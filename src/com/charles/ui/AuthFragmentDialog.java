@@ -84,6 +84,12 @@ public class AuthFragmentDialog extends DialogFragment implements
 			User user = auth.getUser();
 			app.saveFlickrAuthToken(auth.getToken(), user.getId(), user
 					.getUsername());
+			
+			//notify main menu panel to update
+			//TODO refactor later.
+			MainNavFragment menuFragment = (MainNavFragment) getFragmentManager().findFragmentById(R.id.nav_frg);
+			menuFragment.handleUserPanel(menuFragment.getView());
+			
 			this.dismiss();
 		}
 	}
