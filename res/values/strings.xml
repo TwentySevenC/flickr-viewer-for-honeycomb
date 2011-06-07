@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Flickr Viewer</string>
+
+	<string name="menu_share_title">Share</string>
+	<string name="menu_write_comment">Comment</string>
+	<string name="menu_item_setting">Settings</string>
+	<string name="menu_show_comment">Show Comments</string>
+	<string name="menu_show_exif">Show EXIF</string>
+	<string name="menu_previous_page">Previous Page</string>
+	<string name="menu_next_page">Next Page</string>
+	<string name="menu_item_ok">OK</string>
+
+	<string name="photo_list">Photo List</string>
+	<string name="photo_grid_column_count">Grid column count</string>
+	<string name="summary_photo_grid_column_count">The grid column count</string>
+	<string name="photo_grid_column_count_dlg_title">Photo Grid Column Count</string>
+
+	<string name="photo_grid_page_size">Page size</string>
+	<string name="summary_photo_grid_page_size">The page size of the photo grid</string>
+	<string name="photo_grid_page_size_dlg_title">Photo grid page size</string>
+
+	<string name="app_caches">Cache</string>
+	<string name="photo_list_cache_size">Photo cache size</string>
+	<string name="summary_photo_list_cache_size">The photo cache size for the photo list/grid.
+	</string>
+
+	<string name="app_cache_size_dlg_title">Photo List Cache Size</string>
+
+	<string name="auth_hint">
+		Click the first button to grant access to your
+		flickr account, it\'s with OAUTH, your password is not known to this
+		application.\n\r\n\rAfter you grant access, please go back here, then click
+		the 2nd button to finish the auth process.\n\r\n\rClick \'back\' button to dismiss this dialog.
+	</string>
+	<string name="auth_btn_title">Go Flickr to Authorize</string>
+	<string name="auth_done_btn_title">Permission Granted</string>
+</resources>
+
+
