@@ -6,6 +6,7 @@ package com.charles.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -20,8 +21,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +49,49 @@ import com.charles.task.AsyncPhotoListTask;
  */
 public class MainNavFragment extends Fragment {
 
+	/**
+	 * The item click listner to handle the main menus.
+	 */
+	private OnItemClickListener mItemClickListener = new OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			ListView list = (ListView) parent;
+			list.setItemChecked(position, true);
+			switch (position) {
+			case 0:
+				showInteresting();
+				break;
+			case 1:
+				FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+						.getApplication();
+				String token = app.getFlickrToken();
+				if (token == null) {
+
+					FragmentTransaction ft = getFragmentManager()
+							.beginTransaction();
+					Fragment prev = getFragmentManager().findFragmentByTag(
+							"auth_dialog");
+					if (prev != null) {
+						ft.remove(prev);
+					}
+					ft.addToBackStack(null);
+
+					// Create and show the dialog.
+					AuthFragmentDialog authDialog = new AuthFragmentDialog();
+					authDialog.setCancelable(true);
+					authDialog.show(ft, "auth_dialog");
+				} else {
+					String userId = app.getUserId();
+					showPeoplePhotos(userId, token);
+				}
+
+				break;
+			}
+
+		}
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,48 +103,51 @@ public class MainNavFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(com.charles.R.layout.main_nav, null);
 
+		// main menu
 		final ListView list = (ListView) view.findViewById(R.id.list_menu);
-
 		NavMenuAdapter adapter = new NavMenuAdapter(getActivity(),
 				createNavCommandItems());
 		list.setAdapter(adapter);
-		list.setOnItemClickListener(new OnItemClickListener() {
+		list.setOnItemClickListener(mItemClickListener);
+
+		// the user panel.
+		final View userPanel = view.findViewById(R.id.user_panel);
+		final FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+				.getApplication();
+		String token = app.getFlickrToken();
+		userPanel.setVisibility(token == null ? View.INVISIBLE : View.VISIBLE);
+		if (token != null) {
+			TextView userText = (TextView) view.findViewById(R.id.user_name);
+			userText.setText(app.getUserName());
+		}
+
+		// logout button
+		Button button = (Button) view.findViewById(R.id.buttonLogout);
+		button.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				list.setItemChecked(position, true);
-				switch (position) {
-				case 0:
-					showInteresting();
-					break;
-				case 1:
-					FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
-							.getApplication();
-					String token = app.getFlickrToken();
-					if (token == null) {
-
-						FragmentTransaction ft = getFragmentManager()
-								.beginTransaction();
-						Fragment prev = getFragmentManager().findFragmentByTag(
-								"auth_dialog");
-						if (prev != null) {
-							ft.remove(prev);
-						}
-						ft.addToBackStack(null);
-
-						// Create and show the dialog.
-						AuthFragmentDialog authDialog = new AuthFragmentDialog();
-						authDialog.setCancelable(true);
-						authDialog.show(ft, "auth_dialog");
-					} else {
-						String userId = app.getUserId();
-						showPeoplePhotos(userId, token);
-					}
-
-					break;
-				}
-
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						getActivity());
+				builder
+						.setMessage(
+								"Some features will not work after logout, are you sure to logout?")
+						.setCancelable(false).setPositiveButton("Yes",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										app.logout();
+										userPanel.setVisibility(View.INVISIBLE);
+									}
+								}).setNegativeButton("No",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										dialog.cancel();
+									}
+								});
+				AlertDialog alert = builder.create();
+				alert.show();
 			}
 		});
 
@@ -151,7 +200,6 @@ public class MainNavFragment extends Fragment {
 				FragmentManager fm = getFragmentManager();
 				FragmentTransaction ft = fm.beginTransaction();
 				ft.replace(R.id.main_area, fragment);
-				ft.addToBackStack(null);
 				ft.commitAllowingStateLoss();
 			}
 		});
@@ -172,7 +220,7 @@ public class MainNavFragment extends Fragment {
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		photoListDataProvider.setPageSize(app.getPageSize());
-		showPhotos(photoListDataProvider,"Loading photos...");
+		showPhotos(photoListDataProvider, "Loading photos...");
 	}
 
 	private void showInteresting() {

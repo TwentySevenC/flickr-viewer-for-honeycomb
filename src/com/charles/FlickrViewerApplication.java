@@ -67,6 +67,13 @@ public class FlickrViewerApplication extends Application {
 	public String getUserId() {
 		return getSharedPreferenceValue(Constants.FLICKR_USER_ID,null);
 	}
+	
+	/**
+	 * Clear the user token
+	 */
+	public void logout() {
+		saveFlickrAuthToken(null,null,null);
+	}
 
 	/**
 	 * Returns the saved value in the shared preferences.
