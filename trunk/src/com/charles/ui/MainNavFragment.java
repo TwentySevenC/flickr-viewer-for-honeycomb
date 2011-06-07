@@ -110,6 +110,18 @@ public class MainNavFragment extends Fragment {
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(mItemClickListener);
 
+		handleUserPanel(view);
+
+		return view;
+	}
+
+	/**
+	 * @param view
+	 *            the root view of this fragment, that is, the view returned
+	 *            from <code>onCreateView</code>.
+	 */
+	protected void handleUserPanel(View view) {
+		
 		// the user panel.
 		final View userPanel = view.findViewById(R.id.user_panel);
 		final FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
@@ -150,8 +162,8 @@ public class MainNavFragment extends Fragment {
 				alert.show();
 			}
 		});
-
-		return view;
+		
+		//TODO fetch user buddy icon
 	}
 
 	@Override
