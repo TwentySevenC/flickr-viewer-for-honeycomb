@@ -9,28 +9,26 @@
 	<View android:layout_width="1dp" android:layout_height="fill_parent"
 		android:layout_alignParentRight="true" android:background="@drawable/sep" />
 
-	<RelativeLayout android:id="@+id/user_panel"
-		android:layout_width="fill_parent" android:padding="50dp"
-		android:layout_below="@id/list_menu" android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true" android:layout_marginBottom="20dp"
-		android:layout_centerHorizontal="true">
+	<LinearLayout android:id="@+id/user_panel"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:padding="50dp"
+		android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+		android:layout_marginBottom="5dp" >
 		<View android:layout_width="fill_parent" android:layout_height="1dp"
-			android:layout_marginTop="5dp" android:layout_alignParentBottom="true"
-			android:id="@+id/bottom_line" android:background="@drawable/sep" />
-		<Button android:id="@+id/buttonLogout" android:layout_above="@id/bottom_line"
-			android:layout_marginTop="10dp" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Logout" />
-		<ImageView android:id="@+id/user_icon" android:src="@drawable/contacts"
-			android:layout_above="@id/buttonLogout" android:layout_width="48dp"
-			android:layout_height="48dp" />
-		<TextView android:id="@+id/user_name"
-			android:layout_alignTop="@id/user_icon" android:layout_alignBottom="@id/user_icon"
-			android:layout_toRightOf="@id/user_icon" android:layout_marginLeft="5dp"
-			android:gravity="center" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+			android:layout_marginBottom="10dp" android:background="@drawable/sep" />
+		<LinearLayout android:layout_width="fill_parent" android:orientation="horizontal"
+			android:layout_height="wrap_content">
+			<ImageView android:id="@+id/user_icon" android:src="@drawable/contacts"
+				android:layout_width="48dp" android:layout_height="48dp" />
+			<TextView android:id="@+id/user_name" android:layout_weight="1"
+				android:layout_marginLeft="5dp" android:gravity="left|center"
+				android:layout_width="wrap_content" android:layout_height="fill_parent" />
+			<ImageView android:id="@+id/buttonLogout" android:layout_gravity="center|center"
+				android:clickable="true" android:layout_width="wrap_content"
+				android:src="@drawable/logout" android:layout_height="wrap_content" />
+		</LinearLayout>
 		<View android:layout_width="fill_parent" android:layout_height="1dp"
-			android:layout_marginBottom="10dp" android:layout_above="@id/user_icon"
+			android:layout_marginTop="10dp" android:id="@+id/bottom_line"
 			android:background="@drawable/sep" />
-
-	</RelativeLayout>
+	</LinearLayout>
 </RelativeLayout>

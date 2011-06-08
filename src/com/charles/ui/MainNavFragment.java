@@ -33,7 +33,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -134,7 +133,7 @@ public class MainNavFragment extends Fragment {
         }
 
         // logout button
-        Button button = (Button) view.findViewById(R.id.buttonLogout);
+        ImageView button = (ImageView) view.findViewById(R.id.buttonLogout);
         button.setOnClickListener(new OnClickListener() {
 
             @Override
