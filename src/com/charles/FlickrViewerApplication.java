@@ -50,23 +50,18 @@ public class FlickrViewerApplication extends Application {
 		return token;
 	}
 
-	public void saveFlickrAuthToken(String token, String userId, String userName, String buddyIconUrl) {
+	public void saveFlickrAuthToken(String token, String userId, String userName) {
 		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
 				Context.MODE_PRIVATE);
 		Editor editor = sp.edit();
 		editor.putString(Constants.FLICKR_TOKEN, token);
 		editor.putString(Constants.FLICKR_USER_ID, userId);
 		editor.putString(Constants.FLICKR_USER_NAME, userName);
-		editor.putString(Constants.FILCKR_USER_BUDDY_ICON, buddyIconUrl);
 		editor.commit();
 	}
 	
 	public String getUserName() {
 		return getSharedPreferenceValue(Constants.FLICKR_USER_NAME,null);
-	}
-	
-	public String getUserBuddyIconUrl() {
-	    return getSharedPreferenceValue(Constants.FILCKR_USER_BUDDY_ICON,null);
 	}
 	
 	public String getUserId() {
@@ -77,7 +72,7 @@ public class FlickrViewerApplication extends Application {
 	 * Clear the user token
 	 */
 	public void logout() {
-		saveFlickrAuthToken(null,null,null,null);
+		saveFlickrAuthToken(null,null,null);
 	}
 
 	/**

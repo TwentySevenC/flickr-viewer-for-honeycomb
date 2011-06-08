@@ -12,8 +12,7 @@ import com.charles.dataprovider.PaginationPhotoListDataProvider;
 import com.charles.dataprovider.PeoplePublicPhotosDataProvider;
 import com.charles.event.IPhotoListReadyListener;
 import com.charles.task.AsyncPhotoListTask;
-import com.charles.task.ImageDownloadTask;
-import com.charles.utils.ImageUtils.DownloadedDrawable;
+import com.charles.task.GetUserInfoTask;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -23,7 +22,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -167,13 +165,9 @@ public class MainNavFragment extends Fragment {
 
         // buddy icon
         ImageView iconImage = (ImageView) view.findViewById(R.id.user_icon);
-        String iconUrl = app.getUserBuddyIconUrl();
-        if (iconUrl != null) {
-            ImageDownloadTask task = new ImageDownloadTask(iconImage);
-            Drawable drawable = new DownloadedDrawable(task);
-            iconImage.setImageDrawable(drawable);
-            task.execute(app.getUserBuddyIconUrl());
-        }
+        String userId = app.getUserId();
+        GetUserInfoTask task = new GetUserInfoTask(iconImage,null);
+        task.execute(userId);
 
         // TODO fetch user buddy icon
     }
