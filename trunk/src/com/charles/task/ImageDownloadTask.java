@@ -15,6 +15,9 @@ import com.charles.utils.ImageUtils;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
 
 /**
+ * Represents the image download task which takes an image url as the parameter, after the download,
+ * set the bitmap to an associated <code>ImageView</code>.
+ * 
  * @author charles
  * 
  */
