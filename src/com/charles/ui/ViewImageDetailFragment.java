@@ -35,6 +35,7 @@ import com.charles.event.IUserCommentsFetchedListener;
 import com.charles.model.UserComment;
 import com.charles.task.GetPhotoCommentsTask;
 import com.charles.task.ImageDownloadTask;
+import com.charles.ui.comp.UserActionBar;
 import com.charles.utils.ImageCache;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
 
@@ -139,6 +140,10 @@ public class ViewImageDetailFragment extends Fragment implements
 		TextView titleByAuthor = (TextView) view
 				.findViewById(R.id.titlebyauthor);
 		titleByAuthor.setText(mCurrentPhoto.getTitle());
+		
+		//user action bar
+		UserActionBar userBar = (UserActionBar) view.findViewById(R.id.user_action_bar);
+		userBar.setUser(mCurrentPhoto.getOwner().getId());
 
 		// exif list.
 		ListView list = (ListView) view.findViewById(R.id.exifList);
