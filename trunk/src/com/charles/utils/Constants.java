@@ -36,7 +36,7 @@ public final class Constants {
 	 */
 	public static final int DEF_CACHE_SIZE = 20;
 	public static final int DEF_GRID_COL_COUNT = 3;
-	public static final int DEF_GRID_PAGE_SIZE = 36;
+	public static final int DEF_GRID_PAGE_SIZE = 18;
 
 	/**
 	 * Private constructor to prevent this class to be instanced.
