@@ -18,29 +18,29 @@ import com.charles.task.GetUserInfoTask;
 
 /**
  * Represents the UI component that provides a list of actions which can be
- * performed on a user, for example, when showing my contact list, for each
+ * performed on a photo, for example, when showing my contact list, for each
  * contact item, we can place this UI component somewhere, with this action bar,
  * user can view this user's detail information, see his/her public photos, etc.
  * 
  * @author charles
  * 
  */
-public class UserActionBar extends FrameLayout implements IUserInfoFetchedListener {
+public class PhotoDetailActionBar extends FrameLayout implements IUserInfoFetchedListener {
 	
 	private ImageView mBuddyIcon;
 	private TextView mUserName;
 
-	public UserActionBar(Context context) {
+	public PhotoDetailActionBar(Context context) {
 		super(context);
 		buildLayout();
 	}
 
-	public UserActionBar(Context context, AttributeSet attrs, int defStyle) {
+	public PhotoDetailActionBar(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		buildLayout();
 	}
 
-	public UserActionBar(Context context, AttributeSet attrs) {
+	public PhotoDetailActionBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		buildLayout();
 	}
@@ -54,9 +54,6 @@ public class UserActionBar extends FrameLayout implements IUserInfoFetchedListen
 		
 		mBuddyIcon = (ImageView) this.findViewById(R.id.user_icon);
 		mBuddyIcon.setBackgroundResource(R.drawable.action_bar_item);
-		
-		ImageView image = (ImageView) this.findViewById(R.id.show_photo);
-		image.setBackgroundResource(R.drawable.action_bar_item);
 		
 		mUserName = (TextView) findViewById(R.id.user_name);
 		mUserName.setText("Loading user information...");

@@ -307,7 +307,7 @@ public class PhotoListFragment extends Fragment implements
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		ft.replace(R.id.main_area, fragment);
 		ft.addToBackStack("Detail Image");
-		ft.commit();
+		ft.commitAllowingStateLoss();
 	}
 
 	@SuppressWarnings("unchecked")
