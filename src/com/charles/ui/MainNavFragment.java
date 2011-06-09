@@ -216,6 +216,7 @@ public class MainNavFragment extends Fragment {
                         dataProvider);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.replace(R.id.main_area, fragment);
                 ft.commitAllowingStateLoss();
             }
