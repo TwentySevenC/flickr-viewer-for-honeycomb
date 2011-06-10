@@ -69,6 +69,13 @@ public class ViewImageDetailFragment extends Fragment implements
 	private boolean mShowingExif = true;
 	private ViewSwitcher mViewSwitcher;
 	private View mCommentProgressBar;
+	
+	/**
+	 * Default constructor for the framework.
+	 */
+	public ViewImageDetailFragment() {
+	    
+	}
 
 	/**
 	 * Constructor.
