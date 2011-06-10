@@ -29,18 +29,12 @@ import android.widget.ViewSwitcher;
 import com.aetrion.flickr.photos.Exif;
 import com.aetrion.flickr.photos.Photo;
 import com.charles.R;
-import com.charles.actions.AddContactAction;
-import com.charles.actions.AddFavouriteAction;
-import com.charles.actions.GetPhotoPoolsAction;
-import com.charles.actions.GetPhotoTagsAction;
 import com.charles.actions.IAction;
 import com.charles.actions.SharePhotoAction;
-import com.charles.actions.ShowPeoplePhotosAction;
 import com.charles.event.IUserCommentsFetchedListener;
 import com.charles.model.UserComment;
 import com.charles.task.GetPhotoCommentsTask;
 import com.charles.task.ImageDownloadTask;
-import com.charles.ui.comp.HorizontalActionBar;
 import com.charles.ui.comp.PhotoDetailActionBar;
 import com.charles.utils.ImageCache;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
@@ -149,10 +143,10 @@ public class ViewImageDetailFragment extends Fragment implements
 			}
 		});
 
-		// author and title
-		TextView titleByAuthor = (TextView) view
+		// photo title.
+		TextView photoTitle = (TextView) view
 				.findViewById(R.id.titlebyauthor);
-		titleByAuthor.setText(mCurrentPhoto.getTitle());
+		photoTitle.setText(mCurrentPhoto.getTitle());
 		
 		// exif list.
 		ListView list = (ListView) view.findViewById(R.id.exifList);
@@ -172,23 +166,11 @@ public class ViewImageDetailFragment extends Fragment implements
 		// comment progress bar
 		mCommentProgressBar = view.findViewById(R.id.commentProgressBar);
 		
-		//user action bar
-		PhotoDetailActionBar userBar = (PhotoDetailActionBar) view.findViewById(R.id.user_action_bar);
-		userBar.setUser(mCurrentPhoto.getOwner().getId());
-
-		//quick action in the user bar.
-		HorizontalActionBar hBar = (HorizontalActionBar) userBar.findViewById(R.id.photo_detail_quick_actions);
-		addPhotoDetailQuickActions(hBar);
-
+		//get user information.
+		PhotoDetailActionBar pBar = (PhotoDetailActionBar) view.findViewById(R.id.user_action_bar);
+		pBar.setUser(mCurrentPhoto.getOwner().getId());
+		
 		return view;
-	}
-	
-	private void addPhotoDetailQuickActions(HorizontalActionBar hBar) {
-		hBar.addActionItem(new AddContactAction());
-		hBar.addActionItem(new GetPhotoTagsAction());
-		hBar.addActionItem(new GetPhotoPoolsAction());
-		hBar.addActionItem(new ShowPeoplePhotosAction(getActivity(),this.mCurrentPhoto.getOwner().getId()));
-		hBar.addActionItem(new AddFavouriteAction());
 	}
 	
 	private GetPhotoCommentsTask mPhotoCommentTask;
@@ -363,4 +345,5 @@ public class ViewImageDetailFragment extends Fragment implements
 		mCommentAdapter.notifyDataSetChanged();
 		this.mCommentProgressBar.setVisibility(View.GONE);
 	}
+
 }
