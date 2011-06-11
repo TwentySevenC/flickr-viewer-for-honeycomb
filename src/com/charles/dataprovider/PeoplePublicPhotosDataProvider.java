@@ -4,9 +4,6 @@
 package com.charles.dataprovider;
 
 import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.RequestContext;
-import com.aetrion.flickr.auth.Auth;
-import com.aetrion.flickr.auth.Permission;
 import com.aetrion.flickr.people.PeopleInterface;
 import com.aetrion.flickr.photos.PhotoList;
 import com.charles.utils.FlickrHelper;
@@ -35,12 +32,7 @@ public class PeoplePublicPhotosDataProvider extends
 	 */
 	@Override
 	public PhotoList getPhotoList() throws Exception {
-		Flickr f = FlickrHelper.getInstance().getFlickr();
-		RequestContext requestContext = RequestContext.getRequestContext();
-		Auth auth = new Auth();
-		auth.setPermission(Permission.READ);
-		auth.setToken(mToken);
-		requestContext.setAuth(auth);
+		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
 
 		PeopleInterface pi = f.getPeopleInterface();
 		return pi.getPublicPhotos(mUserId, mPageSize, mPageNumber);

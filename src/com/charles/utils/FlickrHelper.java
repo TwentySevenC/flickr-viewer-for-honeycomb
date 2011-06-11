@@ -4,6 +4,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.REST;
+import com.aetrion.flickr.RequestContext;
+import com.aetrion.flickr.auth.Auth;
+import com.aetrion.flickr.auth.Permission;
 import com.aetrion.flickr.interestingness.InterestingnessInterface;
 import com.aetrion.flickr.photos.PhotosInterface;
 
@@ -32,6 +35,17 @@ public final class FlickrHelper {
 		} catch (ParserConfigurationException e) {
 			return null;
 		}
+	}
+	
+	public Flickr getFlickrAuthed(String token) {
+		Flickr f = getFlickr();
+		RequestContext requestContext = RequestContext.getRequestContext();
+		Auth auth = new Auth();
+		auth.setPermission(Permission.WRITE);
+		auth.setToken(token);
+		requestContext.setAuth(auth);
+		
+		return f;
 	}
 
 	public InterestingnessInterface getInterestingInterface() {
