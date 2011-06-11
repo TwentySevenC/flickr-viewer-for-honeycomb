@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -63,12 +64,12 @@ public class ViewImageDetailFragment extends Fragment implements
 	private boolean mShowingExif = true;
 	private ViewSwitcher mViewSwitcher;
 	private View mCommentProgressBar;
-	
+
 	/**
 	 * Default constructor for the framework.
 	 */
 	public ViewImageDetailFragment() {
-	    
+
 	}
 
 	/**
@@ -108,6 +109,20 @@ public class ViewImageDetailFragment extends Fragment implements
 					.get(), this.mCurrentPhoto.getUrl());
 			action.execute();
 			return true;
+		case R.id.menu_item_write_comment:
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			Fragment prev = getFragmentManager().findFragmentByTag(
+					"write_comment_dlg");
+			if (prev != null) {
+				ft.remove(prev);
+			}
+			ft.addToBackStack(null);
+
+			// Create and show the dialog.
+			WriteCommentDialog authDialog = new WriteCommentDialog(this.mCurrentPhoto.getId());
+			authDialog.setCancelable(true);
+			authDialog.show(ft, "write_comment_dlg");
+			return true;
 		case R.id.menu_item_switch:
 			if (mShowingExif) {
 				item.setTitle(R.string.menu_show_exif);
@@ -144,10 +159,9 @@ public class ViewImageDetailFragment extends Fragment implements
 		});
 
 		// photo title.
-		TextView photoTitle = (TextView) view
-				.findViewById(R.id.titlebyauthor);
+		TextView photoTitle = (TextView) view.findViewById(R.id.titlebyauthor);
 		photoTitle.setText(mCurrentPhoto.getTitle());
-		
+
 		// exif list.
 		ListView list = (ListView) view.findViewById(R.id.exifList);
 		TextView empty = (TextView) view.findViewById(R.id.empty);
@@ -165,14 +179,15 @@ public class ViewImageDetailFragment extends Fragment implements
 
 		// comment progress bar
 		mCommentProgressBar = view.findViewById(R.id.commentProgressBar);
-		
-		//get user information.
-		PhotoDetailActionBar pBar = (PhotoDetailActionBar) view.findViewById(R.id.user_action_bar);
+
+		// get user information.
+		PhotoDetailActionBar pBar = (PhotoDetailActionBar) view
+				.findViewById(R.id.user_action_bar);
 		pBar.setUser(mCurrentPhoto.getOwner().getId());
-		
+
 		return view;
 	}
-	
+
 	private GetPhotoCommentsTask mPhotoCommentTask;
 
 	@Override
@@ -186,7 +201,7 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	@Override
 	public void onPause() {
-		if(mPhotoCommentTask!=null){
+		if (mPhotoCommentTask != null) {
 			mPhotoCommentTask.cancel(true);
 		}
 		super.onPause();
@@ -254,30 +269,30 @@ public class ViewImageDetailFragment extends Fragment implements
 			author.setText(userComment.getUserName());
 			comment.setText(userComment.getCommentText());
 			commentDate.setText(userComment.getCommentDateString());
-			
-			Drawable drawable = buddyIcon.getDrawable();
-            String smallUrl = userComment.getBuddyIconUrl();
-            if (drawable != null && drawable instanceof DownloadedDrawable) {
-                ImageDownloadTask task = ((DownloadedDrawable) drawable)
-                        .getBitmapDownloaderTask();
-                if (!smallUrl.equals(task)) {
-                    task.cancel(true);
-                }
-            }
 
-            if (smallUrl == null) {
-                buddyIcon.setImageDrawable(null);
-            } else {
-                Bitmap cacheBitmap = ImageCache.getFromCache(smallUrl);
-                if (cacheBitmap != null) {
-                	buddyIcon.setImageBitmap(cacheBitmap);
-                } else {
-                    ImageDownloadTask task = new ImageDownloadTask(buddyIcon);
-                    drawable = new DownloadedDrawable(task);
-                    buddyIcon.setImageDrawable(drawable);
-                    task.execute(smallUrl);
-                }
-            }
+			Drawable drawable = buddyIcon.getDrawable();
+			String smallUrl = userComment.getBuddyIconUrl();
+			if (drawable != null && drawable instanceof DownloadedDrawable) {
+				ImageDownloadTask task = ((DownloadedDrawable) drawable)
+						.getBitmapDownloaderTask();
+				if (!smallUrl.equals(task)) {
+					task.cancel(true);
+				}
+			}
+
+			if (smallUrl == null) {
+				buddyIcon.setImageDrawable(null);
+			} else {
+				Bitmap cacheBitmap = ImageCache.getFromCache(smallUrl);
+				if (cacheBitmap != null) {
+					buddyIcon.setImageBitmap(cacheBitmap);
+				} else {
+					ImageDownloadTask task = new ImageDownloadTask(buddyIcon);
+					drawable = new DownloadedDrawable(task);
+					buddyIcon.setImageDrawable(drawable);
+					task.execute(smallUrl);
+				}
+			}
 
 			return view;
 		}
