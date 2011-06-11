@@ -48,7 +48,7 @@ import java.util.List;
  * @author charles
  */
 public class MainNavFragment extends Fragment {
-
+	
     /**
      * The item click listner to handle the main menus.
      */
@@ -167,8 +167,6 @@ public class MainNavFragment extends Fragment {
         String userId = app.getUserId();
         GetUserInfoTask task = new GetUserInfoTask(iconImage,null);
         task.execute(userId);
-
-        // TODO fetch user buddy icon
     }
 
     @Override
@@ -217,6 +215,11 @@ public class MainNavFragment extends Fragment {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                
+                int stackCount = fm.getBackStackEntryCount();
+                for(int i=0;i < stackCount; i++ ) {
+                	fm.popBackStack();
+                }
                 ft.replace(R.id.main_area, fragment);
                 ft.commitAllowingStateLoss();
             }
