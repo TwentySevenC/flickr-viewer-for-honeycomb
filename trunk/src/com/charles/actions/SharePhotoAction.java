@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -72,7 +73,11 @@ public class SharePhotoAction implements IAction {
 	        }
 	      }
 	    }
-
+	    
+	    //save the photo url to the clipboard.
+	    ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+	    cm.setText(mPhotoUrl);
+	    
 	    //send out the intent.
 	    Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
 	    intent.putExtra(Intent.EXTRA_SUBJECT, "Share photo");
