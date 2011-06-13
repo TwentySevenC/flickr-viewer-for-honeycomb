@@ -3,11 +3,9 @@
  */
 package com.charles.actions;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.charles.utils.Constants;
 
+import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +14,10 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
-import com.charles.utils.Constants;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Represents the action to share photos to other applicataions, like twitter,
@@ -24,14 +25,13 @@ import com.charles.utils.Constants;
  * 
  * @author charles
  */
-public class SharePhotoAction implements IAction {
+public class SharePhotoAction extends ActivityAwareAction {
 	
 	private static final String TAG = SharePhotoAction.class.getName();
 	private static final String SHARE_PHOTO_FILE_NAME = "share.jpg";
 
 	private Bitmap mPhoto;
 	private String mPhotoUrl;
-	private Context mContext;
 
 	/**
 	 * Constructor.
@@ -41,10 +41,10 @@ public class SharePhotoAction implements IAction {
 	 * @param url
 	 *            the url of this photo.
 	 */
-	public SharePhotoAction(Context context,Bitmap photo, String url) {
+	public SharePhotoAction(Activity context,Bitmap photo, String url) {
+	    super(context);
 		this.mPhoto = photo;
 		this.mPhotoUrl = url;
-		this.mContext = context;
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class SharePhotoAction implements IAction {
 	    }
 	    
 	    //save the photo url to the clipboard.
-	    ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+	    ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
 	    cm.setText(mPhotoUrl);
 	    
 	    //send out the intent.
@@ -86,7 +86,7 @@ public class SharePhotoAction implements IAction {
 	    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + sharePhotoFile.getAbsolutePath()));
 	    intent.setType("image/jpeg");
 	    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-	    mContext.startActivity(Intent.createChooser(intent, null));
+	    mActivity.startActivity(Intent.createChooser(intent, null));
 
 	}
 }
