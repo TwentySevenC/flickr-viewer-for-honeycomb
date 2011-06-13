@@ -7,6 +7,7 @@ package com.charles.ui;
 import com.aetrion.flickr.photos.PhotoList;
 import com.charles.FlickrViewerApplication;
 import com.charles.R;
+import com.charles.actions.ShowAuthDialogAction;
 import com.charles.dataprovider.InterestingPhotosDataProvider;
 import com.charles.dataprovider.PaginationPhotoListDataProvider;
 import com.charles.dataprovider.PeoplePublicPhotosDataProvider;
@@ -67,20 +68,8 @@ public class MainNavFragment extends Fragment {
                         .getApplication();
                 String token = app.getFlickrToken();
                 if (token == null) {
-
-                    FragmentTransaction ft = getFragmentManager()
-                            .beginTransaction();
-                    Fragment prev = getFragmentManager().findFragmentByTag(
-                            "auth_dialog");
-                    if (prev != null) {
-                        ft.remove(prev);
-                    }
-                    ft.addToBackStack(null);
-
-                    // Create and show the dialog.
-                    AuthFragmentDialog authDialog = new AuthFragmentDialog();
-                    authDialog.setCancelable(true);
-                    authDialog.show(ft, "auth_dialog");
+                    ShowAuthDialogAction action = new ShowAuthDialogAction(getActivity());
+                    action.execute();
                 } else {
                     String userId = app.getUserId();
                     showPeoplePhotos(userId, token);
