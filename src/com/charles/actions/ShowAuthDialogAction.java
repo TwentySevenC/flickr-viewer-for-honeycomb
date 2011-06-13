@@ -20,12 +20,17 @@ import android.app.FragmentTransaction;
  * 
  * @author qiangz
  */
-public class ShowAuthDialogAction implements IAction {
+public class ShowAuthDialogAction extends ActivityAwareAction {
 
-    private Activity mActivity;
-
+    private IAction mFinishAction;
+    
     public ShowAuthDialogAction(Activity act) {
-        this.mActivity = act;
+        this(act,null);
+    }
+
+    public ShowAuthDialogAction(Activity act, IAction finishAction) {
+        super(act);
+        this.mFinishAction = finishAction;
     }
 
     /*

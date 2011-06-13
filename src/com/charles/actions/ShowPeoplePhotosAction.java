@@ -3,10 +3,6 @@
  */
 package com.charles.actions;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-
 import com.aetrion.flickr.photos.PhotoList;
 import com.charles.FlickrViewerApplication;
 import com.charles.R;
@@ -15,13 +11,16 @@ import com.charles.event.IPhotoListReadyListener;
 import com.charles.task.AsyncPhotoListTask;
 import com.charles.ui.PhotoListFragment;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+
 /**
  * @author charles
  * 
  */
-public class ShowPeoplePhotosAction extends AbstractImageAction {
+public class ShowPeoplePhotosAction extends ActivityAwareAction {
 
-	private Activity mContext;
 	private String mUserId;
 	private PeoplePublicPhotosDataProvider mDataProvider;
 	private IPhotoListReadyListener mPhotosReadyListener = new IPhotoListReadyListener() {
@@ -30,7 +29,7 @@ public class ShowPeoplePhotosAction extends AbstractImageAction {
 		public void onPhotoListReady(PhotoList list) {
 			PhotoListFragment fragment = new PhotoListFragment(list,
 					mDataProvider);
-			FragmentManager fm = mContext.getFragmentManager();
+			FragmentManager fm = mActivity.getFragmentManager();
 			FragmentTransaction ft = fm.beginTransaction();
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			ft.replace(R.id.main_area, fragment);
@@ -44,8 +43,7 @@ public class ShowPeoplePhotosAction extends AbstractImageAction {
 	 * @param resId
 	 */
 	public ShowPeoplePhotosAction(Activity context, String userId) {
-		super(R.drawable.gallery);
-		this.mContext = context;
+		super(context);
 		this.mUserId = userId;
 	}
 
@@ -56,11 +54,11 @@ public class ShowPeoplePhotosAction extends AbstractImageAction {
 	 */
 	@Override
 	public void execute() {
-		FlickrViewerApplication app = (FlickrViewerApplication) mContext
+		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 				.getApplication();
 
 		if (mUserId.equals(app.getUserId())) {
-			mContext.onBackPressed();
+			mActivity.onBackPressed();
 			return;
 		}
 		String token = app.getFlickrToken();
