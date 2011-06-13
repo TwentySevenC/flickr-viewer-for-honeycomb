@@ -150,8 +150,6 @@ public class PhotoListFragment extends Fragment implements
 		}
 	}
 
-	private ProgressDialog mDialog;
-
 	/**
 	 * Fetches the photo list in another thread.
 	 */
@@ -159,21 +157,7 @@ public class PhotoListFragment extends Fragment implements
 		if (mPhotoListTask != null) {
 			mPhotoListTask.cancel(true);
 		}
-		mPhotoListTask = new AsyncPhotoListTask(mPhotoListDataProvider);
-		
-		mDialog = ProgressDialog.show(getActivity(), "", "Loading photos...");
-		mDialog.setCancelable(true);
-		mDialog.setCanceledOnTouchOutside(true);
-		mDialog.setOnCancelListener(new OnCancelListener() {
-
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				if(!mPhotoListTask.isCancelled()) {
-					mPhotoListTask.cancel(true);
-				}
-			}
-		});
-		mPhotoListTask.setPhotoListReadyListener(this);
+		mPhotoListTask = new AsyncPhotoListTask(getActivity(),mPhotoListDataProvider,this);
 		mPhotoListTask.execute();
 	}
 
@@ -313,10 +297,6 @@ public class PhotoListFragment extends Fragment implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onPhotoListReady(PhotoList list) {
-		if(mDialog != null && mDialog.isShowing() ) {
-			mDialog.dismiss();
-		}
-		
 		if( list == null || list.isEmpty() ) {
 			return;
 		}

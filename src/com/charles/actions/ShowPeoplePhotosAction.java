@@ -16,8 +16,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
 /**
- * @author charles
+ * Represents the action to show all the public photos of a given user.
  * 
+ * @author charles
  */
 public class ShowPeoplePhotosAction extends ActivityAwareAction {
 
@@ -57,14 +58,18 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
 		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 				.getApplication();
 
-		if (mUserId.equals(app.getUserId())) {
+		if (mUserId != null && mUserId.equals(app.getUserId())) {
 			mActivity.onBackPressed();
 			return;
 		}
+
 		String token = app.getFlickrToken();
+		if (mUserId == null) {
+			mUserId = app.getUserId();
+		}
 		mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token);
-		AsyncPhotoListTask task = new AsyncPhotoListTask(mDataProvider);
-		task.setPhotoListReadyListener(mPhotosReadyListener);
+		AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
+				mDataProvider, mPhotosReadyListener);
 		task.execute();
 	}
 
