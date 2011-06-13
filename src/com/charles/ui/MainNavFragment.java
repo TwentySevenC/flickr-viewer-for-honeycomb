@@ -49,7 +49,7 @@ import java.util.List;
  * @author charles
  */
 public class MainNavFragment extends Fragment {
-	
+
     /**
      * The item click listner to handle the main menus.
      */
@@ -77,7 +77,6 @@ public class MainNavFragment extends Fragment {
 
                 break;
         }
-
     }
     };
 
@@ -154,7 +153,7 @@ public class MainNavFragment extends Fragment {
         // buddy icon
         ImageView iconImage = (ImageView) view.findViewById(R.id.user_icon);
         String userId = app.getUserId();
-        GetUserInfoTask task = new GetUserInfoTask(iconImage,null);
+        GetUserInfoTask task = new GetUserInfoTask(iconImage, null);
         task.execute(userId);
     }
 
@@ -204,10 +203,10 @@ public class MainNavFragment extends Fragment {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                
+
                 int stackCount = fm.getBackStackEntryCount();
-                for(int i=0;i < stackCount; i++ ) {
-                	fm.popBackStack();
+                for (int i = 0; i < stackCount; i++) {
+                    fm.popBackStack();
                 }
                 ft.replace(R.id.main_area, fragment);
                 ft.commitAllowingStateLoss();
