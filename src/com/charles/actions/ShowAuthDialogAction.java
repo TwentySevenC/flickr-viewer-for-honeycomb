@@ -51,6 +51,7 @@ public class ShowAuthDialogAction extends ActivityAwareAction {
 
         // Create and show the dialog.
         AuthFragmentDialog authDialog = new AuthFragmentDialog();
+        authDialog.setFinishAction(mFinishAction);
         authDialog.setCancelable(true);
         authDialog.show(ft, "auth_dialog");
     }
