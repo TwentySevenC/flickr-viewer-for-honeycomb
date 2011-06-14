@@ -1,16 +1,13 @@
-#summary One-sentence summary of this page.
+#summary program feature guide
 #labels Featured
 
 = Introduction =
+This program is optimized for Android tablet and promise to bring you the best Flickr viewing experience possible. 
 
-Add your content here.
 
+= Screen Shots =
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
-
-https://lh4.googleusercontent.com/-4LUO8qFFOXc/TfY6WQdIpXI/AAAAAAAABPA/2XLuwDvBkwk/s912/c1.png
+[https://lh4.googleusercontent.com/-4LUO8qFFOXc/TfY6WQdIpXI/AAAAAAAABPA/2XLuwDvBkwk/s912/c1.png]
+[https://lh4.googleusercontent.com/-6RmeE9VrGJo/TfY6ZPgFL3I/AAAAAAAABPE/aMosQ_mXcXY/s912/c2.png]
+[https://lh6.googleusercontent.com/-Ifzm0N7O1SE/TfY6cauOwnI/AAAAAAAABPI/pcOV4BAypX4/s912/c3.png]
+[https://lh4.googleusercontent.com/-1IniNCpYU5Y/TfY6JgNztiI/AAAAAAAABO8/zqp3qbzynF8/s912/c4.png]
