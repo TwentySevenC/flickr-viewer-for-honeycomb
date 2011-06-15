@@ -178,41 +178,14 @@ public class MainNavFragment extends Fragment {
 		}
 	}
 
-	private void showPhotos(final PaginationPhotoListDataProvider dataProvider,
-			String prompt) {
-		IPhotoListReadyListener readyListener = new IPhotoListReadyListener() {
-			@Override
-			public void onPhotoListReady(PhotoList list) {
-				if (list == null) {
-					Toast.makeText(getActivity(), "Unable to get photo list",
-							Toast.LENGTH_SHORT).show();
-					return;
-				}
-				PhotoListFragment fragment = new PhotoListFragment(list,
-						dataProvider);
-				FragmentManager fm = getFragmentManager();
-				FragmentTransaction ft = fm.beginTransaction();
-				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
-				int stackCount = fm.getBackStackEntryCount();
-				for (int i = 0; i < stackCount; i++) {
-					fm.popBackStack();
-				}
-				ft.replace(R.id.main_area, fragment);
-				ft.commitAllowingStateLoss();
-			}
-		};
-		final AsyncPhotoListTask task = new AsyncPhotoListTask(getActivity(),
-				dataProvider, readyListener, prompt);
-		task.execute();
-	}
-
 	private void showInteresting() {
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		final PaginationPhotoListDataProvider photoListDataProvider = new InterestingPhotosDataProvider();
 		photoListDataProvider.setPageSize(app.getPageSize());
-		showPhotos(photoListDataProvider, "Loading interesting photos...");
+		final AsyncPhotoListTask task = new AsyncPhotoListTask(getActivity(),
+		        photoListDataProvider, null, "Loading interesting photos...");
+        task.execute();
 	}
 
 	private static class NavMenuAdapter extends BaseAdapter {
