@@ -18,6 +18,7 @@ import com.aetrion.flickr.people.User;
 import com.charles.R;
 import com.charles.actions.ShowPeoplePhotosAction;
 import com.charles.event.IUserInfoFetchedListener;
+import com.charles.task.AddPhotoAsFavoriteTask;
 import com.charles.task.GetUserInfoTask;
 
 /**
@@ -36,6 +37,7 @@ public class PhotoDetailActionBar extends FrameLayout implements
 	private TextView mUserName;
 	private ViewSwitcher mViewSwitcher;
 
+	private String mPhotoId;
 	private String mUserId;
 
 	public PhotoDetailActionBar(Context context) {
@@ -80,6 +82,10 @@ public class PhotoDetailActionBar extends FrameLayout implements
 		galleryButton.setTag(R.id.gallery);
 		galleryButton.setOnClickListener(mOnClickListener);
 
+		ImageView addFavoriteButton = (ImageView) findViewById(R.id.add_favourite);
+		addFavoriteButton.setTag(R.id.add_favourite);
+		addFavoriteButton.setOnClickListener(mOnClickListener);
+
 	}
 
 	private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -100,6 +106,11 @@ public class PhotoDetailActionBar extends FrameLayout implements
 						(Activity) context, mUserId);
 				action.execute();
 				break;
+			case R.id.add_favourite:
+				AddPhotoAsFavoriteTask task = new AddPhotoAsFavoriteTask(
+						(Activity) getContext());
+				task.execute(mPhotoId);
+				break;
 			}
 		}
 	};
@@ -111,6 +122,10 @@ public class PhotoDetailActionBar extends FrameLayout implements
 		this.mUserId = userId;
 		GetUserInfoTask task = new GetUserInfoTask(mBuddyIcon, this, null);
 		task.execute(userId);
+	}
+
+	public void setPhotoId(String photoId) {
+		this.mPhotoId = photoId;
 	}
 
 	@Override

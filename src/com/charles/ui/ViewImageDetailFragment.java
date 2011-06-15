@@ -187,6 +187,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		PhotoDetailActionBar pBar = (PhotoDetailActionBar) view
 				.findViewById(R.id.user_action_bar);
 		pBar.setUser(mCurrentPhoto.getOwner().getId());
+		pBar.setPhotoId(mCurrentPhoto.getId());
 
 		return view;
 	}
