@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
+import com.charles.event.IImageDownloadDoneListener;
 import com.charles.utils.ImageCache;
 import com.charles.utils.ImageUtils;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
@@ -25,11 +26,25 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 
 	private WeakReference<ImageView> imgRef = null;
 	private String mUrl;
+	
+	/**
+	 * The image downloaded listener.
+	 */
+	private IImageDownloadDoneListener mImageDownloadedListener;
 
+	/**
+	 * Constructor.
+	 * @param imageView
+	 */
 	public ImageDownloadTask(ImageView imageView) {
-		this.imgRef = new WeakReference<ImageView>(imageView);
+		this(imageView,null);
 	}
-
+	
+	public ImageDownloadTask(ImageView imageView, IImageDownloadDoneListener listener) {
+		this.imgRef = new WeakReference<ImageView>(imageView);
+		this.mImageDownloadedListener = listener;
+	}
+	
 	@Override
 	protected Bitmap doInBackground(String... params) {
 		mUrl = params[0];
@@ -52,6 +67,10 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 			if (this == bitmapDownloaderTask) {
 				imageView.setImageBitmap(result);
 			}
+		}
+		
+		if(mImageDownloadedListener != null ) {
+			mImageDownloadedListener.onImageDownloaded(result);
 		}
 	}
 

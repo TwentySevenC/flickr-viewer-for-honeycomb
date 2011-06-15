@@ -30,6 +30,7 @@ public final class Constants {
 	public static final String FLICKR_TOKEN = "flickr.token";
 	public static final String FLICKR_USER_ID = "flickr.user.id";
 	public static final String FLICKR_USER_NAME = "flickr.user.name";
+	public static final String FLICKR_BUDDY_IMAGE_FILE_NAME = "mybuddyicon.jpg";
 	
 	/**
 	 * The default setting values.

@@ -15,6 +15,11 @@ import com.charles.utils.FlickrHelper;
 public class InterestingPhotosDataProvider extends
 		PaginationPhotoListDataProvider {
 
+	/**
+	 * auto gen sid
+	 */
+	private static final long serialVersionUID = -8218008529748537946L;
+
 	/*
 	 * (non-Javadoc)
 	 * 

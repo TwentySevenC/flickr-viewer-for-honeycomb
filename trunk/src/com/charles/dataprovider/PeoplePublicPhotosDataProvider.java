@@ -17,9 +17,27 @@ import com.charles.utils.FlickrHelper;
 public class PeoplePublicPhotosDataProvider extends
 		PaginationPhotoListDataProvider {
 
+	/**
+	 * auto gen sid
+	 */
+	private static final long serialVersionUID = -1826894885770697192L;
+
+	/**
+	 * the flickr user id, whose photos to be fetched. <code>null</code> means
+	 * to fetch my own photos.
+	 */
 	private String mUserId;
+
+	/**
+	 * my own auth token. Some photos needs to know who's viewing the photos.
+	 */
 	private String mToken;
 
+	/**
+	 * Constructor.
+	 * @param userId
+	 * @param token
+	 */
 	public PeoplePublicPhotosDataProvider(String userId, String token) {
 		this.mUserId = userId;
 		this.mToken = token;

@@ -1,5 +1,8 @@
 package com.charles.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
@@ -112,4 +115,31 @@ public final class ImageUtils {
 		}
 	}
 
+	/**
+	 * Saves the given <code>bitmap</code> into the given <code>destFile</code>
+	 * 
+	 * @param destFile
+	 * @param bitmap
+	 * @return <code>true</code> if success, <code>false</code> otherwise.
+	 */
+	public static boolean saveImageToFile(File destFile, Bitmap bitmap) {
+		FileOutputStream fos = null;
+		try {
+			if (destFile.exists()) {
+				destFile.delete();
+			}
+			fos = new FileOutputStream(destFile);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+		} catch (FileNotFoundException fnfe) {
+			return false;
+		} finally {
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException ioe) {
+				}
+			}
+		}
+		return true;
+	}
 }

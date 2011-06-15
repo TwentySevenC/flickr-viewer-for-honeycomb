@@ -3,7 +3,7 @@
  */
 package com.charles.actions;
 
-import com.charles.utils.Constants;
+import java.io.File;
 
 import android.app.Activity;
 import android.content.ClipboardManager;
@@ -14,10 +14,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.charles.utils.Constants;
+import com.charles.utils.ImageUtils;
 
 /**
  * Represents the action to share photos to other applicataions, like twitter,
@@ -57,23 +55,8 @@ public class SharePhotoAction extends ActivityAwareAction {
 
 		//save the bitmap to sd card.
 		File sharePhotoFile = new File(bsRoot, SHARE_PHOTO_FILE_NAME);
-	    sharePhotoFile.delete();
-	    FileOutputStream fos = null;
-	    try {
-	      fos = new FileOutputStream(sharePhotoFile);
-	      mPhoto.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-	    } catch (FileNotFoundException fnfe) {
-	      Log.w(TAG, "Couldn't access file " + sharePhotoFile + " due to " + fnfe);
-	      return;
-	    } finally {
-	      if (fos != null) {
-	        try {
-	          fos.close();
-	        } catch (IOException ioe) {
-	        }
-	      }
-	    }
-	    
+		ImageUtils.saveImageToFile(sharePhotoFile, mPhoto);
+		
 	    //save the photo url to the clipboard.
 	    ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
 	    cm.setText(mPhotoUrl);

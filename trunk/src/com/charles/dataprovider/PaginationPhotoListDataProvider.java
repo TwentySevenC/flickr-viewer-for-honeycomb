@@ -14,6 +14,11 @@ import com.charles.utils.Constants;
 public abstract class PaginationPhotoListDataProvider implements
 		IPhotoListDataProvider {
 
+	/**
+	 * auto generated sid.
+	 */
+	private static final long serialVersionUID = 4702763028164978288L;
+	
 	protected int mPageSize = Constants.DEF_GRID_PAGE_SIZE;
 	protected int mPageNumber = 1;
 
