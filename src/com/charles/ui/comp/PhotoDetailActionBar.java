@@ -109,7 +109,7 @@ public class PhotoDetailActionBar extends FrameLayout implements
 	 */
 	public void setUser(String userId) {
 		this.mUserId = userId;
-		GetUserInfoTask task = new GetUserInfoTask(mBuddyIcon, this);
+		GetUserInfoTask task = new GetUserInfoTask(mBuddyIcon, this, null);
 		task.execute(userId);
 	}
 

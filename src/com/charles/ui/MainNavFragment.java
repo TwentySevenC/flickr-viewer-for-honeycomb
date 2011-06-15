@@ -4,35 +4,43 @@
 
 package com.charles.ui;
 
-import com.charles.FlickrViewerApplication;
-import com.charles.R;
-import com.charles.actions.ShowAuthDialogAction;
-import com.charles.actions.ShowInterestingPhotosAction;
-import com.charles.actions.ShowPeoplePhotosAction;
-import com.charles.task.GetUserInfoTask;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.charles.FlickrViewerApplication;
+import com.charles.R;
+import com.charles.actions.ShowAuthDialogAction;
+import com.charles.actions.ShowInterestingPhotosAction;
+import com.charles.actions.ShowPeoplePhotosAction;
+import com.charles.event.IImageDownloadDoneListener;
+import com.charles.task.GetUserInfoTask;
+import com.charles.utils.Constants;
+import com.charles.utils.ImageUtils;
 
 /**
  * Represents the fragment to be shown at the left side of the screen, which
@@ -41,6 +49,11 @@ import java.util.List;
  * @author charles
  */
 public class MainNavFragment extends Fragment {
+
+	/**
+	 * the handler.
+	 */
+	private Handler mHandler = new Handler();
 
 	/**
 	 * The item click listner to handle the main menus.
@@ -53,17 +66,19 @@ public class MainNavFragment extends Fragment {
 			list.setItemChecked(position, true);
 			switch (position) {
 			case 0:
-				ShowInterestingPhotosAction action = new ShowInterestingPhotosAction(getActivity());
+				ShowInterestingPhotosAction action = new ShowInterestingPhotosAction(
+						getActivity());
 				action.execute();
 				break;
 			case 1:
 				FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 						.getApplication();
 				String token = app.getFlickrToken();
-				ShowPeoplePhotosAction photosAction = new ShowPeoplePhotosAction(getActivity(),null);
+				ShowPeoplePhotosAction photosAction = new ShowPeoplePhotosAction(
+						getActivity(), null);
 				if (token == null) {
 					ShowAuthDialogAction ia = new ShowAuthDialogAction(
-							getActivity(),photosAction);
+							getActivity(), photosAction);
 					ia.execute();
 				} else {
 					photosAction.execute();
@@ -98,6 +113,9 @@ public class MainNavFragment extends Fragment {
 	}
 
 	/**
+	 * Deals with the user info panel in the main navigation page, showing the
+	 * user information, and fetch the buddy icons.
+	 * 
 	 * @param view
 	 *            the root view of this fragment, that is, the view returned
 	 *            from <code>onCreateView</code>.
@@ -147,9 +165,31 @@ public class MainNavFragment extends Fragment {
 
 		// buddy icon
 		ImageView iconImage = (ImageView) view.findViewById(R.id.user_icon);
-		String userId = app.getUserId();
-		GetUserInfoTask task = new GetUserInfoTask(iconImage, null);
-		task.execute(userId);
+		Bitmap cachedIcon = getBuddyIconFromCache();
+		if (cachedIcon != null) {
+			iconImage.setImageBitmap(cachedIcon);
+		} else {
+			String userId = app.getUserId();
+			GetUserInfoTask task = new GetUserInfoTask(iconImage, null,
+					mImageDownloadedListener);
+			task.execute(userId);
+		}
+	}
+
+	/**
+	 * Gets the buddy icon from the sd card, which was cached before.
+	 * 
+	 * @return
+	 */
+	private Bitmap getBuddyIconFromCache() {
+		File root = new File(Environment.getExternalStorageDirectory(),
+				Constants.SD_CARD_FOLDER_NAME);
+		File buddyIconFile = new File(root,
+				Constants.FLICKR_BUDDY_IMAGE_FILE_NAME);
+		if (!buddyIconFile.exists()) {
+			return null;
+		}
+		return BitmapFactory.decodeFile(buddyIconFile.getAbsolutePath());
 	}
 
 	@Override
@@ -172,6 +212,30 @@ public class MainNavFragment extends Fragment {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
+	/**
+	 * The image download listener to save the buddy icons.
+	 */
+	private IImageDownloadDoneListener mImageDownloadedListener = new IImageDownloadDoneListener() {
+
+		@Override
+		public void onImageDownloaded(final Bitmap bitmap) {
+			File root = new File(Environment.getExternalStorageDirectory(),
+					Constants.SD_CARD_FOLDER_NAME);
+			if (!root.exists() && !root.mkdirs()) {
+				return;
+			}
+
+			final File buddyIconFile = new File(root,
+					Constants.FLICKR_BUDDY_IMAGE_FILE_NAME);
+			mHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					ImageUtils.saveImageToFile(buddyIconFile, bitmap);
+				}
+			});
+		}
+	};
 
 	private static class NavMenuAdapter extends BaseAdapter {
 
