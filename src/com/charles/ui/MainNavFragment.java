@@ -4,12 +4,15 @@
 
 package com.charles.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.charles.FlickrViewerApplication;
+import com.charles.R;
+import com.charles.actions.ShowAuthDialogAction;
+import com.charles.actions.ShowInterestingPhotosAction;
+import com.charles.actions.ShowPeoplePhotosAction;
+import com.charles.task.GetUserInfoTask;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,26 +22,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.aetrion.flickr.photos.PhotoList;
-import com.charles.FlickrViewerApplication;
-import com.charles.R;
-import com.charles.actions.ShowAuthDialogAction;
-import com.charles.actions.ShowPeoplePhotosAction;
-import com.charles.dataprovider.InterestingPhotosDataProvider;
-import com.charles.dataprovider.PaginationPhotoListDataProvider;
-import com.charles.event.IPhotoListReadyListener;
-import com.charles.task.AsyncPhotoListTask;
-import com.charles.task.GetUserInfoTask;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the fragment to be shown at the left side of the screen, which
@@ -59,7 +53,8 @@ public class MainNavFragment extends Fragment {
 			list.setItemChecked(position, true);
 			switch (position) {
 			case 0:
-				showInteresting();
+				ShowInterestingPhotosAction action = new ShowInterestingPhotosAction(getActivity());
+				action.execute();
 				break;
 			case 1:
 				FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
@@ -67,9 +62,9 @@ public class MainNavFragment extends Fragment {
 				String token = app.getFlickrToken();
 				ShowPeoplePhotosAction photosAction = new ShowPeoplePhotosAction(getActivity(),null);
 				if (token == null) {
-					ShowAuthDialogAction action = new ShowAuthDialogAction(
+					ShowAuthDialogAction ia = new ShowAuthDialogAction(
 							getActivity(),photosAction);
-					action.execute();
+					ia.execute();
 				} else {
 					photosAction.execute();
 				}
@@ -176,16 +171,6 @@ public class MainNavFragment extends Fragment {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	private void showInteresting() {
-		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
-				.getApplication();
-		final PaginationPhotoListDataProvider photoListDataProvider = new InterestingPhotosDataProvider();
-		photoListDataProvider.setPageSize(app.getPageSize());
-		final AsyncPhotoListTask task = new AsyncPhotoListTask(getActivity(),
-		        photoListDataProvider, null, "Loading interesting photos...");
-        task.execute();
 	}
 
 	private static class NavMenuAdapter extends BaseAdapter {
