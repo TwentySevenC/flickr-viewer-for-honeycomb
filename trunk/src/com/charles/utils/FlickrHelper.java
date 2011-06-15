@@ -47,7 +47,7 @@ public final class FlickrHelper {
 		
 		return f;
 	}
-
+	
 	public InterestingnessInterface getInterestingInterface() {
 		Flickr f = getFlickr();
 		if (f != null) {

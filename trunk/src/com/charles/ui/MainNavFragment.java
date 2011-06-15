@@ -35,6 +35,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.charles.FlickrViewerApplication;
 import com.charles.R;
 import com.charles.actions.ShowAuthDialogAction;
+import com.charles.actions.ShowFavoritesAction;
 import com.charles.actions.ShowInterestingPhotosAction;
 import com.charles.actions.ShowPeoplePhotosAction;
 import com.charles.event.IImageDownloadDoneListener;
@@ -64,6 +65,11 @@ public class MainNavFragment extends Fragment {
 				long id) {
 			ListView list = (ListView) parent;
 			list.setItemChecked(position, true);
+
+			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+					.getApplication();
+			String token = app.getFlickrToken();
+
 			switch (position) {
 			case 0:
 				ShowInterestingPhotosAction action = new ShowInterestingPhotosAction(
@@ -71,9 +77,6 @@ public class MainNavFragment extends Fragment {
 				action.execute();
 				break;
 			case 1:
-				FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
-						.getApplication();
-				String token = app.getFlickrToken();
 				ShowPeoplePhotosAction photosAction = new ShowPeoplePhotosAction(
 						getActivity(), null);
 				if (token == null) {
@@ -84,6 +87,17 @@ public class MainNavFragment extends Fragment {
 					photosAction.execute();
 				}
 
+				break;
+			case 3:
+				ShowFavoritesAction favAction = new ShowFavoritesAction(
+						getActivity(), null);
+				if (token == null) {
+					ShowAuthDialogAction showAuthAction = new ShowAuthDialogAction(
+							getActivity(), favAction);
+					showAuthAction.execute();
+				} else {
+					favAction.execute();
+				}
 				break;
 			}
 		}
@@ -237,6 +251,9 @@ public class MainNavFragment extends Fragment {
 		}
 	};
 
+	/**
+	 * The main menu adapter.
+	 */
 	private static class NavMenuAdapter extends BaseAdapter {
 
 		private List<CommandItem> commands;
@@ -318,6 +335,11 @@ public class MainNavFragment extends Fragment {
 		item = new CommandItem();
 		item.imageResId = R.drawable.contacts;
 		item.title = "My Contacts";
+		list.add(item);
+
+		item = new CommandItem();
+		item.imageResId = R.drawable.myfavorite;
+		item.title = "My Favorites";
 		list.add(item);
 
 		return list;
