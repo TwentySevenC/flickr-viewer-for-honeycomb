@@ -4,23 +4,18 @@
 
 package com.charles.task;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.aetrion.flickr.photos.PhotoList;
 import com.charles.R;
 import com.charles.dataprovider.IPhotoListDataProvider;
 import com.charles.dataprovider.PaginationPhotoListDataProvider;
 import com.charles.event.IPhotoListReadyListener;
 import com.charles.ui.PhotoListFragment;
-
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Represents the task to fetch the photo list of a user.
@@ -30,27 +25,25 @@ import android.widget.Toast;
  * 
  * @author charles
  */
-public class AsyncPhotoListTask extends AsyncTask<Void, Integer, PhotoList> {
+public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, PhotoList> {
 
     private static final String DEF_MSG = "Loading photos ...";
 
-    private Context mContext;
     private IPhotoListDataProvider mPhotoListProvider;
     private IPhotoListReadyListener mPhotoListReadyListener;
-    private String mDialogMessage;
 
     private IPhotoListReadyListener mDefaultPhotoReadyListener = new IPhotoListReadyListener() {
         @Override
         public void onPhotoListReady(PhotoList list) {
             if (list == null) {
-                Toast.makeText(mContext, "Unable to get photo list",
+                Toast.makeText(mActivity, "Unable to get photo list",
                         Toast.LENGTH_SHORT).show();
                 return;
             }
 
             PhotoListFragment fragment = new PhotoListFragment(list,
                     (PaginationPhotoListDataProvider) mPhotoListProvider);
-            FragmentManager fm = ((Activity) mContext).getFragmentManager();
+            FragmentManager fm = mActivity.getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
@@ -63,35 +56,19 @@ public class AsyncPhotoListTask extends AsyncTask<Void, Integer, PhotoList> {
         }
     };
 
-    private ProgressDialog mDialog;
-
-    public AsyncPhotoListTask(Context context,
+    public AsyncPhotoListTask(Activity context,
             IPhotoListDataProvider photoListProvider,
             IPhotoListReadyListener listener) {
         this(context, photoListProvider, listener, DEF_MSG);
     }
 
-    public AsyncPhotoListTask(Context context,
+    public AsyncPhotoListTask(Activity context,
             IPhotoListDataProvider photoListProvider,
             IPhotoListReadyListener listener, String prompt) {
-        this.mContext = context;
+    	super(context,prompt);
         this.mPhotoListProvider = photoListProvider;
         this.mPhotoListReadyListener = listener == null ? mDefaultPhotoReadyListener : listener;
         this.mDialogMessage = prompt == null ? DEF_MSG : prompt;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        mDialog = ProgressDialog.show(mContext, "", mDialogMessage);
-        mDialog.setCancelable(true);
-        mDialog.setCanceledOnTouchOutside(true);
-        mDialog.setOnCancelListener(new OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                AsyncPhotoListTask.this.cancel(true);
-            }
-        });
     }
 
     @Override
@@ -107,9 +84,7 @@ public class AsyncPhotoListTask extends AsyncTask<Void, Integer, PhotoList> {
 
     @Override
     protected void onPostExecute(PhotoList result) {
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
+        super.onPostExecute(result);
         if (mPhotoListReadyListener != null) {
             mPhotoListReadyListener.onPhotoListReady(result);
         }
