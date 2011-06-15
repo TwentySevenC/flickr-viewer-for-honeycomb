@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 package com.charles.ui;
 
 import java.net.MalformedURLException;
@@ -31,124 +32,134 @@ import com.charles.task.AuthTask;
 import com.charles.utils.FlickrHelper;
 
 /**
- * @author charles
+ * Represents the auth dialog to grant this application the permission to access
+ * user's flickr photos.
  * 
+ * @author charles
  */
 public class AuthFragmentDialog extends DialogFragment implements
-		IAuthDoneListener {
+        IAuthDoneListener {
 
-	/**
-	 * The auth interface
-	 */
-	private AuthInterface mAuthInterface;
-	
-	private IAction mFinishAction;
-	
-	private Handler mHandler = new Handler();
+    /**
+     * The auth interface
+     */
+    private AuthInterface mAuthInterface;
 
-	/**
-	 * The frob.
-	 */
-	private String mFrob = null;
+    /**
+     * Auth dialog might be brought up in several places if not authed before,
+     * so finish action is that the place where the dialog is brought up, then
+     * after auth, we can continue that action.
+     */
+    private IAction mFinishAction;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		getDialog().setTitle("Flickr Authorization");
-		View view = inflater.inflate(R.layout.auth_dlg, null);
+    private Handler mHandler = new Handler();
 
-		Button authButton = (Button) view.findViewById(R.id.button_auth);
-		authButton.setTag(R.id.button_auth);
-		authButton.setOnClickListener(mClickListener);
+    /**
+     * The frob.
+     */
+    private String mFrob = null;
 
-		Button authDoneButton = (Button) view
-				.findViewById(R.id.button_auth_done);
-		authDoneButton.setTag(R.id.button_auth_done);
-		authDoneButton.setOnClickListener(mClickListener);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        getDialog().setTitle("Flickr Authorization");
+        View view = inflater.inflate(R.layout.auth_dlg, null);
 
-		return view;
-	}
+        Button authButton = (Button) view.findViewById(R.id.button_auth);
+        authButton.setTag(R.id.button_auth);
+        authButton.setOnClickListener(mClickListener);
 
-	@Override
-	public void onAuthDone(int type, Object result) {
-		if (type == AuthTask.TYPE_FROB) {
-			mFrob = result.toString();
-			try {
-				URL url = mAuthInterface.buildAuthenticationUrl(
-						Permission.WRITE, mFrob);
-				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url
-						.toExternalForm()));
-				getActivity().startActivity(intent);
-				return;
-			} catch (MalformedURLException e) {
+        Button authDoneButton = (Button) view
+                .findViewById(R.id.button_auth_done);
+        authDoneButton.setTag(R.id.button_auth_done);
+        authDoneButton.setOnClickListener(mClickListener);
 
-			}
-		} else { //auth done
-			Auth auth = (Auth) result;
-			if( auth == null ) {
-			    return;
-			}
-			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
-					.getApplication();
-			User user = auth.getUser();
-			app.saveFlickrAuthToken(auth.getToken(), user.getId(), user
-					.getUsername());
-			
-			//notify main menu panel to update
-			//TODO refactor later.
-			MainNavFragment menuFragment = (MainNavFragment) getFragmentManager().findFragmentById(R.id.nav_frg);
-			menuFragment.handleUserPanel(menuFragment.getView());
-			this.dismiss();
-			
-			if(mFinishAction != null) {
-			    mHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						mFinishAction.execute();
-					}} );
-			}
-			
-		}
-	}
+        return view;
+    }
 
-	/**
-	 * The button click listener.
-	 */
-	private OnClickListener mClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
+    @Override
+    public void onAuthDone(int type, Object result) {
+        if (type == AuthTask.TYPE_FROB) {
+            mFrob = result.toString();
+            try {
+                URL url = mAuthInterface.buildAuthenticationUrl(
+                        Permission.WRITE, mFrob);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url
+                        .toExternalForm()));
+                getActivity().startActivity(intent);
+                return;
+            } catch (MalformedURLException e) {
 
-			if (mAuthInterface == null) {
-				Flickr f = FlickrHelper.getInstance().getFlickr();
-				mAuthInterface = f.getAuthInterface();
-			}
+            }
+        } else { // auth done
+            Auth auth = (Auth) result;
+            if (auth == null) {
+                return;
+            }
+            FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+                    .getApplication();
+            User user = auth.getUser();
+            app.saveFlickrAuthToken(auth.getToken(), user.getId(), user
+                    .getUsername());
 
-			Integer tag = (Integer) v.getTag();
-			if (tag == R.id.button_auth) {
-				AuthTask task = new AuthTask(AuthTask.TYPE_FROB,
-						AuthFragmentDialog.this, mAuthInterface);
-				task.execute("");
-			} else if (tag == R.id.button_auth_done) {
-				if (mFrob == null) {
-					Toast.makeText(getActivity(),
-							"Click the 1st button first please.",
-							Toast.LENGTH_LONG).show();
-					return;
-				}
+            // notify main menu panel to update
+            // TODO refactor later.
+            MainNavFragment menuFragment = (MainNavFragment) getFragmentManager().findFragmentById(
+                    R.id.nav_frg);
+            menuFragment.handleUserPanel(menuFragment.getView());
+            this.dismiss();
 
-				AuthTask authDoneTask = new AuthTask(AuthTask.TYPE_TOKEN,
-						AuthFragmentDialog.this, mAuthInterface);
-				authDoneTask.execute(mFrob);
-			}
-		}
-	};
-	
-	/**
-	 * Sets the action after auth.
-	 * @param action
-	 */
-	public void setFinishAction(IAction action) {
-	    this.mFinishAction = action;
-	}
+            if (mFinishAction != null) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFinishAction.execute();
+                    }
+                });
+            }
+
+        }
+    }
+
+    /**
+     * The button click listener.
+     */
+    private OnClickListener mClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            if (mAuthInterface == null) {
+                Flickr f = FlickrHelper.getInstance().getFlickr();
+                mAuthInterface = f.getAuthInterface();
+            }
+
+            Integer tag = (Integer) v.getTag();
+            if (tag == R.id.button_auth) {
+                AuthTask task = new AuthTask(AuthTask.TYPE_FROB,
+                        AuthFragmentDialog.this, mAuthInterface);
+                task.execute("");
+            } else if (tag == R.id.button_auth_done) {
+                if (mFrob == null) {
+                    Toast.makeText(getActivity(),
+                            "Click the 1st button first please.",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                AuthTask authDoneTask = new AuthTask(AuthTask.TYPE_TOKEN,
+                        AuthFragmentDialog.this, mAuthInterface);
+                authDoneTask.execute(mFrob);
+            }
+        }
+    };
+
+    /**
+     * Sets the action after auth.
+     * 
+     * @param action
+     */
+    public void setFinishAction(IAction action) {
+        this.mFinishAction = action;
+    }
 
 }
