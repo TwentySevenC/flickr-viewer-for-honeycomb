@@ -83,8 +83,11 @@ public class AuthFragmentDialog extends DialogFragment implements
 			} catch (MalformedURLException e) {
 
 			}
-		} else {
+		} else { //auth done
 			Auth auth = (Auth) result;
+			if( auth == null ) {
+			    return;
+			}
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
 			User user = auth.getUser();
