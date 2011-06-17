@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.aetrion.flickr.people.User;
 import com.aetrion.flickr.photos.Exif;
 import com.aetrion.flickr.photos.Photo;
 import com.charles.FlickrViewerApplication;
@@ -54,6 +55,11 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	private static final String TAG = ViewImageDetailFragment.class
 			.getSimpleName();
+	   
+    private static final String PHOTO_ID_ATTR = "photo.id";
+    private static final String PHOTO_TITLE_ATTR = "photo.title";
+    private static final String PHOTO_OWNER_ID = "photo.owner.id";
+
 	private WeakReference<Bitmap> mBitmapRef;
 	private Photo mCurrentPhoto;
 	private Exif[] mExifs;
@@ -72,7 +78,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	 * Default constructor for the framework.
 	 */
 	public ViewImageDetailFragment() {
-
+	    mCurrentPhoto = new Photo();
 	}
 
 	/**
@@ -160,6 +166,17 @@ public class ViewImageDetailFragment extends Fragment implements
 				getActivity().onBackPressed();
 			}
 		});
+		
+		if( savedInstanceState != null ) {
+		    String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
+		    String photoTitle = savedInstanceState.getString(PHOTO_TITLE_ATTR);
+		    String ownerId = savedInstanceState.getString(PHOTO_OWNER_ID);
+		    mCurrentPhoto.setId(photoId);
+		    mCurrentPhoto.setTitle(photoTitle);
+		    User user = new User();
+		    user.setId(ownerId);
+		    mCurrentPhoto.setOwner(user);
+		}
 
 		// photo title.
 		TextView photoTitle = (TextView) view.findViewById(R.id.titlebyauthor);
@@ -204,6 +221,14 @@ public class ViewImageDetailFragment extends Fragment implements
 	}
 
 	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(PHOTO_ID_ATTR, mCurrentPhoto.getId());
+        outState.putString(PHOTO_TITLE_ATTR, mCurrentPhoto.getTitle());
+        outState.putString(PHOTO_OWNER_ID, mCurrentPhoto.getOwner().getId());
+    }
+
+    @Override
 	public void onPause() {
 		if (mPhotoCommentTask != null) {
 			mPhotoCommentTask.cancel(true);
