@@ -14,6 +14,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -296,7 +297,7 @@ public class ViewImageDetailFragment extends Fragment implements
 
 			UserComment userComment = (UserComment) getItem(position);
 			author.setText(userComment.getUserName());
-			comment.setText(userComment.getCommentText());
+			comment.setText(Html.fromHtml(userComment.getCommentText()));
 			commentDate.setText(userComment.getCommentDateString());
 
 			Drawable drawable = buddyIcon.getDrawable();
