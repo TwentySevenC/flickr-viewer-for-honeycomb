@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -280,6 +281,7 @@ public class ViewImageDetailFragment extends Fragment implements
 				buddyIcon = (ImageView) view.findViewById(R.id.buddy_icon);
 				author = (TextView) view.findViewById(R.id.author);
 				comment = (TextView) view.findViewById(R.id.comment);
+				comment.setMovementMethod(LinkMovementMethod.getInstance());
 				commentDate = (TextView) view.findViewById(R.id.commentDate);
 
 				holder = new ViewHolder();
