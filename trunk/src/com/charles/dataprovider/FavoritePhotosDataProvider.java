@@ -3,8 +3,12 @@
  */
 package com.charles.dataprovider;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.favorites.FavoritesInterface;
+import com.aetrion.flickr.photos.Extras;
 import com.aetrion.flickr.photos.PhotoList;
 import com.charles.utils.FlickrHelper;
 
@@ -41,7 +45,11 @@ public class FavoritePhotosDataProvider extends
 	public PhotoList getPhotoList() throws Exception {
 		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
 		FavoritesInterface fi = f.getFavoritesInterface();
-		return fi.getList(mUserId, this.mPageSize, this.mPageNumber, null);
+		Set<String> extras = new HashSet<String>();
+		extras.add(Extras.TAGS);
+		extras.add(Extras.GEO);
+		extras.add(Extras.OWNER_NAME);
+		return fi.getList(mUserId, this.mPageSize, this.mPageNumber, extras);
 	}
 
 }

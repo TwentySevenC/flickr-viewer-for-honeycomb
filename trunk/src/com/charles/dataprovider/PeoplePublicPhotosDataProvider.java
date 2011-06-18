@@ -3,8 +3,12 @@
  */
 package com.charles.dataprovider;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.people.PeopleInterface;
+import com.aetrion.flickr.photos.Extras;
 import com.aetrion.flickr.photos.PhotoList;
 import com.charles.utils.FlickrHelper;
 
@@ -53,7 +57,11 @@ public class PeoplePublicPhotosDataProvider extends
 		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
 
 		PeopleInterface pi = f.getPeopleInterface();
-		return pi.getPublicPhotos(mUserId, mPageSize, mPageNumber);
+		Set<String> extras = new HashSet<String>();
+		extras.add(Extras.TAGS);
+		extras.add(Extras.GEO);
+		extras.add(Extras.OWNER_NAME);
+		return pi.getPublicPhotos(mUserId, extras, mPageSize, mPageNumber);
 	}
 
 }
