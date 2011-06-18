@@ -12,11 +12,17 @@
 			android:layout_below="@id/image" android:layout_marginTop="10dp"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center" />
-		<com.charles.ui.comp.PhotoDetailActionBar android:background="@drawable/photo_detail_action_bar_bg"
+		<com.charles.ui.comp.PhotoDetailActionBar
+			android:background="@drawable/photo_detail_action_bar_bg"
 			android:layout_centerHorizontal="true" android:id="@+id/user_action_bar"
 			android:layout_alignParentBottom="true" android:layout_height="wrap_content"
 			android:layout_marginLeft="50dp" android:layout_marginRight="50dp"
-			android:layout_marginBottom="50dp" android:layout_width="fill_parent"/>
+			android:layout_marginBottom="50dp" android:layout_width="fill_parent" />
+		<TextView android:id="@+id/photo_tags" android:layout_above="@id/user_action_bar"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_marginLeft="50dp" android:layout_marginRight="50dp"
+			android:layout_marginBottom="5dp" android:singleLine="true"
+			android:marqueeRepeatLimit="-1" android:ellipsize="marquee" />
 
 	</RelativeLayout>
 	<LinearLayout android:orientation="vertical"
