@@ -8,6 +8,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -16,6 +18,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.text.util.Linkify.MatchFilter;
+import android.text.util.Linkify.TransformFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -57,6 +62,11 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	private static final String TAG = ViewImageDetailFragment.class
 			.getSimpleName();
+	
+	/**
+	 * Example: [http://www.flickr.com/photos/example/2910192942/]
+	 */
+	private static final String FILICK_URL_EXPRESSION = "(\\[http){1}+(s)?+(://){1}+.*\\]{1}+";
 	   
     private static final String PHOTO_ID_ATTR = "photo.id";
     private static final String PHOTO_TITLE_ATTR = "photo.title";
@@ -300,6 +310,25 @@ public class ViewImageDetailFragment extends Fragment implements
 			UserComment userComment = (UserComment) getItem(position);
 			author.setText(userComment.getUserName());
 			comment.setText(Html.fromHtml(userComment.getCommentText()));
+			Linkify.addLinks(comment, Pattern.compile(FILICK_URL_EXPRESSION), "http://", 
+					new MatchFilter() {
+
+				@Override
+				public boolean acceptMatch(CharSequence s, int start, int end) {
+					return true;
+				}
+
+			}, new TransformFilter() {
+
+				@Override
+				public String transformUrl(Matcher matcher, String data) {
+					if (data.length() > 2) {
+						return data.substring(1, data.length() - 1);
+					}
+					return data;
+				}
+
+			});
 			commentDate.setText(userComment.getCommentDateString());
 
 			Drawable drawable = buddyIcon.getDrawable();
