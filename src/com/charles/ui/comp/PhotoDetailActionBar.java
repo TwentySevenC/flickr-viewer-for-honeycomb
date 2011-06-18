@@ -38,7 +38,7 @@ public class PhotoDetailActionBar extends FrameLayout implements
 	private ViewSwitcher mViewSwitcher;
 
 	private String mPhotoId;
-	private String mUserId;
+	private User mPhotoOwner;
 
 	public PhotoDetailActionBar(Context context) {
 		super(context);
@@ -103,7 +103,7 @@ public class PhotoDetailActionBar extends FrameLayout implements
 			case R.id.gallery:
 				Context context = getContext();
 				ShowPeoplePhotosAction action = new ShowPeoplePhotosAction(
-						(Activity) context, mUserId);
+						(Activity) context, mPhotoOwner.getId());
 				action.execute();
 				break;
 			case R.id.add_favourite:
@@ -116,12 +116,13 @@ public class PhotoDetailActionBar extends FrameLayout implements
 	};
 
 	/**
-	 * @param userId
+	 * @param owner
 	 */
-	public void setUser(String userId) {
-		this.mUserId = userId;
+	public void setUser(User owner) {
+		this.mPhotoOwner = owner;
+		mUserName.setText(mPhotoOwner.getUsername());
 		GetUserInfoTask task = new GetUserInfoTask(mBuddyIcon, this, null);
-		task.execute(userId);
+		task.execute(owner.getId());
 	}
 
 	public void setPhotoId(String photoId) {

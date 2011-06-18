@@ -37,6 +37,7 @@ import android.widget.ViewSwitcher;
 import com.aetrion.flickr.people.User;
 import com.aetrion.flickr.photos.Exif;
 import com.aetrion.flickr.photos.Photo;
+import com.aetrion.flickr.tags.Tag;
 import com.charles.FlickrViewerApplication;
 import com.charles.R;
 import com.charles.actions.IAction;
@@ -161,6 +162,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -193,6 +195,21 @@ public class ViewImageDetailFragment extends Fragment implements
 		// photo title.
 		TextView photoTitle = (TextView) view.findViewById(R.id.titlebyauthor);
 		photoTitle.setText(mCurrentPhoto.getTitle());
+		
+		//tags
+		TextView tagsText = (TextView) view.findViewById(R.id.photo_tags);
+		Collection<Tag> tags = mCurrentPhoto.getTags();
+		if( tags == null || tags.isEmpty() ) {
+			tagsText.setVisibility(View.GONE);
+		} else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Tags: " );
+			for( Tag tag : tags ) {
+				sb.append(tag.getValue()).append(" ");
+			}
+			tagsText.setText(sb.toString());
+			tagsText.setSelected(true);
+		}
 
 		// exif list.
 		ListView list = (ListView) view.findViewById(R.id.exifList);
@@ -215,7 +232,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		// get user information.
 		PhotoDetailActionBar pBar = (PhotoDetailActionBar) view
 				.findViewById(R.id.user_action_bar);
-		pBar.setUser(mCurrentPhoto.getOwner().getId());
+		pBar.setUser(mCurrentPhoto.getOwner());
 		pBar.setPhotoId(mCurrentPhoto.getId());
 
 		return view;
