@@ -36,7 +36,7 @@
             	android:summary="@string/summary_photo_grid_page_size"
             	android:entries="@array/photo_grid_page_size"
             	android:entryValues="@array/photo_grid_page_size"
-            	android:defaultValue="36"
+            	android:defaultValue="18"
             	android:dialogTitle="@string/photo_grid_page_size_dlg_title"/>
             
     </PreferenceCategory>
