@@ -7,14 +7,9 @@
 
 package com.charles.ui;
 
-import com.aetrion.flickr.contacts.Contact;
-import com.charles.R;
-import com.charles.actions.ShowPeoplePhotosAction;
-import com.charles.event.IContactsFetchedListener;
-import com.charles.task.GetContactsTask;
-import com.charles.task.ImageDownloadTask;
-import com.charles.utils.ImageCache;
-import com.charles.utils.ImageUtils.DownloadedDrawable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -26,152 +21,173 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView.ScaleType;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.aetrion.flickr.contacts.Contact;
+import com.charles.R;
+import com.charles.actions.ShowMyContactsAction;
+import com.charles.actions.ShowPeoplePhotosAction;
+import com.charles.event.IContactsFetchedListener;
+import com.charles.task.ImageDownloadTask;
+import com.charles.utils.ImageCache;
+import com.charles.utils.ImageUtils.DownloadedDrawable;
 
 /**
  * @author qiangz
  */
-public class ContactsFragment extends Fragment implements IContactsFetchedListener,
-        OnItemClickListener {
+public class ContactsFragment extends Fragment implements
+		IContactsFetchedListener, OnItemClickListener {
 
-    private MyAdapter mAdapter;
-    private List<Contact> mContacts = new ArrayList<Contact>();
+	private MyAdapter mAdapter;
+	private List<Contact> mContacts = null;
 
-    /**
-     * Default constructor.
-     */
-    public ContactsFragment() {
-    }
+	private boolean mCreatedByOS = false;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        GridView gv = new GridView(getActivity());
-        gv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-        gv.setNumColumns(3);
-        mAdapter = new MyAdapter(getActivity(), mContacts);
-        gv.setAdapter(mAdapter);
-        gv.setOnItemClickListener(this);
-        return gv;
-    }
+	/**
+	 * Default constructor.
+	 */
+	public ContactsFragment() {
+		mContacts = new ArrayList<Contact>();
+		mCreatedByOS = true;
+	}
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        GetContactsTask task = new GetContactsTask(getActivity(), this);
-        task.execute((String) null);
-    }
+	public ContactsFragment(List<Contact> contacts) {
+		mContacts = contacts;
+	}
 
-    private static class MyAdapter extends BaseAdapter {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		GridView gv = new GridView(getActivity());
+		gv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
+		gv.setNumColumns(3);
+		mAdapter = new MyAdapter(getActivity(), mContacts);
+		gv.setAdapter(mAdapter);
+		gv.setOnItemClickListener(this);
+		return gv;
+	}
 
-        private List<Contact> mContacts;
-        private Context mContext;
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (mCreatedByOS) {
+			ShowMyContactsAction action = new ShowMyContactsAction(
+					getActivity(), this);
+			action.execute();
+			mCreatedByOS = false;
+		}
+	}
 
-        public MyAdapter(Context context, List<Contact> contacts) {
-            this.mContacts = contacts;
-            this.mContext = context;
-        }
+	private static class MyAdapter extends BaseAdapter {
 
-        @Override
-        public int getCount() {
-            return mContacts.size();
-        }
+		private List<Contact> mContacts;
+		private Context mContext;
 
-        @Override
-        public Object getItem(int arg0) {
-            return mContacts.get(arg0);
-        }
+		public MyAdapter(Context context, List<Contact> contacts) {
+			this.mContacts = contacts;
+			this.mContext = context;
+		}
 
-        @Override
-        public long getItemId(int arg0) {
-            return 0;
-        }
+		@Override
+		public int getCount() {
+			return mContacts.size();
+		}
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+		@Override
+		public Object getItem(int arg0) {
+			return mContacts.get(arg0);
+		}
 
-            View view = convertView;
-            if (view == null) {
-                LayoutInflater li = LayoutInflater.from(mContext);
-                view = li.inflate(R.layout.contact_item, null);
-            }
+		@Override
+		public long getItemId(int arg0) {
+			return 0;
+		}
 
-            Contact contact = (Contact) getItem(position);
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
 
-            ImageView photoImage;
-            TextView titleView;
+			View view = convertView;
+			if (view == null) {
+				LayoutInflater li = LayoutInflater.from(mContext);
+				view = li.inflate(R.layout.contact_item, null);
+			}
 
-            ViewHolder holder = (ViewHolder) view.getTag();
-            if (holder == null) {
-                photoImage = (ImageView) view.findViewById(R.id.contact_icon);
-                titleView = (TextView) view.findViewById(R.id.contact_name);
+			Contact contact = (Contact) getItem(position);
 
-                holder = new ViewHolder();
-                holder.image = photoImage;
-                holder.titleView = titleView;
-                view.setTag(holder);
+			ImageView photoImage;
+			TextView titleView;
 
-            } else {
-                photoImage = holder.image;
-                titleView = holder.titleView;
-            }
-            titleView.setText(contact.getUsername());
-            photoImage.setScaleType(ScaleType.CENTER_CROP);
+			ViewHolder holder = (ViewHolder) view.getTag();
+			if (holder == null) {
+				photoImage = (ImageView) view.findViewById(R.id.contact_icon);
+				titleView = (TextView) view.findViewById(R.id.contact_name);
 
-            Drawable drawable = photoImage.getDrawable();
-            String buddyIconUrl = contact.getBuddyIconUrl();
-            if (drawable != null && drawable instanceof DownloadedDrawable) {
-                ImageDownloadTask task = ((DownloadedDrawable) drawable)
-                        .getBitmapDownloaderTask();
-                if (!buddyIconUrl.equals(task)) {
-                    task.cancel(true);
-                }
-            }
+				holder = new ViewHolder();
+				holder.image = photoImage;
+				holder.titleView = titleView;
+				view.setTag(holder);
 
-            if (buddyIconUrl == null) {
-                photoImage.setImageDrawable(null);
-            } else {
-                Bitmap cacheBitmap = ImageCache.getFromCache(buddyIconUrl);
-                if (cacheBitmap != null) {
-                    photoImage.setImageBitmap(cacheBitmap);
-                } else {
-                    ImageDownloadTask task = new ImageDownloadTask(photoImage);
-                    drawable = new DownloadedDrawable(task);
-                    photoImage.setImageDrawable(drawable);
-                    task.execute(buddyIconUrl);
-                }
-            }
+			} else {
+				photoImage = holder.image;
+				titleView = holder.titleView;
+			}
+			titleView.setText(contact.getUsername());
+			photoImage.setScaleType(ScaleType.CENTER_CROP);
 
-            return view;
-        }
+			Drawable drawable = photoImage.getDrawable();
+			String buddyIconUrl = contact.getBuddyIconUrl();
+			if (drawable != null && drawable instanceof DownloadedDrawable) {
+				ImageDownloadTask task = ((DownloadedDrawable) drawable)
+						.getBitmapDownloaderTask();
+				if (!buddyIconUrl.equals(task)) {
+					task.cancel(true);
+				}
+			}
 
-        private static class ViewHolder {
-            ImageView image;
-            TextView titleView;
-        }
+			if (buddyIconUrl == null) {
+				photoImage.setImageDrawable(null);
+			} else {
+				Bitmap cacheBitmap = ImageCache.getFromCache(buddyIconUrl);
+				if (cacheBitmap != null) {
+					photoImage.setImageBitmap(cacheBitmap);
+				} else {
+					ImageDownloadTask task = new ImageDownloadTask(photoImage);
+					drawable = new DownloadedDrawable(task);
+					photoImage.setImageDrawable(drawable);
+					task.execute(buddyIconUrl);
+				}
+			}
 
-    }
+			return view;
+		}
 
-    @Override
-    public void onContactsFetched(Collection<Contact> contacts) {
-        mContacts.clear();
-        mContacts.addAll(contacts);
-        mAdapter.notifyDataSetChanged();
-    }
+		private static class ViewHolder {
+			ImageView image;
+			TextView titleView;
+		}
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Contact c = mContacts.get(position);
-        String userId = c.getId();
-        ShowPeoplePhotosAction action = new ShowPeoplePhotosAction(getActivity(), userId);
-        action.execute();
-    }
+	}
+
+	@Override
+	public void onContactsFetched(Collection<Contact> contacts) {
+		mContacts.clear();
+		mContacts.addAll(contacts);
+		mAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Contact c = mContacts.get(position);
+		String userId = c.getId();
+		ShowPeoplePhotosAction action = new ShowPeoplePhotosAction(
+				getActivity(), userId);
+		action.execute();
+	}
 }
