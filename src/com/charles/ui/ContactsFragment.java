@@ -52,7 +52,7 @@ public class ContactsFragment extends Fragment implements IContactsFetchedListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         GridView gv = new GridView(getActivity());
         gv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-        gv.setNumColumns(GridView.AUTO_FIT);
+        gv.setNumColumns(3);
         mAdapter = new MyAdapter(getActivity(), mContacts);
         gv.setAdapter(mAdapter);
         return gv;
