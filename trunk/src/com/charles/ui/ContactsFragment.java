@@ -9,6 +9,7 @@ package com.charles.ui;
 
 import com.aetrion.flickr.contacts.Contact;
 import com.charles.R;
+import com.charles.actions.ShowPeoplePhotosAction;
 import com.charles.event.IContactsFetchedListener;
 import com.charles.task.GetContactsTask;
 import com.charles.task.ImageDownloadTask;
@@ -24,6 +25,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -37,7 +40,8 @@ import java.util.List;
 /**
  * @author qiangz
  */
-public class ContactsFragment extends Fragment implements IContactsFetchedListener {
+public class ContactsFragment extends Fragment implements IContactsFetchedListener,
+        OnItemClickListener {
 
     private MyAdapter mAdapter;
     private List<Contact> mContacts = new ArrayList<Contact>();
@@ -55,6 +59,7 @@ public class ContactsFragment extends Fragment implements IContactsFetchedListen
         gv.setNumColumns(3);
         mAdapter = new MyAdapter(getActivity(), mContacts);
         gv.setAdapter(mAdapter);
+        gv.setOnItemClickListener(this);
         return gv;
     }
 
@@ -162,4 +167,11 @@ public class ContactsFragment extends Fragment implements IContactsFetchedListen
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Contact c = mContacts.get(position);
+        String userId = c.getId();
+        ShowPeoplePhotosAction action = new ShowPeoplePhotosAction(getActivity(), userId);
+        action.execute();
+    }
 }
