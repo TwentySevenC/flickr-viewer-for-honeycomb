@@ -67,6 +67,7 @@ public class ContactsFragment extends Fragment implements
 		gv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT));
 		gv.setNumColumns(3);
+		gv.setHorizontalSpacing(20);
 		mAdapter = new MyAdapter(getActivity(), mContacts);
 		gv.setAdapter(mAdapter);
 		gv.setOnItemClickListener(this);
