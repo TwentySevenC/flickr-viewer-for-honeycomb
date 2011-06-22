@@ -4,9 +4,17 @@
 
 package com.charles.ui;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.charles.FlickrViewerApplication;
+import com.charles.R;
+import com.charles.actions.ShowAuthDialogAction;
+import com.charles.actions.ShowFavoritesAction;
+import com.charles.actions.ShowInterestingPhotosAction;
+import com.charles.actions.ShowMyContactsAction;
+import com.charles.actions.ShowPeoplePhotosAction;
+import com.charles.event.IImageDownloadDoneListener;
+import com.charles.task.GetUserInfoTask;
+import com.charles.utils.Constants;
+import com.charles.utils.ImageUtils;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -19,30 +27,19 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.charles.FlickrViewerApplication;
-import com.charles.R;
-import com.charles.actions.ShowAuthDialogAction;
-import com.charles.actions.ShowFavoritesAction;
-import com.charles.actions.ShowInterestingPhotosAction;
-import com.charles.actions.ShowMyContactsAction;
-import com.charles.actions.ShowPeoplePhotosAction;
-import com.charles.event.IImageDownloadDoneListener;
-import com.charles.task.GetUserInfoTask;
-import com.charles.utils.Constants;
-import com.charles.utils.ImageUtils;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the fragment to be shown at the left side of the screen, which
@@ -111,15 +108,16 @@ public class MainNavFragment extends Fragment {
 					favAction.execute();
 				}
 				break;
+			case 4:
+			    Fragment frag = new SettingsFragment();
+	            FragmentTransaction ft = getFragmentManager().beginTransaction();
+	            ft.replace(R.id.main_area, frag);
+	            ft.addToBackStack("Settings");
+	            ft.commit();
+	            break;
 			}
 		}
 	};
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.setHasOptionsMenu(true);
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -216,27 +214,6 @@ public class MainNavFragment extends Fragment {
 			return null;
 		}
 		return BitmapFactory.decodeFile(buddyIconFile.getAbsolutePath());
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.menu_main_nav, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_item_setting:
-			Fragment frag = new SettingsFragment();
-			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.replace(R.id.main_area, frag);
-			ft.addToBackStack("Settings");
-			ft.commit();
-
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
 	}
 
 	/**
@@ -352,6 +329,11 @@ public class MainNavFragment extends Fragment {
 		item = new CommandItem();
 		item.imageResId = R.drawable.myfavorite;
 		item.title = "My Favorites";
+		list.add(item);
+		
+		item = new CommandItem();
+		item.imageResId = R.drawable.settings;
+		item.title= "Settings";
 		list.add(item);
 
 		return list;
