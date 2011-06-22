@@ -1,14 +1,6 @@
 package com.charles.utils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.SoftReference;
-import java.lang.ref.WeakReference;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.charles.task.ImageDownloadTask;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,11 +10,22 @@ import org.apache.http.client.methods.HttpGet;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
-import com.charles.task.ImageDownloadTask;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class ImageUtils {
 
@@ -30,6 +33,20 @@ public final class ImageUtils {
 
 	private static Map<String, SoftReference<Bitmap>> imageCache = new ConcurrentHashMap<String, SoftReference<Bitmap>>(
 			20);
+	
+	private static final float ROTATION_ANGLE_MIN = 2.5f;
+    private static final float ROTATION_ANGLE_EXTRA = 5.5f;
+    private static Random mRandom = new Random();
+    private static final float PHOTO_BORDER_WIDTH = 3.0f;
+    private static final int PHOTO_BORDER_COLOR = 0xffffffff;
+    private static final Paint sPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+    private static final Paint sStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    
+    static {
+        sStrokePaint.setStrokeWidth(PHOTO_BORDER_WIDTH);
+        sStrokePaint.setStyle(Paint.Style.STROKE);
+        sStrokePaint.setColor(PHOTO_BORDER_COLOR);
+    }
 
 	/**
 	 * This method must be called in a thread other than UI.
@@ -142,4 +159,35 @@ public final class ImageUtils {
 		}
 		return true;
 	}
+	
+	public static Bitmap rotateAndFrame(Bitmap bitmap) {
+        final boolean positive = mRandom.nextFloat() >= 0.5f;
+        final float angle = (ROTATION_ANGLE_MIN + mRandom.nextFloat() * ROTATION_ANGLE_EXTRA) *
+                (positive ? 1.0f : -1.0f);
+        final double radAngle = Math.toRadians(angle);
+
+        final int bitmapWidth = bitmap.getWidth();
+        final int bitmapHeight = bitmap.getHeight();
+
+        final double cosAngle = Math.abs(Math.cos(radAngle));
+        final double sinAngle = Math.abs(Math.sin(radAngle));
+
+        final int strokedWidth = (int) (bitmapWidth + 2 * PHOTO_BORDER_WIDTH);
+        final int strokedHeight = (int) (bitmapHeight + 2 * PHOTO_BORDER_WIDTH);
+
+        final int width = (int) (strokedHeight * sinAngle + strokedWidth * cosAngle);
+        final int height = (int) (strokedWidth * sinAngle + strokedHeight * cosAngle);
+
+        final float x = (width - bitmapWidth) / 2.0f;
+        final float y = (height - bitmapHeight) / 2.0f;
+
+        final Bitmap decored = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(decored);
+
+        canvas.rotate(angle, width / 2.0f, height / 2.0f);
+        canvas.drawBitmap(bitmap, x, y, sPaint);
+        canvas.drawRect(x, y, x + bitmapWidth, y + bitmapHeight, sStrokePaint);
+
+        return decored;
+    }
 }
