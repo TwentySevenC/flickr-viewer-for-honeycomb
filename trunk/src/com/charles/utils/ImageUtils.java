@@ -38,7 +38,7 @@ public final class ImageUtils {
     private static final float ROTATION_ANGLE_EXTRA = 5.5f;
     private static Random mRandom = new Random();
     private static final float PHOTO_BORDER_WIDTH = 3.0f;
-    private static final int PHOTO_BORDER_COLOR = 0xffffffff;
+    private static final int PHOTO_BORDER_COLOR = 0x0;
     private static final Paint sPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
     private static final Paint sStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     
