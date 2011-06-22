@@ -35,6 +35,8 @@
 	</string>
 	<string name="auth_btn_title">Go Flickr to Authorize</string>
 	<string name="auth_done_btn_title">Permission Granted</string>
+	
+	<string name="share_dlg_title">Select an action to share</string>
 </resources>
 
 
