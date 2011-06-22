@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 package com.charles.actions;
 
 import com.aetrion.flickr.photos.PhotoList;
@@ -22,55 +23,57 @@ import android.app.FragmentTransaction;
  */
 public class ShowPeoplePhotosAction extends ActivityAwareAction {
 
-	private String mUserId;
-	private PeoplePublicPhotosDataProvider mDataProvider;
-	private IPhotoListReadyListener mPhotosReadyListener = new IPhotoListReadyListener() {
+    private String mUserId;
+    private PeoplePublicPhotosDataProvider mDataProvider;
+    private IPhotoListReadyListener mPhotosReadyListener = new IPhotoListReadyListener() {
 
-		@Override
-		public void onPhotoListReady(PhotoList list) {
-			PhotoListFragment fragment = new PhotoListFragment(list,
-					mDataProvider);
-			FragmentManager fm = mActivity.getFragmentManager();
-			FragmentTransaction ft = fm.beginTransaction();
-			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			ft.replace(R.id.main_area, fragment);
-			ft.addToBackStack(null);
-			ft.commitAllowingStateLoss();
-		}
+        @Override
+        public void onPhotoListReady(PhotoList list) {
+            PhotoListFragment fragment = new PhotoListFragment(list,
+                    mDataProvider);
+            FragmentManager fm = mActivity.getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            int stackCount = fm.getBackStackEntryCount();
+            for (int i = 0; i < stackCount; i++) {
+                fm.popBackStack();
+            }
+            ft.replace(R.id.main_area, fragment);
+            ft.commitAllowingStateLoss();
+        }
 
-	};
+    };
 
-	/**
-	 * @param resId
-	 */
-	public ShowPeoplePhotosAction(Activity context, String userId) {
-		super(context);
-		this.mUserId = userId;
-	}
+    /**
+     * @param resId
+     */
+    public ShowPeoplePhotosAction(Activity context, String userId) {
+        super(context);
+        this.mUserId = userId;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.charles.actions.IAction#execute()
-	 */
-	@Override
-	public void execute() {
-		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
-				.getApplication();
+    /*
+     * (non-Javadoc)
+     * @see com.charles.actions.IAction#execute()
+     */
+    @Override
+    public void execute() {
+        FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+                .getApplication();
 
-		if (mUserId != null && mUserId.equals(app.getUserId())) {
-			mActivity.onBackPressed();
-			return;
-		}
+        if (mUserId != null && mUserId.equals(app.getUserId())) {
+            mActivity.onBackPressed();
+            return;
+        }
 
-		String token = app.getFlickrToken();
-		if (mUserId == null) {
-			mUserId = app.getUserId();
-		}
-		mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token);
-		AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
-				mDataProvider, mPhotosReadyListener);
-		task.execute();
-	}
+        String token = app.getFlickrToken();
+        if (mUserId == null) {
+            mUserId = app.getUserId();
+        }
+        mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token);
+        AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
+                mDataProvider, mPhotosReadyListener);
+        task.execute();
+    }
 
 }
