@@ -42,7 +42,7 @@ public class ShowFavoritesAction extends ActivityAwareAction {
 		PaginationPhotoListDataProvider dp = new FavoritePhotosDataProvider(
 				mUserId, token);
 		AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity, dp, null,
-				"Loading favorite photos of " + mUserId);
+				"Loading favorite photos ..." );
 		task.execute();
 	}
 
