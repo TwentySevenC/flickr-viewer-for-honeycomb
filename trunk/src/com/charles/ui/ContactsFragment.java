@@ -29,6 +29,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
 
 import com.aetrion.flickr.contacts.Contact;
+import com.charles.FlickrViewerActivity;
 import com.charles.R;
 import com.charles.actions.ShowMyContactsAction;
 import com.charles.actions.ShowPeoplePhotosAction;
@@ -71,6 +72,9 @@ public class ContactsFragment extends Fragment implements
 		mAdapter = new MyAdapter(getActivity(), mContacts);
 		gv.setAdapter(mAdapter);
 		gv.setOnItemClickListener(this);
+		
+		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
+		act.changeActionBarTitle(null);
 		return gv;
 	}
 
@@ -188,7 +192,7 @@ public class ContactsFragment extends Fragment implements
 		Contact c = mContacts.get(position);
 		String userId = c.getId();
 		ShowPeoplePhotosAction action = new ShowPeoplePhotosAction(
-				getActivity(), userId);
+				getActivity(), userId, c.getUsername());
 		action.execute();
 	}
 }

@@ -103,7 +103,7 @@ public class PhotoDetailActionBar extends FrameLayout implements
 			case R.id.gallery:
 				Context context = getContext();
 				ShowPeoplePhotosAction action = new ShowPeoplePhotosAction(
-						(Activity) context, mPhotoOwner.getId());
+						(Activity) context, mPhotoOwner.getId(), mPhotoOwner.getUsername());
 				action.execute();
 				break;
 			case R.id.add_favourite:

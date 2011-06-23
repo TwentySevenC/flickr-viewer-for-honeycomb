@@ -40,4 +40,9 @@ public class InterestingPhotosDataProvider extends
 		return iif.getList((String) null, extras, mPageSize, mPageNumber);
 	}
 
+	@Override
+	public String getDescription() {
+		return "Interesting photos";
+	}
+
 }

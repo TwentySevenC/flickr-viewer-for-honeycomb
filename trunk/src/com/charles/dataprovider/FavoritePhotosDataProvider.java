@@ -52,4 +52,9 @@ public class FavoritePhotosDataProvider extends
 		return fi.getList(mUserId, this.mPageSize, this.mPageNumber, extras);
 	}
 
+	@Override
+	public String getDescription() {
+		return "My Favorite photos";
+	}
+
 }

@@ -31,6 +31,11 @@ public class PeoplePublicPhotosDataProvider extends
 	 * to fetch my own photos.
 	 */
 	private String mUserId;
+	
+	/**
+	 * The user name.
+	 */
+	private String mUserName;
 
 	/**
 	 * my own auth token. Some photos needs to know who's viewing the photos.
@@ -42,9 +47,10 @@ public class PeoplePublicPhotosDataProvider extends
 	 * @param userId
 	 * @param token
 	 */
-	public PeoplePublicPhotosDataProvider(String userId, String token) {
+	public PeoplePublicPhotosDataProvider(String userId, String token, String userName ) {
 		this.mUserId = userId;
 		this.mToken = token;
+		this.mUserName = userName;
 	}
 
 	/*
@@ -62,6 +68,13 @@ public class PeoplePublicPhotosDataProvider extends
 		extras.add(Extras.GEO);
 		extras.add(Extras.OWNER_NAME);
 		return pi.getPublicPhotos(mUserId, extras, mPageSize, mPageNumber);
+	}
+
+	@Override
+	public String getDescription() {
+		StringBuilder builder = new StringBuilder("Photostream of ");
+		builder.append( mUserName );
+		return builder.toString();
 	}
 
 }

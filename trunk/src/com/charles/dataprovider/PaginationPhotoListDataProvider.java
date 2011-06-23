@@ -29,4 +29,9 @@ public abstract class PaginationPhotoListDataProvider implements
 	public void setPageNumber(int mPageNumber) {
 		this.mPageNumber = mPageNumber;
 	}
+	
+	/**
+	 * @return
+	 */
+	public abstract String getDescription();
 }

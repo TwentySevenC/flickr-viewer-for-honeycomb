@@ -76,7 +76,7 @@ public class MainNavFragment extends Fragment {
 				break;
 			case 1:
 				ShowPeoplePhotosAction photosAction = new ShowPeoplePhotosAction(
-						getActivity(), null);
+						getActivity(), null, app.getUserName());
 				if (token == null) {
 					ShowAuthDialogAction ia = new ShowAuthDialogAction(
 							getActivity(), photosAction);
