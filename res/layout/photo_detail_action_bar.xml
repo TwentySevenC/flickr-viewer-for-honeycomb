@@ -24,14 +24,14 @@
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 		<ImageView android:layout_width="wrap_content"
-			android:layout_weight="1" android:clickable="true" android:src="@drawable/tags"
-			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
-			android:id="@+id/tags" />
-
-		<ImageView android:layout_width="wrap_content"
 			android:layout_weight="1" android:clickable="true" android:src="@drawable/add_contact"
 			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
 			android:id="@+id/add_contact" />
+			
+		<ImageView android:layout_width="wrap_content"
+			android:layout_weight="1" android:clickable="true" android:src="@drawable/add_favourite"
+			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
+			android:id="@+id/add_favourite" />
 
 		<ImageView android:layout_width="wrap_content"
 			android:layout_weight="1" android:clickable="true" android:src="@drawable/photo_group"
@@ -39,14 +39,14 @@
 			android:id="@+id/photo_group" />
 
 		<ImageView android:layout_width="wrap_content"
-			android:layout_weight="1" android:clickable="true" android:src="@drawable/add_favourite"
-			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
-			android:id="@+id/add_favourite" />
-
-		<ImageView android:layout_width="wrap_content"
 			android:layout_weight="1" android:clickable="true" android:src="@drawable/gallery"
 			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
 			android:id="@+id/gallery" />
+			
+		<ImageView android:layout_width="wrap_content"
+			android:layout_weight="1" android:clickable="true" android:src="@drawable/view_big_pic"
+			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
+			android:id="@+id/view_big_pic" />
 
 		<ImageView android:layout_width="wrap_content"
 			android:layout_weight="1" android:clickable="true" android:src="@drawable/back"
