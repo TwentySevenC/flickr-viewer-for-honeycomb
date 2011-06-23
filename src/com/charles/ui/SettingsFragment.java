@@ -4,6 +4,7 @@
 
 package com.charles.ui;
 
+import com.charles.FlickrViewerActivity;
 import com.charles.utils.Constants;
 import com.charles.utils.ImageCache;
 
@@ -40,6 +41,9 @@ public class SettingsFragment extends PreferenceFragment implements
         SharedPreferences sp = pm.getSharedPreferences();
         Log.d("SettingsFragment", "Preference name" + pm.getSharedPreferencesName());
         sp.registerOnSharedPreferenceChangeListener(this);
+        
+        FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
+		act.changeActionBarTitle(null);
     }
 
     @Override

@@ -24,6 +24,7 @@ import android.app.FragmentTransaction;
 public class ShowPeoplePhotosAction extends ActivityAwareAction {
 
     private String mUserId;
+    private String mUserName;
     private PeoplePublicPhotosDataProvider mDataProvider;
     private IPhotoListReadyListener mPhotosReadyListener = new IPhotoListReadyListener() {
 
@@ -47,9 +48,10 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
     /**
      * @param resId
      */
-    public ShowPeoplePhotosAction(Activity context, String userId) {
+    public ShowPeoplePhotosAction(Activity context, String userId, String userName) {
         super(context);
         this.mUserId = userId;
+        this.mUserName = userName;
     }
 
     /*
@@ -70,7 +72,7 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
         if (mUserId == null) {
             mUserId = app.getUserId();
         }
-        mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token);
+        mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token, mUserName);
         AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
                 mDataProvider, mPhotosReadyListener);
         task.execute();

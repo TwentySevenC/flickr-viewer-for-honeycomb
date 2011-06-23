@@ -6,7 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 public class FlickrViewerActivity extends Activity {
-	/** Called when the activity is first created. */
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -17,6 +17,17 @@ public class FlickrViewerActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		ImageCache.dispose();
+	}
+	
+	public void changeActionBarTitle(String title) {
+		String appName = this.getResources().getString(R.string.app_name);
+		
+		StringBuilder sb = new StringBuilder(appName);
+		if( title != null ) {
+			sb.append( " - " ).append(title);
+		}
+		
+		getActionBar().setTitle(sb.toString());
 	}
 
 }

@@ -4,20 +4,7 @@
 
 package com.charles.ui;
 
-import com.aetrion.flickr.photos.Exif;
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotoList;
-import com.charles.FlickrViewerApplication;
-import com.charles.R;
-import com.charles.dataprovider.PaginationPhotoListDataProvider;
-import com.charles.event.IExifListener;
-import com.charles.event.IPhotoListReadyListener;
-import com.charles.task.AsyncPhotoListTask;
-import com.charles.task.GetBigImageAndExifTask;
-import com.charles.task.ImageDownloadTask;
-import com.charles.utils.Constants;
-import com.charles.utils.ImageCache;
-import com.charles.utils.ImageUtils.DownloadedDrawable;
+import java.util.Collection;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -39,11 +26,25 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 
-import java.util.Collection;
+import com.aetrion.flickr.photos.Exif;
+import com.aetrion.flickr.photos.Photo;
+import com.aetrion.flickr.photos.PhotoList;
+import com.charles.FlickrViewerActivity;
+import com.charles.FlickrViewerApplication;
+import com.charles.R;
+import com.charles.dataprovider.PaginationPhotoListDataProvider;
+import com.charles.event.IExifListener;
+import com.charles.event.IPhotoListReadyListener;
+import com.charles.task.AsyncPhotoListTask;
+import com.charles.task.GetBigImageAndExifTask;
+import com.charles.task.ImageDownloadTask;
+import com.charles.utils.Constants;
+import com.charles.utils.ImageCache;
+import com.charles.utils.ImageUtils.DownloadedDrawable;
 
 /**
  * @author charles
@@ -129,6 +130,10 @@ public class PhotoListFragment extends Fragment implements
         mGridAdapter = new MyAdapter(getActivity(), mPhotoList);
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnItemClickListener(this);
+        
+        // change action bar title
+        FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
+        act.changeActionBarTitle(mPhotoListDataProvider.getDescription());
         return mRootContainer;
     }
 
