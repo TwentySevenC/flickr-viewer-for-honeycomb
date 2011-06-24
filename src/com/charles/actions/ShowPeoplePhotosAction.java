@@ -11,6 +11,7 @@ import com.charles.dataprovider.PeoplePublicPhotosDataProvider;
 import com.charles.event.IPhotoListReadyListener;
 import com.charles.task.AsyncPhotoListTask;
 import com.charles.ui.PhotoListFragment;
+import com.charles.utils.Constants;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -35,11 +36,8 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
             FragmentManager fm = mActivity.getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            int stackCount = fm.getBackStackEntryCount();
-            for (int i = 0; i < stackCount; i++) {
-                fm.popBackStack();
-            }
             ft.replace(R.id.main_area, fragment);
+            ft.addToBackStack(Constants.PHOTO_LIST_BACK_STACK);
             ft.commitAllowingStateLoss();
         }
 

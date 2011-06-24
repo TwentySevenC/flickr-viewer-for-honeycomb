@@ -17,6 +17,7 @@ import com.charles.R;
 import com.charles.event.IContactsFetchedListener;
 import com.charles.task.GetContactsTask;
 import com.charles.ui.ContactsFragment;
+import com.charles.utils.Constants;
 
 /**
  * @author charles
@@ -52,11 +53,8 @@ public class ShowMyContactsAction extends ActivityAwareAction {
             List<Contact> ret = new ArrayList<Contact>();
             ret.addAll(contacts);
             ContactsFragment fragment = new ContactsFragment(ret);
-            int stackCount = fm.getBackStackEntryCount();
-            for (int i = 0; i < stackCount; i++) {
-                fm.popBackStack();
-            }
             ft.replace(R.id.main_area, fragment);
+            ft.addToBackStack(Constants.CONTACT_BACK_STACK);
             ft.commitAllowingStateLoss();
         }
     };

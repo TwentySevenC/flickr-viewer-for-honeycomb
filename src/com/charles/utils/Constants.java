@@ -39,6 +39,11 @@ public final class Constants {
 	public static final int DEF_GRID_COL_COUNT = 3;
 	public static final int DEF_GRID_PAGE_SIZE = 18;
 
+	
+	public static final String PHOTO_LIST_BACK_STACK = "photo.list";
+	public static final String SETTING_BACK_STACK = "settings";
+	public static final String CONTACT_BACK_STACK = "contacts";
+	
 	/**
 	 * Private constructor to prevent this class to be instanced.
 	 */

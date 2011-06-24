@@ -4,6 +4,32 @@
 
 package com.charles.ui;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.charles.FlickrViewerApplication;
 import com.charles.R;
 import com.charles.actions.ShowAuthDialogAction;
@@ -15,31 +41,6 @@ import com.charles.event.IImageDownloadDoneListener;
 import com.charles.task.GetUserInfoTask;
 import com.charles.utils.Constants;
 import com.charles.utils.ImageUtils;
-
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Represents the fragment to be shown at the left side of the screen, which
@@ -61,6 +62,9 @@ public class MainNavFragment extends Fragment {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			
+			cleanFragmentBackStack();
+			
 			ListView list = (ListView) parent;
 			list.setItemChecked(position, true);
 
@@ -112,12 +116,19 @@ public class MainNavFragment extends Fragment {
 			    Fragment frag = new SettingsFragment();
 	            FragmentTransaction ft = getFragmentManager().beginTransaction();
 	            ft.replace(R.id.main_area, frag);
-	            ft.addToBackStack("Settings");
+	            ft.addToBackStack(Constants.SETTING_BACK_STACK);
 	            ft.commit();
 	            break;
 			}
 		}
 	};
+	
+	private void cleanFragmentBackStack() {
+		FragmentManager fm = getFragmentManager();
+		fm.popBackStack(Constants.PHOTO_LIST_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		fm.popBackStack(Constants.SETTING_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		fm.popBackStack(Constants.CONTACT_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
