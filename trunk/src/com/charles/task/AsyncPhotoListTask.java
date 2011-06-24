@@ -16,6 +16,7 @@ import com.charles.dataprovider.IPhotoListDataProvider;
 import com.charles.dataprovider.PaginationPhotoListDataProvider;
 import com.charles.event.IPhotoListReadyListener;
 import com.charles.ui.PhotoListFragment;
+import com.charles.utils.Constants;
 
 /**
  * Represents the task to fetch the photo list of a user.
@@ -52,6 +53,7 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
                 fm.popBackStack();
             }
             ft.replace(R.id.main_area, fragment);
+            ft.addToBackStack(Constants.PHOTO_LIST_BACK_STACK);
             ft.commitAllowingStateLoss();
         }
     };
