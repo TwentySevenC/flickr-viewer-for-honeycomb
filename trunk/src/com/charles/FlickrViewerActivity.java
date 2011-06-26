@@ -1,9 +1,17 @@
 package com.charles;
 
-import com.charles.utils.ImageCache;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.charles.ui.ContactsFragment;
+import com.charles.utils.Constants;
+import com.charles.utils.ImageCache;
 
 public class FlickrViewerActivity extends Activity {
 	
@@ -11,6 +19,29 @@ public class FlickrViewerActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		Intent intent = getIntent();
+		if( Constants.CONTACT_UPLOAD_PHOTO_NOTIF_INTENT_ACTION.equals(intent.getAction())) {
+			showContactsUploads(intent);
+		}
+	}
+
+	/**
+	 * Shows 'my contacts' page with recent uploads.
+	 */
+	private void showContactsUploads(Intent intent) {
+		String[] cids = intent.getStringArrayExtra(Constants.CONTACT_IDS_WITH_PHOTO_UPLOADED);
+		Set<String> cidSet = new HashSet<String>();
+		for( String cid : cids ) {
+			cidSet.add(cid);
+		}
+		
+		FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ContactsFragment fragment = new ContactsFragment(cidSet);
+        ft.replace(R.id.main_area, fragment);
+        ft.addToBackStack(Constants.CONTACT_BACK_STACK);
+        ft.commitAllowingStateLoss();
 	}
 
 	@Override

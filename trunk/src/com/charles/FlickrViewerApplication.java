@@ -6,9 +6,11 @@ package com.charles;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.charles.services.FlickrViewerService;
 import com.charles.utils.Constants;
 
 /**
@@ -21,8 +23,12 @@ public class FlickrViewerApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		String token = getFlickrToken();
+		if( token != null ) {
+			this.startService(new Intent(this,FlickrViewerService.class));
+		}
 	}
-
+	
 	/**
 	 * Returns the defiend page size of the grid view.
 	 * 

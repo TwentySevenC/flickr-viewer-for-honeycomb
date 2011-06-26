@@ -43,6 +43,11 @@ public final class Constants {
 	public static final String PHOTO_LIST_BACK_STACK = "photo.list";
 	public static final String SETTING_BACK_STACK = "settings";
 	public static final String CONTACT_BACK_STACK = "contacts";
+
+	//notifications
+	public static final String CONTACT_UPLOAD_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_CONTACT_PHOTO_UPLOADED";
+	public static final String CONTACT_IDS_WITH_PHOTO_UPLOADED = "BUNDLE_KEY_CONTACTS_WITH_PHOTO_UPLOADED";
+	public static final int COTACT_UPLOAD_NOTIF_ID = 1;
 	
 	/**
 	 * Private constructor to prevent this class to be instanced.
