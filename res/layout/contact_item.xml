@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:minHeight="64dp" android:layout_width="fill_parent"
-	android:background="@drawable/contact_item_bg"
-	android:layout_height="fill_parent">
+	android:background="@drawable/contact_item_bg" android:layout_height="fill_parent">
 	<ImageView android:id="@+id/contact_icon"
 		android:layout_margin="10dp" android:layout_alignParentLeft="true"
 		android:gravity="center" android:layout_height="wrap_content"
@@ -12,4 +11,8 @@
 		android:layout_height="wrap_content" android:singleLine="true"
 		android:gravity="left|center" android:ellipsize="marquee"
 		android:selectAllOnFocus="true" />
+	<ImageView android:id="@+id/has_new_photo"
+		android:layout_width="32dp" android:layout_height="32dp"
+		android:layout_alignParentRight="true" android:layout_centerVertical="true"
+		android:src="@drawable/notification" android:visibility="gone" />
 </RelativeLayout>
