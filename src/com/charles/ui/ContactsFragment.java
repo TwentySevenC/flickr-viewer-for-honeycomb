@@ -10,6 +10,7 @@ package com.charles.ui;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -46,6 +47,7 @@ public class ContactsFragment extends Fragment implements
 
 	private MyAdapter mAdapter;
 	private List<Contact> mContacts = null;
+	private Set<String> mContactIdsWithPhotoUploaded = null;
 
 	private boolean mCreatedByOS = false;
 
@@ -60,7 +62,18 @@ public class ContactsFragment extends Fragment implements
 	public ContactsFragment(List<Contact> contacts) {
 		mContacts = contacts;
 	}
-
+	
+	/**
+	 * Constructor. This constructor will be called when the background task detects that
+	 * one or more of my contacts have photo uploaded recently.
+	 * 
+	 * @param hasPhotoUploadedIds
+	 */
+	public ContactsFragment(Set<String> hasPhotoUploadedIds) {
+		this();
+		mContactIdsWithPhotoUploaded = hasPhotoUploadedIds;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -69,7 +82,7 @@ public class ContactsFragment extends Fragment implements
 				LayoutParams.FILL_PARENT));
 		gv.setNumColumns(3);
 		gv.setHorizontalSpacing(20);
-		mAdapter = new MyAdapter(getActivity(), mContacts);
+		mAdapter = new MyAdapter(getActivity(), mContacts, mContactIdsWithPhotoUploaded);
 		gv.setAdapter(mAdapter);
 		gv.setOnItemClickListener(this);
 		
@@ -93,10 +106,12 @@ public class ContactsFragment extends Fragment implements
 
 		private List<Contact> mContacts;
 		private Context mContext;
+		private Set<String> mIdsWithPhotoUploaded = null;
 
-		public MyAdapter(Context context, List<Contact> contacts) {
+		public MyAdapter(Context context, List<Contact> contacts, Set<String> uploadedCIds) {
 			this.mContacts = contacts;
 			this.mContext = context;
+			mIdsWithPhotoUploaded = uploadedCIds;
 		}
 
 		@Override
@@ -125,25 +140,33 @@ public class ContactsFragment extends Fragment implements
 
 			Contact contact = (Contact) getItem(position);
 
-			ImageView photoImage;
+			ImageView photoImage, notifImage;
 			TextView titleView;
 
 			ViewHolder holder = (ViewHolder) view.getTag();
 			if (holder == null) {
 				photoImage = (ImageView) view.findViewById(R.id.contact_icon);
 				titleView = (TextView) view.findViewById(R.id.contact_name);
+				notifImage = (ImageView) view.findViewById(R.id.has_new_photo);
 
 				holder = new ViewHolder();
 				holder.image = photoImage;
 				holder.titleView = titleView;
+				holder.notifImage = notifImage;
 				view.setTag(holder);
 
 			} else {
 				photoImage = holder.image;
 				titleView = holder.titleView;
+				notifImage = holder.notifImage;
 			}
 			titleView.setText(contact.getUsername());
 			photoImage.setScaleType(ScaleType.CENTER_CROP);
+			if( mIdsWithPhotoUploaded != null && mIdsWithPhotoUploaded.contains(contact.getId())) {
+				notifImage.setVisibility(View.VISIBLE);
+			} else {
+				notifImage.setVisibility(View.GONE);
+			}
 
 			Drawable drawable = photoImage.getDrawable();
 			String buddyIconUrl = contact.getBuddyIconUrl();
@@ -175,6 +198,7 @@ public class ContactsFragment extends Fragment implements
 		private static class ViewHolder {
 			ImageView image;
 			TextView titleView;
+			ImageView notifImage;
 		}
 
 	}
