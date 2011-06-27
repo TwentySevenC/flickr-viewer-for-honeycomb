@@ -23,13 +23,26 @@ public class FlickrViewerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        handleIntent();
+    }
+    
+    @Override
+	protected void onNewIntent(Intent intent) {
+		setIntent(intent);
+		handleIntent();
+	}
+
+	/**
+	 * Checks the intent of this activity.
+	 */
+	private void handleIntent() {
         Intent intent = getIntent();
         if (Constants.CONTACT_UPLOAD_PHOTO_NOTIF_INTENT_ACTION.equals(intent.getAction())) {
             showContactsUploads(intent);
-        }
-    }
+        }		
+	}
 
-    /**
+	/**
      * Shows 'my contacts' page with recent uploads.
      */
     private void showContactsUploads(Intent intent) {
