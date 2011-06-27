@@ -4,21 +4,6 @@
 
 package com.charles.ui;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import android.app.DialogFragment;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.auth.Auth;
 import com.aetrion.flickr.auth.AuthInterface;
@@ -28,8 +13,24 @@ import com.charles.FlickrViewerApplication;
 import com.charles.R;
 import com.charles.actions.IAction;
 import com.charles.event.IAuthDoneListener;
+import com.charles.services.FlickrViewerService;
 import com.charles.task.AuthTask;
 import com.charles.utils.FlickrHelper;
+
+import android.app.DialogFragment;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Represents the auth dialog to grant this application the permission to access
@@ -101,6 +102,8 @@ public class AuthFragmentDialog extends DialogFragment implements
             User user = auth.getUser();
             app.saveFlickrAuthToken(auth.getToken(), user.getId(), user
                     .getUsername());
+            
+            app.startService(new Intent(app,FlickrViewerService.class));
 
             // notify main menu panel to update
             // TODO refactor later.
