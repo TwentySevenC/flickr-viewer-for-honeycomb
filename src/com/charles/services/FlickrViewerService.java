@@ -32,7 +32,7 @@ public class FlickrViewerService extends Service {
 		ContactUploadTimerTask task = new ContactUploadTimerTask(context,token);
 		
 		//TODO put the update interval into settings.
-		timer.schedule(task, new Date(), 24 * 60 * 60 * 1000 );
+		timer.scheduleAtFixedRate(task, new Date(), 24 * 60 * 60 * 1000L );
 	}
 
 	/*
