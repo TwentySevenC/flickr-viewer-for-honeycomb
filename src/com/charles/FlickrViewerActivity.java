@@ -1,6 +1,7 @@
 
 package com.charles;
 
+import com.charles.services.FlickrViewerService;
 import com.charles.ui.ContactsFragment;
 import com.charles.utils.Constants;
 import com.charles.utils.ImageCache;
@@ -23,6 +24,11 @@ public class FlickrViewerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
+        String token = app.getFlickrToken();
+        if( token != null ) {
+            startService(new Intent(app,FlickrViewerService.class));
+        }
         handleIntent();
     }
     
