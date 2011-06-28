@@ -9,7 +9,6 @@
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:theme="@style/Flickr.Viewer.Theme" android:name="FlickrViewerApplication">
 		<activity android:name="FlickrViewerActivity" android:label="@string/app_name"
-			android:launchMode="singleTask"
 			android:screenOrientation="landscape">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -21,6 +20,5 @@
 			</intent-filter>
 		</activity>
 		<service android:name=".services.FlickrViewerService"></service>
-
 	</application>
 </manifest>
