@@ -10,6 +10,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.charles.FlickrViewerApplication;
 
@@ -23,16 +24,27 @@ import com.charles.FlickrViewerApplication;
  */
 public class FlickrViewerService extends Service {
 
+	private static final String TAG = FlickrViewerService.class.getName();
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Timer timer = new Timer();
+		
+		String token = null;
 		Context context = getApplicationContext();
-		String token = ((FlickrViewerApplication)context).getFlickrToken();
+		if( context instanceof FlickrViewerApplication ) {
+			FlickrViewerApplication app = (FlickrViewerApplication) context;
+			token = app.getFlickrToken();
+		} else {
+			Log.e(TAG, "Not the application context provided");
+			return;
+		}
 		ContactUploadTimerTask task = new ContactUploadTimerTask(context,token);
 		
 		//TODO put the update interval into settings.
-		timer.scheduleAtFixedRate(task, new Date(), 60 * 60 * 1000L );
+		long period = 24 * 60 * 60 * 1000L;
+		timer.scheduleAtFixedRate(task, new Date(), period);
 	}
 
 	/*
