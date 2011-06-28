@@ -3,19 +3,6 @@
  */
 package com.charles.services;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TimerTask;
-
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.contacts.Contact;
 import com.aetrion.flickr.contacts.ContactsInterface;
@@ -23,13 +10,29 @@ import com.charles.R;
 import com.charles.utils.Constants;
 import com.charles.utils.FlickrHelper;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TimerTask;
+
 /**
  * @author charles
  * 
  */
 public class ContactUploadTimerTask extends TimerTask {
 
-	private String mToken;
+	private static final String TAG = ContactUploadTimerTask.class.getName();
+    private String mToken;
 	private Context mContext;
 
 	/**
@@ -45,8 +48,8 @@ public class ContactUploadTimerTask extends TimerTask {
 	 * 
 	 * @see java.util.TimerTask#run()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("rawtypes")
 	public void run() {
 		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
 		ContactsInterface ci = f.getContactsInterface();
@@ -54,17 +57,20 @@ public class ContactUploadTimerTask extends TimerTask {
 		Long time = sinceDate.getTime() - 24 * 60 * 60 * 1000;
 		sinceDate = new Date(time);
 		try {
-			Collection col = ci.getListRecentlyUploaded(sinceDate, "all");
+		    Date now = new Date();
+		    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		    Log.d(TAG,"Task runs at " + formater.format(now));
+            Collection col = ci.getListRecentlyUploaded(sinceDate, "all");
 			if (col.size() > 0) {
 				sendNotifications(col);
 			}
 		} catch (Exception e) {
-
+		    Log.w(TAG, "unable to get recent upload: " + e.getMessage());
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void sendNotifications(Collection col) {
+	@SuppressWarnings("rawtypes")
+    private void sendNotifications(Collection col) {
 		// notification manager.
 		NotificationManager notifManager = (NotificationManager) mContext
 				.getSystemService(Context.NOTIFICATION_SERVICE);
