@@ -49,7 +49,6 @@ public class ContactUploadTimerTask extends TimerTask {
 	 * @see java.util.TimerTask#run()
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
 	public void run() {
 		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
 		ContactsInterface ci = f.getContactsInterface();
@@ -60,17 +59,18 @@ public class ContactUploadTimerTask extends TimerTask {
 		    Date now = new Date();
 		    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		    Log.d(TAG,"Task runs at " + formater.format(now));
-            Collection col = ci.getListRecentlyUploaded(sinceDate, "all");
+            Collection<?> col = ci.getListRecentlyUploaded(sinceDate, "all");
 			if (col.size() > 0) {
 				sendNotifications(col);
+			} else {
+				Log.i(TAG,"No recent upload.");
 			}
 		} catch (Exception e) {
 		    Log.w(TAG, "unable to get recent upload: " + e.getMessage());
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-    private void sendNotifications(Collection col) {
+    private void sendNotifications(Collection<?> col) {
 		// notification manager.
 		NotificationManager notifManager = (NotificationManager) mContext
 				.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -82,7 +82,7 @@ public class ContactUploadTimerTask extends TimerTask {
 						.currentTimeMillis());
 		// init the contact id string array
 		List<String> cIds = new ArrayList<String>();
-		Iterator it = col.iterator();
+		Iterator<?> it = col.iterator();
 		while (it.hasNext()) {
 			Contact c = (Contact) it.next();
 			cIds.add(c.getId());

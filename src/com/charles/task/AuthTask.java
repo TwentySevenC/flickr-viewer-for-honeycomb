@@ -3,13 +3,8 @@
  */
 package com.charles.task;
 
-import java.io.IOException;
-
-import org.xml.sax.SAXException;
-
 import android.os.AsyncTask;
 
-import com.aetrion.flickr.FlickrException;
 import com.aetrion.flickr.auth.AuthInterface;
 import com.charles.event.IAuthDoneListener;
 
