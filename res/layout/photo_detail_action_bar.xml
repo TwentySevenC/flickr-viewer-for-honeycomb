@@ -23,20 +23,24 @@
 	<LinearLayout android:padding="5dp" android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
+		<!-- 
 		<ImageView android:layout_width="wrap_content"
 			android:layout_weight="1" android:clickable="true" android:src="@drawable/add_contact"
 			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
 			android:id="@+id/add_contact" />
+		 -->
 			
 		<ImageView android:layout_width="wrap_content"
 			android:layout_weight="1" android:clickable="true" android:src="@drawable/add_favourite"
 			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
 			android:id="@+id/add_favourite" />
 
+		<!-- 
 		<ImageView android:layout_width="wrap_content"
 			android:layout_weight="1" android:clickable="true" android:src="@drawable/photo_group"
 			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
 			android:id="@+id/photo_group" />
+		 -->
 
 		<ImageView android:layout_width="wrap_content"
 			android:layout_weight="1" android:clickable="true" android:src="@drawable/gallery"
