@@ -52,6 +52,11 @@ import java.util.Set;
  */
 public class ContactsFragment extends Fragment implements
         IContactsFetchedListener, OnItemClickListener {
+    
+    private static final String FAMILY_ONLY = "family_only";
+    private static final String FAMILY_AND_FRIEND = "family_and_friend";
+    private static final String CONTACT_ALL = "contact_all";
+    
 
     private MyAdapter mAdapter;
     private List<Contact> mContacts = null;
@@ -125,7 +130,6 @@ public class ContactsFragment extends Fragment implements
         inflater.inflate(R.menu.menu_contacts, menu);
         MenuItem item = menu.findItem(R.id.menu_item_search);
         SearchView sview = (SearchView) item.getActionView();
-        sview.setSubmitButtonEnabled(true);
         sview.setOnQueryTextListener(new OnQueryTextListener() {
 
             @Override
@@ -136,11 +140,35 @@ public class ContactsFragment extends Fragment implements
 
             @Override
             public boolean onQueryTextSubmit(String arg0) {
-                // TODO Auto-generated method stub
                 return false;
             }
         });
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+		String filterString = null;
+		switch(item.getItemId()) {
+		    case R.id.family_only:
+		        filterString = FAMILY_ONLY;
+		        break;
+		    case R.id.family_and_friend:
+		        filterString = FAMILY_AND_FRIEND;
+		        break;
+		    case R.id.contact_all:
+		        filterString = CONTACT_ALL;
+		        break;
+		}
+		if( filterString != null ) {
+		    mAdapter.getFilter().filter(filterString);
+		    return true;
+		} else {
+		    return super.onOptionsItemSelected(item);
+		}
+        
+    }
+
+
 
     private static class MyAdapter extends BaseAdapter implements Filterable {
 

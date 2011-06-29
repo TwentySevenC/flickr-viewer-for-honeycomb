@@ -3,4 +3,20 @@
 	<item android:showAsAction="ifRoom" android:id="@+id/menu_item_search"
 		android:icon="@android:drawable/ic_menu_search"
 		android:actionViewClass="android.widget.SearchView"></item>
+	<item android:id="@+id/filter_contact"
+          android:icon="@drawable/contact_filter"
+          android:title="Filter"
+          android:showAsAction="ifRoom|withText">
+        <menu>
+            <item android:id="@+id/family_only"
+                  android:title="Family Only"
+                  />
+            <item android:id="@+id/family_and_friend"
+                  android:title="Family and Friend"
+                  />
+            <item android:id="@+id/contact_all"
+                  android:title="All Contacts"
+                  />
+        </menu>
+    </item>
 </menu>
