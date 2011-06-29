@@ -43,7 +43,7 @@ public class FlickrViewerService extends Service {
 		ContactUploadTimerTask task = new ContactUploadTimerTask(context,token);
 		
 		//TODO put the update interval into settings.
-		long period = 24 * 60 * 60 * 1000L;
+		long period = 24L * 60L * 60L * 1000L;
 		timer.scheduleAtFixedRate(task, new Date(), period);
 	}
 
