@@ -23,9 +23,11 @@
 
 	<CheckBox android:id="@+id/cb_family" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_marginLeft="10dp"
-		android:layout_alignParentBottom="true" android:text="Family" />
+		android:enabled="false" android:layout_alignParentBottom="true"
+		android:focusable="false" android:text="Family" />
 	<CheckBox android:id="@+id/cb_friend" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_marginLeft="5dp"
-		android:layout_toRightOf="@id/cb_family"
-		android:layout_alignParentBottom="true" android:text="Friend" />
+		android:layout_toRightOf="@id/cb_family" android:enabled="false"
+		android:focusable="false" android:layout_alignParentBottom="true"
+		android:text="Friend" />
 </RelativeLayout>
