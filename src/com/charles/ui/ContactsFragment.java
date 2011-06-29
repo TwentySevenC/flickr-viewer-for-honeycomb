@@ -52,11 +52,10 @@ import java.util.Set;
  */
 public class ContactsFragment extends Fragment implements
         IContactsFetchedListener, OnItemClickListener {
-    
+
     private static final String FAMILY_ONLY = "family_only";
     private static final String FAMILY_AND_FRIEND = "family_and_friend";
     private static final String CONTACT_ALL = "contact_all";
-    
 
     private MyAdapter mAdapter;
     private List<Contact> mContacts = null;
@@ -144,31 +143,29 @@ public class ContactsFragment extends Fragment implements
             }
         });
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-		String filterString = null;
-		switch(item.getItemId()) {
-		    case R.id.family_only:
-		        filterString = FAMILY_ONLY;
-		        break;
-		    case R.id.family_and_friend:
-		        filterString = FAMILY_AND_FRIEND;
-		        break;
-		    case R.id.contact_all:
-		        filterString = CONTACT_ALL;
-		        break;
-		}
-		if( filterString != null ) {
-		    mAdapter.getFilter().filter(filterString);
-		    return true;
-		} else {
-		    return super.onOptionsItemSelected(item);
-		}
-        
+        String filterString = null;
+        switch (item.getItemId()) {
+            case R.id.family_only:
+                filterString = FAMILY_ONLY;
+                break;
+            case R.id.family_and_friend:
+                filterString = FAMILY_AND_FRIEND;
+                break;
+            case R.id.contact_all:
+                filterString = CONTACT_ALL;
+                break;
+        }
+        if (filterString != null) {
+            mAdapter.getFilter().filter(filterString);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+
     }
-
-
 
     private static class MyAdapter extends BaseAdapter implements Filterable {
 
@@ -186,13 +183,13 @@ public class ContactsFragment extends Fragment implements
 
         @Override
         public int getCount() {
-            List<Contact> list = ((ContactFilter)getFilter()).getFilterdList();
+            List<Contact> list = ((ContactFilter) getFilter()).getFilterdList();
             return list.size();
         }
 
         @Override
         public Object getItem(int arg0) {
-            return ((ContactFilter)getFilter()).getFilterdList().get(arg0);
+            return ((ContactFilter) getFilter()).getFilterdList().get(arg0);
         }
 
         @Override
@@ -309,11 +306,21 @@ public class ContactsFragment extends Fragment implements
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            if (constraint != null ) {
+            if (constraint != null) {
                 int count = 0;
                 List<Contact> filterdList = new ArrayList<Contact>();
                 for (Contact contact : mOriginalContacts) {
-                    if (contact.getUsername().toLowerCase().contains(constraint.toString())) {
+                    if (FAMILY_ONLY.equals(constraint.toString()) && contact.isFamily()) {
+                        count++;
+                        filterdList.add(contact);
+                    } else if (FAMILY_AND_FRIEND.equals(constraint.toString())
+                            && (contact.isFamily() || contact.isFriend())) {
+                        count++;
+                        filterdList.add(contact);
+                    } else if (CONTACT_ALL.equals(constraint.toString())) {
+                        count++;
+                        filterdList.add(contact);
+                    } else if (contact.getUsername().toLowerCase().contains(constraint.toString())) {
                         count++;
                         filterdList.add(contact);
                     }
@@ -331,7 +338,7 @@ public class ContactsFragment extends Fragment implements
                 mAdapter.notifyDataSetChanged();
             }
         }
-        
+
         List<Contact> getFilterdList() {
             return mFilterdContacts;
         }
