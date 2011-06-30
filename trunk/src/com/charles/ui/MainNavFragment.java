@@ -32,6 +32,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.charles.FlickrViewerApplication;
 import com.charles.R;
+import com.charles.actions.GetActivitiesAction;
 import com.charles.actions.ShowAuthDialogAction;
 import com.charles.actions.ShowFavoritesAction;
 import com.charles.actions.ShowInterestingPhotosAction;
@@ -113,6 +114,16 @@ public class MainNavFragment extends Fragment {
 				}
 				break;
 			case 4:
+				GetActivitiesAction aaction = new GetActivitiesAction(getActivity());
+				if( token == null ) {
+					ShowAuthDialogAction showAuthAction = new ShowAuthDialogAction(
+							getActivity(), aaction);
+					showAuthAction.execute();
+				} else {
+					aaction.execute();
+				}
+				break;
+			case 5:
 			    Fragment frag = new SettingsFragment();
 	            FragmentTransaction ft = getFragmentManager().beginTransaction();
 	            ft.replace(R.id.main_area, frag);
@@ -340,6 +351,11 @@ public class MainNavFragment extends Fragment {
 		item = new CommandItem();
 		item.imageResId = R.drawable.myfavorite;
 		item.title = "My Favorites";
+		list.add(item);
+		
+		item = new CommandItem();
+		item.imageResId = R.drawable.activities;
+		item.title = "Recent Activities";
 		list.add(item);
 		
 		item = new CommandItem();

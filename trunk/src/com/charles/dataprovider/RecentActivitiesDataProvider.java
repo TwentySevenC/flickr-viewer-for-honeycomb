@@ -6,6 +6,8 @@ package com.charles.dataprovider;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.activity.ActivityInterface;
 import com.aetrion.flickr.activity.Item;
@@ -20,6 +22,7 @@ import com.charles.utils.FlickrHelper;
 public class RecentActivitiesDataProvider {
 	
 	private static final int PER_PAGE = 10;
+	private static final String TAG = RecentActivitiesDataProvider.class.getName();
 
 	private String mToken;
 
@@ -37,6 +40,8 @@ public class RecentActivitiesDataProvider {
 	 * Returns the recent activities, including both the activities of my own
 	 * photo, and that on the photos commented by me.
 	 * 
+	 * TODO only support photo item right now, for 'photoset', support later.
+	 * 
 	 * @return
 	 */
 	public List<Item> getRecentActivities() {
@@ -47,11 +52,23 @@ public class RecentActivitiesDataProvider {
 		try {
 			ItemList userComments = ai.userComments(PER_PAGE, 1);
 			if(userComments!=null) {
-				items.addAll(userComments);
+				for(int i = 0; i < userComments.size(); i ++ ) {
+					Item item = (Item) userComments.get(i);
+					Log.d(TAG, "Activity item type : " + item.getType());
+					if( "photo".equals(item.getType())) {
+						items.add(item);
+					}
+				}
 			}
 			ItemList photoComments = ai.userPhotos(PER_PAGE, 1, "1d");
 			if(photoComments!=null) {
-				items.addAll(photoComments);
+				for( int j = 0; j < photoComments.size(); j ++ ) {
+					Item item = (Item) photoComments.get(j);
+					Log.d(TAG, "Activity item type : " + item.getType());
+					if( "photo".equals(item.getType())) {
+						items.add(item);
+					}
+				}
 			}
 			
 		} catch (Exception e) {
