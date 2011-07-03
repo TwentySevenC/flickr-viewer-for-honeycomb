@@ -355,10 +355,12 @@ public class ContactsFragment extends Fragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        Contact c = mContacts.get(position);
-        String userId = c.getId();
-        ShowPeoplePhotosAction action = new ShowPeoplePhotosAction(
-                getActivity(), userId, c.getUsername());
-        action.execute();
+        Contact c = (Contact)mAdapter.getItem(position);
+        if (c != null) {
+        	String userId = c.getId();
+        	ShowPeoplePhotosAction action = new ShowPeoplePhotosAction(
+        			getActivity(), userId, c.getUsername());
+        	action.execute();
+        }
     }
 }
