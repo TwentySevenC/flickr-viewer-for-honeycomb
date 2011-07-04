@@ -1,97 +1,140 @@
 /**
  * 
  */
+
 package com.charles.task;
 
-import java.lang.ref.WeakReference;
-
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.widget.ImageView;
-
+import com.aetrion.flickr.Flickr;
+import com.aetrion.flickr.photos.Photo;
+import com.aetrion.flickr.photos.PhotosInterface;
 import com.charles.event.IImageDownloadDoneListener;
+import com.charles.utils.FlickrHelper;
 import com.charles.utils.ImageCache;
 import com.charles.utils.ImageUtils;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ImageView;
+
+import java.lang.ref.WeakReference;
+
 /**
- * Represents the image download task which takes an image url as the parameter, after the download,
- * set the bitmap to an associated <code>ImageView</code>.
+ * Represents the image download task which takes an image url as the parameter,
+ * after the download, set the bitmap to an associated <code>ImageView</code>.
  * 
  * @author charles
- * 
  */
 public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 
-	private WeakReference<ImageView> imgRef = null;
-	private String mUrl;
-	
-	/**
-	 * The image downloaded listener.
-	 */
-	private IImageDownloadDoneListener mImageDownloadedListener;
+    private static final String TAG = ImageDownloadTask.class.getName();
+    private WeakReference<ImageView> imgRef = null;
+    private String mUrl;
 
-	/**
-	 * Constructor.
-	 * @param imageView
-	 */
-	public ImageDownloadTask(ImageView imageView) {
-		this(imageView,null);
-	}
-	
-	public ImageDownloadTask(ImageView imageView, IImageDownloadDoneListener listener) {
-		this.imgRef = new WeakReference<ImageView>(imageView);
-		this.mImageDownloadedListener = listener;
-	}
-	
-	@Override
-	protected Bitmap doInBackground(String... params) {
-		mUrl = params[0];
-		return ImageUtils.downloadImage(mUrl);
-	}
+    public static enum ParamType {
+        PHOTO_URL, PHOTO_ID_SMALL, PHOTO_ID_SMALL_SQUARE, PHOTO_ID_MEDIUM, PHOTO_ID_LARGE
+    };
 
-	@Override
-	protected void onPostExecute(Bitmap result) {
-		if (this.isCancelled()) {
-			result = null;
-		}
+    /**
+     * The parameter type to say whether the passed in parameter is the url, or
+     * just photo id.
+     */
+    private ParamType mParamType = ParamType.PHOTO_URL;
 
-		ImageCache.saveToCache(mUrl, result);
-		if (imgRef != null) {
-			ImageView imageView = imgRef.get();
-			ImageDownloadTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
-			// Change bitmap only if this process is still associated with it
-			// Or if we don't use any bitmap to task association
-			// (NO_DOWNLOADED_DRAWABLE mode)
-			if (this == bitmapDownloaderTask) {
-				imageView.setImageBitmap(result);
-			}
-		}
-		
-		if(mImageDownloadedListener != null ) {
-			mImageDownloadedListener.onImageDownloaded(result);
-		}
-	}
+    /**
+     * The image downloaded listener.
+     */
+    private IImageDownloadDoneListener mImageDownloadedListener;
 
-	public String getUrl() {
-		return mUrl;
-	}
+    /**
+     * Constructor.
+     * 
+     * @param imageView
+     */
+    public ImageDownloadTask(ImageView imageView) {
+        this(imageView, ParamType.PHOTO_URL, null);
+    }
 
-	/**
-	 * @param imageView
-	 *            Any imageView
-	 * @return Retrieve the currently active download task (if any) associated
-	 *         with this imageView. null if there is no such task.
-	 */
-	private ImageDownloadTask getBitmapDownloaderTask(ImageView imageView) {
-		if (imageView != null) {
-			Drawable drawable = imageView.getDrawable();
-			if (drawable instanceof DownloadedDrawable) {
-				DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
-				return downloadedDrawable.getBitmapDownloaderTask();
-			}
-		}
-		return null;
-	}
+    /**
+     * Constructor.
+     * 
+     * @param imageView
+     */
+    public ImageDownloadTask(ImageView imageView, ParamType paramType) {
+        this(imageView, paramType, null);
+    }
+
+    public ImageDownloadTask(ImageView imageView, ParamType paramType,
+            IImageDownloadDoneListener listener) {
+        this.imgRef = new WeakReference<ImageView>(imageView);
+        this.mParamType = paramType;
+        this.mImageDownloadedListener = listener;
+    }
+
+    @Override
+    protected Bitmap doInBackground(String... params) {
+        mUrl = params[0];
+        String url = mUrl;
+        if (!mParamType.equals(ParamType.PHOTO_URL)) {
+            Flickr f = FlickrHelper.getInstance().getFlickr();
+            PhotosInterface pi = f.getPhotosInterface();
+            try {
+                Photo photo = pi.getPhoto(mUrl);
+                // TODO other url types.
+                if (mParamType.equals(ParamType.PHOTO_ID_SMALL_SQUARE)) {
+                    url = photo.getSmallSquareUrl();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Unable to get the photo detail information: " + e.getMessage());
+                return null;
+            }
+        }
+        return ImageUtils.downloadImage(url);
+    }
+
+    @Override
+    protected void onPostExecute(Bitmap result) {
+        if (this.isCancelled()) {
+            result = null;
+            return;
+        }
+
+        ImageCache.saveToCache(mUrl, result);
+        if (imgRef != null) {
+            ImageView imageView = imgRef.get();
+            ImageDownloadTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
+            // Change bitmap only if this process is still associated with it
+            // Or if we don't use any bitmap to task association
+            // (NO_DOWNLOADED_DRAWABLE mode)
+            if (this == bitmapDownloaderTask) {
+                imageView.setImageBitmap(result);
+            }
+        }
+
+        if (mImageDownloadedListener != null) {
+            mImageDownloadedListener.onImageDownloaded(result);
+        }
+    }
+
+    public String getUrl() {
+        return mUrl;
+    }
+
+    /**
+     * @param imageView Any imageView
+     * @return Retrieve the currently active download task (if any) associated
+     *         with this imageView. null if there is no such task.
+     */
+    private ImageDownloadTask getBitmapDownloaderTask(ImageView imageView) {
+        if (imageView != null) {
+            Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof DownloadedDrawable) {
+                DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
+                return downloadedDrawable.getBitmapDownloaderTask();
+            }
+        }
+        return null;
+    }
 }
