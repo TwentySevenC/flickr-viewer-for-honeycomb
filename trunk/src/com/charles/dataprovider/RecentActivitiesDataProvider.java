@@ -20,9 +20,10 @@ import com.charles.utils.FlickrHelper;
  * @author charles
  */
 public class RecentActivitiesDataProvider {
-	
+
 	private static final int PER_PAGE = 10;
-	private static final String TAG = RecentActivitiesDataProvider.class.getName();
+	private static final String TAG = RecentActivitiesDataProvider.class
+			.getName();
 
 	private String mToken;
 
@@ -47,30 +48,30 @@ public class RecentActivitiesDataProvider {
 	public List<Item> getRecentActivities() {
 		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
 		ActivityInterface ai = f.getActivityInterface();
-		
+
 		List<Item> items = new ArrayList<Item>();
 		try {
 			ItemList userComments = ai.userComments(PER_PAGE, 1);
-			if(userComments!=null) {
-				for(int i = 0; i < userComments.size(); i ++ ) {
+			if (userComments != null) {
+				for (int i = 0; i < userComments.size(); i++) {
 					Item item = (Item) userComments.get(i);
 					Log.d(TAG, "Activity item type : " + item.getType());
-					if( "photo".equals(item.getType())) {
+					if ("photo".equals(item.getType())) {
 						items.add(item);
 					}
 				}
 			}
 			ItemList photoComments = ai.userPhotos(PER_PAGE, 1, "1d");
-			if(photoComments!=null) {
-				for( int j = 0; j < photoComments.size(); j ++ ) {
+			if (photoComments != null) {
+				for (int j = 0; j < photoComments.size(); j++) {
 					Item item = (Item) photoComments.get(j);
 					Log.d(TAG, "Activity item type : " + item.getType());
-					if( "photo".equals(item.getType())) {
+					if ("photo".equals(item.getType())) {
 						items.add(item);
 					}
 				}
 			}
-			
+
 		} catch (Exception e) {
 		}
 		return items;
