@@ -9,6 +9,7 @@ package com.charles.ui;
 
 import com.aetrion.flickr.activity.Event;
 import com.aetrion.flickr.activity.Item;
+import com.charles.FlickrViewerActivity;
 import com.charles.R;
 import com.charles.actions.GetPhotoDetailAction;
 import com.charles.task.ImageDownloadTask;
@@ -64,6 +65,9 @@ public class RecentActivityFragment extends Fragment implements OnItemClickListe
                 mActivities);
         actList.setAdapter(mAdapter);
         actList.setOnItemClickListener(this);
+        
+        FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
+        act.changeActionBarTitle("Recent activities");
         return v;
     }
 
