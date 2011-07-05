@@ -18,6 +18,10 @@
 				<action android:name="INTENT_ACTION_CONTACT_PHOTO_UPLOADED" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
+			<intent-filter>
+				<action android:name="INTENT_ACTION_ACT_ON_MY_PHOTO" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
 		</activity>
 		<service android:name=".services.FlickrViewerService"></service>
 	</application>
