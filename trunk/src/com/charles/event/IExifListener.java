@@ -1,10 +1,11 @@
 package com.charles.event;
 
-import java.util.Collection;
+import com.aetrion.flickr.photos.Exif;
+import com.aetrion.flickr.photos.Photo;
 
 import android.graphics.Bitmap;
 
-import com.aetrion.flickr.photos.Exif;
+import java.util.Collection;
 
 /**
  * Represents the exif listener, it will be used in ViewImageDetailFragment.
@@ -25,5 +26,5 @@ public interface IExifListener {
 	 * @param exifs
 	 *            the exif information.
 	 */
-	void onExifInfoFetched(Bitmap bitmap, Collection<Exif> exifs);
+	void onExifInfoFetched(Bitmap bitmap, Photo photo, Collection<Exif> exifs);
 }

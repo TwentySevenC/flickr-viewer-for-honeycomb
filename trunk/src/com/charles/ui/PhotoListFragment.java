@@ -4,14 +4,22 @@
 
 package com.charles.ui;
 
-import java.util.Collection;
+import com.aetrion.flickr.photos.Photo;
+import com.aetrion.flickr.photos.PhotoList;
+import com.charles.FlickrViewerActivity;
+import com.charles.FlickrViewerApplication;
+import com.charles.R;
+import com.charles.actions.GetPhotoDetailAction;
+import com.charles.dataprovider.PaginationPhotoListDataProvider;
+import com.charles.event.IPhotoListReadyListener;
+import com.charles.task.AsyncPhotoListTask;
+import com.charles.task.ImageDownloadTask;
+import com.charles.utils.Constants;
+import com.charles.utils.ImageCache;
+import com.charles.utils.ImageUtils.DownloadedDrawable;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -26,31 +34,15 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ImageView.ScaleType;
-
-import com.aetrion.flickr.photos.Exif;
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotoList;
-import com.charles.FlickrViewerActivity;
-import com.charles.FlickrViewerApplication;
-import com.charles.R;
-import com.charles.dataprovider.PaginationPhotoListDataProvider;
-import com.charles.event.IExifListener;
-import com.charles.event.IPhotoListReadyListener;
-import com.charles.task.AsyncPhotoListTask;
-import com.charles.task.GetBigImageAndExifTask;
-import com.charles.task.ImageDownloadTask;
-import com.charles.utils.Constants;
-import com.charles.utils.ImageCache;
-import com.charles.utils.ImageUtils.DownloadedDrawable;
 
 /**
  * @author charles
  */
 public class PhotoListFragment extends Fragment implements
-        AdapterView.OnItemClickListener, IExifListener, IPhotoListReadyListener {
+        AdapterView.OnItemClickListener, IPhotoListReadyListener {
 
     private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider";
     private static final String TAG = PhotoListFragment.class.getSimpleName();
@@ -67,11 +59,6 @@ public class PhotoListFragment extends Fragment implements
     private int mCurrentPageNumber = 1;
 
     /**
-     * The task to to fetch exif information and the big image.
-     */
-    private GetBigImageAndExifTask mExifTask;
-
-    /**
      * The photo list data provider.
      */
     private PaginationPhotoListDataProvider mPhotoListDataProvider;
@@ -80,6 +67,11 @@ public class PhotoListFragment extends Fragment implements
      * The async task to fetch photo list.
      */
     private AsyncPhotoListTask mPhotoListTask = null;
+    
+    /**
+     * The current selected photo.
+     */
+    private Photo mSelectedPhoto;
 
     /**
      * Default constructor.
@@ -108,8 +100,8 @@ public class PhotoListFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        
-        //handle the case that this fragment is created by the os.
+
+        // handle the case that this fragment is created by the os.
         if (savedInstanceState != null) {
             PaginationPhotoListDataProvider savedDataProvider = (PaginationPhotoListDataProvider) savedInstanceState
                     .getSerializable(BUNDLE_ATTR_DATA_PROVIDER);
@@ -130,7 +122,7 @@ public class PhotoListFragment extends Fragment implements
         mGridAdapter = new MyAdapter(getActivity(), mPhotoList);
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnItemClickListener(this);
-        
+
         // change action bar title
         FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
         act.changeActionBarTitle(mPhotoListDataProvider.getDescription());
@@ -270,47 +262,14 @@ public class PhotoListFragment extends Fragment implements
 
     }
 
-    private ProgressDialog mProgresDialog;
-    private Photo mSelectedPhoto;
-
     @Override
     public void onItemClick(AdapterView<?> parentView, View view, int position,
             long id) {
         mSelectedPhoto = (Photo) mGridAdapter.getItem(position);
-        if (mExifTask != null) {
-            mExifTask.cancel(true);
-        }
+        GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(),
+                mSelectedPhoto.getId());
+        action.execute();
 
-        mExifTask = new GetBigImageAndExifTask(mSelectedPhoto, this);
-        mProgresDialog = ProgressDialog.show(getActivity(), "",
-                "Loading photo details ...");
-        mProgresDialog.setCancelable(true);
-        mProgresDialog.setCanceledOnTouchOutside(true);
-        mProgresDialog.setOnCancelListener(new OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (mExifTask != null && !mExifTask.isCancelled()) {
-                    mExifTask.cancel(true);
-                }
-            }
-        });
-        mExifTask.execute();
-
-    }
-
-    @Override
-    public void onExifInfoFetched(Bitmap bitmap, Collection<Exif> exifs) {
-        if (mProgresDialog != null && mProgresDialog.isShowing()) {
-            mProgresDialog.dismiss();
-        }
-
-        ViewImageDetailFragment fragment = new ViewImageDetailFragment(
-                mSelectedPhoto, bitmap, exifs);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.main_area, fragment);
-        ft.addToBackStack("Detail Image");
-        ft.commitAllowingStateLoss();
     }
 
     @SuppressWarnings("unchecked")
