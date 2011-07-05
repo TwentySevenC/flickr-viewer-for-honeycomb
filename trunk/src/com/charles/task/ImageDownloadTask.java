@@ -123,6 +123,10 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
         }
     }
 
+    /**
+     * This method name should be changed later, for sometimes, it will return photo id.
+     * @return
+     */
     public String getUrl() {
         return mUrl;
     }
