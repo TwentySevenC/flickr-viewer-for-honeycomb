@@ -4,6 +4,7 @@
 	<ProgressBar android:layout_gravity="center|center"
 		android:id="@+id/progress" android:layout_height="wrap_content"
 		android:layout_width="wrap_content" />
-	<ImageView android:id="@+id/big_image" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:scaleType="matrix" />
+	<ImageView android:id="@+id/big_image" android:layout_width="wrap_content"
+		android:layout_gravity="center|center" android:layout_height="wrap_content"
+		android:scaleType="matrix" />
 </FrameLayout>
