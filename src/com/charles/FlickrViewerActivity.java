@@ -1,7 +1,10 @@
 package com.charles;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.charles.actions.GetActivitiesAction;
+import com.charles.services.FlickrViewerService;
+import com.charles.ui.ContactsFragment;
+import com.charles.utils.Constants;
+import com.charles.utils.ImageCache;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -11,10 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.charles.services.FlickrViewerService;
-import com.charles.ui.ContactsFragment;
-import com.charles.utils.Constants;
-import com.charles.utils.ImageCache;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FlickrViewerActivity extends Activity {
 
@@ -45,6 +46,9 @@ public class FlickrViewerActivity extends Activity {
 		if (Constants.CONTACT_UPLOAD_PHOTO_NOTIF_INTENT_ACTION.equals(intent
 				.getAction())) {
 			showContactsUploads(intent);
+		} else if( Constants.ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION.equals(intent.getAction())) {
+		    GetActivitiesAction aaction = new GetActivitiesAction(this);
+		    aaction.execute();
 		}
 	}
 
