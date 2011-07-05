@@ -81,6 +81,7 @@ public class ViewBigImageFragment extends Fragment implements OnTouchListener,
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.GONE);
         }
+        mImageView.setImageBitmap(bitmap);
     }
 
 }
