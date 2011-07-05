@@ -50,6 +50,9 @@ public final class Constants {
 	public static final String CONTACT_IDS_WITH_PHOTO_UPLOADED = "BUNDLE_KEY_CONTACTS_WITH_PHOTO_UPLOADED";
 	public static final int COTACT_UPLOAD_NOTIF_ID = 1;
 	
+	public static final String ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_ACT_ON_MY_PHOTO";
+	public static final int ACT_ON_MY_PHOTO_NOTIF_ID = 2;
+	
 	/**
 	 * Private constructor to prevent this class to be instanced.
 	 */

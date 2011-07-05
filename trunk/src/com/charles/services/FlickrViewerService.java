@@ -3,8 +3,7 @@
  */
 package com.charles.services;
 
-import java.util.Date;
-import java.util.Timer;
+import com.charles.FlickrViewerApplication;
 
 import android.app.Service;
 import android.content.Context;
@@ -12,7 +11,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.charles.FlickrViewerApplication;
+import java.util.Calendar;
+import java.util.Timer;
 
 /**
  * Represents the service to run in the background, querying the activities of
@@ -44,7 +44,13 @@ public class FlickrViewerService extends Service {
 		
 		//TODO put the update interval into settings.
 		long period = 24L * 60L * 60L * 1000L;
-		timer.scheduleAtFixedRate(task, new Date(), period);
+		Calendar cal = Calendar.getInstance();
+		timer.scheduleAtFixedRate(task, cal.getTime(), period);
+		
+		//one hour later, start another task.
+		RecentActivityOnMyPhotoTimerTask actTask = new RecentActivityOnMyPhotoTimerTask(context,token);
+		cal.add(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY)+1);
+		timer.schedule(actTask, cal.getTime(), period);
 	}
 
 	/*

@@ -7,17 +7,19 @@
 
 package com.charles.ui;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import com.aetrion.flickr.activity.Event;
+import com.aetrion.flickr.activity.Item;
+import com.charles.R;
+import com.charles.task.ImageDownloadTask;
+import com.charles.task.ImageDownloadTask.ParamType;
+import com.charles.utils.ImageCache;
+import com.charles.utils.ImageUtils.DownloadedDrawable;
 
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,20 +29,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.aetrion.flickr.activity.Event;
-import com.aetrion.flickr.activity.Item;
-import com.charles.R;
-import com.charles.task.ImageDownloadTask;
-import com.charles.task.ImageDownloadTask.ParamType;
-import com.charles.utils.ImageCache;
-import com.charles.utils.ImageUtils.DownloadedDrawable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author qiangz
  */
 public class RecentActivityFragment extends Fragment {
-
-	private static final String TAG = RecentActivityFragment.class.getName();
 
 	private List<Item> mActivities;
 
