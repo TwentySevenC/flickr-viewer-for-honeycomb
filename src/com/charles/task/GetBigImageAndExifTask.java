@@ -1,11 +1,5 @@
 package com.charles.task;
 
-import java.util.Collection;
-
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.util.Log;
-
 import com.aetrion.flickr.photos.Exif;
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotosInterface;
@@ -13,15 +7,25 @@ import com.charles.event.IExifListener;
 import com.charles.utils.FlickrHelper;
 import com.charles.utils.ImageUtils;
 
-public class GetBigImageAndExifTask extends
-		AsyncTask<Void, Integer, Collection<Exif>> {
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.util.Log;
 
+import java.util.Collection;
+
+public class GetBigImageAndExifTask extends
+		ProgressDialogAsyncTask<Void, Integer, Collection<Exif>> {
+    
+    private static final String MSG = "Fetching photo detail...";
+
+	private String mPhotoId;
 	private Photo mPhoto;
 	private IExifListener mExifListener;
 	private Bitmap mDownloadedBitmap;
 
-	public GetBigImageAndExifTask(Photo photo, IExifListener exifListener) {
-		mPhoto = photo;
+	public GetBigImageAndExifTask(Activity activity, String photoId, IExifListener exifListener) {
+	    super(activity,MSG);
+		mPhotoId = photoId;
 		this.mExifListener = exifListener;
 	}
 
@@ -32,7 +36,6 @@ public class GetBigImageAndExifTask extends
 			return null;
 		}
 		
-		String photoId = mPhoto.getId();
 		PhotosInterface pi = FlickrHelper.getInstance().getPhotosInterface();
 		if (pi == null) {
 			return null;
@@ -40,19 +43,24 @@ public class GetBigImageAndExifTask extends
 
 		Collection<Exif> exifs = null;
 		try {
-			exifs = pi.getExif(photoId, FlickrHelper.API_SEC);
+			exifs = pi.getExif(mPhotoId, FlickrHelper.API_SEC);
 		} catch (Exception e) {
 			Log.e("GetBigImageAndExifTask", "Error to get exif information: "
 					+ e.getMessage());
 		}
-		
-		mDownloadedBitmap = ImageUtils.downloadImage(mPhoto.getMediumUrl());
+
+        try {
+            mPhoto = pi.getPhoto(mPhotoId);
+            mDownloadedBitmap = ImageUtils.downloadImage(mPhoto.getMediumUrl());
+        } catch (Exception e) {
+        }
 		return exifs;
 	}
 
 	@Override
 	protected void onPostExecute(Collection<Exif> result) {
-		mExifListener.onExifInfoFetched(mDownloadedBitmap,result);
+	    super.onPostExecute(result);
+		mExifListener.onExifInfoFetched(mDownloadedBitmap,mPhoto,result);
 	}
 	
 	
