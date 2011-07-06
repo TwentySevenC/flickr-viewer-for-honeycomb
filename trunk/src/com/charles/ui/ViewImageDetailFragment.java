@@ -12,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -43,9 +45,11 @@ import com.charles.R;
 import com.charles.actions.IAction;
 import com.charles.actions.SharePhotoAction;
 import com.charles.actions.ShowAuthDialogAction;
+import com.charles.actions.ShowPeoplePhotosAction;
 import com.charles.actions.ShowWriteCommentAction;
 import com.charles.event.IUserCommentsFetchedListener;
 import com.charles.model.UserComment;
+import com.charles.task.AddPhotoAsFavoriteTask;
 import com.charles.task.GetPhotoCommentsTask;
 import com.charles.task.ImageDownloadTask;
 import com.charles.ui.comp.PhotoDetailActionBar;
@@ -63,15 +67,15 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	private static final String TAG = ViewImageDetailFragment.class
 			.getSimpleName();
-	
+
 	/**
 	 * Example: [http://www.flickr.com/photos/example/2910192942/]
 	 */
 	private static final String FILICK_URL_EXPRESSION = "(\\[http){1}+(s)?+(://){1}+.*\\]{1}+";
-	   
-    private static final String PHOTO_ID_ATTR = "photo.id";
-    private static final String PHOTO_TITLE_ATTR = "photo.title";
-    private static final String PHOTO_OWNER_ID = "photo.owner.id";
+
+	private static final String PHOTO_ID_ATTR = "photo.id";
+	private static final String PHOTO_TITLE_ATTR = "photo.title";
+	private static final String PHOTO_OWNER_ID = "photo.owner.id";
 
 	private WeakReference<Bitmap> mBitmapRef;
 	private Photo mCurrentPhoto;
@@ -91,7 +95,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	 * Default constructor for the framework.
 	 */
 	public ViewImageDetailFragment() {
-	    mCurrentPhoto = new Photo();
+		mCurrentPhoto = new Photo();
 	}
 
 	/**
@@ -157,6 +161,26 @@ public class ViewImageDetailFragment extends Fragment implements
 			}
 			mShowingExif = !mShowingExif;
 			return true;
+		case R.id.menu_item_add_as_fav:
+			AddPhotoAsFavoriteTask task = new AddPhotoAsFavoriteTask(
+					getActivity());
+			task.execute(mCurrentPhoto.getId());
+			return true;
+		case R.id.menu_item_show_owner_photos:
+			ShowPeoplePhotosAction showOwnerPhotosAction = new ShowPeoplePhotosAction(
+					getActivity(), mCurrentPhoto.getOwner().getId(),
+					mCurrentPhoto.getOwner().getUsername());
+			showOwnerPhotosAction.execute();
+			return true;
+		case R.id.menu_item_view_big_photo:
+			FragmentManager fm = getActivity().getFragmentManager();
+			ViewBigImageFragment fragment = new ViewBigImageFragment(
+					mCurrentPhoto);
+			FragmentTransaction ft = fm.beginTransaction();
+			ft.replace(R.id.main_area, fragment);
+			ft.addToBackStack("BigImage");
+			ft.commitAllowingStateLoss();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -180,31 +204,31 @@ public class ViewImageDetailFragment extends Fragment implements
 				getActivity().onBackPressed();
 			}
 		});
-		
-		if( savedInstanceState != null ) {
-		    String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
-		    String photoTitle = savedInstanceState.getString(PHOTO_TITLE_ATTR);
-		    String ownerId = savedInstanceState.getString(PHOTO_OWNER_ID);
-		    mCurrentPhoto.setId(photoId);
-		    mCurrentPhoto.setTitle(photoTitle);
-		    User user = new User();
-		    user.setId(ownerId);
-		    mCurrentPhoto.setOwner(user);
+
+		if (savedInstanceState != null) {
+			String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
+			String photoTitle = savedInstanceState.getString(PHOTO_TITLE_ATTR);
+			String ownerId = savedInstanceState.getString(PHOTO_OWNER_ID);
+			mCurrentPhoto.setId(photoId);
+			mCurrentPhoto.setTitle(photoTitle);
+			User user = new User();
+			user.setId(ownerId);
+			mCurrentPhoto.setOwner(user);
 		}
 
 		// photo title.
 		TextView photoTitle = (TextView) view.findViewById(R.id.titlebyauthor);
 		photoTitle.setText(mCurrentPhoto.getTitle());
-		
-		//tags
+
+		// tags
 		TextView tagsText = (TextView) view.findViewById(R.id.photo_tags);
 		Collection<Tag> tags = mCurrentPhoto.getTags();
-		if( tags == null || tags.isEmpty() ) {
+		if (tags == null || tags.isEmpty()) {
 			tagsText.setVisibility(View.GONE);
 		} else {
 			StringBuilder sb = new StringBuilder();
-			sb.append("Tags: " );
-			for( Tag tag : tags ) {
+			sb.append("Tags: ");
+			for (Tag tag : tags) {
 				sb.append(tag.getValue()).append(" ");
 			}
 			tagsText.setText(sb.toString());
@@ -233,7 +257,6 @@ public class ViewImageDetailFragment extends Fragment implements
 		PhotoDetailActionBar pBar = (PhotoDetailActionBar) view
 				.findViewById(R.id.user_action_bar);
 		pBar.setUser(mCurrentPhoto.getOwner());
-		pBar.setPhoto(mCurrentPhoto);
 
 		return view;
 	}
@@ -250,14 +273,14 @@ public class ViewImageDetailFragment extends Fragment implements
 	}
 
 	@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(PHOTO_ID_ATTR, mCurrentPhoto.getId());
-        outState.putString(PHOTO_TITLE_ATTR, mCurrentPhoto.getTitle());
-        outState.putString(PHOTO_OWNER_ID, mCurrentPhoto.getOwner().getId());
-    }
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(PHOTO_ID_ATTR, mCurrentPhoto.getId());
+		outState.putString(PHOTO_TITLE_ATTR, mCurrentPhoto.getTitle());
+		outState.putString(PHOTO_OWNER_ID, mCurrentPhoto.getOwner().getId());
+	}
 
-    @Override
+	@Override
 	public void onPause() {
 		if (mPhotoCommentTask != null) {
 			mPhotoCommentTask.cancel(true);
@@ -327,25 +350,26 @@ public class ViewImageDetailFragment extends Fragment implements
 			UserComment userComment = (UserComment) getItem(position);
 			author.setText(userComment.getUserName());
 			comment.setText(Html.fromHtml(userComment.getCommentText()));
-			Linkify.addLinks(comment, Pattern.compile(FILICK_URL_EXPRESSION), "http://", 
-					new MatchFilter() {
+			Linkify.addLinks(comment, Pattern.compile(FILICK_URL_EXPRESSION),
+					"http://", new MatchFilter() {
 
-				@Override
-				public boolean acceptMatch(CharSequence s, int start, int end) {
-					return true;
-				}
+						@Override
+						public boolean acceptMatch(CharSequence s, int start,
+								int end) {
+							return true;
+						}
 
-			}, new TransformFilter() {
+					}, new TransformFilter() {
 
-				@Override
-				public String transformUrl(Matcher matcher, String data) {
-					if (data.length() > 2) {
-						return data.substring(1, data.length() - 1);
-					}
-					return data;
-				}
+						@Override
+						public String transformUrl(Matcher matcher, String data) {
+							if (data.length() > 2) {
+								return data.substring(1, data.length() - 1);
+							}
+							return data;
+						}
 
-			});
+					});
 			commentDate.setText(userComment.getCommentDateString());
 
 			Drawable drawable = buddyIcon.getDrawable();
