@@ -44,13 +44,14 @@ public class FlickrViewerService extends Service {
 		
 		//TODO put the update interval into settings.
 		long period = 24L * 60L * 60L * 1000L;
+//		long period = 60L * 1000L;
 		Calendar cal = Calendar.getInstance();
 		timer.scheduleAtFixedRate(task, cal.getTime(), period);
 		
 		//one hour later, start another task.
 		Timer timer2 = new Timer();
 		RecentActivityOnMyPhotoTimerTask actTask = new RecentActivityOnMyPhotoTimerTask(context,token);
-		cal.add(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY)+1);
+//		cal.add(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY)+1);
 		timer2.schedule(actTask, cal.getTime(), period);
 	}
 

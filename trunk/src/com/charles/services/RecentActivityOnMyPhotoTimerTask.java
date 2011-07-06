@@ -17,39 +17,41 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.List;
 import java.util.TimerTask;
 
 /**
  * @author qiangz
- *
  */
 public class RecentActivityOnMyPhotoTimerTask extends TimerTask {
-    
+    private static final String TAG = RecentActivityOnMyPhotoTimerTask.class.getName();
     private Context mContext;
     private String mToken;
-    
-    public RecentActivityOnMyPhotoTimerTask(Context context, String token ) {
+
+    public RecentActivityOnMyPhotoTimerTask(Context context, String token) {
         this.mContext = context;
         this.mToken = token;
-        
+
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see java.util.TimerTask#run()
      */
     @Override
     public void run() {
-        RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(mToken,true);
+        RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(mToken, true);
         List<Item> items = dp.getRecentActivities();
-        if( !items.isEmpty() ) {
+        Log.d(TAG, "Recent activity task executed, item size: " + items.size());
+        if (!items.isEmpty()) {
             sendNotification();
         }
     }
 
     private void sendNotification() {
-     // notification manager.
+        // notification manager.
         NotificationManager notifManager = (NotificationManager) mContext
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
