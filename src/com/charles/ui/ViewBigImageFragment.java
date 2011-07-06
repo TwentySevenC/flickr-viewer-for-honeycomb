@@ -7,7 +7,6 @@
 
 package com.charles.ui;
 
-import com.aetrion.flickr.FlickrException;
 import com.aetrion.flickr.photos.Photo;
 import com.charles.R;
 import com.charles.event.IImageDownloadDoneListener;
@@ -57,12 +56,7 @@ public class ViewBigImageFragment extends Fragment implements OnTouchListener,
         super.onStart();
         if (mPhoto != null) {
             ImageDownloadTask task = new ImageDownloadTask(mImageView, ParamType.PHOTO_URL, this);
-            String url;
-            try {
-                url = mPhoto.getOriginalUrl();
-            } catch (FlickrException e) {
-                url = mPhoto.getLargeUrl();
-            }
+            String url = mPhoto.getLargeUrl();
             task.execute(url);
         } else {
             mProgressBar.setVisibility(View.GONE);
