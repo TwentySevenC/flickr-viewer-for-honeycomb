@@ -139,6 +139,7 @@ public class MainNavFragment extends Fragment {
 		fm.popBackStack(Constants.PHOTO_LIST_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		fm.popBackStack(Constants.SETTING_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		fm.popBackStack(Constants.CONTACT_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		fm.popBackStack(Constants.ACTIVITY_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
 	@Override
