@@ -1,60 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/vswitcher" android:layout_height="fill_parent"
-	android:layout_width="fill_parent">
-	<LinearLayout android:padding="5dp" android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:padding="5dp" android:orientation="horizontal"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-		<ImageView android:id="@+id/user_icon" android:layout_width="48dp"
-			android:src="@drawable/contacts" android:clickable="true"
-			android:layout_height="48dp" android:layout_gravity="center_vertical" />
-		<TextView android:id="@+id/user_name" android:layout_width="0dp"
-			android:layout_marginLeft="5dp" android:layout_height="wrap_content"
-			android:layout_gravity="left|center" android:layout_weight="1" />
-		<ProgressBar android:id="@+id/progress"
-			android:layout_width="48dp" android:layout_height="48dp"
-			android:layout_gravity="center_vertical" />
+	<ImageView android:id="@+id/user_icon" android:layout_width="48dp"
+		android:src="@drawable/contacts" android:clickable="true"
+		android:layout_height="48dp" android:layout_gravity="center_vertical" />
+	<TextView android:id="@+id/user_name" android:layout_width="0dp"
+		android:layout_marginLeft="5dp" android:layout_height="wrap_content"
+		android:layout_gravity="left|center" android:layout_weight="1" />
+	<ProgressBar android:id="@+id/progress"
+		android:layout_width="48dp" android:layout_height="48dp"
+		android:layout_gravity="center_vertical" />
+	<!--
 		<ImageView android:layout_width="wrap_content"
-			android:background="@drawable/action_bar_item" android:clickable="true"
-			android:src="@drawable/commands" android:layout_height="fill_parent"
-			android:id="@+id/commands" />
-	</LinearLayout>
-
-	<LinearLayout android:padding="5dp" android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-
-		<!-- 
-		<ImageView android:layout_width="wrap_content"
-			android:layout_weight="1" android:clickable="true" android:src="@drawable/add_contact"
-			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
-			android:id="@+id/add_contact" />
-		 -->
-			
-		<ImageView android:layout_width="wrap_content"
-			android:layout_weight="1" android:clickable="true" android:src="@drawable/add_favourite"
-			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
-			android:id="@+id/add_favourite" />
-
-		<!-- 
-		<ImageView android:layout_width="wrap_content"
-			android:layout_weight="1" android:clickable="true" android:src="@drawable/photo_group"
-			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
-			android:id="@+id/photo_group" />
-		 -->
-
-		<ImageView android:layout_width="wrap_content"
-			android:layout_weight="1" android:clickable="true" android:src="@drawable/gallery"
-			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
-			android:id="@+id/gallery" />
-			
-		<ImageView android:layout_width="wrap_content"
-			android:layout_weight="1" android:clickable="true" android:src="@drawable/view_big_pic"
-			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
-			android:id="@+id/view_big_pic" />
-
-		<ImageView android:layout_width="wrap_content"
-			android:layout_weight="1" android:clickable="true" android:src="@drawable/back"
-			android:background="@drawable/action_bar_item" android:layout_height="fill_parent"
-			android:id="@+id/back" />
-	</LinearLayout>
-</ViewSwitcher>
+		android:background="@drawable/action_bar_item"
+		android:clickable="true" android:src="@drawable/commands"
+		android:layout_height="fill_parent" android:id="@+id/commands" />
+	-->
+</LinearLayout>
