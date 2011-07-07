@@ -42,255 +42,274 @@ import android.widget.Toast;
  * @author charles
  */
 public class PhotoListFragment extends Fragment implements
-        AdapterView.OnItemClickListener, IPhotoListReadyListener {
+		AdapterView.OnItemClickListener, IPhotoListReadyListener {
 
-    private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider";
-    private static final String TAG = PhotoListFragment.class.getSimpleName();
+	private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider";
+	private static final String TAG = PhotoListFragment.class.getSimpleName();
 
-    private PhotoList mPhotoList;
-    private MyAdapter mGridAdapter;
-    private GridView mGridView;
+	private PhotoList mPhotoList;
+	private MyAdapter mGridAdapter;
+	private GridView mGridView;
 
-    private int mCurrentGridColumnCount = Constants.DEF_GRID_COL_COUNT;
+	private int mCurrentGridColumnCount = Constants.DEF_GRID_COL_COUNT;
 
-    /**
-     * The current page number.
-     */
-    private int mCurrentPageNumber = 1;
+	/**
+	 * The current page number.
+	 */
+	private int mCurrentPageNumber = 1;
 
-    /**
-     * The photo list data provider.
-     */
-    private PaginationPhotoListDataProvider mPhotoListDataProvider;
+	/**
+	 * Remember the previous page number, when get photo task is canceled,
+	 * restore the <code>mCurrentPageNumber</code>
+	 */
+	private int mOldPageNumber = 1;
 
-    /**
-     * The async task to fetch photo list.
-     */
-    private AsyncPhotoListTask mPhotoListTask = null;
-    
-    /**
-     * The current selected photo.
-     */
-    private Photo mSelectedPhoto;
+	/**
+	 * The photo list data provider.
+	 */
+	private PaginationPhotoListDataProvider mPhotoListDataProvider;
 
-    /**
-     * Default constructor.
-     */
-    public PhotoListFragment() {
-        mPhotoList = new PhotoList();
-    }
+	/**
+	 * The async task to fetch photo list.
+	 */
+	private AsyncPhotoListTask mPhotoListTask = null;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setHasOptionsMenu(true);
-    }
+	/**
+	 * The current selected photo.
+	 */
+	private Photo mSelectedPhoto;
 
-    /**
-     * Constructor with a list of photos.
-     * 
-     * @param photoList
-     */
-    public PhotoListFragment(PhotoList photoList,
-            PaginationPhotoListDataProvider photoListDataProvider) {
-        this.mPhotoList = photoList;
-        this.mPhotoListDataProvider = photoListDataProvider;
-    }
+	/**
+	 * Default constructor.
+	 */
+	public PhotoListFragment() {
+		mPhotoList = new PhotoList();
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.setHasOptionsMenu(true);
+	}
 
-        // handle the case that this fragment is created by the os.
-        if (savedInstanceState != null) {
-            PaginationPhotoListDataProvider savedDataProvider = (PaginationPhotoListDataProvider) savedInstanceState
-                    .getSerializable(BUNDLE_ATTR_DATA_PROVIDER);
-            if (mPhotoListDataProvider == null) {
-                mPhotoListDataProvider = savedDataProvider;
-                this.runPhotoListTask();
-            }
-        }
-        View mRootContainer = (View) inflater.inflate(R.layout.photo_grid_view,
-                null);
+	/**
+	 * Constructor with a list of photos.
+	 * 
+	 * @param photoList
+	 */
+	public PhotoListFragment(PhotoList photoList,
+			PaginationPhotoListDataProvider photoListDataProvider) {
+		this.mPhotoList = photoList;
+		this.mPhotoListDataProvider = photoListDataProvider;
+	}
 
-        // grid view.
-        mGridView = (GridView) mRootContainer.findViewById(R.id.grid);
-        FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
-                .getApplication();
-        mCurrentGridColumnCount = app.getGridNumColumns();
-        mGridView.setNumColumns(mCurrentGridColumnCount);
-        mGridAdapter = new MyAdapter(getActivity(), mPhotoList);
-        mGridView.setAdapter(mGridAdapter);
-        mGridView.setOnItemClickListener(this);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
-        // change action bar title
-        FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
-        act.changeActionBarTitle(mPhotoListDataProvider.getDescription());
-        return mRootContainer;
-    }
+		// handle the case that this fragment is created by the os.
+		if (savedInstanceState != null) {
+			PaginationPhotoListDataProvider savedDataProvider = (PaginationPhotoListDataProvider) savedInstanceState
+					.getSerializable(BUNDLE_ATTR_DATA_PROVIDER);
+			if (mPhotoListDataProvider == null) {
+				mPhotoListDataProvider = savedDataProvider;
+				this.runPhotoListTask();
+			}
+		}
+		View mRootContainer = (View) inflater.inflate(R.layout.photo_grid_view,
+				null);
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_photo_list, menu);
-    }
+		// grid view.
+		mGridView = (GridView) mRootContainer.findViewById(R.id.grid);
+		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+				.getApplication();
+		mCurrentGridColumnCount = app.getGridNumColumns();
+		mGridView.setNumColumns(mCurrentGridColumnCount);
+		mGridAdapter = new MyAdapter(getActivity(), mPhotoList);
+		mGridView.setAdapter(mGridAdapter);
+		mGridView.setOnItemClickListener(this);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+		// change action bar title
+		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
+		act.changeActionBarTitle(mPhotoListDataProvider.getDescription());
+		return mRootContainer;
+	}
 
-        FlickrViewerApplication app = (FlickrViewerApplication) getActivity().getApplication();
-        int pageSize = app.getPageSize();
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_photo_list, menu);
+	}
 
-        switch (item.getItemId()) {
-            case R.id.menu_item_previous_page:
-                if (mCurrentPageNumber <= 1) {
-                    Toast.makeText(getActivity(), "First page right now",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    mPhotoListDataProvider.setPageNumber(--mCurrentPageNumber);
-                    mPhotoListDataProvider.setPageSize(pageSize);
-                    runPhotoListTask();
-                }
-                return true;
-            case R.id.menu_item_next_page:
-                mPhotoListDataProvider.setPageNumber(++mCurrentPageNumber);
-                mPhotoListDataProvider.setPageSize(pageSize);
-                runPhotoListTask();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 
-    /**
-     * Fetches the photo list in another thread.
-     */
-    private void runPhotoListTask() {
-        if (mPhotoListTask != null) {
-            mPhotoListTask.cancel(true);
-        }
-        mPhotoListTask = new AsyncPhotoListTask(getActivity(), mPhotoListDataProvider, this);
-        mPhotoListTask.execute();
-    }
+		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+				.getApplication();
+		int pageSize = app.getPageSize();
 
-    private static class MyAdapter extends BaseAdapter {
+		switch (item.getItemId()) {
+		case R.id.menu_item_previous_page:
+			if (mCurrentPageNumber <= 1) {
+				Toast.makeText(getActivity(), "This is the first page.",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				mOldPageNumber = mCurrentPageNumber;
+				mCurrentPageNumber --;
+				mPhotoListDataProvider.setPageNumber(mCurrentPageNumber);
+				mPhotoListDataProvider.setPageSize(pageSize);
+				runPhotoListTask();
+			}
+			return true;
+		case R.id.menu_item_next_page:
+			if (mPhotoList.size() < pageSize) {
+				Toast.makeText(getActivity(), "This is the last page.",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				mOldPageNumber = mCurrentPageNumber;
+				mCurrentPageNumber ++;
+				mPhotoListDataProvider.setPageNumber(mCurrentPageNumber);
+				mPhotoListDataProvider.setPageSize(pageSize);
+				runPhotoListTask();
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
-        private PhotoList mPhotoList;
-        private Context mContext;
+	/**
+	 * Fetches the photo list in another thread.
+	 */
+	private void runPhotoListTask() {
+		if (mPhotoListTask != null) {
+			mPhotoListTask.cancel(true);
+		}
+		mPhotoListTask = new AsyncPhotoListTask(getActivity(),
+				mPhotoListDataProvider, this);
+		mPhotoListTask.execute();
+	}
 
-        public MyAdapter(Context context, PhotoList mPhotoList) {
-            this.mPhotoList = mPhotoList;
-            this.mContext = context;
-        }
+	private static class MyAdapter extends BaseAdapter {
 
-        @Override
-        public int getCount() {
-            return mPhotoList.size();
-        }
+		private PhotoList mPhotoList;
+		private Context mContext;
 
-        @Override
-        public Object getItem(int arg0) {
-            return mPhotoList.get(arg0);
-        }
+		public MyAdapter(Context context, PhotoList mPhotoList) {
+			this.mPhotoList = mPhotoList;
+			this.mContext = context;
+		}
 
-        @Override
-        public long getItemId(int arg0) {
-            return 0;
-        }
+		@Override
+		public int getCount() {
+			return mPhotoList.size();
+		}
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+		@Override
+		public Object getItem(int arg0) {
+			return mPhotoList.get(arg0);
+		}
 
-            View view = convertView;
-            if (view == null) {
-                LayoutInflater li = LayoutInflater.from(mContext);
-                view = li.inflate(R.layout.interesting_list_item, null);
-            }
+		@Override
+		public long getItemId(int arg0) {
+			return 0;
+		}
 
-            Photo photo = (Photo) getItem(position);
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
 
-            ImageView photoImage;
-            TextView titleView;
+			View view = convertView;
+			if (view == null) {
+				LayoutInflater li = LayoutInflater.from(mContext);
+				view = li.inflate(R.layout.interesting_list_item, null);
+			}
 
-            ViewHolder holder = (ViewHolder) view.getTag();
-            if (holder == null) {
-                photoImage = (ImageView) view.findViewById(R.id.small_img);
-                titleView = (TextView) view.findViewById(R.id.title);
+			Photo photo = (Photo) getItem(position);
 
-                holder = new ViewHolder();
-                holder.image = photoImage;
-                holder.titleView = titleView;
-                view.setTag(holder);
+			ImageView photoImage;
+			TextView titleView;
 
-            } else {
-                photoImage = holder.image;
-                titleView = holder.titleView;
-            }
-            titleView.setText(photo.getTitle());
-            photoImage.setScaleType(ScaleType.CENTER_CROP);
+			ViewHolder holder = (ViewHolder) view.getTag();
+			if (holder == null) {
+				photoImage = (ImageView) view.findViewById(R.id.small_img);
+				titleView = (TextView) view.findViewById(R.id.title);
 
-            Drawable drawable = photoImage.getDrawable();
-            String smallUrl = photo.getSmallUrl();
-            if (drawable != null && drawable instanceof DownloadedDrawable) {
-                ImageDownloadTask task = ((DownloadedDrawable) drawable)
-                        .getBitmapDownloaderTask();
-                if (!smallUrl.equals(task.getUrl())) {
-                    task.cancel(true);
-                }
-            }
+				holder = new ViewHolder();
+				holder.image = photoImage;
+				holder.titleView = titleView;
+				view.setTag(holder);
 
-            if (smallUrl == null) {
-                photoImage.setImageDrawable(null);
-            } else {
-                Bitmap cacheBitmap = ImageCache.getFromCache(smallUrl);
-                if (cacheBitmap != null) {
-                    photoImage.setImageBitmap(cacheBitmap);
-                } else {
-                    ImageDownloadTask task = new ImageDownloadTask(photoImage);
-                    drawable = new DownloadedDrawable(task);
-                    photoImage.setImageDrawable(drawable);
-                    task.execute(smallUrl);
-                }
-            }
+			} else {
+				photoImage = holder.image;
+				titleView = holder.titleView;
+			}
+			titleView.setText(photo.getTitle());
+			photoImage.setScaleType(ScaleType.CENTER_CROP);
 
-            return view;
-        }
+			Drawable drawable = photoImage.getDrawable();
+			String smallUrl = photo.getSmallUrl();
+			if (drawable != null && drawable instanceof DownloadedDrawable) {
+				ImageDownloadTask task = ((DownloadedDrawable) drawable)
+						.getBitmapDownloaderTask();
+				if (!smallUrl.equals(task.getUrl())) {
+					task.cancel(true);
+				}
+			}
 
-        private static class ViewHolder {
-            ImageView image;
-            TextView titleView;
-        }
+			if (smallUrl == null) {
+				photoImage.setImageDrawable(null);
+			} else {
+				Bitmap cacheBitmap = ImageCache.getFromCache(smallUrl);
+				if (cacheBitmap != null) {
+					photoImage.setImageBitmap(cacheBitmap);
+				} else {
+					ImageDownloadTask task = new ImageDownloadTask(photoImage);
+					drawable = new DownloadedDrawable(task);
+					photoImage.setImageDrawable(drawable);
+					task.execute(smallUrl);
+				}
+			}
 
-    }
+			return view;
+		}
 
-    @Override
-    public void onItemClick(AdapterView<?> parentView, View view, int position,
-            long id) {
-        mSelectedPhoto = (Photo) mGridAdapter.getItem(position);
-        GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(),
-                mSelectedPhoto.getId());
-        action.execute();
+		private static class ViewHolder {
+			ImageView image;
+			TextView titleView;
+		}
 
-    }
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onPhotoListReady(PhotoList list) {
-        if (list == null || list.isEmpty()) {
-            return;
-        }
+	@Override
+	public void onItemClick(AdapterView<?> parentView, View view, int position,
+			long id) {
+		mSelectedPhoto = (Photo) mGridAdapter.getItem(position);
+		GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(),
+				mSelectedPhoto.getId());
+		action.execute();
 
-        mPhotoList.clear();
-        for (int i = 0; i < list.size(); i++) {
-            mPhotoList.add(list.get(i));
-        }
-        mGridAdapter.notifyDataSetChanged();
-    }
+	}
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(BUNDLE_ATTR_DATA_PROVIDER, mPhotoListDataProvider);
-        Log.d(TAG, "data provider is saved.");
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onPhotoListReady(PhotoList list, boolean cancelled) {
+		if (list == null || list.isEmpty() || cancelled ) {
+			mCurrentPageNumber = mOldPageNumber;
+			return;
+		}
+
+		mPhotoList.clear();
+		for (int i = 0; i < list.size(); i++) {
+			mPhotoList.add(list.get(i));
+		}
+		mGridAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(BUNDLE_ATTR_DATA_PROVIDER,
+				mPhotoListDataProvider);
+		Log.d(TAG, "data provider is saved.");
+	}
 
 }
