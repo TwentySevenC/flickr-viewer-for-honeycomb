@@ -35,7 +35,10 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
 
     private IPhotoListReadyListener mDefaultPhotoReadyListener = new IPhotoListReadyListener() {
         @Override
-        public void onPhotoListReady(PhotoList list) {
+        public void onPhotoListReady(PhotoList list, boolean cancelled ) {
+        	if( cancelled ) {
+        		return;
+        	}
             if (list == null) {
                 Toast.makeText(mActivity, "Unable to get photo list",
                         Toast.LENGTH_SHORT).show();
@@ -88,8 +91,18 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
     protected void onPostExecute(PhotoList result) {
         super.onPostExecute(result);
         if (mPhotoListReadyListener != null) {
-            mPhotoListReadyListener.onPhotoListReady(result);
+            mPhotoListReadyListener.onPhotoListReady(result, false);
         }
     }
+
+	@Override
+	protected void onCancelled() {
+		super.onCancelled();
+		if (mPhotoListReadyListener != null) {
+            mPhotoListReadyListener.onPhotoListReady(null, true);
+        }
+	}
+    
+    
 
 }

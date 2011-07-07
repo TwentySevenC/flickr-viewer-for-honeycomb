@@ -30,7 +30,10 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
     private IPhotoListReadyListener mPhotosReadyListener = new IPhotoListReadyListener() {
 
         @Override
-        public void onPhotoListReady(PhotoList list) {
+        public void onPhotoListReady(PhotoList list, boolean cancelled) {
+        	if( cancelled ) {
+        		return;
+        	}
             PhotoListFragment fragment = new PhotoListFragment(list,
                     mDataProvider);
             FragmentManager fm = mActivity.getFragmentManager();

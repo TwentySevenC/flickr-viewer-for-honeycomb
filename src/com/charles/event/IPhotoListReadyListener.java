@@ -8,5 +8,10 @@ import com.aetrion.flickr.photos.PhotoList;
  */
 public interface IPhotoListReadyListener {
 
-	void onPhotoListReady(PhotoList list);
+	/**
+	 * Called when the photo list ready, or the task is cancelled.
+	 * @param list
+	 * @param cancelled
+	 */
+	void onPhotoListReady(PhotoList list, boolean cancelled);
 }
