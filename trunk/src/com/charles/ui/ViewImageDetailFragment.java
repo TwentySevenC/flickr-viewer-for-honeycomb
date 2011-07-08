@@ -96,6 +96,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	 */
 	public ViewImageDetailFragment() {
 		mCurrentPhoto = new Photo();
+		mExifs = new Exif[0];
 	}
 
 	/**
