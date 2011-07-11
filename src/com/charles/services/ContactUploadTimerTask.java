@@ -80,6 +80,7 @@ public class ContactUploadTimerTask extends TimerTask {
 				mContext.getResources().getString(
 						R.string.notif_message_recent_upload), System
 						.currentTimeMillis());
+		notif.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
 		// init the contact id string array
 		List<String> cIds = new ArrayList<String>();
 		Iterator<?> it = col.iterator();
