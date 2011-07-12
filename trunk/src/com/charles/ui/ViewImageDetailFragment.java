@@ -43,6 +43,7 @@ import com.aetrion.flickr.tags.Tag;
 import com.charles.FlickrViewerApplication;
 import com.charles.R;
 import com.charles.actions.IAction;
+import com.charles.actions.SaveImageWallpaperAction;
 import com.charles.actions.SharePhotoAction;
 import com.charles.actions.ShowAuthDialogAction;
 import com.charles.actions.ShowPeoplePhotosAction;
@@ -126,6 +127,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_view_image, menu);
+		inflater.inflate(R.menu.menu_view_big_image, menu);
 	}
 
 	@Override
@@ -181,6 +183,16 @@ public class ViewImageDetailFragment extends Fragment implements
 			ft.replace(R.id.main_area, fragment);
 			ft.addToBackStack("BigImage");
 			ft.commitAllowingStateLoss();
+			return true;
+		case R.id.menu_item_save:
+			SaveImageWallpaperAction sa = new SaveImageWallpaperAction(
+					getActivity(), mCurrentPhoto);
+			sa.execute();
+			return true;
+		case R.id.menu_item_wallpaper:
+			SaveImageWallpaperAction wallAction = new SaveImageWallpaperAction(
+					getActivity(), mCurrentPhoto, true);
+			wallAction.execute();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
