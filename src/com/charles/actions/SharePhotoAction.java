@@ -64,7 +64,7 @@ public class SharePhotoAction extends ActivityAwareAction {
         cm.setText(mPhotoUrl);
 
         // send out the intent.
-        Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
+        Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_SUBJECT, "Share photo");
         intent.putExtra(Intent.EXTRA_TEXT, mPhotoUrl);
         intent.putExtra(Intent.EXTRA_TITLE, mPhotoUrl);
