@@ -4,6 +4,6 @@
 		android:showAsAction="ifRoom|withText" android:icon="@android:drawable/ic_menu_save"
 		android:id="@+id/menu_item_save" />
 	<item android:title="@string/menu_item_set_wall_paper"
-		android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_set_as"
+		android:icon="@android:drawable/ic_menu_set_as"
 		android:id="@+id/menu_item_wallpaper"></item>
 </menu>
