@@ -7,11 +7,17 @@
 
 package com.charles.ui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import android.app.Fragment;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +38,7 @@ import com.charles.actions.SaveImageWallpaperAction;
 import com.charles.event.IImageDownloadDoneListener;
 import com.charles.task.ImageDownloadTask;
 import com.charles.task.ImageDownloadTask.ParamType;
+import com.charles.utils.Constants;
 
 /**
  * @author qiangz
@@ -109,10 +116,22 @@ public class ViewBigImageFragment extends Fragment implements OnTouchListener,
 	public void onStart() {
 		super.onStart();
 		if (mPhoto != null) {
-			ImageDownloadTask task = new ImageDownloadTask(mImageView,
-					ParamType.PHOTO_URL, this);
-			String url = mPhoto.getLargeUrl();
-			task.execute(url);
+			File root = new File(Environment.getExternalStorageDirectory(),
+					Constants.SD_CARD_FOLDER_NAME);
+			File imageFile = new File(root, mPhoto.getId() + ".jpg");
+			if (imageFile.exists()) {
+				try {
+					Bitmap bm = BitmapFactory.decodeStream(new FileInputStream(
+							imageFile));
+					onImageDownloaded(bm);
+				} catch (FileNotFoundException e) {
+				}
+			} else {
+				ImageDownloadTask task = new ImageDownloadTask(mImageView,
+						ParamType.PHOTO_URL, this);
+				String url = mPhoto.getLargeUrl();
+				task.execute(url);
+			}
 		} else {
 			mProgressBar.setVisibility(View.GONE);
 			Toast.makeText(getActivity(), "Unable to get the big image.",
