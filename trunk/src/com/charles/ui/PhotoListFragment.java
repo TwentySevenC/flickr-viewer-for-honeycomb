@@ -4,6 +4,32 @@
 
 package com.charles.ui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import android.app.Fragment;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
+
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotoList;
 import com.charles.FlickrViewerActivity;
@@ -17,26 +43,6 @@ import com.charles.task.ImageDownloadTask;
 import com.charles.utils.Constants;
 import com.charles.utils.ImageCache;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
-
-import android.app.Fragment;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * @author charles
@@ -154,7 +160,7 @@ public class PhotoListFragment extends Fragment implements
 						Toast.LENGTH_SHORT).show();
 			} else {
 				mOldPageNumber = mCurrentPageNumber;
-				mCurrentPageNumber --;
+				mCurrentPageNumber--;
 				mPhotoListDataProvider.setPageNumber(mCurrentPageNumber);
 				mPhotoListDataProvider.setPageSize(pageSize);
 				runPhotoListTask();
@@ -166,7 +172,7 @@ public class PhotoListFragment extends Fragment implements
 						Toast.LENGTH_SHORT).show();
 			} else {
 				mOldPageNumber = mCurrentPageNumber;
-				mCurrentPageNumber ++;
+				mCurrentPageNumber++;
 				mPhotoListDataProvider.setPageNumber(mCurrentPageNumber);
 				mPhotoListDataProvider.setPageSize(pageSize);
 				runPhotoListTask();
@@ -256,16 +262,37 @@ public class PhotoListFragment extends Fragment implements
 			}
 
 			if (smallUrl == null) {
-				photoImage.setImageDrawable(null);
+				File f = getSavedImageFile(photo.getId());
+				if (f == null) {
+					photoImage.setImageDrawable(null);
+				} else {
+					try {
+						photoImage.setImageBitmap(BitmapFactory
+								.decodeStream(new FileInputStream(f)));
+					} catch (FileNotFoundException e) {
+						photoImage.setImageDrawable(null);
+					}
+				}
 			} else {
 				Bitmap cacheBitmap = ImageCache.getFromCache(smallUrl);
 				if (cacheBitmap != null) {
 					photoImage.setImageBitmap(cacheBitmap);
 				} else {
-					ImageDownloadTask task = new ImageDownloadTask(photoImage);
-					drawable = new DownloadedDrawable(task);
-					photoImage.setImageDrawable(drawable);
-					task.execute(smallUrl);
+					File f = getSavedImageFile(photo.getId());
+					if (f == null) {
+						ImageDownloadTask task = new ImageDownloadTask(
+								photoImage);
+						drawable = new DownloadedDrawable(task);
+						photoImage.setImageDrawable(drawable);
+						task.execute(smallUrl);
+					} else {
+						try {
+							photoImage.setImageBitmap(BitmapFactory
+									.decodeStream(new FileInputStream(f)));
+						} catch (FileNotFoundException e) {
+							photoImage.setImageDrawable(null);
+						}
+					}
 				}
 			}
 
@@ -275,6 +302,17 @@ public class PhotoListFragment extends Fragment implements
 		private static class ViewHolder {
 			ImageView image;
 			TextView titleView;
+		}
+
+		private File getSavedImageFile(String photoId) {
+			File root = new File(Environment.getExternalStorageDirectory(),
+					Constants.SD_CARD_FOLDER_NAME);
+			File imageFile = new File(root, photoId + ".jpg");
+			if (imageFile.exists()) {
+				return imageFile;
+			} else {
+				return null;
+			}
 		}
 
 	}
@@ -292,7 +330,7 @@ public class PhotoListFragment extends Fragment implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onPhotoListReady(PhotoList list, boolean cancelled) {
-		if (list == null || list.isEmpty() || cancelled ) {
+		if (list == null || list.isEmpty() || cancelled) {
 			mCurrentPageNumber = mOldPageNumber;
 			return;
 		}
