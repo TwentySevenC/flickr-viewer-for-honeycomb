@@ -30,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -154,13 +155,17 @@ public class ViewImageDetailFragment extends Fragment implements
 			return true;
 		case R.id.menu_item_switch:
 			if (mShowingExif) {
+			    mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_in));
+			    mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_out));
 				item.setTitle(R.string.menu_show_exif);
 				mViewSwitcher.showNext();
-				mViewSwitcher.animate().setDuration(2000).rotationY(360f);
+//				mViewSwitcher.animate().setDuration(2000).rotationY(360f);
 			} else {
+			    mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_left_in));
+			    mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.push_right_out));
 				item.setTitle(R.string.menu_show_comment);
 				mViewSwitcher.showPrevious();
-				mViewSwitcher.animate().setDuration(2000).rotationY(0f);
+//				mViewSwitcher.animate().setDuration(2000).rotationY(0f);
 			}
 			mShowingExif = !mShowingExif;
 			return true;
