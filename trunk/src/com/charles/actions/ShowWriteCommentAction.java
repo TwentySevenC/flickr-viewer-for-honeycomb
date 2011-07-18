@@ -35,7 +35,7 @@ public class ShowWriteCommentAction extends ActivityAwareAction {
 	public void execute() {
 		FragmentManager fm = mActivity.getFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
-		Fragment prev = fm.findFragmentByTag("write_comment_dlg");
+		Fragment prev = fm.findFragmentByTag("write_comment_dlg"); //$NON-NLS-1$
 		if (prev != null) {
 			ft.remove(prev);
 		}
@@ -45,7 +45,7 @@ public class ShowWriteCommentAction extends ActivityAwareAction {
 		WriteCommentDialog authDialog = new WriteCommentDialog(
 				this.mPhotoId);
 		authDialog.setCancelable(true);
-		authDialog.show(ft, "write_comment_dlg");
+		authDialog.show(ft, "write_comment_dlg"); //$NON-NLS-1$
 	}
 
 }

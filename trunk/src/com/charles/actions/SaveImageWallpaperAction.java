@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.widget.Toast;
 
 import com.aetrion.flickr.photos.Photo;
+import com.charles.R;
 import com.charles.event.IImageDownloadDoneListener;
 import com.charles.task.ImageDownloadTask;
 import com.charles.task.ImageDownloadTask.ParamType;
@@ -65,7 +66,10 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 				} catch (IOException e) {
 				}
 			} else {
-				Toast.makeText(mActivity, "Photo already saved.",
+				Toast.makeText(
+						mActivity,
+						mActivity.getResources().getString(
+								R.string.toast_photo_already_saved),
 						Toast.LENGTH_SHORT).show();
 			}
 		} else {
@@ -79,7 +83,7 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 	private File getBitmapFile() {
 		File root = new File(Environment.getExternalStorageDirectory(),
 				Constants.SD_CARD_FOLDER_NAME);
-		File saveFile = new File(root, mCurrentPhoto.getId() + ".jpg");
+		File saveFile = new File(root, mCurrentPhoto.getId() + ".jpg"); //$NON-NLS-1$
 		return saveFile;
 	}
 
@@ -92,19 +96,31 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 				WallpaperManager wmgr = WallpaperManager.getInstance(mActivity);
 				try {
 					wmgr.setBitmap(bitmap);
-					Toast.makeText(mActivity, "Wallpaper changed.",
+					Toast.makeText(
+							mActivity,
+							mActivity.getResources().getString(
+									R.string.toast_wallpaper_changed),
 							Toast.LENGTH_SHORT).show();
 				} catch (IOException e) {
-					Toast.makeText(mActivity,
-							"Error to set the photo as wallpaper",
+					Toast.makeText(
+							mActivity,
+							mActivity.getResources().getString(
+									R.string.toast_error_set_wallpaper),
 							Toast.LENGTH_SHORT).show();
 				}
 			} else {
-				Toast.makeText(mActivity, "Photo saved successfully.",
-						Toast.LENGTH_SHORT).show();
+				Toast
+						.makeText(
+								mActivity,
+								mActivity.getResources().getString(
+										R.string.toast_photo_saved),
+								Toast.LENGTH_SHORT).show();
 			}
 		} else {
-			Toast.makeText(mActivity, "Error to save the photo",
+			Toast.makeText(
+					mActivity,
+					mActivity.getResources().getString(
+							R.string.toast_error_save_photo),
 					Toast.LENGTH_SHORT).show();
 		}
 	}

@@ -57,16 +57,16 @@ public class ContactUploadTimerTask extends TimerTask {
 		sinceDate = new Date(time);
 		try {
 		    Date now = new Date();
-		    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		    Log.d(TAG,"Task runs at " + formater.format(now));
-            Collection<?> col = ci.getListRecentlyUploaded(sinceDate, "all");
+		    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); //$NON-NLS-1$
+		    Log.d(TAG,"Task runs at " + formater.format(now)); //$NON-NLS-1$
+            Collection<?> col = ci.getListRecentlyUploaded(sinceDate, "all"); //$NON-NLS-1$
 			if (col.size() > 0) {
 				sendNotifications(col);
 			} else {
-				Log.i(TAG,"No recent upload.");
+				Log.i(TAG,"No recent upload."); //$NON-NLS-1$
 			}
 		} catch (Exception e) {
-		    Log.w(TAG, "unable to get recent upload: " + e.getMessage());
+		    Log.w(TAG, "unable to get recent upload: " + e.getMessage()); //$NON-NLS-1$
 		}
 	}
 

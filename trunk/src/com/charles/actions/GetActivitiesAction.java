@@ -24,43 +24,48 @@ import java.util.List;
  */
 public class GetActivitiesAction extends ActivityAwareAction {
 
-    private IActivityFetchedListener mTaskDoneListener = new IActivityFetchedListener() {
+	private IActivityFetchedListener mTaskDoneListener = new IActivityFetchedListener() {
 
-        @Override
-        public void onActivityFetched(List<Item> items) {
-            if (items.isEmpty()) {
-                Toast.makeText(mActivity, "No recent activites.",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                FragmentManager fm = mActivity.getFragmentManager();
-                fm.popBackStack(Constants.ACTIVITY_BACK_STACK,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                FragmentTransaction ft = fm.beginTransaction();
+		@Override
+		public void onActivityFetched(List<Item> items) {
+			if (items.isEmpty()) {
+				Toast.makeText(
+						mActivity,
+						mActivity.getResources().getString(
+								R.string.toast_no_activities),
+						Toast.LENGTH_SHORT).show();
+			} else {
+				FragmentManager fm = mActivity.getFragmentManager();
+				fm.popBackStack(Constants.ACTIVITY_BACK_STACK,
+						FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				FragmentTransaction ft = fm.beginTransaction();
 
-                RecentActivityFragment frag = new RecentActivityFragment(items);
-                ft.replace(R.id.main_area, frag);
-                ft.addToBackStack(Constants.ACTIVITY_BACK_STACK);
-                ft.commitAllowingStateLoss();
-            }
-        }
+				RecentActivityFragment frag = new RecentActivityFragment(items);
+				ft.replace(R.id.main_area, frag);
+				ft.addToBackStack(Constants.ACTIVITY_BACK_STACK);
+				ft.commitAllowingStateLoss();
+			}
+		}
 
-    };
+	};
 
-    public GetActivitiesAction(Activity activity) {
-        super(activity);
-    }
+	public GetActivitiesAction(Activity activity) {
+		super(activity);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see com.charles.actions.IAction#execute()
-     */
-    @Override
-    public void execute() {
-        FlickrViewerApplication app = (FlickrViewerApplication) mActivity
-                .getApplication();
-        String token = app.getFlickrToken();
-        GetActivitiesTask task = new GetActivitiesTask(mActivity, mTaskDoneListener);
-        task.execute(token);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.charles.actions.IAction#execute()
+	 */
+	@Override
+	public void execute() {
+		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+				.getApplication();
+		String token = app.getFlickrToken();
+		GetActivitiesTask task = new GetActivitiesTask(mActivity,
+				mTaskDoneListener);
+		task.execute(token);
+	}
 
 }

@@ -43,7 +43,7 @@ public class ShowAuthDialogAction extends ActivityAwareAction {
         FragmentTransaction ft = fm
                 .beginTransaction();
         Fragment prev = fm.findFragmentByTag(
-                "auth_dialog");
+                "auth_dialog"); //$NON-NLS-1$
         if (prev != null) {
             ft.remove(prev);
         }
@@ -53,7 +53,7 @@ public class ShowAuthDialogAction extends ActivityAwareAction {
         AuthFragmentDialog authDialog = new AuthFragmentDialog();
         authDialog.setFinishAction(mFinishAction);
         authDialog.setCancelable(true);
-        authDialog.show(ft, "auth_dialog");
+        authDialog.show(ft, "auth_dialog"); //$NON-NLS-1$
     }
 
 }

@@ -7,35 +7,38 @@
 
 package com.charles.actions;
 
+import android.app.Activity;
+
 import com.charles.FlickrViewerApplication;
+import com.charles.R;
 import com.charles.dataprovider.InterestingPhotosDataProvider;
 import com.charles.dataprovider.PaginationPhotoListDataProvider;
 import com.charles.task.AsyncPhotoListTask;
-
-import android.app.Activity;
 
 /**
  * @author qiangz
  */
 public class ShowInterestingPhotosAction extends ActivityAwareAction {
 
-    public ShowInterestingPhotosAction(Activity activity) {
-        super(activity);
-    }
+	public ShowInterestingPhotosAction(Activity activity) {
+		super(activity);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see com.charles.actions.IAction#execute()
-     */
-    @Override
-    public void execute() {
-        FlickrViewerApplication app = (FlickrViewerApplication) mActivity
-                .getApplication();
-        final PaginationPhotoListDataProvider photoListDataProvider = new InterestingPhotosDataProvider();
-        photoListDataProvider.setPageSize(app.getPageSize());
-        final AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
-                photoListDataProvider, null, "Loading interesting photos...");
-        task.execute();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.charles.actions.IAction#execute()
+	 */
+	@Override
+	public void execute() {
+		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+				.getApplication();
+		final PaginationPhotoListDataProvider photoListDataProvider = new InterestingPhotosDataProvider();
+		photoListDataProvider.setPageSize(app.getPageSize());
+		final AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
+				photoListDataProvider, null, mActivity.getResources()
+						.getString(R.string.task_loading_interest));
+		task.execute();
+	}
 
 }
