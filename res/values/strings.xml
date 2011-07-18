@@ -46,6 +46,24 @@
 	<!-- Notification title and hints -->
 	<string name="notif_message_recent_upload">Your contacts have photos uploaded.</string>
 	<string name="notif_message_act_on_my_photo">You got comments on your photos.</string>
+	
+	<!-- Toast related -->
+	<string name="toast_no_activities">No recent activities.</string>
+	<string name="toast_photo_already_saved">Photo already saved.</string>
+	<string name="toast_wallpaper_changed">Wallpaper changed.</string>
+	<string name="toast_error_set_wallpaper">Error to set the photo as wallpaper.</string>
+	<string name="toast_photo_saved">Photo saved successfully.</string>
+	<string name="toast_error_save_photo">Error to save the photo.</string>
+	
+	<!-- Share photo intent related. -->
+	<string name="share_photo_intent_subj">Share Photo</string>
+	
+	<!-- Task messages -->
+	<string name="task_loading_favs">Loading favorite photos...</string>
+	<string name="task_loading_interest">Loading interesting photos...</string>
+	
+	<!-- data provider desc -->
+	<string name="dp_desc_fav">My Favorite photos</string>
 </resources>
 
 
