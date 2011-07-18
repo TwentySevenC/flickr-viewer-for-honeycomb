@@ -50,7 +50,7 @@ public class GetPhotoDetailAction extends ActivityAwareAction implements IExifLi
         FragmentManager fm = mActivity.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.main_area, fragment);
-        ft.addToBackStack("Detail Image");
+        ft.addToBackStack("Detail Image"); //$NON-NLS-1$
         ft.commitAllowingStateLoss();
     }
 

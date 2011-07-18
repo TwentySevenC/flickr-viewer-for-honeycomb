@@ -44,7 +44,7 @@ public class RecentActivityOnMyPhotoTimerTask extends TimerTask {
     public void run() {
         RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(mToken, true);
         List<Item> items = dp.getRecentActivities();
-        Log.d(TAG, "Recent activity task executed, item size: " + items.size());
+        Log.d(TAG, "Recent activity task executed, item size: " + items.size()); //$NON-NLS-1$
         if (!items.isEmpty()) {
             sendNotification();
         }

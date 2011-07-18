@@ -6,6 +6,7 @@ package com.charles.actions;
 import android.app.Activity;
 
 import com.charles.FlickrViewerApplication;
+import com.charles.R;
 import com.charles.dataprovider.FavoritePhotosDataProvider;
 import com.charles.dataprovider.PaginationPhotoListDataProvider;
 import com.charles.task.AsyncPhotoListTask;
@@ -42,7 +43,7 @@ public class ShowFavoritesAction extends ActivityAwareAction {
 		PaginationPhotoListDataProvider dp = new FavoritePhotosDataProvider(
 				mUserId, token);
 		AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity, dp, null,
-				"Loading favorite photos ..." );
+				mActivity.getResources().getString(R.string.task_loading_favs));
 		task.execute();
 	}
 

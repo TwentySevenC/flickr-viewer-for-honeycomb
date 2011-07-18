@@ -37,7 +37,7 @@ public class FlickrViewerService extends Service {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
 		} else {
-			Log.e(TAG, "Not the application context provided");
+			Log.e(TAG, "Not the application context provided"); //$NON-NLS-1$
 			return;
 		}
 		ContactUploadTimerTask task = new ContactUploadTimerTask(context,token);

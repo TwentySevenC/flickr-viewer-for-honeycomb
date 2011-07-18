@@ -45,7 +45,9 @@ public class RecentActivitiesDataProvider {
 
     /**
      * Returns the recent activities, including both the activities of my own
-     * photo, and that on the photos commented by me. TODO only support photo
+     * photo, and that on the photos commented by me. 
+     * <p>
+     * TODO only support photo
      * item right now, for 'photoset', support later.
      * 
      * @return
@@ -61,19 +63,19 @@ public class RecentActivitiesDataProvider {
                 if (userComments != null) {
                     for (int i = 0; i < userComments.size(); i++) {
                         Item item = (Item) userComments.get(i);
-                        Log.d(TAG, "Activity item type : " + item.getType());
-                        if ("photo".equals(item.getType())) {
+                        Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
+                        if ("photo".equals(item.getType())) { //$NON-NLS-1$
                             items.add(item);
                         }
                     }
                 }
             }
-            ItemList photoComments = ai.userPhotos(PER_PAGE, 1, "1d");
+            ItemList photoComments = ai.userPhotos(PER_PAGE, 1, "1d"); //$NON-NLS-1$
             if (photoComments != null) {
                 for (int j = 0; j < photoComments.size(); j++) {
                     Item item = (Item) photoComments.get(j);
-                    Log.d(TAG, "Activity item type : " + item.getType());
-                    if ("photo".equals(item.getType())) {
+                    Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
+                    if ("photo".equals(item.getType())) { //$NON-NLS-1$
                         items.add(item);
                     }
                 }

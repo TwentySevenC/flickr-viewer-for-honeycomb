@@ -93,7 +93,7 @@ public class FlickrViewerActivity extends Activity {
 
         StringBuilder sb = new StringBuilder(appName);
         if (title != null) {
-            sb.append(" - ").append(title);
+            sb.append(" - ").append(title); //$NON-NLS-1$
         }
 
         getActionBar().setTitle(sb.toString());

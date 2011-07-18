@@ -53,7 +53,7 @@ public final class UserComment {
 	}
 
 	public String getCommentDateString() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss"); //$NON-NLS-1$
 		try {
 			String s = format.format(mCommentDate);
 			return s;
