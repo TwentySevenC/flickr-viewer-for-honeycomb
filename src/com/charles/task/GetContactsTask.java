@@ -9,6 +9,7 @@ package com.charles.task;
 
 import com.aetrion.flickr.contacts.Contact;
 import com.charles.FlickrViewerApplication;
+import com.charles.R;
 import com.charles.dataprovider.DefaultContactDataProvider;
 import com.charles.event.IContactsFetchedListener;
 
@@ -21,11 +22,10 @@ import java.util.Collection;
  */
 public class GetContactsTask extends ProgressDialogAsyncTask<String, Integer, Collection<Contact>> {
 
-    private static final String DEF_MSG = "Fetching contacts ...";
     private IContactsFetchedListener mListener;
 
     public GetContactsTask(Activity activity, IContactsFetchedListener listener) {
-        super(activity, DEF_MSG);
+        super(activity, R.string.loading_contacts);
         this.mListener = listener;
     }
 

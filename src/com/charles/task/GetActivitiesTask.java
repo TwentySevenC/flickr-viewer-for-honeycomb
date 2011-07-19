@@ -3,12 +3,13 @@
  */
 package com.charles.task;
 
-import java.util.List;
+import com.aetrion.flickr.activity.Item;
+import com.charles.R;
+import com.charles.dataprovider.RecentActivitiesDataProvider;
 
 import android.app.Activity;
 
-import com.aetrion.flickr.activity.Item;
-import com.charles.dataprovider.RecentActivitiesDataProvider;
+import java.util.List;
 
 /**
  * Represents the task to get the rencent activites.
@@ -21,12 +22,10 @@ import com.charles.dataprovider.RecentActivitiesDataProvider;
 public class GetActivitiesTask extends
 		ProgressDialogAsyncTask<String, Integer, List<Item>> {
 
-	private static final String DLG_MSG = "Get recent activities...";
-	
 	private IActivityFetchedListener mTaskDoneListener;
 
 	public GetActivitiesTask(Activity activity) {
-		super(activity, DLG_MSG);
+		super(activity, R.string.loading_recent_act);
 	}
 	
 	public GetActivitiesTask(Activity activity, IActivityFetchedListener listener) {

@@ -26,7 +26,7 @@ public final class ImageCache {
             return;
         }
 
-        Log.d("ImageCache", "Cache size: " + CACHE_SIZE);
+        Log.d("ImageCache", "Cache size: " + CACHE_SIZE);  //$NON-NLS-1$//$NON-NLS-2$
         if (cache.size() >= CACHE_SIZE) {
             String firstKey = queue.poll();
             cache.remove(firstKey);

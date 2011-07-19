@@ -6,6 +6,7 @@ package com.charles.task;
 
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.photos.comments.CommentsInterface;
+import com.charles.R;
 import com.charles.utils.FlickrHelper;
 
 import android.app.DialogFragment;
@@ -16,13 +17,11 @@ import android.widget.Toast;
  */
 public class WriteCommentTask extends ProgressDialogAsyncTask<String, Integer, Boolean> {
 
-    private static final String MSG = "Adding comment...";
-
     private String mToken;
     private DialogFragment mDialog;
 
     public WriteCommentTask(String token, DialogFragment dialog) {
-        super(dialog.getActivity(), MSG);
+        super(dialog.getActivity(), R.string.adding_comments);
         this.mToken = token;
         mDialog = dialog;
     }
@@ -45,9 +44,9 @@ public class WriteCommentTask extends ProgressDialogAsyncTask<String, Integer, B
     @Override
     protected void onPostExecute(Boolean result) {
         super.onPostExecute(result);
-        String msg = "Comment added.";
+        String msg = mActivity.getResources().getString(R.string.comment_added);
         if (!result) {
-            msg = "Error when adding comment";
+            msg = mActivity.getResources().getString(R.string.error_add_comment);
         }
         Toast.makeText(mDialog.getActivity(), msg, Toast.LENGTH_SHORT).show();
     }

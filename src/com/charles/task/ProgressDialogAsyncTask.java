@@ -24,6 +24,11 @@ public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends
 		this.mActivity = activity;
 		this.mDialogMessage = msg;
 	}
+	
+	public ProgressDialogAsyncTask(Activity activity, int msgResId ) {
+	    this.mActivity = activity;
+	    this.mDialogMessage = activity.getResources().getString(msgResId);
+	}
 
 	@Override
 	protected void onPostExecute(Result result) {
@@ -35,7 +40,7 @@ public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		mDialog = ProgressDialog.show(mActivity, "", mDialogMessage);
+		mDialog = ProgressDialog.show(mActivity, "", mDialogMessage); //$NON-NLS-1$
         mDialog.setCancelable(true);
         mDialog.setCanceledOnTouchOutside(true);
         mDialog.setOnCancelListener(new OnCancelListener() {

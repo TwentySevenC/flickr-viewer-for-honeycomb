@@ -13,24 +13,24 @@ public final class Constants {
 	/**
 	 * The preference name.
 	 */
-	public static final String DEF_PREF_NAME = "flickr_viewer";
+	public static final String DEF_PREF_NAME = "flickr_viewer"; //$NON-NLS-1$
 	
 	/**
 	 * The folder name stored in the sd card to save temp files of this application.
 	 */
-	public static final String SD_CARD_FOLDER_NAME = "flickrviewer";
+	public static final String SD_CARD_FOLDER_NAME = "flickrviewer"; //$NON-NLS-1$
 	
 	/**
 	 * The preference setting keys.
 	 */
-	public static final String PHOTO_LIST_CACHE_SIZE = "photo.list.cache.size";
-	public static final String PHOTO_GRID_COL_COUNT = "photo.grid.col.count";
-	public static final String PHOTO_PAGE_SIZE = "photo.grid.page.size";
+	public static final String PHOTO_LIST_CACHE_SIZE = "photo.list.cache.size"; //$NON-NLS-1$
+	public static final String PHOTO_GRID_COL_COUNT = "photo.grid.col.count"; //$NON-NLS-1$
+	public static final String PHOTO_PAGE_SIZE = "photo.grid.page.size"; //$NON-NLS-1$
 	
-	public static final String FLICKR_TOKEN = "flickr.token";
-	public static final String FLICKR_USER_ID = "flickr.user.id";
-	public static final String FLICKR_USER_NAME = "flickr.user.name";
-	public static final String FLICKR_BUDDY_IMAGE_FILE_NAME = "mybuddyicon.jpg";
+	public static final String FLICKR_TOKEN = "flickr.token"; //$NON-NLS-1$
+	public static final String FLICKR_USER_ID = "flickr.user.id"; //$NON-NLS-1$
+	public static final String FLICKR_USER_NAME = "flickr.user.name"; //$NON-NLS-1$
+	public static final String FLICKR_BUDDY_IMAGE_FILE_NAME = "mybuddyicon.jpg"; //$NON-NLS-1$
 	
 	/**
 	 * The default setting values.
@@ -40,17 +40,17 @@ public final class Constants {
 	public static final int DEF_GRID_PAGE_SIZE = 18;
 
 	
-	public static final String PHOTO_LIST_BACK_STACK = "photo.list";
-	public static final String SETTING_BACK_STACK = "settings";
-	public static final String CONTACT_BACK_STACK = "contacts";
-	public static final String ACTIVITY_BACK_STACK = "activities";
+	public static final String PHOTO_LIST_BACK_STACK = "photo.list"; //$NON-NLS-1$
+	public static final String SETTING_BACK_STACK = "settings"; //$NON-NLS-1$
+	public static final String CONTACT_BACK_STACK = "contacts"; //$NON-NLS-1$
+	public static final String ACTIVITY_BACK_STACK = "activities"; //$NON-NLS-1$
 
 	//notifications
-	public static final String CONTACT_UPLOAD_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_CONTACT_PHOTO_UPLOADED";
-	public static final String CONTACT_IDS_WITH_PHOTO_UPLOADED = "BUNDLE_KEY_CONTACTS_WITH_PHOTO_UPLOADED";
+	public static final String CONTACT_UPLOAD_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_CONTACT_PHOTO_UPLOADED"; //$NON-NLS-1$
+	public static final String CONTACT_IDS_WITH_PHOTO_UPLOADED = "BUNDLE_KEY_CONTACTS_WITH_PHOTO_UPLOADED"; //$NON-NLS-1$
 	public static final int COTACT_UPLOAD_NOTIF_ID = 1;
 	
-	public static final String ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_ACT_ON_MY_PHOTO";
+	public static final String ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_ACT_ON_MY_PHOTO"; //$NON-NLS-1$
 	public static final int ACT_ON_MY_PHOTO_NOTIF_ID = 2;
 	
 	/**

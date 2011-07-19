@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ImageUtils {
 
-	private static final String LOG_TAG = "ImageDownloader";
+	private static final String LOG_TAG = "ImageDownloader"; //$NON-NLS-1$
 
 	private static Map<String, SoftReference<Bitmap>> imageCache = new ConcurrentHashMap<String, SoftReference<Bitmap>>(
 			20);
@@ -58,15 +58,15 @@ public final class ImageUtils {
 		// final int IO_BUFFER_SIZE = 4 * 1024;
 
 		// AndroidHttpClient is not allowed to be used from the main thread
-		final HttpClient client = AndroidHttpClient.newInstance("Android");
+		final HttpClient client = AndroidHttpClient.newInstance("Android"); //$NON-NLS-1$
 		final HttpGet getRequest = new HttpGet(url);
 
 		try {
 			HttpResponse response = client.execute(getRequest);
 			final int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode != HttpStatus.SC_OK) {
-				Log.w("ImageDownloader", "Error " + statusCode
-						+ " while retrieving bitmap from " + url);
+				Log.w("ImageDownloader", "Error " + statusCode  //$NON-NLS-1$//$NON-NLS-2$
+						+ " while retrieving bitmap from " + url); //$NON-NLS-1$
 				return null;
 			}
 
@@ -88,13 +88,13 @@ public final class ImageUtils {
 			}
 		} catch (IOException e) {
 			getRequest.abort();
-			Log.w(LOG_TAG, "I/O error while retrieving bitmap from " + url, e);
+			Log.w(LOG_TAG, "I/O error while retrieving bitmap from " + url, e); //$NON-NLS-1$
 		} catch (IllegalStateException e) {
 			getRequest.abort();
-			Log.w(LOG_TAG, "Incorrect URL: " + url);
+			Log.w(LOG_TAG, "Incorrect URL: " + url); //$NON-NLS-1$
 		} catch (Exception e) {
 			getRequest.abort();
-			Log.w(LOG_TAG, "Error while retrieving bitmap from " + url, e);
+			Log.w(LOG_TAG, "Error while retrieving bitmap from " + url, e); //$NON-NLS-1$
 		} finally {
 			if ((client instanceof AndroidHttpClient)) {
 				((AndroidHttpClient) client).close();

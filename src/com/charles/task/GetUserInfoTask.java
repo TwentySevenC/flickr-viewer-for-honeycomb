@@ -77,7 +77,7 @@ public class GetUserInfoTask extends AsyncTask<String, Integer, User> {
     @Override
     protected void onPostExecute(User result) {
         if (result == null) {
-            Log.d(TAG, "Unable to get user information.");
+            Log.d(TAG, "Unable to get user information."); //$NON-NLS-1$
             return;
         }
         if (mListener != null) {
