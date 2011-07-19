@@ -5,6 +5,8 @@ package com.charles.dataprovider;
 
 import com.charles.utils.Constants;
 
+import android.content.Context;
+
 /**
  * Represents the photo list data provider which has the pagination feature.
  * 
@@ -33,5 +35,5 @@ public abstract class PaginationPhotoListDataProvider implements
 	/**
 	 * @return
 	 */
-	public abstract String getDescription();
+	public abstract String getDescription(Context context);
 }

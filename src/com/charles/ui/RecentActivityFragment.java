@@ -65,9 +65,10 @@ public class RecentActivityFragment extends Fragment implements OnItemClickListe
                 mActivities);
         actList.setAdapter(mAdapter);
         actList.setOnItemClickListener(this);
-        
+
         FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
-        act.changeActionBarTitle("Recent activities");
+        act.changeActionBarTitle(getActivity().getResources().getString(
+                R.string.item_recent_activities));
         return v;
     }
 
@@ -151,11 +152,12 @@ public class RecentActivityFragment extends Fragment implements OnItemClickListe
                 if (count > 4)
                     break;
                 Event actEvent = (Event) it.next();
-                if ("comment".equals(actEvent.getType())) {
+                if ("comment".equals(actEvent.getType())) { //$NON-NLS-1$
                     View actCommentView = li.inflate(R.layout.act_comment_item, null);
                     TextView commentUserView = (TextView) actCommentView
                             .findViewById(R.id.comment_user);
-                    commentUserView.setText(actEvent.getUsername() + " says:");
+                    commentUserView.setText(actEvent.getUsername() + " " //$NON-NLS-1$
+                            + mContext.getResources().getString(R.string.comment_says));
 
                     TextView commentView = (TextView) actCommentView
                             .findViewById(R.id.comment_content);

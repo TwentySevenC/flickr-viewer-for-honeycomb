@@ -39,7 +39,7 @@ public class SettingsFragment extends PreferenceFragment implements
         super.onStart();
         PreferenceManager pm = getPreferenceManager();
         SharedPreferences sp = pm.getSharedPreferences();
-        Log.d("SettingsFragment", "Preference name" + pm.getSharedPreferencesName());
+        Log.d("SettingsFragment", "Preference name" + pm.getSharedPreferencesName());  //$NON-NLS-1$//$NON-NLS-2$
         sp.registerOnSharedPreferenceChangeListener(this);
         
         FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
@@ -52,7 +52,7 @@ public class SettingsFragment extends PreferenceFragment implements
             String size = sharedPreferences
                     .getString(key, String.valueOf(Constants.DEF_CACHE_SIZE));
             ImageCache.CACHE_SIZE = Integer.parseInt(size);
-            Log.d("SettingsFragment", "Cache size changed: " + size);
+            Log.d("SettingsFragment", "Cache size changed: " + size);  //$NON-NLS-1$//$NON-NLS-2$
         }
     }
 

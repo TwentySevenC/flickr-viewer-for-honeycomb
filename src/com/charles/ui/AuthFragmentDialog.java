@@ -63,7 +63,7 @@ public class AuthFragmentDialog extends DialogFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        getDialog().setTitle("Flickr Authorization");
+        getDialog().setTitle(getActivity().getResources().getString(R.string.auth_dlg_title));
         View view = inflater.inflate(R.layout.auth_dlg, null);
 
         Button authButton = (Button) view.findViewById(R.id.button_auth);
@@ -106,7 +106,6 @@ public class AuthFragmentDialog extends DialogFragment implements
             app.startService(new Intent(app,FlickrViewerService.class));
 
             // notify main menu panel to update
-            // TODO refactor later.
             MainNavFragment menuFragment = (MainNavFragment) getFragmentManager().findFragmentById(
                     R.id.nav_frg);
             menuFragment.handleUserPanel(menuFragment.getView());
@@ -140,11 +139,11 @@ public class AuthFragmentDialog extends DialogFragment implements
             if (tag == R.id.button_auth) {
                 AuthTask task = new AuthTask(AuthTask.TYPE_FROB,
                         AuthFragmentDialog.this, mAuthInterface);
-                task.execute("");
+                task.execute(""); //$NON-NLS-1$
             } else if (tag == R.id.button_auth_done) {
                 if (mFrob == null) {
                     Toast.makeText(getActivity(),
-                            "Click the 1st button first please.",
+                            getActivity().getResources().getString(R.string.toast_click_first_btn),
                             Toast.LENGTH_LONG).show();
                     return;
                 }

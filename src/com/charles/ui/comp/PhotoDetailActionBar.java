@@ -59,7 +59,7 @@ public class PhotoDetailActionBar extends FrameLayout implements
         mBuddyIcon = (ImageView) this.findViewById(R.id.user_icon);
 
         mUserName = (TextView) findViewById(R.id.user_name);
-        mUserName.setText("Loading user information...");
+        mUserName.setText(getContext().getResources().getString(R.string.loading_user_info));
 
     }
 

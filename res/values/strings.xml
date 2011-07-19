@@ -55,6 +55,7 @@
 	<string name="toast_photo_saved">Photo saved successfully.</string>
 	<string name="toast_error_save_photo">Error to save the photo.</string>
 	<string name="toast_error_get_photos">Unable to get photo list</string>
+	<string name="toast_click_first_btn">Click the 1st button first please.</string>
 	
 	<!-- Share photo intent related. -->
 	<string name="share_photo_intent_subj">Share Photo</string>
@@ -80,7 +81,37 @@
 	<string name="adding_comments">Adding comment...</string>
 	<string name="comment_added">Comment added.</string>
 	<string name="error_add_comment">Error to add comment.</string>
+	<string name="comment_says">says:</string>
 	
+	<!-- user -->
+	<string name="loading_user_info">Loading user information...</string>
+	
+	<!-- auth dialog -->
+	<string name="auth_dlg_title">Flickr Authorization</string>
+	<string name="logout_msg">Some features will not work after logout, are you sure to logout?</string>
+	<string name="btn_yes">Yes</string>
+	<string name="btn_no">No</string>
+	
+	<!-- main menu items -->
+	<string name="item_interesting_photo">Interesting Photos</string>
+	<string name="item_my_photo">My Photos</string>
+	<string name="item_my_contact">My Contacts</string>
+	<string name="item_my_fav">My Favorites</string>
+	<string name="item_recent_activities">Recent Activities</string>
+	<string name="item_settings">Settings</string>
+	
+	<!-- pagination -->
+	<string name="toast_first_page">This is the first page.</string>
+	<string name="toast_last_page">This is the last page.</string>
+	
+	<string name="error_get_big_image">Unable to get the big image.</string>
+	<string name="msg_tags">Tags:</string>
+	<string name="dlg_title_write_comment">Write Comment</string>
+	<string name="empty_comment_error">Please input your comment.</string>
+	
+	<!-- app title -->
+	<string name="my_favs">My Favorite photos</string>
+	<string name="photo_stream_of">Photostream of</string>
 </resources>
 
 

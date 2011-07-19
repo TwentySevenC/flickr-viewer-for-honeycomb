@@ -73,11 +73,11 @@ public class ViewImageDetailFragment extends Fragment implements
 	/**
 	 * Example: [http://www.flickr.com/photos/example/2910192942/]
 	 */
-	private static final String FILICK_URL_EXPRESSION = "(\\[http){1}+(s)?+(://){1}+.*\\]{1}+";
+	private static final String FILICK_URL_EXPRESSION = "(\\[http){1}+(s)?+(://){1}+.*\\]{1}+"; //$NON-NLS-1$
 
-	private static final String PHOTO_ID_ATTR = "photo.id";
-	private static final String PHOTO_TITLE_ATTR = "photo.title";
-	private static final String PHOTO_OWNER_ID = "photo.owner.id";
+	private static final String PHOTO_ID_ATTR = "photo.id"; //$NON-NLS-1$
+	private static final String PHOTO_TITLE_ATTR = "photo.title"; //$NON-NLS-1$
+	private static final String PHOTO_OWNER_ID = "photo.owner.id"; //$NON-NLS-1$
 
 	private WeakReference<Bitmap> mBitmapRef;
 	private Photo mCurrentPhoto;
@@ -186,7 +186,7 @@ public class ViewImageDetailFragment extends Fragment implements
 					mCurrentPhoto);
 			FragmentTransaction ft = fm.beginTransaction();
 			ft.replace(R.id.main_area, fragment);
-			ft.addToBackStack("BigImage");
+			ft.addToBackStack("BigImage"); //$NON-NLS-1$
 			ft.commitAllowingStateLoss();
 			return true;
 		case R.id.menu_item_save:
@@ -245,9 +245,9 @@ public class ViewImageDetailFragment extends Fragment implements
 			tagsText.setVisibility(View.GONE);
 		} else {
 			StringBuilder sb = new StringBuilder();
-			sb.append("Tags: ");
+			sb.append(getActivity().getResources().getString(R.string.msg_tags));
 			for (Tag tag : tags) {
-				sb.append(tag.getValue()).append(" ");
+				sb.append(tag.getValue()).append(" "); //$NON-NLS-1$
 			}
 			tagsText.setText(sb.toString());
 			tagsText.setSelected(true);
@@ -285,7 +285,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	public void onResume() {
 		super.onResume();
 		String photoId = mCurrentPhoto.getId();
-		Log.d(TAG, "Current photo id: " + photoId);
+		Log.d(TAG, "Current photo id: " + photoId); //$NON-NLS-1$
 		mPhotoCommentTask = new GetPhotoCommentsTask(this);
 		mPhotoCommentTask.execute(photoId);
 	}
@@ -369,7 +369,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			author.setText(userComment.getUserName());
 			comment.setText(Html.fromHtml(userComment.getCommentText()));
 			Linkify.addLinks(comment, Pattern.compile(FILICK_URL_EXPRESSION),
-					"http://", new MatchFilter() {
+					"http://", new MatchFilter() { //$NON-NLS-1$
 
 						@Override
 						public boolean acceptMatch(CharSequence s, int start,
@@ -462,7 +462,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			}
 			Exif exif = (Exif) getItem(position);
 			if (exif != null) {
-				((TextView) view).setText(exif.getLabel() + " : "
+				((TextView) view).setText(exif.getLabel() + " : " //$NON-NLS-1$
 						+ exif.getRaw());
 			}
 			return view;
@@ -472,7 +472,7 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	@Override
 	public void onCommentFetched(List<UserComment> comments) {
-		Log.d(TAG, "comments fetched, comment size: " + comments.size());
+		Log.d(TAG, "comments fetched, comment size: " + comments.size()); //$NON-NLS-1$
 		this.mComments.clear();
 		for (UserComment comment : comments) {
 			mComments.add(comment);

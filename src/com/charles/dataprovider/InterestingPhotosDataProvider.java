@@ -3,13 +3,16 @@
  */
 package com.charles.dataprovider;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.aetrion.flickr.interestingness.InterestingnessInterface;
 import com.aetrion.flickr.photos.Extras;
 import com.aetrion.flickr.photos.PhotoList;
+import com.charles.R;
 import com.charles.utils.FlickrHelper;
+
+import android.content.Context;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents the data provider for interesting photos.
@@ -41,8 +44,8 @@ public class InterestingPhotosDataProvider extends
 	}
 
 	@Override
-	public String getDescription() {
-		return "Interesting photos";
+	public String getDescription(Context context) {
+		return context.getResources().getString(R.string.item_interesting_photo);
 	}
 
 }

@@ -118,7 +118,7 @@ public class ViewBigImageFragment extends Fragment implements OnTouchListener,
 		if (mPhoto != null) {
 			File root = new File(Environment.getExternalStorageDirectory(),
 					Constants.SD_CARD_FOLDER_NAME);
-			File imageFile = new File(root, mPhoto.getId() + ".jpg");
+			File imageFile = new File(root, mPhoto.getId() + ".jpg"); //$NON-NLS-1$
 			if (imageFile.exists()) {
 				try {
 					Bitmap bm = BitmapFactory.decodeStream(new FileInputStream(
@@ -134,7 +134,7 @@ public class ViewBigImageFragment extends Fragment implements OnTouchListener,
 			}
 		} else {
 			mProgressBar.setVisibility(View.GONE);
-			Toast.makeText(getActivity(), "Unable to get the big image.",
+			Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_get_big_image),
 					Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -148,23 +148,23 @@ public class ViewBigImageFragment extends Fragment implements OnTouchListener,
 		case MotionEvent.ACTION_DOWN:
 			savedMatrix.set(matrix);
 			start.set(event.getX(), event.getY());
-			Log.d(TAG, "mode=DRAG");
+			Log.d(TAG, "mode=DRAG"); //$NON-NLS-1$
 			mode = DRAG;
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
 			oldDist = spacing(event);
-			Log.d(TAG, "oldDist=" + oldDist);
+			Log.d(TAG, "oldDist=" + oldDist); //$NON-NLS-1$
 			if (oldDist > 10f) {
 				savedMatrix.set(matrix);
 				midPoint(mid, event);
 				mode = ZOOM;
-				Log.d(TAG, "mode=ZOOM");
+				Log.d(TAG, "mode=ZOOM"); //$NON-NLS-1$
 			}
 			break;
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_POINTER_UP:
 			mode = NONE;
-			Log.d(TAG, "mode=NONE");
+			Log.d(TAG, "mode=NONE"); //$NON-NLS-1$
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if (mode == DRAG) {
@@ -174,7 +174,7 @@ public class ViewBigImageFragment extends Fragment implements OnTouchListener,
 						- start.y);
 			} else if (mode == ZOOM) {
 				float newDist = spacing(event);
-				Log.d(TAG, "newDist=" + newDist);
+				Log.d(TAG, "newDist=" + newDist); //$NON-NLS-1$
 				if (newDist > 10f) {
 					matrix.set(savedMatrix);
 					float scale = newDist / oldDist;
