@@ -28,19 +28,18 @@ import com.charles.utils.Constants;
  */
 public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, PhotoList> {
 
-    private static final String DEF_MSG = "Loading photos ...";
-
     private IPhotoListDataProvider mPhotoListProvider;
     private IPhotoListReadyListener mPhotoListReadyListener;
 
     private IPhotoListReadyListener mDefaultPhotoReadyListener = new IPhotoListReadyListener() {
         @Override
-        public void onPhotoListReady(PhotoList list, boolean cancelled ) {
-        	if( cancelled ) {
-        		return;
-        	}
+        public void onPhotoListReady(PhotoList list, boolean cancelled) {
+            if (cancelled) {
+                return;
+            }
             if (list == null) {
-                Toast.makeText(mActivity, "Unable to get photo list",
+                Toast.makeText(mActivity,
+                        mActivity.getResources().getString(R.string.toast_error_get_photos),
                         Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -64,16 +63,18 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
     public AsyncPhotoListTask(Activity context,
             IPhotoListDataProvider photoListProvider,
             IPhotoListReadyListener listener) {
-        this(context, photoListProvider, listener, DEF_MSG);
+        this(context, photoListProvider, listener, context.getResources().getString(
+                R.string.loading_photos));
     }
 
     public AsyncPhotoListTask(Activity context,
             IPhotoListDataProvider photoListProvider,
             IPhotoListReadyListener listener, String prompt) {
-    	super(context,prompt);
+        super(context, prompt);
         this.mPhotoListProvider = photoListProvider;
         this.mPhotoListReadyListener = listener == null ? mDefaultPhotoReadyListener : listener;
-        this.mDialogMessage = prompt == null ? DEF_MSG : prompt;
+        this.mDialogMessage = prompt == null ? context.getResources().getString(
+                R.string.loading_photos) : prompt;
     }
 
     @Override
@@ -81,7 +82,7 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
         try {
             return mPhotoListProvider.getPhotoList();
         } catch (Exception e) {
-            Log.e("AsyncPhotoListTask", "error to get photo list: "
+            Log.e("AsyncPhotoListTask", "error to get photo list: "  //$NON-NLS-1$//$NON-NLS-2$
                     + e.getMessage());
             return null;
         }
@@ -95,14 +96,12 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
         }
     }
 
-	@Override
-	protected void onCancelled() {
-		super.onCancelled();
-		if (mPhotoListReadyListener != null) {
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        if (mPhotoListReadyListener != null) {
             mPhotoListReadyListener.onPhotoListReady(null, true);
         }
-	}
-    
-    
+    }
 
 }

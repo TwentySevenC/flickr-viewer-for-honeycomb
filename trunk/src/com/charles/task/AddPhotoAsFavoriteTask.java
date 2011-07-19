@@ -3,13 +3,14 @@
  */
 package com.charles.task;
 
-import android.app.Activity;
-import android.widget.Toast;
-
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.favorites.FavoritesInterface;
 import com.charles.FlickrViewerApplication;
+import com.charles.R;
 import com.charles.utils.FlickrHelper;
+
+import android.app.Activity;
+import android.widget.Toast;
 
 /**
  * Represents the task to add a photo to my favorite photo list.
@@ -24,15 +25,15 @@ public class AddPhotoAsFavoriteTask extends
 	 * Constructor.
 	 */
 	public AddPhotoAsFavoriteTask(Activity activity) {
-		super(activity, "Adding photo as my favorite...");
+		super(activity, R.string.adding_fav);
 	}
 
 	@Override
 	protected void onPostExecute(Boolean result) {
 		super.onPostExecute(result);
-		String msg = "This photo was added to favorites successfully.";
+		String msg = mActivity.getResources().getString(R.string.fav_added);
 		if (!result) {
-			msg = "Error to add this photo to favorites.";
+			msg = mActivity.getResources().getString(R.string.error_add_fav);
 		}
 		Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
 	}

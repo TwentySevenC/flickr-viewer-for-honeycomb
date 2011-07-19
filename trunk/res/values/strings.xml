@@ -54,6 +54,7 @@
 	<string name="toast_error_set_wallpaper">Error to set the photo as wallpaper.</string>
 	<string name="toast_photo_saved">Photo saved successfully.</string>
 	<string name="toast_error_save_photo">Error to save the photo.</string>
+	<string name="toast_error_get_photos">Unable to get photo list</string>
 	
 	<!-- Share photo intent related. -->
 	<string name="share_photo_intent_subj">Share Photo</string>
@@ -64,6 +65,22 @@
 	
 	<!-- data provider desc -->
 	<string name="dp_desc_fav">My Favorite photos</string>
+	
+	<!-- general messages -->
+	<string name="adding_fav">Adding photo as my favorite...</string>
+	<string name="fav_added">This photo was added to favorites successfully.</string>
+	<string name="error_add_fav">Error to add this photo to favorites.</string>
+	
+	<string name="loading_photos">Loading photos...</string>
+	<string name="loading_recent_act">Loading recent activities...</string>
+	<string name="loading_photo_detail">Loading photo detail..</string>
+	<string name="loading_contacts">Loading contacts...</string>
+	
+	<!-- comments -->
+	<string name="adding_comments">Adding comment...</string>
+	<string name="comment_added">Comment added.</string>
+	<string name="error_add_comment">Error to add comment.</string>
+	
 </resources>
 
 

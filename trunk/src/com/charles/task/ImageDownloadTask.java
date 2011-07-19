@@ -89,7 +89,7 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
                 	url = null;
                 }
             } catch (Exception e) {
-                Log.e(TAG, "Unable to get the photo detail information: " + e.getMessage());
+                Log.e(TAG, "Unable to get the photo detail information: " + e.getMessage()); //$NON-NLS-1$
                 return null;
             }
         }

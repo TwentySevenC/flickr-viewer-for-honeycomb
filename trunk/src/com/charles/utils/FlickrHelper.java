@@ -13,8 +13,8 @@ import com.aetrion.flickr.photos.PhotosInterface;
 public final class FlickrHelper {
 
 	private static FlickrHelper instance = null;
-	private static final String API_KEY = "56893c4690000edac61e265c4d1bbf0f";
-	public static final String API_SEC = "30156baf9e81fcdc";
+	private static final String API_KEY = "56893c4690000edac61e265c4d1bbf0f"; //$NON-NLS-1$
+	public static final String API_SEC = "30156baf9e81fcdc"; //$NON-NLS-1$
 
 	private FlickrHelper() {
 
