@@ -50,7 +50,7 @@ import com.charles.utils.ImageUtils.DownloadedDrawable;
 public class PhotoListFragment extends Fragment implements
 		AdapterView.OnItemClickListener, IPhotoListReadyListener {
 
-	private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider";
+	private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider"; //$NON-NLS-1$
 	private static final String TAG = PhotoListFragment.class.getSimpleName();
 
 	private PhotoList mPhotoList;
@@ -137,7 +137,7 @@ public class PhotoListFragment extends Fragment implements
 
 		// change action bar title
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
-		act.changeActionBarTitle(mPhotoListDataProvider.getDescription());
+		act.changeActionBarTitle(mPhotoListDataProvider.getDescription(getActivity()));
 		return mRootContainer;
 	}
 
@@ -156,7 +156,7 @@ public class PhotoListFragment extends Fragment implements
 		switch (item.getItemId()) {
 		case R.id.menu_item_previous_page:
 			if (mCurrentPageNumber <= 1) {
-				Toast.makeText(getActivity(), "This is the first page.",
+				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.toast_first_page),
 						Toast.LENGTH_SHORT).show();
 			} else {
 				mOldPageNumber = mCurrentPageNumber;
@@ -168,7 +168,7 @@ public class PhotoListFragment extends Fragment implements
 			return true;
 		case R.id.menu_item_next_page:
 			if (mPhotoList.size() < pageSize) {
-				Toast.makeText(getActivity(), "This is the last page.",
+				Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.toast_last_page),
 						Toast.LENGTH_SHORT).show();
 			} else {
 				mOldPageNumber = mCurrentPageNumber;
@@ -307,7 +307,7 @@ public class PhotoListFragment extends Fragment implements
 		private File getSavedImageFile(String photoId) {
 			File root = new File(Environment.getExternalStorageDirectory(),
 					Constants.SD_CARD_FOLDER_NAME);
-			File imageFile = new File(root, photoId + ".jpg");
+			File imageFile = new File(root, photoId + ".jpg"); //$NON-NLS-1$
 			if (imageFile.exists()) {
 				return imageFile;
 			} else {
@@ -347,7 +347,7 @@ public class PhotoListFragment extends Fragment implements
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_ATTR_DATA_PROVIDER,
 				mPhotoListDataProvider);
-		Log.d(TAG, "data provider is saved.");
+		Log.d(TAG, "data provider is saved."); //$NON-NLS-1$
 	}
 
 }

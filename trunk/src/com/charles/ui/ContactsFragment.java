@@ -53,9 +53,9 @@ import java.util.Set;
 public class ContactsFragment extends Fragment implements
         IContactsFetchedListener, OnItemClickListener {
 
-    private static final String FAMILY_ONLY = "family_only";
-    private static final String FAMILY_AND_FRIEND = "family_and_friend";
-    private static final String CONTACT_ALL = "contact_all";
+    private static final String FAMILY_ONLY = "family_only"; //$NON-NLS-1$
+    private static final String FAMILY_AND_FRIEND = "family_and_friend"; //$NON-NLS-1$
+    private static final String CONTACT_ALL = "contact_all"; //$NON-NLS-1$
 
     private MyAdapter mAdapter;
     private List<Contact> mContacts = null;
