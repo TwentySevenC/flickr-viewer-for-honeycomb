@@ -71,6 +71,7 @@
 	<string name="adding_fav">Adding photo as my favorite...</string>
 	<string name="fav_added">This photo was added to favorites successfully.</string>
 	<string name="error_add_fav">Error to add this photo to favorites.</string>
+	<string name="user_fav_ur_photo">added this as favorite.</string>
 	
 	<string name="loading_photos">Loading photos...</string>
 	<string name="loading_recent_act">Loading recent activities...</string>
