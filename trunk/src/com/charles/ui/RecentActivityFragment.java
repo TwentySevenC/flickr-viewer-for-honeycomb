@@ -152,19 +152,31 @@ public class RecentActivityFragment extends Fragment implements OnItemClickListe
                 if (count > 4)
                     break;
                 Event actEvent = (Event) it.next();
+
+                View actCommentView = li.inflate(R.layout.act_comment_item, null);
+                TextView commentUserView = (TextView) actCommentView
+                        .findViewById(R.id.comment_user);
+                TextView commentView = (TextView) actCommentView
+                        .findViewById(R.id.comment_content);
+
                 if ("comment".equals(actEvent.getType())) { //$NON-NLS-1$
-                    View actCommentView = li.inflate(R.layout.act_comment_item, null);
-                    TextView commentUserView = (TextView) actCommentView
-                            .findViewById(R.id.comment_user);
+
                     commentUserView.setText(actEvent.getUsername() + " " //$NON-NLS-1$
                             + mContext.getResources().getString(R.string.comment_says));
 
-                    TextView commentView = (TextView) actCommentView
-                            .findViewById(R.id.comment_content);
                     commentView.setText(actEvent.getValue());
-
                     commentContainer.addView(actCommentView);
                     count++;
+
+                } else if ("fave".equals(actEvent.getType())) { //$NON-NLS-1$
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(actEvent.getUsername()).append(" "); //$NON-NLS-1$
+                    sb.append(mContext.getResources().getString(R.string.user_fav_ur_photo));
+                    commentView.setText(sb.toString());
+                    
+                    commentContainer.addView(actCommentView);
+                    count++;
+
                 }
             }
 
