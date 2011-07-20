@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:title="@string/menu_item_save"
-		android:showAsAction="ifRoom|withText" android:icon="@android:drawable/ic_menu_save"
+		android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_save"
 		android:id="@+id/menu_item_save" />
 	<item android:title="@string/menu_item_set_wall_paper"
 		android:icon="@android:drawable/ic_menu_set_as"

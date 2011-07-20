@@ -215,13 +215,6 @@ public class ViewImageDetailFragment extends Fragment implements
 		}
 		image.setFocusable(true);
 		image.setClickable(true);
-		image.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				getActivity().onBackPressed();
-			}
-		});
 
 		if (savedInstanceState != null) {
 			String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
