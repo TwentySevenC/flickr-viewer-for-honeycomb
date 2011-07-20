@@ -49,6 +49,9 @@ public class WriteCommentTask extends ProgressDialogAsyncTask<String, Integer, B
             msg = mActivity.getResources().getString(R.string.error_add_comment);
         }
         Toast.makeText(mDialog.getActivity(), msg, Toast.LENGTH_SHORT).show();
+        if( result ) {
+            mDialog.dismiss();
+        }
     }
 
 }
