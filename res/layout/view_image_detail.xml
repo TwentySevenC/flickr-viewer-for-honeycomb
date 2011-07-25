@@ -32,10 +32,15 @@
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
 			<RelativeLayout android:layout_width="fill_parent"
 				android:layout_height="fill_parent">
+				<ProgressBar android:id="@+id/exifProgressBar"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentTop="true" />
 				<TextView android:id="@+id/exifLabel" android:layout_width="wrap_content"
 					android:layout_marginLeft="10dp" android:layout_height="wrap_content"
-					android:layout_alignParentTop="true"
-					android:layout_alignParentLeft="true" android:text="EXIF information:" />
+					android:layout_alignTop="@id/exifProgressBar"
+					android:layout_alignBottom="@id/exifProgressBar"
+					android:layout_alignParentLeft="true" android:text="@string/exif_info" />
 				<ListView android:id="@+id/exifList" android:layout_height="fill_parent"
 					android:layout_below="@id/exifLabel" android:layout_alignLeft="@id/exifLabel"
 					android:layout_gravity="center" android:layout_width="fill_parent"
@@ -50,7 +55,7 @@
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
 					android:layout_alignParentTop="true" />
-				<TextView android:id="@+id/labelComment" android:text="Comments"
+				<TextView android:id="@+id/labelComment" android:text="@string/user_comments"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:layout_alignParentLeft="true" android:layout_alignTop="@id/commentProgressBar"
 					android:layout_alignBottom="@id/commentProgressBar"
