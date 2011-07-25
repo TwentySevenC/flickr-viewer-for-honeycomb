@@ -113,6 +113,10 @@
 	<!-- app title -->
 	<string name="my_favs">My Favorite photos</string>
 	<string name="photo_stream_of">Photostream of</string>
+	
+	<!-- Photo detail -->
+	<string name="exif_info">Exif:</string>
+	<string name="user_comments">Comments:</string>
 </resources>
 
 

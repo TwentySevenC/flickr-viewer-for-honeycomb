@@ -7,11 +7,10 @@
 
 package com.charles.actions;
 
-import com.aetrion.flickr.photos.Exif;
 import com.aetrion.flickr.photos.Photo;
 import com.charles.R;
-import com.charles.event.IExifListener;
-import com.charles.task.GetBigImageAndExifTask;
+import com.charles.task.GetPhotoImageTask;
+import com.charles.task.GetPhotoImageTask.IPhotoFetchedListener;
 import com.charles.ui.ViewImageDetailFragment;
 
 import android.app.Activity;
@@ -19,12 +18,10 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 
-import java.util.Collection;
-
 /**
  * @author qiangz
  */
-public class GetPhotoDetailAction extends ActivityAwareAction implements IExifListener {
+public class GetPhotoDetailAction extends ActivityAwareAction implements IPhotoFetchedListener {
 
     private String mPhotoId;
 
@@ -39,19 +36,18 @@ public class GetPhotoDetailAction extends ActivityAwareAction implements IExifLi
      */
     @Override
     public void execute() {
-        GetBigImageAndExifTask task = new GetBigImageAndExifTask(mActivity, mPhotoId, this);
-        task.execute();
+        GetPhotoImageTask task = new GetPhotoImageTask(mActivity, this);
+        task.execute(mPhotoId);
     }
 
     @Override
-    public void onExifInfoFetched(Bitmap bitmap, Photo photo, Collection<Exif> exifs) {
+    public void onPhotoFetched(Photo photo, Bitmap bitmap) {
         ViewImageDetailFragment fragment = new ViewImageDetailFragment(
-                photo, bitmap, exifs);
+                photo, bitmap);
         FragmentManager fm = mActivity.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.main_area, fragment);
         ft.addToBackStack("Detail Image"); //$NON-NLS-1$
         ft.commitAllowingStateLoss();
     }
-
 }
