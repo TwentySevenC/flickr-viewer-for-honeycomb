@@ -249,8 +249,6 @@ public class ViewImageDetailFragment extends Fragment implements
 
         // exif list.
         ListView list = (ListView) view.findViewById(R.id.exifList);
-        TextView empty = (TextView) view.findViewById(R.id.empty);
-        list.setEmptyView(empty);
         mExifAdapter = new ExifAdapter(getActivity(), mExifs);
         list.setAdapter(mExifAdapter);
         mExifProgressBar = view.findViewById(R.id.exifProgressBar);
@@ -481,18 +479,21 @@ public class ViewImageDetailFragment extends Fragment implements
             mComments.add(comment);
         }
         mCommentAdapter.notifyDataSetChanged();
-        this.mCommentProgressBar.setVisibility(View.GONE);
+        this.mCommentProgressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onExifInfoFetched(Collection<Exif> exifs) {
         Log.d(TAG, "exif fetched."); //$NON-NLS-1$
+        if( exifs == null ) {
+            return;
+        }
         this.mExifs.clear();
         for (Exif exif : exifs) {
             mExifs.add(exif);
         }
         mExifAdapter.notifyDataSetChanged();
-        mExifProgressBar.setVisibility(View.GONE);
+        mExifProgressBar.setVisibility(View.INVISIBLE);
     }
 
 }
