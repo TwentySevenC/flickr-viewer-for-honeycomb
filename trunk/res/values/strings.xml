@@ -115,8 +115,9 @@
 	<string name="photo_stream_of">Photostream of</string>
 	
 	<!-- Photo detail -->
-	<string name="exif_info">Exif:</string>
+	<string name="exif_info">Exif Information:</string>
 	<string name="user_comments">Comments:</string>
+	<string name="no_exif_info">No EXIF Information.</string>
 </resources>
 
 

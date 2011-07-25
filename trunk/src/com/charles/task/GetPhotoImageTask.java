@@ -10,18 +10,12 @@ package com.charles.task;
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotosInterface;
 import com.charles.R;
-import com.charles.utils.Constants;
 import com.charles.utils.FlickrHelper;
 import com.charles.utils.ImageUtils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.util.Log;
-
-import java.io.File;
-import java.io.FileInputStream;
 
 /**
  * @author charles
@@ -85,16 +79,17 @@ public class GetPhotoImageTask extends ProgressDialogAsyncTask<String, Integer, 
                     break;
             }
 
-            File root = new File(Environment.getExternalStorageDirectory(),
-                    Constants.SD_CARD_FOLDER_NAME);
-            File imageFile = new File(root, photoId + ".jpg"); //$NON-NLS-1$
+            //TODO get cached image from sdcard will make the UI look a little strange, research later.
+//            File root = new File(Environment.getExternalStorageDirectory(),
+//                    Constants.SD_CARD_FOLDER_NAME);
+//            File imageFile = new File(root, photoId + ".jpg"); //$NON-NLS-1$
 
             Bitmap mDownloadedBitmap = null;
-            if (imageFile.exists()) {
-                mDownloadedBitmap = BitmapFactory.decodeStream(new FileInputStream(imageFile));
-            } else {
+//            if (imageFile.exists()) {
+//                mDownloadedBitmap = BitmapFactory.decodeStream(new FileInputStream(imageFile));
+//            } else {
                 mDownloadedBitmap = ImageUtils.downloadImage(url);
-            }
+//            }
             return mDownloadedBitmap;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
