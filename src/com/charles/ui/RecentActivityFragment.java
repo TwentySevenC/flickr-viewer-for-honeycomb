@@ -16,6 +16,7 @@ import com.charles.task.ImageDownloadTask;
 import com.charles.task.ImageDownloadTask.ParamType;
 import com.charles.utils.ImageCache;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
+import com.charles.utils.StringUtils;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -164,7 +165,8 @@ public class RecentActivityFragment extends Fragment implements OnItemClickListe
                     commentUserView.setText(actEvent.getUsername() + " " //$NON-NLS-1$
                             + mContext.getResources().getString(R.string.comment_says));
 
-                    commentView.setText(actEvent.getValue());
+//                    commentView.setText(actEvent.getValue());
+                    StringUtils.formatHtmlString(actEvent.getValue(), commentView, false);
                     commentContainer.addView(actCommentView);
                     count++;
 
