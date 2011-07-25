@@ -166,7 +166,7 @@ public class RecentActivityFragment extends Fragment implements OnItemClickListe
                             + mContext.getResources().getString(R.string.comment_says));
 
 //                    commentView.setText(actEvent.getValue());
-                    StringUtils.formatHtmlString(actEvent.getValue(), commentView, false);
+                    StringUtils.formatHtmlString(actEvent.getValue(), commentView);
                     commentContainer.addView(actCommentView);
                     count++;
 
