@@ -359,7 +359,7 @@ public class ViewImageDetailFragment extends Fragment implements
             UserComment userComment = (UserComment) getItem(position);
             author.setText(userComment.getUserName());
 
-            StringUtils.formatHtmlString(userComment.getCommentText(), comment, true);
+            StringUtils.formatHtmlString(userComment.getCommentText(), comment);
             commentDate.setText(userComment.getCommentDateString());
 
             Drawable drawable = buddyIcon.getDrawable();

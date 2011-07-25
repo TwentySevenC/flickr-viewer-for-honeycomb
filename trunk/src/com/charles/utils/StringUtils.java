@@ -26,11 +26,8 @@ public final class StringUtils {
      */
     private static final String FILICK_URL_EXPRESSION = "(\\[http){1}+(s)?+(://){1}+.*\\]{1}+"; //$NON-NLS-1$
 
-    public static void formatHtmlString(String string, TextView textView, boolean linkify) {
+    public static void formatHtmlString(String string, TextView textView) {
         textView.setText(Html.fromHtml(string));
-        if( !linkify ) {
-            return;
-        }
         Linkify.addLinks(textView, Pattern.compile(FILICK_URL_EXPRESSION),
                 "http://", new MatchFilter() { //$NON-NLS-1$
 
