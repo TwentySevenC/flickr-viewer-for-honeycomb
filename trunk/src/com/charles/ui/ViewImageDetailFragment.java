@@ -26,6 +26,7 @@ import com.charles.task.ImageDownloadTask;
 import com.charles.ui.comp.PhotoDetailActionBar;
 import com.charles.utils.ImageCache;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
+import com.charles.utils.StringUtils;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -34,11 +35,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.text.util.Linkify.MatchFilter;
-import android.text.util.Linkify.TransformFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -57,8 +54,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The fragment to view the detail information of a picture, including exif,
@@ -71,11 +66,6 @@ public class ViewImageDetailFragment extends Fragment implements
 
     private static final String TAG = ViewImageDetailFragment.class
             .getSimpleName();
-
-    /**
-     * Example: [http://www.flickr.com/photos/example/2910192942/]
-     */
-    private static final String FILICK_URL_EXPRESSION = "(\\[http){1}+(s)?+(://){1}+.*\\]{1}+"; //$NON-NLS-1$
 
     private static final String PHOTO_ID_ATTR = "photo.id"; //$NON-NLS-1$
     private static final String PHOTO_TITLE_ATTR = "photo.title"; //$NON-NLS-1$
@@ -368,27 +358,8 @@ public class ViewImageDetailFragment extends Fragment implements
 
             UserComment userComment = (UserComment) getItem(position);
             author.setText(userComment.getUserName());
-            comment.setText(Html.fromHtml(userComment.getCommentText()));
-            Linkify.addLinks(comment, Pattern.compile(FILICK_URL_EXPRESSION),
-                    "http://", new MatchFilter() { //$NON-NLS-1$
 
-                        @Override
-                        public boolean acceptMatch(CharSequence s, int start,
-                                int end) {
-                            return true;
-                        }
-
-                    }, new TransformFilter() {
-
-                        @Override
-                        public String transformUrl(Matcher matcher, String data) {
-                            if (data.length() > 2) {
-                                return data.substring(1, data.length() - 1);
-                            }
-                            return data;
-                        }
-
-                    });
+            StringUtils.formatHtmlString(userComment.getCommentText(), comment, true);
             commentDate.setText(userComment.getCommentDateString());
 
             Drawable drawable = buddyIcon.getDrawable();
@@ -485,7 +456,7 @@ public class ViewImageDetailFragment extends Fragment implements
     @Override
     public void onExifInfoFetched(Collection<Exif> exifs) {
         Log.d(TAG, "exif fetched."); //$NON-NLS-1$
-        if( exifs == null ) {
+        if (exifs == null) {
             return;
         }
         this.mExifs.clear();
