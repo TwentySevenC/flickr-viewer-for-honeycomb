@@ -457,6 +457,7 @@ public class ViewImageDetailFragment extends Fragment implements
     public void onExifInfoFetched(Collection<Exif> exifs) {
         Log.d(TAG, "exif fetched."); //$NON-NLS-1$
         if (exifs == null) {
+            mExifProgressBar.setVisibility(View.INVISIBLE);
             return;
         }
         this.mExifs.clear();
