@@ -4,6 +4,7 @@ package com.charles;
 import com.charles.actions.GetActivitiesAction;
 import com.charles.services.FlickrViewerService;
 import com.charles.ui.ContactsFragment;
+import com.charles.ui.HelpFragment;
 import com.charles.utils.Constants;
 import com.charles.utils.ImageCache;
 
@@ -99,4 +100,13 @@ public class FlickrViewerActivity extends Activity {
         getActionBar().setTitle(sb.toString());
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        HelpFragment help = new HelpFragment();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.main_area, help);
+        ft.commit();
+    }
 }
