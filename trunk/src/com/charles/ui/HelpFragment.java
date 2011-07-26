@@ -46,8 +46,9 @@ public class HelpFragment extends Fragment {
     public void onStart() {
         super.onStart();
         AssetManager am = getActivity().getAssets();
+        InputStream is = null;
         try {
-            InputStream is = am.open("help.html"); //$NON-NLS-1$
+            is = am.open("help.html"); //$NON-NLS-1$
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             StringBuilder sb = new StringBuilder();
             int ch = reader.read();
@@ -57,6 +58,13 @@ public class HelpFragment extends Fragment {
             }
             mWebView.loadData(sb.toString(), "text/html", "utf-8"); //$NON-NLS-1$//$NON-NLS-2$
         } catch (IOException e) {
+        } finally {
+            if( is != null ) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
         }
     }
 
