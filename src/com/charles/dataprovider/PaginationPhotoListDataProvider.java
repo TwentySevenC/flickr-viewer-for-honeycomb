@@ -3,6 +3,7 @@
  */
 package com.charles.dataprovider;
 
+import com.aetrion.flickr.photos.PhotoList;
 import com.charles.utils.Constants;
 
 import android.content.Context;
@@ -23,6 +24,7 @@ public abstract class PaginationPhotoListDataProvider implements
 	
 	protected int mPageSize = Constants.DEF_GRID_PAGE_SIZE;
 	protected int mPageNumber = 1;
+	protected PhotoList mPhotoList = null;
 
 	public void setPageSize(int mPageSize) {
 		this.mPageSize = mPageSize;
@@ -32,7 +34,12 @@ public abstract class PaginationPhotoListDataProvider implements
 		this.mPageNumber = mPageNumber;
 	}
 	
-	/**
+	@Override
+    public void invalidatePhotoList() {
+	    this.mPhotoList = null;
+    }
+
+    /**
 	 * @return
 	 */
 	public abstract String getDescription(Context context);

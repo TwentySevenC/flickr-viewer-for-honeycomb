@@ -46,13 +46,17 @@ public class FavoritePhotosDataProvider extends
      */
     @Override
     public PhotoList getPhotoList() throws Exception {
+        if( mPhotoList != null ) {
+            return mPhotoList;
+        }
         Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
         FavoritesInterface fi = f.getFavoritesInterface();
         Set<String> extras = new HashSet<String>();
         extras.add(Extras.TAGS);
         extras.add(Extras.GEO);
         extras.add(Extras.OWNER_NAME);
-        return fi.getList(mUserId, this.mPageSize, this.mPageNumber, extras);
+        mPhotoList = fi.getList(mUserId, this.mPageSize, this.mPageNumber, extras);
+        return mPhotoList;
     }
 
     @Override

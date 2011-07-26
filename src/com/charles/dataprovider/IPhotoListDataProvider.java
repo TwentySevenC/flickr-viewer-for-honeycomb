@@ -21,4 +21,9 @@ public interface IPhotoListDataProvider extends Serializable {
      * @throws Exception
      */
     PhotoList getPhotoList() throws Exception;
+    
+    /**
+     * The photo list will be cached, to invalidate the cache, call this method.
+     */
+    void invalidatePhotoList();
 }

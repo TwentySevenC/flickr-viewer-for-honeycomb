@@ -2,6 +2,7 @@
 <resources>
 	<string name="app_name">Flickr Viewer</string>
 
+	<string name="menu_item_remove_fav">Remove from Favorites</string>
 	<string name="menu_share_title">Share</string>
 	<string name="menu_write_comment">Comment</string>
 	<string name="menu_item_setting">Settings</string>
@@ -72,6 +73,8 @@
 	<string name="fav_added">This photo was added to favorites successfully.</string>
 	<string name="error_add_fav">Error to add this photo to favorites.</string>
 	<string name="user_fav_ur_photo">added this as favorite.</string>
+	<string name="remove_fav_done">Photo removed from favorites.</string>
+	<string name="remove_fav_error">Error to remove this photo from favorites.</string>
 	
 	<string name="loading_photos">Loading photos...</string>
 	<string name="loading_recent_act">Loading recent activities...</string>
