@@ -4,19 +4,14 @@
 
 package com.charles.task;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.aetrion.flickr.photos.PhotoList;
 import com.charles.R;
 import com.charles.dataprovider.IPhotoListDataProvider;
-import com.charles.dataprovider.PaginationPhotoListDataProvider;
+import com.charles.event.DefaultPhotoListReadyListener;
 import com.charles.event.IPhotoListReadyListener;
-import com.charles.ui.PhotoListFragment;
-import com.charles.utils.Constants;
+
+import android.app.Activity;
+import android.util.Log;
 
 /**
  * Represents the task to fetch the photo list of a user.
@@ -31,35 +26,6 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
     private IPhotoListDataProvider mPhotoListProvider;
     private IPhotoListReadyListener mPhotoListReadyListener;
 
-    private IPhotoListReadyListener mDefaultPhotoReadyListener = new IPhotoListReadyListener() {
-        @Override
-        public void onPhotoListReady(PhotoList list, boolean cancelled) {
-            if (cancelled) {
-                return;
-            }
-            if (list == null) {
-                Toast.makeText(mActivity,
-                        mActivity.getResources().getString(R.string.toast_error_get_photos),
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            PhotoListFragment fragment = new PhotoListFragment(list,
-                    (PaginationPhotoListDataProvider) mPhotoListProvider);
-            FragmentManager fm = mActivity.getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
-            int stackCount = fm.getBackStackEntryCount();
-            for (int i = 0; i < stackCount; i++) {
-                fm.popBackStack();
-            }
-            ft.replace(R.id.main_area, fragment);
-            ft.addToBackStack(Constants.PHOTO_LIST_BACK_STACK);
-            ft.commitAllowingStateLoss();
-        }
-    };
-
     public AsyncPhotoListTask(Activity context,
             IPhotoListDataProvider photoListProvider,
             IPhotoListReadyListener listener) {
@@ -72,7 +38,11 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
             IPhotoListReadyListener listener, String prompt) {
         super(context, prompt);
         this.mPhotoListProvider = photoListProvider;
-        this.mPhotoListReadyListener = listener == null ? mDefaultPhotoReadyListener : listener;
+        if( listener ==  null ) {
+            mPhotoListReadyListener = new DefaultPhotoListReadyListener(context, photoListProvider);
+        } else {
+            mPhotoListReadyListener = listener;
+        }
         this.mDialogMessage = prompt == null ? context.getResources().getString(
                 R.string.loading_photos) : prompt;
     }
@@ -80,6 +50,7 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
     @Override
     protected PhotoList doInBackground(Void... params) {
         try {
+            mPhotoListProvider.invalidatePhotoList();
             return mPhotoListProvider.getPhotoList();
         } catch (Exception e) {
             Log.e("AsyncPhotoListTask", "error to get photo list: "  //$NON-NLS-1$//$NON-NLS-2$
