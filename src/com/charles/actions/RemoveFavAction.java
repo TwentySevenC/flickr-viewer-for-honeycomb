@@ -11,6 +11,7 @@ import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.favorites.FavoritesInterface;
 import com.charles.FlickrViewerApplication;
 import com.charles.R;
+import com.charles.event.FlickrViewerMessage;
 import com.charles.utils.FlickrHelper;
 
 import android.app.Activity;
@@ -65,6 +66,14 @@ public class RemoveFavAction extends ActivityAwareAction {
                     msg = mActivity.getResources().getString(R.string.remove_fav_error);
                 }
                 Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+
+                if (result) {
+                    FlickrViewerMessage fmsg = new FlickrViewerMessage(
+                            FlickrViewerMessage.FAV_PHOTO_REMOVED, null);
+                    FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+                            .getApplication();
+                    app.handleMessage(fmsg);
+                }
             }
         };
 

@@ -11,6 +11,8 @@ import com.charles.FlickrViewerApplication;
 import com.charles.R;
 import com.charles.actions.GetPhotoDetailAction;
 import com.charles.dataprovider.PaginationPhotoListDataProvider;
+import com.charles.event.FlickrViewerMessage;
+import com.charles.event.IFlickrViewerMessageHandler;
 import com.charles.event.IPhotoListReadyListener;
 import com.charles.task.AsyncPhotoListTask;
 import com.charles.task.ImageDownloadTask;
@@ -19,6 +21,7 @@ import com.charles.utils.Constants;
 import com.charles.utils.ImageCache;
 import com.charles.utils.ImageUtils.DownloadedDrawable;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -49,7 +52,7 @@ import java.io.FileNotFoundException;
  * @author charles
  */
 public class PhotoListFragment extends Fragment implements
-        AdapterView.OnItemClickListener, IPhotoListReadyListener {
+        AdapterView.OnItemClickListener, IPhotoListReadyListener, IFlickrViewerMessageHandler {
 
     private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider"; //$NON-NLS-1$
     private static final String TAG = PhotoListFragment.class.getSimpleName();
@@ -152,8 +155,8 @@ public class PhotoListFragment extends Fragment implements
         mGridAdapter = new MyAdapter(getActivity(), mPhotoList);
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnItemClickListener(this);
-        
-        if( mContextMenuHandler != null ) {
+
+        if (mContextMenuHandler != null) {
             mGridView.setOnCreateContextMenuListener(mContextMenuHandler);
         }
 
@@ -214,8 +217,10 @@ public class PhotoListFragment extends Fragment implements
         if (mPhotoListTask != null) {
             mPhotoListTask.cancel(true);
         }
-        mPhotoListTask = new AsyncPhotoListTask(getActivity(),
-                mPhotoListDataProvider, this);
+        if (mPhotoListTask == null) {
+            mPhotoListTask = new AsyncPhotoListTask(getActivity(),
+                    mPhotoListDataProvider, this);
+        }
         mPhotoListTask.execute();
     }
 
@@ -372,6 +377,30 @@ public class PhotoListFragment extends Fragment implements
         outState.putSerializable(BUNDLE_ATTR_DATA_PROVIDER,
                 mPhotoListDataProvider);
         Log.d(TAG, "data provider is saved."); //$NON-NLS-1$
+    }
+
+    @Override
+    public void handleMessage(FlickrViewerMessage message) {
+        if (message != null) {
+            String id = message.getMessageId();
+            if (FlickrViewerMessage.FAV_PHOTO_REMOVED.equals(id)) {
+                runPhotoListTask();
+            }
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        FlickrViewerApplication app = (FlickrViewerApplication) activity.getApplication();
+        app.registerMessageHandler(this);
+    }
+
+    @Override
+    public void onDetach() {
+        FlickrViewerApplication app = (FlickrViewerApplication) getActivity().getApplication();
+        app.unregisterMessageHandler(this);
+        super.onDetach();
     }
 
 }
