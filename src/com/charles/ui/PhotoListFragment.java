@@ -217,10 +217,8 @@ public class PhotoListFragment extends Fragment implements
         if (mPhotoListTask != null) {
             mPhotoListTask.cancel(true);
         }
-        if (mPhotoListTask == null) {
-            mPhotoListTask = new AsyncPhotoListTask(getActivity(),
+        mPhotoListTask = new AsyncPhotoListTask(getActivity(),
                     mPhotoListDataProvider, this);
-        }
         mPhotoListTask.execute();
     }
 
