@@ -7,7 +7,7 @@
 		android:layout_alignParentRight="true" android:background="@drawable/sep" />
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<fragment class="com.charles.ui.MainNavFragment" android:id="@+id/nav_frg"
+		<fragment class="com.gmail.charleszq.ui.MainNavFragment" android:id="@+id/nav_frg"
 			android:layout_height="fill_parent" android:layout_width="0dp"
 			android:layout_weight="1" />
 		<FrameLayout android:id="@+id/main_area"
