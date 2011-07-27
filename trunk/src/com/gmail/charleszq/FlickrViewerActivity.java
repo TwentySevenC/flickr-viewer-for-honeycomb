@@ -11,8 +11,6 @@ import com.gmail.charleszq.utils.ImageCache;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -51,9 +49,6 @@ public class FlickrViewerActivity extends Activity {
         } else if (Constants.ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION.equals(intent.getAction())) {
             GetActivitiesAction aaction = new GetActivitiesAction(this);
             aaction.execute();
-            NotificationManager notifManager = (NotificationManager) FlickrViewerActivity.this
-                    .getSystemService(Context.NOTIFICATION_SERVICE);
-            notifManager.cancel(Constants.ACT_ON_MY_PHOTO_NOTIF_ID);
         }
     }
 
@@ -78,9 +73,6 @@ public class FlickrViewerActivity extends Activity {
         ft.addToBackStack(Constants.CONTACT_BACK_STACK);
         ft.commitAllowingStateLoss();
 
-        NotificationManager notifManager = (NotificationManager) FlickrViewerActivity.this
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        notifManager.cancel(Constants.COTACT_UPLOAD_NOTIF_ID);
     }
 
     @Override
@@ -107,6 +99,7 @@ public class FlickrViewerActivity extends Activity {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.main_area, help);
+        ft.addToBackStack(Constants.HELP_BACK_STACK);
         ft.commit();
     }
 }

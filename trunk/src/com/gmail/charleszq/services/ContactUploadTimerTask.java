@@ -81,6 +81,7 @@ public class ContactUploadTimerTask extends TimerTask {
 						R.string.notif_message_recent_upload), System
 						.currentTimeMillis());
 		notif.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
+		notif.flags =  Notification.FLAG_AUTO_CANCEL;
 		// init the contact id string array
 		List<String> cIds = new ArrayList<String>();
 		Iterator<?> it = col.iterator();
@@ -99,7 +100,7 @@ public class ContactUploadTimerTask extends TimerTask {
 		notificationIntent.putExtra(Constants.CONTACT_IDS_WITH_PHOTO_UPLOADED,
 				cIds.toArray(new String[0]));
 		PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0,
-				notificationIntent, 0);
+				notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
 		notif.setLatestEventInfo(mContext, contentTitle, contentText,
 				contentIntent);

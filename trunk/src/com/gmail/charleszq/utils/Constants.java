@@ -44,6 +44,7 @@ public final class Constants {
 	public static final String SETTING_BACK_STACK = "settings"; //$NON-NLS-1$
 	public static final String CONTACT_BACK_STACK = "contacts"; //$NON-NLS-1$
 	public static final String ACTIVITY_BACK_STACK = "activities"; //$NON-NLS-1$
+	public static final String HELP_BACK_STACK = "help"; //$NON-NLS-1$
 
 	//notifications
 	public static final String CONTACT_UPLOAD_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_CONTACT_PHOTO_UPLOADED"; //$NON-NLS-1$
