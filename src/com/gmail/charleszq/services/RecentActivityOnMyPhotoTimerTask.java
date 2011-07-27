@@ -60,6 +60,8 @@ public class RecentActivityOnMyPhotoTimerTask extends TimerTask {
                 mContext.getResources().getString(
                         R.string.notif_message_act_on_my_photo), System
                         .currentTimeMillis());
+        notif.defaults = Notification.DEFAULT_SOUND;
+        notif.flags = Notification.FLAG_AUTO_CANCEL;
 
         // notification intent.
         CharSequence contentTitle = mContext.getResources().getString(

@@ -136,6 +136,7 @@ public class MainNavFragment extends Fragment {
 
     private void cleanFragmentBackStack() {
         FragmentManager fm = getFragmentManager();
+        fm.popBackStack(Constants.HELP_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.popBackStack(Constants.PHOTO_LIST_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.popBackStack(Constants.SETTING_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.popBackStack(Constants.CONTACT_BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE);
