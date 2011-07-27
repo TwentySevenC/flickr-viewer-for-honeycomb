@@ -36,18 +36,20 @@
 	<string name="auth_hint">
 		Click the first button to grant access to your
 		flickr account, it\'s with OAUTH, your password is not known to this
-		application.\n\r\n\rAfter you grant access, please go back here, then click
-		the 2nd button to finish the auth process.\n\r\n\rClick \'back\' button to dismiss this dialog.
+		application.\n\r\n\rAfter you grant access, please go back here, then
+		click
+		the 2nd button to finish the auth process.\n\r\n\rClick \'back\'
+		button to dismiss this dialog.
 	</string>
 	<string name="auth_btn_title">Go Flickr to Authorize</string>
 	<string name="auth_done_btn_title">Permission Granted</string>
-	
+
 	<string name="share_dlg_title">Select an action to share</string>
-	
+
 	<!-- Notification title and hints -->
 	<string name="notif_message_recent_upload">Your contacts have photos uploaded.</string>
 	<string name="notif_message_act_on_my_photo">You got comments on your photos.</string>
-	
+
 	<!-- Toast related -->
 	<string name="toast_no_activities">No recent activities.</string>
 	<string name="toast_photo_already_saved">Photo already saved.</string>
@@ -57,45 +59,47 @@
 	<string name="toast_error_save_photo">Error to save the photo.</string>
 	<string name="toast_error_get_photos">Unable to get photo list</string>
 	<string name="toast_click_first_btn">Click the 1st button first please.</string>
-	
+
 	<!-- Share photo intent related. -->
 	<string name="share_photo_intent_subj">Share Photo</string>
-	
+
 	<!-- Task messages -->
 	<string name="task_loading_favs">Loading favorite photos...</string>
 	<string name="task_loading_interest">Loading interesting photos...</string>
-	
+
 	<!-- data provider desc -->
 	<string name="dp_desc_fav">My Favorite photos</string>
-	
+
 	<!-- general messages -->
 	<string name="adding_fav">Adding photo as my favorite...</string>
-	<string name="fav_added">This photo was added to favorites successfully.</string>
+	<string name="fav_added">This photo was added to favorites successfully.
+	</string>
 	<string name="error_add_fav">Error to add this photo to favorites.</string>
 	<string name="user_fav_ur_photo">added this as favorite.</string>
 	<string name="remove_fav_done">Photo removed from favorites.</string>
 	<string name="remove_fav_error">Error to remove this photo from favorites.</string>
-	
+
 	<string name="loading_photos">Loading photos...</string>
 	<string name="loading_recent_act">Loading recent activities...</string>
 	<string name="loading_photo_detail">Loading photo detail..</string>
 	<string name="loading_contacts">Loading contacts...</string>
-	
+
 	<!-- comments -->
 	<string name="adding_comments">Adding comment...</string>
 	<string name="comment_added">Comment added.</string>
 	<string name="error_add_comment">Error to add comment.</string>
 	<string name="comment_says">says:</string>
-	
+
 	<!-- user -->
 	<string name="loading_user_info">Loading user information...</string>
-	
+
 	<!-- auth dialog -->
 	<string name="auth_dlg_title">Flickr Authorization</string>
-	<string name="logout_msg">Some features will not work after logout, are you sure to logout?</string>
+	<string name="logout_msg">Some features will not work after logout, are you
+		sure to logout?</string>
 	<string name="btn_yes">Yes</string>
 	<string name="btn_no">No</string>
-	
+
 	<!-- main menu items -->
 	<string name="item_interesting_photo">Interesting Photos</string>
 	<string name="item_my_photo">My Photos</string>
@@ -103,24 +107,25 @@
 	<string name="item_my_fav">My Favorites</string>
 	<string name="item_recent_activities">Recent Activities</string>
 	<string name="item_settings">Settings</string>
-	
+
 	<!-- pagination -->
 	<string name="toast_first_page">This is the first page.</string>
 	<string name="toast_last_page">This is the last page.</string>
-	
+
 	<string name="error_get_big_image">Unable to get the big image.</string>
 	<string name="msg_tags">Tags:</string>
 	<string name="dlg_title_write_comment">Write Comment</string>
 	<string name="empty_comment_error">Please input your comment.</string>
-	
+
 	<!-- app title -->
 	<string name="my_favs">My Favorite photos</string>
 	<string name="photo_stream_of">Photostream of</string>
-	
+
 	<!-- Photo detail -->
 	<string name="exif_info">EXIF Information:</string>
 	<string name="user_comments">Comments:</string>
 	<string name="no_exif_info">No EXIF Information.</string>
+	<string name="no_photo_desc">No description provided.</string>
 </resources>
 
 
