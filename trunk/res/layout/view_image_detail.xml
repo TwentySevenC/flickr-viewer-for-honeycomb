@@ -70,7 +70,7 @@
 			android:layout_margin="10dp">
 			<TextView android:id="@+id/photo_desc" android:layout_width="fill_parent"
 				android:layout_height="fill_parent" android:singleLine="false"
-				android:lines="50" />
+				android:lines="30" />
 		</ScrollView>
 	</LinearLayout>
 </LinearLayout>
