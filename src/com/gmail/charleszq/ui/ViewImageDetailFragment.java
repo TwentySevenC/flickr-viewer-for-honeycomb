@@ -224,9 +224,13 @@ public class ViewImageDetailFragment extends Fragment implements
         // photo title.
         TextView photoTitle = (TextView) view.findViewById(R.id.titlebyauthor);
         photoTitle.setText(mCurrentPhoto.getTitle());
-        
-        //photo description
+
+        // photo description
         TextView photoDesc = (TextView) view.findViewById(R.id.photo_desc);
+        if (mCurrentPhoto.getDescription() == null) {
+            mCurrentPhoto.setDescription(getActivity().getResources().getString(
+                    R.string.no_photo_desc));
+        }
         photoDesc.setText(mCurrentPhoto.getDescription());
 
         // tags
