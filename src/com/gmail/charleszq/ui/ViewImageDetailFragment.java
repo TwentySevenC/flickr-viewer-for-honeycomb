@@ -70,6 +70,7 @@ public class ViewImageDetailFragment extends Fragment implements
     private static final String PHOTO_ID_ATTR = "photo.id"; //$NON-NLS-1$
     private static final String PHOTO_TITLE_ATTR = "photo.title"; //$NON-NLS-1$
     private static final String PHOTO_OWNER_ID = "photo.owner.id"; //$NON-NLS-1$
+    private static final String PHOTO_DESC_ATTR = "photo.desc"; //$NON-NLS-1$
 
     private WeakReference<Bitmap> mBitmapRef;
     private Photo mCurrentPhoto;
@@ -211,8 +212,10 @@ public class ViewImageDetailFragment extends Fragment implements
             String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
             String photoTitle = savedInstanceState.getString(PHOTO_TITLE_ATTR);
             String ownerId = savedInstanceState.getString(PHOTO_OWNER_ID);
+            String desc = savedInstanceState.getString(PHOTO_DESC_ATTR);
             mCurrentPhoto.setId(photoId);
             mCurrentPhoto.setTitle(photoTitle);
+            mCurrentPhoto.setDescription(desc);
             User user = new User();
             user.setId(ownerId);
             mCurrentPhoto.setOwner(user);
@@ -221,6 +224,10 @@ public class ViewImageDetailFragment extends Fragment implements
         // photo title.
         TextView photoTitle = (TextView) view.findViewById(R.id.titlebyauthor);
         photoTitle.setText(mCurrentPhoto.getTitle());
+        
+        //photo description
+        TextView photoDesc = (TextView) view.findViewById(R.id.photo_desc);
+        photoDesc.setText(mCurrentPhoto.getDescription());
 
         // tags
         TextView tagsText = (TextView) view.findViewById(R.id.photo_tags);
@@ -287,6 +294,7 @@ public class ViewImageDetailFragment extends Fragment implements
         outState.putString(PHOTO_ID_ATTR, mCurrentPhoto.getId());
         outState.putString(PHOTO_TITLE_ATTR, mCurrentPhoto.getTitle());
         outState.putString(PHOTO_OWNER_ID, mCurrentPhoto.getOwner().getId());
+        outState.putString(PHOTO_DESC_ATTR, mCurrentPhoto.getDescription());
     }
 
     @Override
