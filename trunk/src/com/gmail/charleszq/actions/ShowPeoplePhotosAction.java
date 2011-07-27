@@ -73,6 +73,9 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
         if (mUserId == null) {
             mUserId = app.getUserId();
         }
+        if( mUserName == null ) {
+            mUserName = app.getUserName();
+        }
         mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token, mUserName);
         AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
                 mDataProvider, mPhotosReadyListener);
