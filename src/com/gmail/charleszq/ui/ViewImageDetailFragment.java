@@ -231,7 +231,6 @@ public class ViewImageDetailFragment extends Fragment implements
             mCurrentPhoto.setDescription(getActivity().getResources().getString(
                     R.string.no_photo_desc));
         }
-//        photoDesc.setText(mCurrentPhoto.getDescription());
         StringUtils.formatHtmlString(mCurrentPhoto.getDescription(), photoDesc);
 
         // tags

@@ -29,6 +29,8 @@ public class FlickrViewerActivity extends Activity {
         if (token != null) {
             startService(new Intent(app, FlickrViewerService.class));
         }
+        
+        showHelpPage();
         handleIntent();
     }
 
@@ -71,7 +73,7 @@ public class FlickrViewerActivity extends Activity {
         ContactsFragment fragment = new ContactsFragment(cidSet);
         ft.replace(R.id.main_area, fragment);
         ft.addToBackStack(Constants.CONTACT_BACK_STACK);
-        ft.commitAllowingStateLoss();
+        ft.commit();
 
     }
 
@@ -92,9 +94,7 @@ public class FlickrViewerActivity extends Activity {
         getActionBar().setTitle(sb.toString());
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void showHelpPage() {
         HelpFragment help = new HelpFragment();
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
