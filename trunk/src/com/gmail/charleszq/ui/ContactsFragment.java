@@ -7,15 +7,11 @@
 
 package com.gmail.charleszq.ui;
 
-import com.aetrion.flickr.contacts.Contact;
-import com.gmail.charleszq.FlickrViewerActivity;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.actions.ShowMyContactsAction;
-import com.gmail.charleszq.actions.ShowPeoplePhotosAction;
-import com.gmail.charleszq.event.IContactsFetchedListener;
-import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.utils.ImageCache;
-import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -42,10 +38,15 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import com.aetrion.flickr.contacts.Contact;
+import com.gmail.charleszq.FlickrViewerActivity;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.actions.ShowMyContactsAction;
+import com.gmail.charleszq.actions.ShowPeoplePhotosAction;
+import com.gmail.charleszq.event.IContactsFetchedListener;
+import com.gmail.charleszq.task.ImageDownloadTask;
+import com.gmail.charleszq.utils.ImageCache;
+import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 
 /**
  * @author qiangz
@@ -56,6 +57,7 @@ public class ContactsFragment extends Fragment implements
 	private static final String FAMILY_ONLY = "family_only"; //$NON-NLS-1$
 	private static final String FAMILY_AND_FRIEND = "family_and_friend"; //$NON-NLS-1$
 	private static final String CONTACT_ALL = "contact_all"; //$NON-NLS-1$
+	private static final String HAS_NEW_PHOTO = "has_new_photo"; //$NON-NLS-1$
 
 	private MyAdapter mAdapter;
 	private List<Contact> mContacts = null;
@@ -156,6 +158,9 @@ public class ContactsFragment extends Fragment implements
 			break;
 		case R.id.contact_all:
 			filterString = CONTACT_ALL;
+			break;
+		case R.id.has_new_photos:
+			filterString = HAS_NEW_PHOTO;
 			break;
 		}
 		if (filterString != null) {
@@ -284,7 +289,7 @@ public class ContactsFragment extends Fragment implements
 		@Override
 		public Filter getFilter() {
 			if (mFilter == null) {
-				mFilter = new ContactFilter(this.mContacts, this);
+				mFilter = new ContactFilter(this.mContacts, this, mIdsWithPhotoUploaded);
 			}
 			return mFilter;
 		}
@@ -296,11 +301,13 @@ public class ContactsFragment extends Fragment implements
 		private List<Contact> mOriginalContacts;
 		private BaseAdapter mAdapter;
 		private List<Contact> mFilterdContacts;
+		private Set<String> mContactIds;
 
-		ContactFilter(List<Contact> contacts, BaseAdapter adapter) {
+		ContactFilter(List<Contact> contacts, BaseAdapter adapter, Set<String> contactIds) {
 			this.mOriginalContacts = contacts;
 			this.mAdapter = adapter;
 			mFilterdContacts = mOriginalContacts;
+			mContactIds = contactIds == null ? new HashSet<String>() : contactIds;
 		}
 
 		@Override
@@ -325,6 +332,11 @@ public class ContactsFragment extends Fragment implements
 							.contains(constraint.toString())) {
 						count++;
 						filterdList.add(contact);
+					} else if( HAS_NEW_PHOTO.equals(constraint.toString())) {
+						if( mContactIds.contains( contact.getId())) {
+							count ++;
+							filterdList.add(contact);
+						}
 					}
 				}
 				results.count = count;
@@ -349,17 +361,11 @@ public class ContactsFragment extends Fragment implements
 	@Override
 	public void onContactsFetched(Collection<Contact> contacts) {
 		mContacts.clear();
-		if (mContactIdsWithPhotoUploaded == null
-				|| mContactIdsWithPhotoUploaded.isEmpty()) {
-			mContacts.addAll(contacts);
-		} else {
-			for (Contact c : contacts) {
-				if (mContactIdsWithPhotoUploaded.contains(c.getId())) {
-					mContacts.add(c);
-				}
-			}
-		}
+		mContacts.addAll(contacts);
 		mAdapter.notifyDataSetChanged();
+		if( mContactIdsWithPhotoUploaded != null ) {
+			mAdapter.getFilter().filter(HAS_NEW_PHOTO);
+		}
 	}
 
 	@Override
