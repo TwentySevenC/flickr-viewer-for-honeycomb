@@ -60,7 +60,7 @@ public class GetPhotoImageTask extends ProgressDialogAsyncTask<String, Integer, 
 
         try {
             mCurrentPhoto = pi.getPhoto(photoId);
-            Log.d(TAG,"Photo description: " + mCurrentPhoto.getDescription());
+            Log.d(TAG,"Photo description: " + mCurrentPhoto.getDescription()); //$NON-NLS-1$
             String url = mCurrentPhoto.getMediumUrl();
             switch (mPhotoType) {
                 case LARGE_URL:
