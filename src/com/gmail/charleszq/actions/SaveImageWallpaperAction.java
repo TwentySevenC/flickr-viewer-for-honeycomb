@@ -3,6 +3,20 @@
  */
 package com.gmail.charleszq.actions;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.app.WallpaperManager;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.widget.Toast;
+
 import com.aetrion.flickr.photos.Photo;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
@@ -10,16 +24,6 @@ import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageUtils;
-
-import android.app.Activity;
-import android.app.WallpaperManager;
-import android.graphics.Bitmap;
-import android.os.Environment;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
  * Represents the action to save a photo to sd card, and after that to set it as
@@ -33,6 +37,8 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 
 	private boolean mSetAsWallpaper = false;
 	private Photo mCurrentPhoto;
+
+	private ProgressDialog mDialog;
 
 	/**
 	 * @param activity
@@ -63,6 +69,11 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 				try {
 					FileInputStream fis = new FileInputStream(photoFile);
 					wmgr.setStream(fis);
+					Toast.makeText(
+							mActivity,
+							mActivity.getResources().getString(
+									R.string.toast_wallpaper_changed),
+							Toast.LENGTH_SHORT).show();
 				} catch (IOException e) {
 				}
 			} else {
@@ -73,8 +84,22 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 						Toast.LENGTH_SHORT).show();
 			}
 		} else {
-			ImageDownloadTask task = new ImageDownloadTask(null,
+			final ImageDownloadTask task = new ImageDownloadTask(null,
 					ParamType.PHOTO_URL, this);
+			mDialog = ProgressDialog
+					.show(mActivity,
+							"", mActivity.getResources().getString(R.string.saving_photo)); //$NON-NLS-1$
+			mDialog.setCancelable(true);
+			mDialog.setCanceledOnTouchOutside(true);
+			mDialog.setOnCancelListener(new OnCancelListener() {
+
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					if (task.getStatus() == AsyncTask.Status.RUNNING) {
+						task.cancel(true);
+					}
+				}
+			});
 			task.execute(mCurrentPhoto.getLargeUrl());
 		}
 
@@ -109,12 +134,11 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 							Toast.LENGTH_SHORT).show();
 				}
 			} else {
-				Toast
-						.makeText(
-								mActivity,
-								mActivity.getResources().getString(
-										R.string.toast_photo_saved),
-								Toast.LENGTH_SHORT).show();
+				Toast.makeText(
+						mActivity,
+						mActivity.getResources().getString(
+								R.string.toast_photo_saved), Toast.LENGTH_SHORT)
+						.show();
 			}
 		} else {
 			Toast.makeText(
@@ -122,6 +146,10 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 					mActivity.getResources().getString(
 							R.string.toast_error_save_photo),
 					Toast.LENGTH_SHORT).show();
+		}
+
+		if (mDialog != null && mDialog.isShowing()) {
+			mDialog.dismiss();
 		}
 	}
 

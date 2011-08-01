@@ -126,6 +126,8 @@
 	<string name="user_comments">Comments:</string>
 	<string name="no_exif_info">No EXIF Information.</string>
 	<string name="no_photo_desc">No description provided.</string>
+	
+	<string name="saving_photo">Saving photo...</string>
 </resources>
 
 
