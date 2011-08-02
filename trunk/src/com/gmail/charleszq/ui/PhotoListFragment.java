@@ -367,6 +367,7 @@ public class PhotoListFragment extends Fragment implements
             mPhotoList.add(list.get(i));
         }
         mGridAdapter.notifyDataSetChanged();
+        mGridView.smoothScrollToPositionFromTop(0,0);
     }
 
     @Override
