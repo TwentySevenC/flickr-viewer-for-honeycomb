@@ -193,9 +193,9 @@ public class ContactsFragment extends Fragment implements
 		}
 
 		@Override
-		public Object getItem(int arg0) {
-			if (getCount() > 0) {
-				return ((ContactFilter) getFilter()).getFilterdList().get(arg0);
+		public Object getItem(int pos) {
+			if (getCount() > 0 && pos < getCount()) {
+				return ((ContactFilter) getFilter()).getFilterdList().get(pos);
 			} else {
 				return null;
 			}
