@@ -194,7 +194,11 @@ public class ContactsFragment extends Fragment implements
 
 		@Override
 		public Object getItem(int arg0) {
-			return ((ContactFilter) getFilter()).getFilterdList().get(arg0);
+			if (getCount() > 0) {
+				return ((ContactFilter) getFilter()).getFilterdList().get(arg0);
+			} else {
+				return null;
+			}
 		}
 
 		@Override
@@ -212,6 +216,9 @@ public class ContactsFragment extends Fragment implements
 			}
 
 			Contact contact = (Contact) getItem(position);
+			if( contact == null ) {
+				return view;
+			}
 
 			ImageView photoImage, notifImage;
 			TextView titleView;
@@ -289,7 +296,8 @@ public class ContactsFragment extends Fragment implements
 		@Override
 		public Filter getFilter() {
 			if (mFilter == null) {
-				mFilter = new ContactFilter(this.mContacts, this, mIdsWithPhotoUploaded);
+				mFilter = new ContactFilter(this.mContacts, this,
+						mIdsWithPhotoUploaded);
 			}
 			return mFilter;
 		}
@@ -303,11 +311,13 @@ public class ContactsFragment extends Fragment implements
 		private List<Contact> mFilterdContacts;
 		private Set<String> mContactIds;
 
-		ContactFilter(List<Contact> contacts, BaseAdapter adapter, Set<String> contactIds) {
+		ContactFilter(List<Contact> contacts, BaseAdapter adapter,
+				Set<String> contactIds) {
 			this.mOriginalContacts = contacts;
 			this.mAdapter = adapter;
 			mFilterdContacts = mOriginalContacts;
-			mContactIds = contactIds == null ? new HashSet<String>() : contactIds;
+			mContactIds = contactIds == null ? new HashSet<String>()
+					: contactIds;
 		}
 
 		@Override
@@ -332,9 +342,9 @@ public class ContactsFragment extends Fragment implements
 							.contains(constraint.toString())) {
 						count++;
 						filterdList.add(contact);
-					} else if( HAS_NEW_PHOTO.equals(constraint.toString())) {
-						if( mContactIds.contains( contact.getId())) {
-							count ++;
+					} else if (HAS_NEW_PHOTO.equals(constraint.toString())) {
+						if (mContactIds.contains(contact.getId())) {
+							count++;
 							filterdList.add(contact);
 						}
 					}
@@ -363,7 +373,7 @@ public class ContactsFragment extends Fragment implements
 		mContacts.clear();
 		mContacts.addAll(contacts);
 		mAdapter.notifyDataSetChanged();
-		if( mContactIdsWithPhotoUploaded != null ) {
+		if (mContactIdsWithPhotoUploaded != null) {
 			mAdapter.getFilter().filter(HAS_NEW_PHOTO);
 		}
 	}
