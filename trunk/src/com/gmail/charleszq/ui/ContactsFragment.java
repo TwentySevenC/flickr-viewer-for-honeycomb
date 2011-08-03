@@ -62,6 +62,11 @@ public class ContactsFragment extends Fragment implements
 	private MyAdapter mAdapter;
 	private List<Contact> mContacts = null;
 	private Set<String> mContactIdsWithPhotoUploaded = null;
+	
+	/**
+	 * The current filter string.
+	 */
+	private String mCurrentFilterString = null;
 
 	private boolean mCreatedByOS = false;
 
@@ -123,6 +128,10 @@ public class ContactsFragment extends Fragment implements
 			action.execute();
 			mCreatedByOS = false;
 		}
+		
+		if( mCurrentFilterString != null && mAdapter != null ) {
+			mAdapter.getFilter().filter(mCurrentFilterString);
+		}
 	}
 
 	@Override
@@ -163,6 +172,8 @@ public class ContactsFragment extends Fragment implements
 			filterString = HAS_NEW_PHOTO;
 			break;
 		}
+		
+		mCurrentFilterString = filterString;
 		if (filterString != null) {
 			mAdapter.getFilter().filter(filterString);
 			return true;
@@ -375,6 +386,7 @@ public class ContactsFragment extends Fragment implements
 		mAdapter.notifyDataSetChanged();
 		if (mContactIdsWithPhotoUploaded != null) {
 			mAdapter.getFilter().filter(HAS_NEW_PHOTO);
+			mCurrentFilterString = HAS_NEW_PHOTO;
 		}
 	}
 

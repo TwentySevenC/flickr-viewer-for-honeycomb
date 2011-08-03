@@ -22,4 +22,18 @@
 		<item>54</item>
 		<item>63</item>
 	</string-array>
+	
+	<string-array name="contact_upload_interval_title">
+		<item>2 Hours</item>
+		<item>6 Hours</item>
+		<item>12 Hours</item>
+		<item>24 Hours</item>
+	</string-array>
+	
+	<string-array name="contact_upload_interval_value">
+		<item>2</item>
+		<item>6</item>
+		<item>12</item>
+		<item>24</item>
+	</string-array>
 </resources>
