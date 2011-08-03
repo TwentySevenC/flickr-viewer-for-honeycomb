@@ -26,6 +26,10 @@ public final class Constants {
 	public static final String PHOTO_LIST_CACHE_SIZE = "photo.list.cache.size"; //$NON-NLS-1$
 	public static final String PHOTO_GRID_COL_COUNT = "photo.grid.col.count"; //$NON-NLS-1$
 	public static final String PHOTO_PAGE_SIZE = "photo.grid.page.size"; //$NON-NLS-1$
+	public static final String ENABLE_CONTACT_UPLOAD_NOTIF = "notif.enable.contact.upload"; //$NON-NLS-1$
+	public static final String NOTIF_CONTACT_UPLOAD_INTERVAL = "notif.contact.upload.interval"; //$NON-NLS-1$
+	public static final String ENABLE_PHOTO_ACT_NOTIF = "notif.enable.photo.activity"; //$NON-NLS-1$
+	public static final String NOTIF_PHOTO_ACT_INTERVAL = "notif.photo.activity.interval"; //$NON-NLS-1$
 	
 	public static final String FLICKR_TOKEN = "flickr.token"; //$NON-NLS-1$
 	public static final String FLICKR_USER_ID = "flickr.user.id"; //$NON-NLS-1$
