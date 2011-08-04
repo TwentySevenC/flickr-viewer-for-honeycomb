@@ -42,15 +42,14 @@ public class PhotoActivityService extends FlickrViewerService {
 			return;
 		}
 		
-		// one hour later, start another task.
-		Timer timer2 = new Timer();
+		Timer timer = new Timer();
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + 10);
 		
 		long period = interval * 60L * 60L * 1000L;
 		RecentActivityOnMyPhotoTimerTask actTask = new RecentActivityOnMyPhotoTimerTask(
 				context, token, interval);
-		timer2.schedule(actTask, cal.getTime(), period);
+		timer.schedule(actTask, cal.getTime(), period);
 
 	}
 
