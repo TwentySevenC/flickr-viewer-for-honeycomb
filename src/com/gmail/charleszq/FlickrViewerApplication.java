@@ -4,10 +4,8 @@
 
 package com.gmail.charleszq;
 
-import com.gmail.charleszq.event.FlickrViewerMessage;
-import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
-import com.gmail.charleszq.services.FlickrViewerService;
-import com.gmail.charleszq.utils.Constants;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.app.Application;
 import android.content.Context;
@@ -16,8 +14,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.gmail.charleszq.event.FlickrViewerMessage;
+import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
+import com.gmail.charleszq.services.ContactUploadService;
+import com.gmail.charleszq.services.FlickrViewerService;
+import com.gmail.charleszq.services.PhotoActivityService;
+import com.gmail.charleszq.utils.Constants;
 
 /**
  * Represents the main application.
@@ -129,6 +131,12 @@ public class FlickrViewerApplication extends Application {
 	 * Clear the user token
 	 */
 	public void logout() {
+		Intent intent = new Intent(this,ContactUploadService.class);
+		stopService(intent);
+		
+		Intent pIntent = new Intent(this,PhotoActivityService.class);
+		stopService(pIntent);
+		
 		saveFlickrAuthToken(null, null, null);
 	}
 
