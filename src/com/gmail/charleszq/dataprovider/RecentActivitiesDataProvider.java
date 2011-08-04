@@ -28,6 +28,11 @@ public class RecentActivitiesDataProvider {
 
     private String mToken;
     private boolean mOnlyMyPhoto = false;
+    
+    /**
+     * The check interval of activities on my photos.
+     */
+    private int mMyPhotoInterval = 24;
 
     /**
      * Constructor.
@@ -70,7 +75,13 @@ public class RecentActivitiesDataProvider {
                     }
                 }
             }
-            ItemList photoComments = ai.userPhotos(PER_PAGE, 1, "1d"); //$NON-NLS-1$
+            
+            String sInterval = String.valueOf(mMyPhotoInterval) + "h"; //$NON-NLS-1$
+            if( mMyPhotoInterval == 24 ) {
+            	sInterval = "1d"; //$NON-NLS-1$
+            }
+            
+            ItemList photoComments = ai.userPhotos(PER_PAGE, 1, sInterval); 
             if (photoComments != null) {
                 for (int j = 0; j < photoComments.size(); j++) {
                     Item item = (Item) photoComments.get(j);
@@ -84,5 +95,9 @@ public class RecentActivitiesDataProvider {
         } catch (Exception e) {
         }
         return items;
+    }
+    
+    public void setCheckInterval(int interval) {
+    	this.mMyPhotoInterval = interval;
     }
 }

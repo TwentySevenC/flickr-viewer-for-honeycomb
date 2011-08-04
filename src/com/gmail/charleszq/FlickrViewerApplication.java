@@ -26,108 +26,151 @@ import java.util.Set;
  */
 public class FlickrViewerApplication extends Application {
 
-    private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
+	private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        String token = getFlickrToken();
-        if (token != null) {
-            this.startService(new Intent(this, FlickrViewerService.class));
-        }
-    }
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		String token = getFlickrToken();
+		if (token != null) {
+			this.startService(new Intent(this, FlickrViewerService.class));
+		}
+	}
 
-    /**
-     * Returns the defiend page size of the grid view.
-     * 
-     * @return the page size.
-     */
-    public int getPageSize() {
-        String pageSize = getSharedPreferenceValue(Constants.PHOTO_PAGE_SIZE,
-                String.valueOf(Constants.DEF_GRID_PAGE_SIZE));
-        return Integer.valueOf(pageSize);
-    }
+	/**
+	 * Returns the defiend page size of the grid view.
+	 * 
+	 * @return the page size.
+	 */
+	public int getPageSize() {
+		String pageSize = getSharedPreferenceValue(Constants.PHOTO_PAGE_SIZE,
+				String.valueOf(Constants.DEF_GRID_PAGE_SIZE));
+		return Integer.valueOf(pageSize);
+	}
 
-    /**
-     * Returns the user defined column number of the grid view.
-     * 
-     * @return
-     */
-    public int getGridNumColumns() {
-        String count = getSharedPreferenceValue(Constants.PHOTO_GRID_COL_COUNT,
-                String.valueOf(Constants.DEF_GRID_COL_COUNT));
-        return Integer.parseInt(count);
-    }
+	/**
+	 * Returns the user defined column number of the grid view.
+	 * 
+	 * @return
+	 */
+	public int getGridNumColumns() {
+		String count = getSharedPreferenceValue(Constants.PHOTO_GRID_COL_COUNT,
+				String.valueOf(Constants.DEF_GRID_COL_COUNT));
+		return Integer.parseInt(count);
+	}
 
-    public String getFlickrToken() {
-        String token = getSharedPreferenceValue(Constants.FLICKR_TOKEN, null);
-        return token;
-    }
+	public String getFlickrToken() {
+		String token = getSharedPreferenceValue(Constants.FLICKR_TOKEN, null);
+		return token;
+	}
 
-    public void saveFlickrAuthToken(String token, String userId, String userName) {
-        SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
-                Context.MODE_PRIVATE);
-        Editor editor = sp.edit();
-        editor.putString(Constants.FLICKR_TOKEN, token);
-        editor.putString(Constants.FLICKR_USER_ID, userId);
-        editor.putString(Constants.FLICKR_USER_NAME, userName);
-        editor.commit();
-    }
+	public void saveFlickrAuthToken(String token, String userId, String userName) {
+		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
+				Context.MODE_PRIVATE);
+		Editor editor = sp.edit();
+		editor.putString(Constants.FLICKR_TOKEN, token);
+		editor.putString(Constants.FLICKR_USER_ID, userId);
+		editor.putString(Constants.FLICKR_USER_NAME, userName);
+		editor.commit();
+	}
 
-    public String getUserName() {
-        return getSharedPreferenceValue(Constants.FLICKR_USER_NAME, null);
-    }
+	public String getUserName() {
+		return getSharedPreferenceValue(Constants.FLICKR_USER_NAME, null);
+	}
 
-    public String getUserId() {
-        return getSharedPreferenceValue(Constants.FLICKR_USER_ID, null);
-    }
+	public String getUserId() {
+		return getSharedPreferenceValue(Constants.FLICKR_USER_ID, null);
+	}
 
-    /**
-     * Clear the user token
-     */
-    public void logout() {
-        saveFlickrAuthToken(null, null, null);
-    }
+	/**
+	 * Returns the contact upload check interval settings, in 'hour' unit, the
+	 * default value is 24 hours.
+	 * 
+	 * @return
+	 */
+	public int getContactUploadCheckInterval() {
+		String interval = getSharedPreferenceValue(
+				Constants.NOTIF_CONTACT_UPLOAD_INTERVAL, "24"); //$NON-NLS-1$
+		return Integer.parseInt(interval);
+	}
 
-    /**
-     * Returns the saved value in the shared preferences.
-     * 
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    private String getSharedPreferenceValue(String key, String defaultValue) {
-        SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
-                Context.MODE_APPEND);
-        String value = sp.getString(key, defaultValue);
-        return value;
-    }
+	/**
+	 * Returns the photo activity check interval settings, in 'hour' unit, the
+	 * default value is 24 hours.
+	 * 
+	 * @return
+	 */
+	public int getPhotoActivityCheckInterval() {
+		String interval = getSharedPreferenceValue(
+				Constants.NOTIF_PHOTO_ACT_INTERVAL, "24"); //$NON-NLS-1$
+		return Integer.parseInt(interval);
+	}
 
-    @Override
-    public void onTerminate() {
-        mMessageHandlers = null;
-        super.onTerminate();
-    }
+	/**
+	 * Whether to start the service to check the contact upload.
+	 * 
+	 * @return
+	 */
+	public boolean isContactUploadCheckEnabled() {
+		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
+				Context.MODE_APPEND);
+		boolean result = sp.getBoolean(Constants.ENABLE_CONTACT_UPLOAD_NOTIF,
+				true);
+		return result;
+	}
 
-    public void registerMessageHandler(IFlickrViewerMessageHandler handler) {
-        mMessageHandlers.add(handler);
-    }
+	public boolean isPhotoActivityCheckEnabled() {
+		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
+				Context.MODE_APPEND);
+		return sp.getBoolean(Constants.ENABLE_PHOTO_ACT_NOTIF, true);
+	}
 
-    public void unregisterMessageHandler(IFlickrViewerMessageHandler handler) {
-        mMessageHandlers.remove(handler);
-    }
+	/**
+	 * Clear the user token
+	 */
+	public void logout() {
+		saveFlickrAuthToken(null, null, null);
+	}
 
-    public void handleMessage(final FlickrViewerMessage message) {
-        Handler handler = new Handler();
-        handler.post(new Runnable() {
+	/**
+	 * Returns the saved value in the shared preferences.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	private String getSharedPreferenceValue(String key, String defaultValue) {
+		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
+				Context.MODE_APPEND);
+		String value = sp.getString(key, defaultValue);
+		return value;
+	}
 
-            @Override
-            public void run() {
-                for (IFlickrViewerMessageHandler handler : mMessageHandlers) {
-                    handler.handleMessage(message);
-                }
-            }
-        });
-    }
+	@Override
+	public void onTerminate() {
+		mMessageHandlers = null;
+		super.onTerminate();
+	}
+
+	public void registerMessageHandler(IFlickrViewerMessageHandler handler) {
+		mMessageHandlers.add(handler);
+	}
+
+	public void unregisterMessageHandler(IFlickrViewerMessageHandler handler) {
+		mMessageHandlers.remove(handler);
+	}
+
+	public void handleMessage(final FlickrViewerMessage message) {
+		Handler handler = new Handler();
+		handler.post(new Runnable() {
+
+			@Override
+			public void run() {
+				for (IFlickrViewerMessageHandler handler : mMessageHandlers) {
+					handler.handleMessage(message);
+				}
+			}
+		});
+	}
 
 }

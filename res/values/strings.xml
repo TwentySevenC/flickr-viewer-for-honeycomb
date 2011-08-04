@@ -33,17 +33,24 @@
 
 	<string name="app_cache_size_dlg_title">Photo List Cache Size</string>
 	<string name="pref_notif_cat">Notifications</string>
-	<string name="notif_enable_contact_upload">Enable notification on contact upload photos</string>
+	<string name="notif_enable_contact_upload">Enable notification on contact upload photos
+	</string>
 	<string name="summary_notif_enable_contact_upload">Enable/Disable the notification when your contacts
 		have photos uploaded.</string>
 	<string name="notif_contact_upload_interval">Check interval of contacts upload photos</string>
-	<string name="summary_notif_contact_upload_interval">The check interval to see if my contacts have new photos uploaded or not.</string>
+	<string name="summary_notif_contact_upload_interval">The check interval to see if my contacts have new
+		photos uploaded or not. Change this will restart the background
+		service.</string>
 	<string name="notif_contact_upload_interval_dlg_title">Contact Upload Check Interval</string>
-	
-	<string name="notif_enable_photo_activity">Enable notification on activities of my photos</string>
-	<string name="summary_notif_enable_photo_activity">Enable/Disable notification when comments added on my photos or the photos I commented.</string>
+
+	<string name="notif_enable_photo_activity">Enable notification on activities of my photos
+	</string>
+	<string name="summary_notif_enable_photo_activity">Enable/Disable notification when comments added on
+		my photos or the photos I commented.</string>
 	<string name="notif_photo_act_interval">Check interval of activities on my photos</string>
-	<string name="summary_notif_photo_act_interval">The check interval to see if comments were added on my photos or the photos I commented.</string>
+	<string name="summary_notif_photo_act_interval">The check interval to see if comments were added on
+		my photos or the photos I commented. Change this will restart the
+		background service.</string>
 	<string name="notif_photo_act_interval_dlg_title">Photo Activity Check Interval</string>
 
 	<string name="auth_hint">
