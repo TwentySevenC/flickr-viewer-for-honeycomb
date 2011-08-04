@@ -4,18 +4,8 @@
 
 package com.gmail.charleszq.ui;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.auth.Auth;
-import com.aetrion.flickr.auth.AuthInterface;
-import com.aetrion.flickr.auth.Permission;
-import com.aetrion.flickr.people.User;
-import com.gmail.charleszq.FlickrViewerApplication;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.actions.IAction;
-import com.gmail.charleszq.event.IAuthDoneListener;
-import com.gmail.charleszq.services.FlickrViewerService;
-import com.gmail.charleszq.task.AuthTask;
-import com.gmail.charleszq.utils.FlickrHelper;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -29,8 +19,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.aetrion.flickr.Flickr;
+import com.aetrion.flickr.auth.Auth;
+import com.aetrion.flickr.auth.AuthInterface;
+import com.aetrion.flickr.auth.Permission;
+import com.aetrion.flickr.people.User;
+import com.gmail.charleszq.FlickrViewerApplication;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.actions.IAction;
+import com.gmail.charleszq.event.IAuthDoneListener;
+import com.gmail.charleszq.services.ContactUploadService;
+import com.gmail.charleszq.services.PhotoActivityService;
+import com.gmail.charleszq.task.AuthTask;
+import com.gmail.charleszq.utils.FlickrHelper;
 
 /**
  * Represents the auth dialog to grant this application the permission to access
@@ -103,7 +104,13 @@ public class AuthFragmentDialog extends DialogFragment implements
             app.saveFlickrAuthToken(auth.getToken(), user.getId(), user
                     .getUsername());
             
-            app.startService(new Intent(app,FlickrViewerService.class));
+            if( app.isContactUploadCheckEnabled()) {
+            	app.startService(new Intent(app, ContactUploadService.class));
+            }
+            
+            if( app.isPhotoActivityCheckEnabled() ) {
+            	app.startService(new Intent(app, PhotoActivityService.class));
+            }
 
             // notify main menu panel to update
             MainNavFragment menuFragment = (MainNavFragment) getFragmentManager().findFragmentById(

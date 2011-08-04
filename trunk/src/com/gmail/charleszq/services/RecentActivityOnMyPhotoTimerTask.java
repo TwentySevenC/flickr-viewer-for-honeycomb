@@ -29,11 +29,16 @@ public class RecentActivityOnMyPhotoTimerTask extends TimerTask {
     private static final String TAG = RecentActivityOnMyPhotoTimerTask.class.getName();
     private Context mContext;
     private String mToken;
+    
+    /**
+     * The check interval of activities on my photos, in 'hour's.
+     */
+    private int mInterval = 24;
 
-    public RecentActivityOnMyPhotoTimerTask(Context context, String token) {
+    public RecentActivityOnMyPhotoTimerTask(Context context, String token, int interval ) {
         this.mContext = context;
         this.mToken = token;
-
+        this.mInterval = interval;
     }
 
     /*
@@ -43,6 +48,7 @@ public class RecentActivityOnMyPhotoTimerTask extends TimerTask {
     @Override
     public void run() {
         RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(mToken, true);
+        dp.setCheckInterval(mInterval);
         List<Item> items = dp.getRecentActivities();
         Log.d(TAG, "Recent activity task executed, item size: " + items.size()); //$NON-NLS-1$
         if (!items.isEmpty()) {

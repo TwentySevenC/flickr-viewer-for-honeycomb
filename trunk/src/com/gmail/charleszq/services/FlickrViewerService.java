@@ -3,16 +3,9 @@
  */
 package com.gmail.charleszq.services;
 
-import com.gmail.charleszq.FlickrViewerApplication;
-
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
-
-import java.util.Calendar;
-import java.util.Timer;
 
 /**
  * Represents the service to run in the background, querying the activities of
@@ -22,37 +15,7 @@ import java.util.Timer;
  * @author charles
  * 
  */
-public class FlickrViewerService extends Service {
-
-	private static final String TAG = FlickrViewerService.class.getName();
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		Timer timer = new Timer();
-		
-		String token = null;
-		Context context = getApplicationContext();
-		if( context instanceof FlickrViewerApplication ) {
-			FlickrViewerApplication app = (FlickrViewerApplication) context;
-			token = app.getFlickrToken();
-		} else {
-			Log.e(TAG, "Not the application context provided"); //$NON-NLS-1$
-			return;
-		}
-		ContactUploadTimerTask task = new ContactUploadTimerTask(context,token);
-		
-		//TODO put the update interval into settings.
-		long period = 24L * 60L * 60L * 1000L;
-		Calendar cal = Calendar.getInstance();
-		timer.schedule(task, cal.getTime(), period);
-		
-		//one hour later, start another task.
-		Timer timer2 = new Timer();
-		RecentActivityOnMyPhotoTimerTask actTask = new RecentActivityOnMyPhotoTimerTask(context,token);
-		cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) + 1 );
-		timer2.schedule(actTask, cal.getTime(), period);
-	}
+public abstract class  FlickrViewerService extends Service {
 
 	/*
 	 * (non-Javadoc)
