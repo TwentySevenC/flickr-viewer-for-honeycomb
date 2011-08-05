@@ -55,7 +55,7 @@ public class PhotoListFragment extends Fragment implements
         AdapterView.OnItemClickListener, IPhotoListReadyListener, IFlickrViewerMessageHandler {
 
     private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider"; //$NON-NLS-1$
-    private static final String TAG = PhotoListFragment.class.getSimpleName();
+    private static final String TAG = PhotoListFragment.class.getName();
 
     private PhotoList mPhotoList;
     private MyAdapter mGridAdapter;
