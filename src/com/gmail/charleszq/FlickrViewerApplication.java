@@ -92,7 +92,7 @@ public class FlickrViewerApplication extends Application {
 	 */
 	public int getContactUploadCheckInterval() {
 		String interval = getSharedPreferenceValue(
-				Constants.NOTIF_CONTACT_UPLOAD_INTERVAL, "24"); //$NON-NLS-1$
+				Constants.NOTIF_CONTACT_UPLOAD_INTERVAL, String.valueOf(Constants.SERVICE_CHECK_INTERVAL));
 		return Integer.parseInt(interval);
 	}
 
@@ -104,7 +104,7 @@ public class FlickrViewerApplication extends Application {
 	 */
 	public int getPhotoActivityCheckInterval() {
 		String interval = getSharedPreferenceValue(
-				Constants.NOTIF_PHOTO_ACT_INTERVAL, "24"); //$NON-NLS-1$
+				Constants.NOTIF_PHOTO_ACT_INTERVAL, String.valueOf(Constants.SERVICE_CHECK_INTERVAL)); 
 		return Integer.parseInt(interval);
 	}
 

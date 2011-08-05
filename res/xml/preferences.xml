@@ -40,7 +40,7 @@
 			android:layout="?android:attr/preferenceLayoutChild"
 			android:title="@string/notif_contact_upload_interval" android:summary="@string/summary_notif_contact_upload_interval"
 			android:entries="@array/contact_upload_interval_title" android:entryValues="@array/contact_upload_interval_value"
-			android:defaultValue="24" android:dialogTitle="@string/notif_contact_upload_interval_dlg_title" />
+			android:defaultValue="12" android:dialogTitle="@string/notif_contact_upload_interval_dlg_title" />
 			
 		<CheckBoxPreference android:key="notif.enable.photo.activity"
 			android:defaultValue="true"
@@ -50,7 +50,7 @@
 			android:layout="?android:attr/preferenceLayoutChild"
 			android:title="@string/notif_photo_act_interval" android:summary="@string/summary_notif_photo_act_interval"
 			android:entries="@array/contact_upload_interval_title" android:entryValues="@array/contact_upload_interval_value"
-			android:defaultValue="24" android:dialogTitle="@string/notif_photo_act_interval_dlg_title" />
+			android:defaultValue="12" android:dialogTitle="@string/notif_photo_act_interval_dlg_title" />
 	</PreferenceCategory>
 
 </PreferenceScreen>

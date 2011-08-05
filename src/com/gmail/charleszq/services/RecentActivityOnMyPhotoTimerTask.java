@@ -33,7 +33,7 @@ public class RecentActivityOnMyPhotoTimerTask extends TimerTask {
     /**
      * The check interval of activities on my photos, in 'hour's.
      */
-    private int mInterval = 24;
+    private int mInterval = Constants.SERVICE_CHECK_INTERVAL;
 
     public RecentActivityOnMyPhotoTimerTask(Context context, String token, int interval ) {
         this.mContext = context;

@@ -58,6 +58,8 @@ public final class Constants {
 	public static final String ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_ACT_ON_MY_PHOTO"; //$NON-NLS-1$
 	public static final int ACT_ON_MY_PHOTO_NOTIF_ID = 2;
 	
+	public static final int SERVICE_CHECK_INTERVAL = 12;
+	
 	/**
 	 * Private constructor to prevent this class to be instanced.
 	 */

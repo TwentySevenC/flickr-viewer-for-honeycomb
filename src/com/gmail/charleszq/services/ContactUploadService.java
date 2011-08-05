@@ -10,6 +10,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.gmail.charleszq.FlickrViewerApplication;
+import com.gmail.charleszq.utils.Constants;
 
 /**
  * Represents the service to check whether there are new photos uploaded by my
@@ -25,11 +26,13 @@ public class ContactUploadService extends FlickrViewerService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		Log.d(TAG, "Contact upload service created."); //$NON-NLS-1$
 
 		String token = null;
 		Context context = getApplicationContext();
 
-		int interval = 24;
+		int interval = Constants.SERVICE_CHECK_INTERVAL;
 		if (context instanceof FlickrViewerApplication) {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();

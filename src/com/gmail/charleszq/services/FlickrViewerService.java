@@ -6,6 +6,7 @@ package com.gmail.charleszq.services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Represents the service to run in the background, querying the activities of
@@ -16,7 +17,7 @@ import android.os.IBinder;
  * 
  */
 public abstract class  FlickrViewerService extends Service {
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -31,5 +32,13 @@ public abstract class  FlickrViewerService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		return Service.START_STICKY;
 	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.d(this.getClass().getName(), "Service destroyed."); //$NON-NLS-1$
+	}
+	
+	
 	
 }

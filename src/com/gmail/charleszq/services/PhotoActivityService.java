@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Timer;
 
 import com.gmail.charleszq.FlickrViewerApplication;
+import com.gmail.charleszq.utils.Constants;
 
 import android.content.Context;
 import android.util.Log;
@@ -24,10 +25,13 @@ public class PhotoActivityService extends FlickrViewerService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		Log.d(TAG, "photo activity service created."); //$NON-NLS-1$
+		
 		String token = null;
 		Context context = getApplicationContext();
 		
-		int interval = 24;
+		int interval = Constants.SERVICE_CHECK_INTERVAL;
 		if (context instanceof FlickrViewerApplication) {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
