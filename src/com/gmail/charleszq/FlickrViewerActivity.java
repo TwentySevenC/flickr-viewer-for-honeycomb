@@ -77,7 +77,7 @@ public class FlickrViewerActivity extends Activity {
 
 			int pIntervalInHours = app.getPhotoActivityCheckInterval();
 			am.setInexactRepeating(AlarmManager.RTC,
-					System.currentTimeMillis(),
+					System.currentTimeMillis() + 5 * 60 * 1000L,
 					pIntervalInHours * 60 * 60 * 1000L,
 					getPhotoCommentPendingIntent());
 			Log.d(TAG, "Receiver registered to check comments on my photos."); //$NON-NLS-1$
@@ -92,7 +92,7 @@ public class FlickrViewerActivity extends Activity {
 
 			int cIntervalInHours = app.getContactUploadCheckInterval();
 			am.setInexactRepeating(AlarmManager.RTC,
-					System.currentTimeMillis(),
+					System.currentTimeMillis() + 2 * 60 * 1000L,
 					cIntervalInHours * 60 * 60 * 1000L,
 					getContactUploadPendingIntent());
 			Log.d(TAG, "Receiver registered to check contact upload."); //$NON-NLS-1$

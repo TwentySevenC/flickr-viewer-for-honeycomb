@@ -121,12 +121,6 @@ public class FlickrViewerApplication extends Application {
 	 * Clear the user token
 	 */
 	public void logout() {
-		Intent intent = new Intent(this,ContactUploadService.class);
-		stopService(intent);
-		
-		Intent pIntent = new Intent(this,PhotoActivityService.class);
-		stopService(pIntent);
-		
 		saveFlickrAuthToken(null, null, null);
 	}
 
