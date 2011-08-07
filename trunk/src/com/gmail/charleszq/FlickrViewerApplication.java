@@ -17,7 +17,6 @@ import android.os.Handler;
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.services.ContactUploadService;
-import com.gmail.charleszq.services.FlickrViewerService;
 import com.gmail.charleszq.services.PhotoActivityService;
 import com.gmail.charleszq.utils.Constants;
 
@@ -29,15 +28,6 @@ import com.gmail.charleszq.utils.Constants;
 public class FlickrViewerApplication extends Application {
 
 	private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		String token = getFlickrToken();
-		if (token != null) {
-			this.startService(new Intent(this, FlickrViewerService.class));
-		}
-	}
 
 	/**
 	 * Returns the defiend page size of the grid view.
