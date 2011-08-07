@@ -41,7 +41,12 @@ public class PhotoActivityService extends IntentService {
 		
 		Context context = getApplicationContext();
 		if( context instanceof FlickrViewerApplication ) {
-			token = ((FlickrViewerApplication)context).getFlickrToken();
+			FlickrViewerApplication app = (FlickrViewerApplication) context;
+			token = app.getFlickrToken();
+			if( token == null || !app.isPhotoActivityCheckEnabled() ) {
+				Log.d(TAG, "No authed or notification is disabled."); //$NON-NLS-1$
+				return;
+			}
 		} else {
 			Log.w(TAG, "Error, application context is not the application."); //$NON-NLS-1$
 			return;

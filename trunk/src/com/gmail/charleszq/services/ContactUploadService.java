@@ -55,6 +55,13 @@ public class ContactUploadService extends IntentService {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
 			intervalInHours = app.getContactUploadCheckInterval();
+			
+			if( token == null || !app.isContactUploadCheckEnabled() ) {
+				Log.d(TAG, "Not auth or notification is disabled."); //$NON-NLS-1$
+				return;
+			}
+			
+			
 		} else {
 			Log.w(TAG, "Error to get application context."); //$NON-NLS-1$
 			return;
