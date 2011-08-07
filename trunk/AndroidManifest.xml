@@ -25,5 +25,6 @@
 		</activity>
 		<service android:name=".services.ContactUploadService"></service>
 		<service android:name=".services.PhotoActivityService"></service>
+		<receiver android:name=".services.TimeUpReceiver"/>
 	</application>
 </manifest>

@@ -58,6 +58,10 @@ public final class Constants {
 	public static final String ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION = "INTENT_ACTION_ACT_ON_MY_PHOTO"; //$NON-NLS-1$
 	public static final int ACT_ON_MY_PHOTO_NOTIF_ID = 2;
 	
+	//Intent actions for broadcast receiver
+	public static final String INTENT_ACTION_CHECK_CONTACT_UPLOAD_RECEIVER = "INTENT_ACTION_CHECK_CONTACT_UPLOAD_RECEIVER"; //$NON-NLS-1$
+	public static final String INTENT_ACTION_CHECK_PHOTO_ACTIVITY_RECEIVER = "INTENT_ACTION_CHECK_PHOTO_ACTIVITY_RECEIVER"; //$NON-NLS-1$
+	
 	public static final int SERVICE_CHECK_INTERVAL = 12;
 	
 	/**
