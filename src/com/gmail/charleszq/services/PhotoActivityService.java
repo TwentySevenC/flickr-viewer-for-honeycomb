@@ -3,14 +3,21 @@
  */
 package com.gmail.charleszq.services;
 
-import java.util.Calendar;
-import java.util.Timer;
+import java.util.List;
 
-import com.gmail.charleszq.FlickrViewerApplication;
-import com.gmail.charleszq.utils.Constants;
-
+import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+
+import com.aetrion.flickr.activity.Item;
+import com.gmail.charleszq.FlickrViewerApplication;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.dataprovider.RecentActivitiesDataProvider;
+import com.gmail.charleszq.utils.Constants;
 
 /**
  * Represents the service to check whether my photos got comments or not.s
@@ -18,44 +25,74 @@ import android.util.Log;
  * @author qiangz
  * 
  */
-public class PhotoActivityService extends FlickrViewerService {
+public class PhotoActivityService extends IntentService {
 
 	private static final String TAG = PhotoActivityService.class.getName();
+	
+	public PhotoActivityService() {
+		super(Constants.ENABLE_PHOTO_ACT_NOTIF);
+	}
 
 	@Override
-	public void onCreate() {
-		super.onCreate();
-		
-		Log.d(TAG, "photo activity service created."); //$NON-NLS-1$
+	protected void onHandleIntent(Intent intent) {
 		
 		String token = null;
+		int intervalInHours = Constants.SERVICE_CHECK_INTERVAL;
+		
+		Context context = getApplicationContext();
+		if( context instanceof FlickrViewerApplication ) {
+			token = ((FlickrViewerApplication)context).getFlickrToken();
+		} else {
+			Log.w(TAG, "Error, application context is not the application."); //$NON-NLS-1$
+			return;
+		}
+		
+		checkPhotoActivities(token, intervalInHours);
+		
+	}
+
+	private void checkPhotoActivities(String token, int intervalInHours) {
+		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(token, true);
+        dp.setCheckInterval(intervalInHours);
+        List<Item> items = dp.getRecentActivities();
+        Log.d(TAG, "Recent activity task executed, item size: " + items.size()); //$NON-NLS-1$
+        if (!items.isEmpty()) {
+            sendNotification();
+        }
+	}
+	
+	private void sendNotification() {
+		
 		Context context = getApplicationContext();
 		
-		int interval = Constants.SERVICE_CHECK_INTERVAL;
-		if (context instanceof FlickrViewerApplication) {
-			FlickrViewerApplication app = (FlickrViewerApplication) context;
-			token = app.getFlickrToken();
-			interval = app.getContactUploadCheckInterval();
-		} else {
-			Log.e(TAG, "Not the application context provided"); //$NON-NLS-1$
-			return;
-		}
+        // notification manager.
+        NotificationManager notifManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
 
-		if (token == null) {
-			Log.d(TAG, "User not authorizes the flickr access yet."); //$NON-NLS-1$
-			return;
-		}
-		
-		Timer timer = new Timer();
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + 10);
-		
-		long period = interval * 60L * 60L * 1000L;
-		RecentActivityOnMyPhotoTimerTask actTask = new RecentActivityOnMyPhotoTimerTask(
-				context, token, interval);
-		timer.schedule(actTask, cal.getTime(), period);
+        // notification itself.
+        Notification notif = new Notification(R.drawable.icon,
+                context.getResources().getString(
+                        R.string.notif_message_act_on_my_photo), System
+                        .currentTimeMillis());
+        notif.defaults = Notification.DEFAULT_SOUND;
+        notif.flags = Notification.FLAG_AUTO_CANCEL;
 
-	}
+        // notification intent.
+        CharSequence contentTitle = context.getResources().getString(
+                R.string.app_name);
+        CharSequence contentText = context.getResources().getString(
+                R.string.notif_message_act_on_my_photo);
+        Intent notificationIntent = new Intent(
+                Constants.ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                notificationIntent, 0);
+
+        notif.setLatestEventInfo(context, contentTitle, contentText,
+                contentIntent);
+
+        // send out the notif
+        notifManager.notify(Constants.ACT_ON_MY_PHOTO_NOTIF_ID, notif);
+    }
 
 	
 }

@@ -4,14 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.gmail.charleszq.actions.GetActivitiesAction;
-import com.gmail.charleszq.services.ContactUploadService;
-import com.gmail.charleszq.services.PhotoActivityService;
+import com.gmail.charleszq.services.TimeUpReceiver;
 import com.gmail.charleszq.ui.ContactsFragment;
 import com.gmail.charleszq.ui.HelpFragment;
 import com.gmail.charleszq.utils.Constants;
@@ -19,26 +21,82 @@ import com.gmail.charleszq.utils.ImageCache;
 
 public class FlickrViewerActivity extends Activity {
 
+	private static final String TAG = FlickrViewerActivity.class.getName();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
-		String token = app.getFlickrToken();
-
-		if (token != null) {
-			if (app.isContactUploadCheckEnabled()) {
-				startService(new Intent(app, ContactUploadService.class));
-			}
-			
-			if( app.isPhotoActivityCheckEnabled()) {
-				startService(new Intent(app, PhotoActivityService.class));
-			}
-		}
+		registerTimeCheckReceiver();
 
 		showHelpPage();
 		handleIntent();
+	}
+
+	private PendingIntent getContactUploadPendingIntent() {
+		Intent contactUploadIntent = new Intent(this, TimeUpReceiver.class);
+		contactUploadIntent
+				.setAction(Constants.INTENT_ACTION_CHECK_CONTACT_UPLOAD_RECEIVER);
+		PendingIntent contactUploadPendingIntent = PendingIntent.getBroadcast(
+				getApplicationContext(), 0, contactUploadIntent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		return contactUploadPendingIntent;
+	}
+
+	private PendingIntent getPhotoCommentPendingIntent() {
+		Intent photoIntent = new Intent(this, TimeUpReceiver.class);
+		photoIntent
+				.setAction(Constants.INTENT_ACTION_CHECK_PHOTO_ACTIVITY_RECEIVER);
+		PendingIntent photoPendingIntent = PendingIntent.getBroadcast(
+				getApplicationContext(), 0, photoIntent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		return photoPendingIntent;
+	}
+
+	/**
+	 * Registers a broadcast receiver on the alert manager to check photo
+	 * activity or contact upload in the fixed time schedule.
+	 */
+	private void registerTimeCheckReceiver() {
+		FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
+		String token = app.getFlickrToken();
+		if (token == null) {
+			return;
+		}
+		
+		handleContactUploadService();
+		handlePhotoActivityService();
+	}
+	
+	public void handlePhotoActivityService() {
+		FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		am.cancel(getPhotoCommentPendingIntent());
+		if (app.isPhotoActivityCheckEnabled()) {
+
+			int pIntervalInHours = app.getPhotoActivityCheckInterval();
+			am.setInexactRepeating(AlarmManager.RTC,
+					System.currentTimeMillis(),
+					pIntervalInHours * 60 * 60 * 1000L,
+					getPhotoCommentPendingIntent());
+			Log.d(TAG, "Receiver registered to check comments on my photos."); //$NON-NLS-1$
+		} 
+	}
+	
+	public void handleContactUploadService() {
+		FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		am.cancel(getContactUploadPendingIntent());
+		if (app.isContactUploadCheckEnabled()) {
+
+			int cIntervalInHours = app.getContactUploadCheckInterval();
+			am.setInexactRepeating(AlarmManager.RTC,
+					System.currentTimeMillis(),
+					cIntervalInHours * 60 * 60 * 1000L,
+					getContactUploadPendingIntent());
+			Log.d(TAG, "Receiver registered to check contact upload."); //$NON-NLS-1$
+		}
 	}
 
 	@Override
