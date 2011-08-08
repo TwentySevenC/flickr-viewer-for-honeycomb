@@ -62,7 +62,8 @@ public final class Constants {
 	public static final String INTENT_ACTION_CHECK_CONTACT_UPLOAD_RECEIVER = "INTENT_ACTION_CHECK_CONTACT_UPLOAD_RECEIVER"; //$NON-NLS-1$
 	public static final String INTENT_ACTION_CHECK_PHOTO_ACTIVITY_RECEIVER = "INTENT_ACTION_CHECK_PHOTO_ACTIVITY_RECEIVER"; //$NON-NLS-1$
 	
-	public static final int SERVICE_CHECK_INTERVAL = 12;
+	//notification related check interval
+	public static final int SERVICE_CHECK_INTERVAL = 2;
 	
 	/**
 	 * Private constructor to prevent this class to be instanced.

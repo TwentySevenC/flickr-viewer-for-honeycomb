@@ -13,6 +13,7 @@ import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.activity.ActivityInterface;
 import com.aetrion.flickr.activity.Item;
 import com.aetrion.flickr.activity.ItemList;
+import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 
 /**
@@ -32,7 +33,7 @@ public class RecentActivitiesDataProvider {
     /**
      * The check interval of activities on my photos.
      */
-    private int mMyPhotoInterval = 24;
+    private int mMyPhotoInterval = Constants.SERVICE_CHECK_INTERVAL;
 
     /**
      * Constructor.
