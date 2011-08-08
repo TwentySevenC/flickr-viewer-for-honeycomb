@@ -9,15 +9,12 @@ import java.util.Set;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
-import com.gmail.charleszq.services.ContactUploadService;
-import com.gmail.charleszq.services.PhotoActivityService;
 import com.gmail.charleszq.utils.Constants;
 
 /**

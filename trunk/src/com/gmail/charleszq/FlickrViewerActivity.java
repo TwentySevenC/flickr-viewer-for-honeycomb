@@ -64,37 +64,37 @@ public class FlickrViewerActivity extends Activity {
 		if (token == null) {
 			return;
 		}
-		
+
 		handleContactUploadService();
 		handlePhotoActivityService();
 	}
-	
+
 	public void handlePhotoActivityService() {
 		FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-		am.cancel(getPhotoCommentPendingIntent());
+		PendingIntent pendingIntent = getPhotoCommentPendingIntent();
+		am.cancel(pendingIntent);
 		if (app.isPhotoActivityCheckEnabled()) {
 
 			int pIntervalInHours = app.getPhotoActivityCheckInterval();
-			am.setInexactRepeating(AlarmManager.RTC,
+			am.setRepeating(AlarmManager.RTC,
 					System.currentTimeMillis() + 5 * 60 * 1000L,
-					pIntervalInHours * 60 * 60 * 1000L,
-					getPhotoCommentPendingIntent());
+					pIntervalInHours * 60 * 60 * 1000L, pendingIntent);
 			Log.d(TAG, "Receiver registered to check comments on my photos."); //$NON-NLS-1$
-		} 
+		}
 	}
-	
+
 	public void handleContactUploadService() {
 		FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-		am.cancel(getContactUploadPendingIntent());
+		PendingIntent pendingIntent = getContactUploadPendingIntent();
+		am.cancel(pendingIntent);
 		if (app.isContactUploadCheckEnabled()) {
 
 			int cIntervalInHours = app.getContactUploadCheckInterval();
-			am.setInexactRepeating(AlarmManager.RTC,
+			am.setRepeating(AlarmManager.RTC,
 					System.currentTimeMillis() + 2 * 60 * 1000L,
-					cIntervalInHours * 60 * 60 * 1000L,
-					getContactUploadPendingIntent());
+					cIntervalInHours * 60 * 60 * 1000L, pendingIntent);
 			Log.d(TAG, "Receiver registered to check contact upload."); //$NON-NLS-1$
 		}
 	}
