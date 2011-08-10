@@ -28,10 +28,14 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 	 */
 	private static final long serialVersionUID = 7813993447701103209L;
 
-	private PhotoPlace mPhotoPlace;
+	private String mPhotoPlaceId;
+	private int mPhotoPlaceKind;
+	private String mPhotoPlaceTitle;
 
 	public PhotoPoolDataProvider(PhotoPlace photoPlace) {
-		this.mPhotoPlace = photoPlace;
+		this.mPhotoPlaceId = photoPlace.getId();
+		this.mPhotoPlaceKind = photoPlace.getKind();
+		this.mPhotoPlaceTitle = photoPlace.getTitle();
 	}
 
 	/*
@@ -49,13 +53,13 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
         extras.add(Extras.OWNER_NAME);
         
 		Flickr f = FlickrHelper.getInstance().getFlickr();
-		switch (mPhotoPlace.getKind()) {
+		switch (mPhotoPlaceKind) {
 		case PhotoPlace.SET:
 			PhotosetsInterface psi = f.getPhotosetsInterface();
-			return psi.getPhotos(mPhotoPlace.getId(), extras,  Flickr.PRIVACY_LEVEL_NO_FILTER, mPageSize, mPageNumber);
+			return psi.getPhotos(mPhotoPlaceId, extras,  Flickr.PRIVACY_LEVEL_NO_FILTER, mPageSize, mPageNumber);
 		case PhotoPlace.POOL:
 			PoolsInterface gi = f.getPoolsInterface();
-			return gi.getPhotos(mPhotoPlace.getId(), null, extras, mPageSize, mPageNumber);
+			return gi.getPhotos(mPhotoPlaceId, null, extras, mPageSize, mPageNumber);
 		}
 		return null;
 	}
@@ -69,12 +73,13 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 	@Override
 	public String getDescription(Context context) {
 		StringBuilder sb = new StringBuilder();
-		if (mPhotoPlace.getKind() == PhotoPlace.SET) {
+		if (mPhotoPlaceKind == PhotoPlace.SET) {
 			sb.append(context.getString(R.string.dp_photo_pool_desc_set));
 		} else {
 			sb.append(context.getString(R.string.dp_photo_pool_desc_pool));
 		}
-		sb.append(" ").append(mPhotoPlace.getTitle()); //$NON-NLS-1$
+		sb.append(" \"").append(mPhotoPlaceTitle); //$NON-NLS-1$
+		sb.append("\""); //$NON-NLS-1$
 		return sb.toString();
 	}
 
