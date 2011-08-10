@@ -75,7 +75,7 @@
 	<string name="toast_error_set_wallpaper">Error to set the photo as wallpaper.</string>
 	<string name="toast_photo_saved">Photo saved successfully.</string>
 	<string name="toast_error_save_photo">Error to save the photo.</string>
-	<string name="toast_error_get_photos">Unable to get photo list</string>
+	<string name="toast_error_get_photos">Unable to get photo list, please check your network access.</string>
 	<string name="toast_click_first_btn">Click the 1st button first please.</string>
 
 	<!-- Share photo intent related. -->
@@ -152,6 +152,8 @@
 	<string name="family_and_friend">Family and Friend</string>
 	<string name="all_contacts">All Contacts</string>
 	<string name="contact_with_upload">Have Recent Upload</string>
+	
+	<string name="error_no_network">Please make sure you have network access.</string>
 </resources>
 
 

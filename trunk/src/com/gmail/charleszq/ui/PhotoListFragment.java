@@ -105,7 +105,7 @@ public class PhotoListFragment extends Fragment implements
      */
     public PhotoListFragment(PhotoList photoList,
             PaginationPhotoListDataProvider photoListDataProvider) {
-        this.mPhotoList = photoList;
+        this.mPhotoList = photoList == null ? new PhotoList() : photoList;
         this.mPhotoListDataProvider = photoListDataProvider;
     }
 
@@ -119,8 +119,7 @@ public class PhotoListFragment extends Fragment implements
      */
     public PhotoListFragment(PhotoList photoList,
             PaginationPhotoListDataProvider photoListDataProvider, IContextMenuHandler menuHandler) {
-        this.mPhotoList = photoList;
-        this.mPhotoListDataProvider = photoListDataProvider;
+        this(photoList,photoListDataProvider);
         this.mContextMenuHandler = menuHandler;
     }
 
