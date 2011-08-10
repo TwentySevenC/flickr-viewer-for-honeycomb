@@ -408,7 +408,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			if (drawable != null && drawable instanceof DownloadedDrawable) {
 				ImageDownloadTask task = ((DownloadedDrawable) drawable)
 						.getBitmapDownloaderTask();
-				if (!smallUrl.equals(task)) {
+				if (!smallUrl.equals(task.getUrl())) {
 					task.cancel(true);
 				}
 			}

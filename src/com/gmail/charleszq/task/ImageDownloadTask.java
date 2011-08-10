@@ -4,14 +4,7 @@
 
 package com.gmail.charleszq.task;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotosInterface;
-import com.gmail.charleszq.event.IImageDownloadDoneListener;
-import com.gmail.charleszq.utils.FlickrHelper;
-import com.gmail.charleszq.utils.ImageCache;
-import com.gmail.charleszq.utils.ImageUtils;
-import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import java.lang.ref.WeakReference;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -19,7 +12,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
-import java.lang.ref.WeakReference;
+import com.aetrion.flickr.Flickr;
+import com.aetrion.flickr.groups.Group;
+import com.aetrion.flickr.groups.GroupsInterface;
+import com.aetrion.flickr.photos.Photo;
+import com.aetrion.flickr.photos.PhotosInterface;
+import com.aetrion.flickr.photosets.Photoset;
+import com.aetrion.flickr.photosets.PhotosetsInterface;
+import com.gmail.charleszq.event.IImageDownloadDoneListener;
+import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.charleszq.utils.ImageCache;
+import com.gmail.charleszq.utils.ImageUtils;
+import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 
 /**
  * Represents the image download task which takes an image url as the parameter,
@@ -34,7 +38,7 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
     private String mUrl;
 
     public static enum ParamType {
-        PHOTO_URL, PHOTO_ID_SMALL, PHOTO_ID_SMALL_SQUARE, PHOTO_ID_MEDIUM, PHOTO_ID_LARGE
+        PHOTO_URL, PHOTO_ID_SMALL, PHOTO_ID_SMALL_SQUARE, PHOTO_ID_MEDIUM, PHOTO_ID_LARGE, PHOTO_SET_ID, PHOTO_POOL_ID
     };
 
     /**
@@ -77,8 +81,26 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
     protected Bitmap doInBackground(String... params) {
         mUrl = params[0];
         String url = mUrl;
-        if (!mParamType.equals(ParamType.PHOTO_URL)) {
-            Flickr f = FlickrHelper.getInstance().getFlickr();
+        Flickr f = FlickrHelper.getInstance().getFlickr();
+        if( ParamType.PHOTO_SET_ID.equals(mParamType)) {
+        	String photoSetId = mUrl;
+        	PhotosetsInterface psi = f.getPhotosetsInterface();
+        	try {
+				Photoset ps = psi.getInfo(photoSetId);
+				url = ps.getPrimaryPhoto().getSmallSquareUrl();
+			} catch (Exception e) {
+				return null;
+			}
+        } else if( ParamType.PHOTO_POOL_ID.equals(mParamType)) {
+        	String photoPoolId = mUrl;
+        	GroupsInterface gi = f.getGroupsInterface();
+        	try {
+				Group photoGroup = gi.getInfo(photoPoolId);
+				url = photoGroup.getBuddyIconUrl();
+			} catch (Exception e) {
+				return null;
+			}
+        } else if (!mParamType.equals(ParamType.PHOTO_URL)) {
             PhotosInterface pi = f.getPhotosInterface();
             try {
                 Photo photo = pi.getPhoto(mUrl);
