@@ -222,6 +222,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			mCurrentPhoto.setDescription(getActivity().getResources()
 					.getString(R.string.no_photo_desc));
 		}
+		photoDesc.setMovementMethod(LinkMovementMethod.getInstance());
 		StringUtils.formatHtmlString(mCurrentPhoto.getDescription(), photoDesc);
 
 		// tags
@@ -418,7 +419,6 @@ public class ViewImageDetailFragment extends Fragment implements
 				buddyIcon = (ImageView) view.findViewById(R.id.buddy_icon);
 				author = (TextView) view.findViewById(R.id.author);
 				comment = (TextView) view.findViewById(R.id.comment);
-				comment.setMovementMethod(LinkMovementMethod.getInstance());
 				commentDate = (TextView) view.findViewById(R.id.commentDate);
 
 				holder = new ViewHolder();
@@ -434,6 +434,7 @@ public class ViewImageDetailFragment extends Fragment implements
 				comment = holder.comment;
 			}
 
+			comment.setMovementMethod(LinkMovementMethod.getInstance());
 			UserComment userComment = (UserComment) getItem(position);
 			author.setText(userComment.getUserName());
 
