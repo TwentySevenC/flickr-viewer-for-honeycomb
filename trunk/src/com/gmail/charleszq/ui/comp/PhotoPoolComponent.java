@@ -6,6 +6,8 @@ package com.gmail.charleszq.ui.comp;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,11 @@ import android.widget.TextView;
 import com.aetrion.flickr.photos.PhotoPlace;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.task.GetPhotoPoolTask;
+import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
+import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
+import com.gmail.charleszq.utils.ImageCache;
+import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 
 /**
  * Represents the ui component to show the photo pool or set information of a
@@ -115,32 +121,59 @@ public class PhotoPoolComponent extends FrameLayout implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = convertView;
-			if( view == null ) {
+			if (view == null) {
 				LayoutInflater li = LayoutInflater.from(mContext);
 				view = li.inflate(R.layout.photo_pool_item, null);
 			}
 			ImageView poolIcon;
 			TextView poolTitle;
 			ViewHolder holder = (ViewHolder) view.getTag();
-			if(holder != null ) {
+			if (holder != null) {
 				poolTitle = holder.title;
 				poolIcon = holder.image;
 			} else {
 				poolIcon = (ImageView) view.findViewById(R.id.photo_pool_icon);
 				poolTitle = (TextView) view.findViewById(R.id.photo_pool_title);
-				
+
 				holder = new ViewHolder();
 				holder.image = poolIcon;
 				holder.title = poolTitle;
 				view.setTag(holder);
 			}
-			
+
 			PhotoPlace place = (PhotoPlace) getItem(position);
 			poolTitle.setText(place.getTitle());
-			
+
+			Drawable drawable = poolIcon.getDrawable();
+			String photoPoolId = place.getId();
+			if (drawable != null && drawable instanceof DownloadedDrawable) {
+				ImageDownloadTask task = ((DownloadedDrawable) drawable)
+						.getBitmapDownloaderTask();
+				if (!photoPoolId.equals(task.getUrl())) {
+					task.cancel(true);
+				}
+			}
+
+			if (photoPoolId == null) {
+				// poolIcon.setImageDrawable(null);
+			} else {
+				Bitmap cacheBitmap = ImageCache.getFromCache(photoPoolId);
+				if (cacheBitmap != null) {
+					poolIcon.setImageBitmap(cacheBitmap);
+				} else {
+					ImageDownloadTask task = new ImageDownloadTask(
+							poolIcon,
+							place.getKind() == PhotoPlace.SET ? ParamType.PHOTO_SET_ID
+									: ParamType.PHOTO_POOL_ID);
+					drawable = new DownloadedDrawable(task);
+					poolIcon.setImageDrawable(drawable);
+					task.execute(photoPoolId);
+				}
+			}
+
 			return view;
 		}
-		
+
 		class ViewHolder {
 			ImageView image;
 			TextView title;
