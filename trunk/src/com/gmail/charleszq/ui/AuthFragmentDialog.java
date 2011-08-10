@@ -103,9 +103,6 @@ public class AuthFragmentDialog extends DialogFragment implements
 			}
 		} else { // auth done
 			Auth auth = (Auth) result;
-			if (auth == null) {
-				return;
-			}
 
 			FlickrViewerActivity mainActivity = (FlickrViewerActivity) getActivity();
 			FlickrViewerApplication app = (FlickrViewerApplication) mainActivity.getApplication();
