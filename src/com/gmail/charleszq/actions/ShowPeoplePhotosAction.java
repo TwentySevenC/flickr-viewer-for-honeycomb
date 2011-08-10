@@ -16,6 +16,7 @@ import com.gmail.charleszq.utils.Constants;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.widget.Toast;
 
 /**
  * Represents the action to show all the public photos of a given user.
@@ -34,6 +35,13 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
         	if( cancelled ) {
         		return;
         	}
+        	
+        	if (list == null) {
+                Toast.makeText(mActivity,
+                		mActivity.getString(R.string.toast_error_get_photos),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
             PhotoListFragment fragment = new PhotoListFragment(list,
                     mDataProvider);
             FragmentManager fm = mActivity.getFragmentManager();

@@ -83,6 +83,12 @@ public class AuthFragmentDialog extends DialogFragment implements
 
 	@Override
 	public void onAuthDone(int type, Object result) {
+		
+		if( result == null ) {
+			Toast.makeText(getActivity(), getActivity().getString(R.string.error_no_network), Toast.LENGTH_LONG).show();
+			return;
+		}
+		
 		if (type == AuthTask.TYPE_FROB) {
 			mFrob = result.toString();
 			try {
