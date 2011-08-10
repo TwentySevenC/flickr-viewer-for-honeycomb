@@ -4,6 +4,38 @@
 
 package com.gmail.charleszq.ui;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ViewAnimator;
+
 import com.aetrion.flickr.people.User;
 import com.aetrion.flickr.photos.Exif;
 import com.aetrion.flickr.photos.Photo;
@@ -24,36 +56,10 @@ import com.gmail.charleszq.task.GetPhotoCommentsTask;
 import com.gmail.charleszq.task.GetPhotoExifTask;
 import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.ui.comp.PhotoDetailActionBar;
+import com.gmail.charleszq.ui.comp.PhotoPoolComponent;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 import com.gmail.charleszq.utils.StringUtils;
-
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ViewSwitcher;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * The fragment to view the detail information of a picture, including exif,
@@ -83,8 +89,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	private List<UserComment> mComments = new ArrayList<UserComment>();
 	private List<Exif> mExifs = new ArrayList<Exif>();
 
-	private boolean mShowingExif = true;
-	private ViewSwitcher mViewSwitcher;
+	private ViewAnimator mViewSwitcher;
 	private View mCommentProgressBar;
 	private View mExifProgressBar;
 
@@ -140,26 +145,6 @@ public class ViewImageDetailFragment extends Fragment implements
 			} else {
 				commentAction.execute();
 			}
-			return true;
-		case R.id.menu_item_switch:
-			if (mShowingExif) {
-				mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
-						getActivity(), R.anim.push_right_in));
-				mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
-						getActivity(), R.anim.push_left_out));
-				item.setTitle(R.string.menu_show_exif);
-				mViewSwitcher.showNext();
-				// mViewSwitcher.animate().setDuration(2000).rotationY(360f);
-			} else {
-				mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
-						getActivity(), R.anim.push_left_in));
-				mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
-						getActivity(), R.anim.push_right_out));
-				item.setTitle(R.string.menu_show_comment);
-				mViewSwitcher.showPrevious();
-				// mViewSwitcher.animate().setDuration(2000).rotationY(0f);
-			}
-			mShowingExif = !mShowingExif;
 			return true;
 		case R.id.menu_item_add_as_fav:
 			AddPhotoAsFavoriteTask task = new AddPhotoAsFavoriteTask(
@@ -261,7 +246,13 @@ public class ViewImageDetailFragment extends Fragment implements
 		commentListView.setAdapter(mCommentAdapter);
 
 		// view swithcer
-		mViewSwitcher = (ViewSwitcher) view.findViewById(R.id.switcher);
+		mViewSwitcher = (ViewAnimator) view.findViewById(R.id.switcher);
+		mGestureDector = new GestureDetector(mGestureListener);
+		mViewSwitcher.setOnTouchListener(mOnTouchListener);
+		
+		//photo pool
+		PhotoPoolComponent photoPool = (PhotoPoolComponent) view.findViewById(R.id.photo_detail_pool);
+		photoPool.initialize(mCurrentPhoto.getId());
 
 		// comment progress bar
 		mCommentProgressBar = view.findViewById(R.id.commentProgressBar);
@@ -273,6 +264,44 @@ public class ViewImageDetailFragment extends Fragment implements
 
 		return view;
 	}
+
+	private GestureDetector mGestureDector;
+
+	private OnGestureListener mGestureListener = new SimpleOnGestureListener() {
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			int dx = (int) (e2.getX() - e1.getX());
+			if (dx > 50) {
+				mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
+						getActivity(), R.anim.push_left_in));
+				mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
+						getActivity(), R.anim.push_right_out));
+				mViewSwitcher.showPrevious();
+				return true;
+			} else if (dx < -50) {
+				mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
+						getActivity(), R.anim.push_right_in));
+				mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
+						getActivity(), R.anim.push_left_out));
+				mViewSwitcher.showNext();
+				return true;
+			} else {
+				return false;
+			}
+		}
+	};
+
+	private OnTouchListener mOnTouchListener = new OnTouchListener() {
+
+		@Override
+		public boolean onTouch(View arg0, MotionEvent event) {
+			mGestureDector.onTouchEvent(event);
+			return true;
+		}
+
+	};
 
 	private GetPhotoCommentsTask mPhotoCommentTask;
 	private GetPhotoExifTask mExifTask;

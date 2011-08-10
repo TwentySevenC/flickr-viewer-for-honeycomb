@@ -154,6 +154,7 @@
 	<string name="contact_with_upload">Have Recent Upload</string>
 	
 	<string name="error_no_network">Please make sure you have network access.</string>
+	<string name="photo_pool">Photo Pool</string>
 </resources>
 
 
