@@ -5,6 +5,7 @@ package com.gmail.charleszq.ui.comp;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -12,6 +13,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -21,9 +24,10 @@ import android.widget.TextView;
 
 import com.aetrion.flickr.photos.PhotoPlace;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.actions.ShowPhotoPoolAction;
 import com.gmail.charleszq.task.GetPhotoPoolTask;
-import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
+import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
@@ -36,7 +40,7 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  * 
  */
 public class PhotoPoolComponent extends FrameLayout implements
-		IPhotoPoolListener {
+		IPhotoPoolListener, OnItemClickListener {
 
 	private ListView mPhotoPoolListView;
 	private ProgressBar mProgressBar;
@@ -91,6 +95,7 @@ public class PhotoPoolComponent extends FrameLayout implements
 		PhotoPoolAdapter adapter = new PhotoPoolAdapter(this.getContext(),
 				photoPlaces);
 		mPhotoPoolListView.setAdapter(adapter);
+		mPhotoPoolListView.setOnItemClickListener(this);
 	}
 
 	private class PhotoPoolAdapter extends BaseAdapter {
@@ -179,5 +184,14 @@ public class PhotoPoolComponent extends FrameLayout implements
 			TextView title;
 		}
 
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View view, int pos, long id) {
+		PhotoPoolAdapter adapter = (PhotoPoolAdapter) arg0.getAdapter();
+		PhotoPlace photoPlace = (PhotoPlace) adapter.getItem(pos);
+		ShowPhotoPoolAction action = new ShowPhotoPoolAction(
+				(Activity) getContext(), photoPlace, false);
+		action.execute();
 	}
 }
