@@ -28,52 +28,65 @@ import android.widget.Toast;
  */
 public class DefaultPhotoListReadyListener implements IPhotoListReadyListener {
 
-    private IPhotoListDataProvider mDataProvider;
-    private Context mContext;
-    private IContextMenuHandler mMenuHandler;
+	private IPhotoListDataProvider mDataProvider;
+	private Context mContext;
+	private IContextMenuHandler mMenuHandler;
+	private boolean mClearStack = true;
 
-    public DefaultPhotoListReadyListener(Context context, IPhotoListDataProvider dataProvider) {
-        this.mContext = context;
-        this.mDataProvider = dataProvider;
-    }
+	public DefaultPhotoListReadyListener(Context context,
+			IPhotoListDataProvider dataProvider) {
+		this(context, dataProvider, null);
+	}
 
-    public DefaultPhotoListReadyListener(Context context, IPhotoListDataProvider dataProvider,
-            IContextMenuHandler handler) {
-        this.mContext = context;
-        this.mDataProvider = dataProvider;
-        this.mMenuHandler = handler;
-    }
+	public DefaultPhotoListReadyListener(Context context,
+			IPhotoListDataProvider dataProvider, IContextMenuHandler handler) {
+		this(context, dataProvider, handler, true);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.gmail.charleszq.event.IPhotoListReadyListener#onPhotoListReady(com.aetrion
-     * .flickr.photos.PhotoList, boolean)
-     */
-    @Override
-    public void onPhotoListReady(PhotoList list, boolean cancelled) {
-        if (cancelled) {
-            return;
-        }
-        if (list == null) {
-            Toast.makeText(mContext,
-                    mContext.getResources().getString(R.string.toast_error_get_photos),
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
+	public DefaultPhotoListReadyListener(Context context,
+			IPhotoListDataProvider dataProvider, IContextMenuHandler handler,
+			boolean clearStack) {
+		this.mContext = context;
+		this.mDataProvider = dataProvider;
+		this.mMenuHandler = handler;
+		this.mClearStack = clearStack;
+	}
 
-        PhotoListFragment fragment = new PhotoListFragment(list,
-                (PaginationPhotoListDataProvider) mDataProvider, mMenuHandler);
-        FragmentManager fm = ((Activity) mContext).getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gmail.charleszq.event.IPhotoListReadyListener#onPhotoListReady(com
+	 * .aetrion .flickr.photos.PhotoList, boolean)
+	 */
+	@Override
+	public void onPhotoListReady(PhotoList list, boolean cancelled) {
+		if (cancelled) {
+			return;
+		}
+		if (list == null) {
+			Toast.makeText(
+					mContext,
+					mContext.getResources().getString(
+							R.string.toast_error_get_photos),
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
 
-        int stackCount = fm.getBackStackEntryCount();
-        for (int i = 0; i < stackCount; i++) {
-            fm.popBackStack();
-        }
-        ft.replace(R.id.main_area, fragment);
-        ft.addToBackStack(Constants.PHOTO_LIST_BACK_STACK);
-        ft.commitAllowingStateLoss();
-    }
+		PhotoListFragment fragment = new PhotoListFragment(list,
+				(PaginationPhotoListDataProvider) mDataProvider, mMenuHandler);
+		FragmentManager fm = ((Activity) mContext).getFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+
+		if (mClearStack) {
+			int stackCount = fm.getBackStackEntryCount();
+			for (int i = 0; i < stackCount; i++) {
+				fm.popBackStack();
+			}
+		}
+		ft.replace(R.id.main_area, fragment);
+		ft.addToBackStack(Constants.PHOTO_LIST_BACK_STACK);
+		ft.commitAllowingStateLoss();
+	}
 }

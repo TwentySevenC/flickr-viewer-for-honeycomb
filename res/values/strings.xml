@@ -155,6 +155,9 @@
 	
 	<string name="error_no_network">Please make sure you have network access.</string>
 	<string name="photo_pool">Photo Pool</string>
+	<string name="dp_photo_pool_desc_set">Photostream of photo set</string>
+	<string name="dp_photo_pool_desc_pool">Photostream of photo group</string>
+	<string name="task_loading_photo_pool">Loading photos from photo pool...</string>
 </resources>
 
 

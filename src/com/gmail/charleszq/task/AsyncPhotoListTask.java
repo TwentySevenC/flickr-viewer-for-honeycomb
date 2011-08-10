@@ -4,14 +4,14 @@
 
 package com.gmail.charleszq.task;
 
+import android.app.Activity;
+import android.util.Log;
+
 import com.aetrion.flickr.photos.PhotoList;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.IPhotoListDataProvider;
 import com.gmail.charleszq.event.DefaultPhotoListReadyListener;
 import com.gmail.charleszq.event.IPhotoListReadyListener;
-
-import android.app.Activity;
-import android.util.Log;
 
 /**
  * Represents the task to fetch the photo list of a user.
@@ -25,7 +25,7 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
 
     private IPhotoListDataProvider mPhotoListProvider;
     private IPhotoListReadyListener mPhotoListReadyListener;
-
+    
     public AsyncPhotoListTask(Activity context,
             IPhotoListDataProvider photoListProvider,
             IPhotoListReadyListener listener) {
@@ -36,10 +36,16 @@ public class AsyncPhotoListTask extends ProgressDialogAsyncTask<Void, Integer, P
     public AsyncPhotoListTask(Activity context,
             IPhotoListDataProvider photoListProvider,
             IPhotoListReadyListener listener, String prompt) {
-        super(context, prompt);
+        this(context,photoListProvider,listener,prompt,true);
+    }
+    
+    public AsyncPhotoListTask(Activity context,
+            IPhotoListDataProvider photoListProvider,
+            IPhotoListReadyListener listener, String prompt, boolean cleanStack) {
+    	super(context, prompt);
         this.mPhotoListProvider = photoListProvider;
         if( listener ==  null ) {
-            mPhotoListReadyListener = new DefaultPhotoListReadyListener(context, photoListProvider);
+            mPhotoListReadyListener = new DefaultPhotoListReadyListener(context, photoListProvider,null, cleanStack);
         } else {
             mPhotoListReadyListener = listener;
         }
