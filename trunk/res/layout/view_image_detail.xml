@@ -27,7 +27,7 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="0dp" android:layout_weight="2"
 		android:layout_height="fill_parent">
-		<ViewSwitcher android:id="@+id/switcher"
+		<ViewAnimator android:id="@+id/switcher"
 			android:layout_weight="3" android:layout_width="fill_parent"
 			android:layout_height="0dp">
 			<RelativeLayout android:layout_width="fill_parent"
@@ -62,14 +62,16 @@
 					android:layout_alignLeft="@id/labelComment" android:layout_width="fill_parent"
 					android:layout_height="fill_parent" />
 			</RelativeLayout>
-		</ViewSwitcher>
+			<com.gmail.charleszq.ui.comp.PhotoPoolComponent android:id="@+id/photo_detail_pool"
+				android:layout_height="fill_parent" android:layout_width="fill_parent" />
+		</ViewAnimator>
 		<ScrollView android:layout_width="fill_parent"
 			android:scrollbars="vertical" android:fillViewport="true"
 			android:background="@drawable/photo_detail_action_bar_bg"
 			android:layout_height="0dp" android:layout_weight="1"
 			android:layout_margin="10dp">
 			<TextView android:id="@+id/photo_desc" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:singleLine="false"/>
+				android:layout_height="fill_parent" android:singleLine="false" />
 		</ScrollView>
 	</LinearLayout>
 </LinearLayout>
