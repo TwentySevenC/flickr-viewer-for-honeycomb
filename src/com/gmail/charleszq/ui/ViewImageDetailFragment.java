@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
@@ -158,13 +159,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			showOwnerPhotosAction.execute();
 			return true;
 		case R.id.menu_item_view_big_photo:
-			FragmentManager fm = getActivity().getFragmentManager();
-			ViewBigImageFragment fragment = new ViewBigImageFragment(
-					mCurrentPhoto);
-			FragmentTransaction ft = fm.beginTransaction();
-			ft.replace(R.id.main_area, fragment);
-			ft.addToBackStack("BigImage"); //$NON-NLS-1$
-			ft.commitAllowingStateLoss();
+			showBigImage();
 			return true;
 		case R.id.menu_item_save:
 			SaveImageWallpaperAction sa = new SaveImageWallpaperAction(
@@ -180,6 +175,16 @@ public class ViewImageDetailFragment extends Fragment implements
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	private void showBigImage() {
+		FragmentManager fm = getActivity().getFragmentManager();
+		ViewBigImageFragment fragment = new ViewBigImageFragment(
+				mCurrentPhoto);
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.replace(R.id.main_area, fragment);
+		ft.addToBackStack("BigImage"); //$NON-NLS-1$
+		ft.commitAllowingStateLoss();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -192,6 +197,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		}
 		image.setFocusable(true);
 		image.setClickable(true);
+		hookDoubleTapOnImage(image);
 
 		if (savedInstanceState != null) {
 			String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
@@ -249,9 +255,10 @@ public class ViewImageDetailFragment extends Fragment implements
 		mViewSwitcher = (ViewAnimator) view.findViewById(R.id.switcher);
 		mGestureDector = new GestureDetector(mGestureListener);
 		mViewSwitcher.setOnTouchListener(mOnTouchListener);
-		
-		//photo pool
-		PhotoPoolComponent photoPool = (PhotoPoolComponent) view.findViewById(R.id.photo_detail_pool);
+
+		// photo pool
+		PhotoPoolComponent photoPool = (PhotoPoolComponent) view
+				.findViewById(R.id.photo_detail_pool);
 		photoPool.initialize(mCurrentPhoto.getId());
 
 		// comment progress bar
@@ -265,8 +272,38 @@ public class ViewImageDetailFragment extends Fragment implements
 		return view;
 	}
 
-	private GestureDetector mGestureDector;
+	private void hookDoubleTapOnImage(ImageView image) {
+		final GestureDetector imageGestureDector = new GestureDetector(
+				new SimpleOnGestureListener());
+		imageGestureDector.setOnDoubleTapListener(new OnDoubleTapListener() {
 
+			@Override
+			public boolean onDoubleTap(MotionEvent e) {
+				showBigImage();
+				return true;
+			}
+
+			@Override
+			public boolean onDoubleTapEvent(MotionEvent e) {
+				return false;
+			}
+
+			@Override
+			public boolean onSingleTapConfirmed(MotionEvent e) {
+				return false;
+			}
+		});
+		image.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				imageGestureDector.onTouchEvent(event);
+				return true;
+			}
+		});
+	}
+
+	private GestureDetector mGestureDector;
 	private OnGestureListener mGestureListener = new SimpleOnGestureListener() {
 
 		@Override
