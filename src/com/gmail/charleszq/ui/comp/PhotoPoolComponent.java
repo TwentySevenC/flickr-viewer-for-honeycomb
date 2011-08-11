@@ -84,7 +84,8 @@ public class PhotoPoolComponent extends FrameLayout implements
 	 * 
 	 * @param photoId
 	 */
-	public void initialize(String photoId) {
+	public void initialize(String photoId, OnTouchListener listener) {
+		mPhotoPoolListView.setOnTouchListener(listener);
 		GetPhotoPoolTask task = new GetPhotoPoolTask(this);
 		task.execute(photoId);
 	}

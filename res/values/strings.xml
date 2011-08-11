@@ -6,8 +6,6 @@
 	<string name="menu_share_title">Share</string>
 	<string name="menu_write_comment">Comment</string>
 	<string name="menu_item_setting">Settings</string>
-	<string name="menu_show_comment">Show Comments</string>
-	<string name="menu_show_exif">Show EXIF</string>
 	<string name="menu_previous_page">Previous Page</string>
 	<string name="menu_next_page">Next Page</string>
 	<string name="menu_item_ok">OK</string>
@@ -158,6 +156,10 @@
 	<string name="dp_photo_pool_desc_set">Photostream of photo set</string>
 	<string name="dp_photo_pool_desc_pool">Photostream of photo group</string>
 	<string name="task_loading_photo_pool">Loading photos from photo pool...</string>
+	
+	<string name="radio_exif_label">EXIF</string>
+	<string name="radio_comment_label">Comments</string>
+	<string name="radio_pool_label">Photo Pool</string>
 </resources>
 
 
