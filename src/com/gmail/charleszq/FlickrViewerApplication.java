@@ -7,14 +7,19 @@ package com.gmail.charleszq;
 import java.util.HashSet;
 import java.util.Set;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Handler;
+import android.util.Log;
 
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
+import com.gmail.charleszq.services.TimeUpReceiver;
 import com.gmail.charleszq.utils.Constants;
 
 /**
@@ -23,6 +28,8 @@ import com.gmail.charleszq.utils.Constants;
  * @author charles
  */
 public class FlickrViewerApplication extends Application {
+	
+	private static final String TAG = FlickrViewerApplication.class.getName();
 
 	private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
 
@@ -136,9 +143,78 @@ public class FlickrViewerApplication extends Application {
 	}
 
 	@Override
-	public void onTerminate() {
-		mMessageHandlers = null;
-		super.onTerminate();
+	public void onCreate() {
+		super.onCreate();
+		Log.d(TAG,"Application created."); //$NON-NLS-1$
+		registerTimeCheckReceiver();
+	}
+	
+	/**
+	 * Registers a broadcast receiver on the alert manager to check photo
+	 * activity or contact upload in the fixed time schedule.
+	 */
+	private void registerTimeCheckReceiver() {
+		String token = getFlickrToken();
+		if (token == null) {
+			return;
+		}
+
+		handleContactUploadService();
+		handlePhotoActivityService();
+	}
+	
+	/**
+	 * Registers alarm to check activities on my photoes.
+	 */
+	public void handlePhotoActivityService() {
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		PendingIntent pendingIntent = getPhotoCommentPendingIntent();
+		am.cancel(pendingIntent);
+		if (isPhotoActivityCheckEnabled()) {
+
+			int pIntervalInHours = getPhotoActivityCheckInterval();
+			am.setRepeating(AlarmManager.RTC,
+					System.currentTimeMillis() + 5 * 60 * 1000L,
+					pIntervalInHours * 60 * 60 * 1000L, pendingIntent);
+			Log.d(TAG, "Receiver registered to check comments on my photos."); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * Registers alaram to check contact upload.
+	 */
+	public void handleContactUploadService() {
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		PendingIntent pendingIntent = getContactUploadPendingIntent();
+		am.cancel(pendingIntent);
+		if (isContactUploadCheckEnabled()) {
+
+			int cIntervalInHours = getContactUploadCheckInterval();
+			am.setRepeating(AlarmManager.RTC,
+					System.currentTimeMillis() + 2 * 60 * 1000L,
+					cIntervalInHours * 60 * 60 * 1000L, pendingIntent);
+			Log.d(TAG, "Receiver registered to check contact upload."); //$NON-NLS-1$
+		}
+	}
+
+	private PendingIntent getContactUploadPendingIntent() {
+		Intent contactUploadIntent = new Intent(this, TimeUpReceiver.class);
+		contactUploadIntent
+				.setAction(Constants.INTENT_ACTION_CHECK_CONTACT_UPLOAD_RECEIVER);
+		PendingIntent contactUploadPendingIntent = PendingIntent.getBroadcast(
+				getApplicationContext(), 0, contactUploadIntent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		return contactUploadPendingIntent;
+	}
+
+	private PendingIntent getPhotoCommentPendingIntent() {
+		Intent photoIntent = new Intent(this, TimeUpReceiver.class);
+		photoIntent
+				.setAction(Constants.INTENT_ACTION_CHECK_PHOTO_ACTIVITY_RECEIVER);
+		PendingIntent photoPendingIntent = PendingIntent.getBroadcast(
+				getApplicationContext(), 0, photoIntent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		return photoPendingIntent;
 	}
 
 	public void registerMessageHandler(IFlickrViewerMessageHandler handler) {

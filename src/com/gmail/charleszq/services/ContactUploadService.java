@@ -82,6 +82,7 @@ public class ContactUploadService extends IntentService {
 		    Log.d(TAG,"Task runs at " + formater.format(now)); //$NON-NLS-1$
             Collection<?> col = ci.getListRecentlyUploaded(sinceDate, "all"); //$NON-NLS-1$
 			if (col.size() > 0) {
+				Log.d(TAG, col.size() + " contacts have new photos uploaded."); //$NON-NLS-1$
 				sendNotifications(col);
 			} else {
 				Log.i(TAG,"No recent upload."); //$NON-NLS-1$

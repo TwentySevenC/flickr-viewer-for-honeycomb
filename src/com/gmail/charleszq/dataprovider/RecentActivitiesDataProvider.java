@@ -23,82 +23,88 @@ import com.gmail.charleszq.utils.FlickrHelper;
  */
 public class RecentActivitiesDataProvider {
 
-    private static final int PER_PAGE = 10;
-    private static final String TAG = RecentActivitiesDataProvider.class
-            .getName();
+	private static final int PER_PAGE = 10;
+	private static final String TAG = RecentActivitiesDataProvider.class
+			.getName();
 
-    private String mToken;
-    private boolean mOnlyMyPhoto = false;
-    
-    /**
-     * The check interval of activities on my photos.
-     */
-    private int mMyPhotoInterval = Constants.SERVICE_CHECK_INTERVAL;
+	private String mToken;
+	private boolean mOnlyMyPhoto = false;
 
-    /**
-     * Constructor.
-     * 
-     * @param token the access token
-     */
-    public RecentActivitiesDataProvider(String token) {
-        this.mToken = token;
-    }
+	/**
+	 * The check interval of activities on my photos.
+	 */
+	private int mMyPhotoInterval = Constants.SERVICE_CHECK_INTERVAL;
 
-    public RecentActivitiesDataProvider(String token, boolean onlyMyPhoto) {
-        this(token);
-        this.mOnlyMyPhoto = onlyMyPhoto;
-    }
+	/**
+	 * Constructor.
+	 * 
+	 * @param token
+	 *            the access token
+	 */
+	public RecentActivitiesDataProvider(String token) {
+		this.mToken = token;
+	}
 
-    /**
-     * Returns the recent activities, including both the activities of my own
-     * photo, and that on the photos commented by me. 
-     * <p>
-     * TODO only support photo
-     * item right now, for 'photoset', support later.
-     * 
-     * @return
-     */
-    public List<Item> getRecentActivities() {
-        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
-        ActivityInterface ai = f.getActivityInterface();
+	public RecentActivitiesDataProvider(String token, boolean onlyMyPhoto) {
+		this(token);
+		this.mOnlyMyPhoto = onlyMyPhoto;
+	}
 
-        List<Item> items = new ArrayList<Item>();
-        try {
-            if (!mOnlyMyPhoto) {
-                ItemList userComments = ai.userComments(PER_PAGE, 1);
-                if (userComments != null) {
-                    for (int i = 0; i < userComments.size(); i++) {
-                        Item item = (Item) userComments.get(i);
-                        Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
-                        if ("photo".equals(item.getType())) { //$NON-NLS-1$
-                            items.add(item);
-                        }
-                    }
-                }
-            }
-            
-            String sInterval = String.valueOf(mMyPhotoInterval) + "h"; //$NON-NLS-1$
-            if( mMyPhotoInterval == 24 ) {
-            	sInterval = "1d"; //$NON-NLS-1$
-            }
-            
-            ItemList photoComments = ai.userPhotos(PER_PAGE, 1, sInterval); 
-            if (photoComments != null) {
-                for (int j = 0; j < photoComments.size(); j++) {
-                    Item item = (Item) photoComments.get(j);
-                    Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
-                    if ("photo".equals(item.getType())) { //$NON-NLS-1$
-                        items.add(item);
-                    }
-                }
-            }
+	/**
+	 * Returns the recent activities, including both the activities of my own
+	 * photo, and that on the photos commented by me.
+	 * <p>
+	 * TODO only support photo item right now, for 'photoset', support later.
+	 * 
+	 * @return
+	 */
+	public List<Item> getRecentActivities() {
+		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
+		ActivityInterface ai = f.getActivityInterface();
 
-        } catch (Exception e) {
-        }
-        return items;
-    }
-    
-    public void setCheckInterval(int interval) {
-    	this.mMyPhotoInterval = interval;
-    }
+		List<Item> items = new ArrayList<Item>();
+		try {
+			if (!mOnlyMyPhoto) {
+				ItemList userComments = ai.userComments(PER_PAGE, 1);
+				if (userComments != null) {
+					for (int i = 0; i < userComments.size(); i++) {
+						Item item = (Item) userComments.get(i);
+						Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
+						if ("photo".equals(item.getType())) { //$NON-NLS-1$
+							items.add(item);
+						}
+					}
+				}
+			}
+
+			String sInterval = String.valueOf(mMyPhotoInterval) + "h"; //$NON-NLS-1$
+			if (mMyPhotoInterval == 24) {
+				sInterval = "1d"; //$NON-NLS-1$
+			}
+
+			ItemList photoComments = ai.userPhotos(PER_PAGE, 1, sInterval);
+			if (photoComments != null) {
+				for (int j = 0; j < photoComments.size(); j++) {
+					Item item = (Item) photoComments.get(j);
+					Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
+					if ("photo".equals(item.getType())) { //$NON-NLS-1$
+						items.add(item);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+		}
+		return items;
+	}
+
+	/**
+	 * Sets the check interval which indicates that since when we're going to
+	 * check activities on my photos.
+	 * 
+	 * @param interval
+	 */
+	public void setCheckInterval(int interval) {
+		this.mMyPhotoInterval = interval;
+	}
 }
