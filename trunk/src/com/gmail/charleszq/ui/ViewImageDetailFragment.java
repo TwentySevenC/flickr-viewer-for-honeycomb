@@ -34,6 +34,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
@@ -93,6 +95,11 @@ public class ViewImageDetailFragment extends Fragment implements
 	private ViewAnimator mViewSwitcher;
 	private View mCommentProgressBar;
 	private View mExifProgressBar;
+
+	/**
+	 * The radio group to switch among exif, comment and pool views.
+	 */
+	private RadioGroup mRadioGroup;
 
 	/**
 	 * Default constructor for the framework.
@@ -175,11 +182,10 @@ public class ViewImageDetailFragment extends Fragment implements
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	private void showBigImage() {
 		FragmentManager fm = getActivity().getFragmentManager();
-		ViewBigImageFragment fragment = new ViewBigImageFragment(
-				mCurrentPhoto);
+		ViewBigImageFragment fragment = new ViewBigImageFragment(mCurrentPhoto);
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.replace(R.id.main_area, fragment);
 		ft.addToBackStack("BigImage"); //$NON-NLS-1$
@@ -254,13 +260,38 @@ public class ViewImageDetailFragment extends Fragment implements
 
 		// view swithcer
 		mViewSwitcher = (ViewAnimator) view.findViewById(R.id.switcher);
+		mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
+				getActivity(), R.anim.push_left_in));
+		mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
+				getActivity(), R.anim.push_right_out));
 		mGestureDector = new GestureDetector(mGestureListener);
-		mViewSwitcher.setOnTouchListener(mOnTouchListener);
+		list.setOnTouchListener(mOnTouchListener);
+		commentListView.setOnTouchListener(mOnTouchListener);
 
 		// photo pool
 		PhotoPoolComponent photoPool = (PhotoPoolComponent) view
 				.findViewById(R.id.photo_detail_pool);
-		photoPool.initialize(mCurrentPhoto.getId());
+		photoPool.initialize(mCurrentPhoto.getId(), mOnTouchListener);
+
+		// radio group
+		mRadioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+		mRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				switch (checkedId) {
+				case R.id.exifRadio:
+					mViewSwitcher.setDisplayedChild(0);
+					break;
+				case R.id.commentRadio:
+					mViewSwitcher.setDisplayedChild(1);
+					break;
+				case R.id.poolRadio:
+					mViewSwitcher.setDisplayedChild(2);
+					break;
+				}
+			}
+		});
 
 		// comment progress bar
 		mCommentProgressBar = view.findViewById(R.id.commentProgressBar);
@@ -298,8 +329,7 @@ public class ViewImageDetailFragment extends Fragment implements
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				imageGestureDector.onTouchEvent(event);
-				return true;
+				return imageGestureDector.onTouchEvent(event);
 			}
 		});
 	}
@@ -317,6 +347,7 @@ public class ViewImageDetailFragment extends Fragment implements
 				mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
 						getActivity(), R.anim.push_right_out));
 				mViewSwitcher.showPrevious();
+				changeRadioGroupState();
 				return true;
 			} else if (dx < -50) {
 				mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
@@ -324,9 +355,25 @@ public class ViewImageDetailFragment extends Fragment implements
 				mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
 						getActivity(), R.anim.push_left_out));
 				mViewSwitcher.showNext();
+				changeRadioGroupState();
 				return true;
 			} else {
 				return false;
+			}
+		}
+
+		private void changeRadioGroupState() {
+			int index = mViewSwitcher.getDisplayedChild();
+			switch (index) {
+			case 0:
+				mRadioGroup.check(R.id.exifRadio);
+				break;
+			case 1:
+				mRadioGroup.check(R.id.commentRadio);
+				break;
+			case 2:
+				mRadioGroup.check(R.id.poolRadio);
+				break;
 			}
 		}
 	};
@@ -335,8 +382,7 @@ public class ViewImageDetailFragment extends Fragment implements
 
 		@Override
 		public boolean onTouch(View arg0, MotionEvent event) {
-			mGestureDector.onTouchEvent(event);
-			return true;
+			return mGestureDector.onTouchEvent(event);
 		}
 
 	};
