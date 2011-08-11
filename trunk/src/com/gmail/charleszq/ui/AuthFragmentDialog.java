@@ -111,8 +111,8 @@ public class AuthFragmentDialog extends DialogFragment implements
 			app.saveFlickrAuthToken(auth.getToken(), user.getId(), user
 					.getUsername());
 
-			mainActivity.handleContactUploadService();
-			mainActivity.handlePhotoActivityService();
+			app.handleContactUploadService();
+			app.handlePhotoActivityService();
 
 			// notify main menu panel to update
 			MainNavFragment menuFragment = (MainNavFragment) getFragmentManager()

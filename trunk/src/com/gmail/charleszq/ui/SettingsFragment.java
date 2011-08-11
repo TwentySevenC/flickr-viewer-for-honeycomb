@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.gmail.charleszq.FlickrViewerActivity;
+import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageCache;
@@ -61,15 +62,16 @@ public class SettingsFragment extends PreferenceFragment implements
 		}
 
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
+		FlickrViewerApplication app = (FlickrViewerApplication) act.getApplication();
 		if (Constants.ENABLE_CONTACT_UPLOAD_NOTIF.equals(key)
 				|| Constants.NOTIF_CONTACT_UPLOAD_INTERVAL.equals(key)) {
-			act.handleContactUploadService();
+			app.handleContactUploadService();
 			return;
 		}
 
 		if (Constants.ENABLE_PHOTO_ACT_NOTIF.equals(key)
 				|| Constants.NOTIF_PHOTO_ACT_INTERVAL.equals(key)) {
-			act.handlePhotoActivityService();
+			app.handlePhotoActivityService();
 			return;
 		}
 	}
