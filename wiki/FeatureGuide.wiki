@@ -5,4 +5,4 @@
 This program is optimized for Android tablet and promise to bring you the best Flickr viewing experience possible. 
 
 
-Please go to <a href="http://market.android.com/?details=com.gmail.charelszq">android market</a> for screenshots.
+Please go to <a href="http://market.android.com/details?id=com.gmail.charleszq">android market</a> for screenshots.
