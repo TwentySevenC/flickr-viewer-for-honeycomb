@@ -4,5 +4,13 @@
 = Introduction =
 This program is optimized for Android tablet and promise to bring you the best Flickr viewing experience possible. 
 
+= Main Features =
+Browse Daily Interesting Photos;
+Browse Your Photostream
+Browse Your Contacts' Photostream
+View Image with Full Exif and Comments
+View your recent activities, like comments on your photos, comments on photos you commented
+Save a photo to your local sd card, and set it as the wallpaper
+Share any pictures with your friends via G+, Facebook, Twitter, Gmail, Sina Weibo and many more.
 
 Please go to android market for screenshots. [http://market.android.com/details?id=com.gmail.charleszq]
