@@ -5,6 +5,7 @@
 
 	<ImageView android:id="@+id/user_icon" android:layout_width="48dp"
 		android:src="@drawable/contacts" android:clickable="true"
+		style="?android:attr/imageWellStyle"
 		android:layout_height="48dp" android:layout_gravity="center_vertical" />
 	<TextView android:id="@+id/user_name" android:layout_width="0dp"
 		android:layout_marginLeft="5dp" android:layout_height="wrap_content"

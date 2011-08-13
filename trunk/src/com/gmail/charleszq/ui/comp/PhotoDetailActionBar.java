@@ -4,18 +4,22 @@
 
 package com.gmail.charleszq.ui.comp;
 
-import com.aetrion.flickr.people.User;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.event.IUserInfoFetchedListener;
-import com.gmail.charleszq.task.GetUserInfoTask;
-
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.aetrion.flickr.people.User;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.event.IUserInfoFetchedListener;
+import com.gmail.charleszq.task.GetUserInfoTask;
 
 /**
  * Represents the UI component that provides a list of actions which can be
@@ -26,7 +30,7 @@ import android.widget.TextView;
  * @author charles
  */
 public class PhotoDetailActionBar extends FrameLayout implements
-        IUserInfoFetchedListener {
+        IUserInfoFetchedListener, OnClickListener {
 
     private ImageView mBuddyIcon;
     private TextView mUserName;
@@ -57,6 +61,7 @@ public class PhotoDetailActionBar extends FrameLayout implements
         li.inflate(R.layout.photo_detail_action_bar, this, true);
 
         mBuddyIcon = (ImageView) this.findViewById(R.id.user_icon);
+        mBuddyIcon.setOnClickListener(this);
 
         mUserName = (TextView) findViewById(R.id.user_name);
         mUserName.setText(getContext().getResources().getString(R.string.loading_user_info));
@@ -79,5 +84,12 @@ public class PhotoDetailActionBar extends FrameLayout implements
         ProgressBar pbar = (ProgressBar) findViewById(R.id.progress);
         pbar.setVisibility(INVISIBLE);
     }
+
+	@Override
+	public void onClick(View v) {
+		String url = "http://www.flickr.com/photos/" + mPhotoOwner.getId(); //$NON-NLS-1$
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		this.getContext().startActivity(intent);
+	}
 
 }
