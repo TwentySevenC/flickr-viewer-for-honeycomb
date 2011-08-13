@@ -341,6 +341,11 @@ public class ViewImageDetailFragment extends Fragment implements
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 			int dx = (int) (e2.getX() - e1.getX());
+			int dy = (int) (e2.getY() - e1.getY());
+			if( Math.abs(dx) <= Math.abs(dy) ) {
+				return false;
+			}
+			
 			if (dx > 50) {
 				mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
 						getActivity(), R.anim.push_left_in));
