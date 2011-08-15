@@ -55,6 +55,7 @@ public class FlickrViewerActivity extends Activity implements
 		mSearchView = new SearchView(this);
 		mSearchView.setIconified(true);
 		mSearchView.setSubmitButtonEnabled(true);
+		mSearchView.setQueryHint("Search by Tags");
 		int option = ActionBar.DISPLAY_SHOW_CUSTOM
 				| ActionBar.DISPLAY_SHOW_HOME;
 		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
