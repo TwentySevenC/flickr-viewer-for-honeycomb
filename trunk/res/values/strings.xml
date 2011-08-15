@@ -83,6 +83,7 @@
 	<!-- Task messages -->
 	<string name="task_loading_favs">Loading favorite photos...</string>
 	<string name="task_loading_interest">Loading interesting photos...</string>
+	<string name="task_searching_tags">Searching photos...</string>
 
 	<!-- data provider desc -->
 	<string name="dp_desc_fav">My Favorite photos</string>
@@ -170,6 +171,8 @@
 	<string name="summary_gen_show_app_title">Some pages will have a very long application title,
 		then the tag search view will be very small. You can choose to show or
 		hide the application title.</string>
+		
+	<string name="app_title_tags_search_result">Tags</string>
 </resources>
 
 

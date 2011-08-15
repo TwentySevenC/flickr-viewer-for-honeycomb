@@ -22,7 +22,8 @@ import android.content.Context;
 import android.widget.Toast;
 
 /**
- * Represents the default photo list ready listener.
+ * Represents the default photo list ready listener, which shows the default
+ * photo grid view after photo fetched.
  * 
  * @author qiangz
  */
