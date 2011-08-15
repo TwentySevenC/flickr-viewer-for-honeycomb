@@ -3,11 +3,15 @@ package com.gmail.charleszq;
 import java.util.HashSet;
 import java.util.Set;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.SearchView;
 
 import com.gmail.charleszq.actions.GetActivitiesAction;
 import com.gmail.charleszq.ui.ContactsFragment;
@@ -17,13 +21,40 @@ import com.gmail.charleszq.utils.ImageCache;
 
 public class FlickrViewerActivity extends Activity {
 
+	/**
+	 * The search view to search tags.
+	 */
+	private SearchView mSearchView;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+		addTagSearchButton();
+
 		showHelpPage();
 		handleIntent();
+	}
+
+	/**
+	 * Initializes the action bar, adds the tag search view.
+	 */
+	private void addTagSearchButton() {
+		ActionBar actionBar = getActionBar();
+		mSearchView = new SearchView(this);
+		mSearchView.setIconified(true);
+		mSearchView.setSubmitButtonEnabled(true);
+		int option = ActionBar.DISPLAY_SHOW_CUSTOM
+				| ActionBar.DISPLAY_SHOW_HOME;
+		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
+				Context.MODE_APPEND);
+		boolean result = sp.getBoolean(Constants.SETTING_SHOW_APP_TITLE, true);
+		if (result) {
+			option |= ActionBar.DISPLAY_SHOW_TITLE;
+		}
+		actionBar.setDisplayOptions(option);
+		actionBar.setCustomView(mSearchView);
 	}
 
 	@Override

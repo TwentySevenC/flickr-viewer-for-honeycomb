@@ -12,6 +12,12 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<PreferenceCategory android:title="@string/pref_cat_general">
+		<CheckBoxPreference android:key="show.app.title"
+			android:defaultValue="true"
+			android:title="@string/gen_show_app_title" android:summary="@string/summary_gen_show_app_title" />
+	</PreferenceCategory>
+
 	<PreferenceCategory android:title="@string/photo_list">
 		<ListPreference android:key="photo.grid.col.count"
 			android:title="@string/photo_grid_column_count" android:summary="@string/summary_photo_grid_column_count"

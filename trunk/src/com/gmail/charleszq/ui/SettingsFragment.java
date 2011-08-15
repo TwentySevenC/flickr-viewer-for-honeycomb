@@ -4,6 +4,7 @@
 
 package com.gmail.charleszq.ui;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -72,6 +73,16 @@ public class SettingsFragment extends PreferenceFragment implements
 		if (Constants.ENABLE_PHOTO_ACT_NOTIF.equals(key)
 				|| Constants.NOTIF_PHOTO_ACT_INTERVAL.equals(key)) {
 			app.handlePhotoActivityService();
+			return;
+		}
+		
+		if( Constants.SETTING_SHOW_APP_TITLE.equals(key)) {
+			boolean result = sharedPreferences.getBoolean(key, true);
+			int option = ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM;
+			if( result ) {
+				option |= ActionBar.DISPLAY_SHOW_TITLE;
+			}
+			getActivity().getActionBar().setDisplayOptions(option);
 			return;
 		}
 	}

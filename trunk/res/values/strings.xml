@@ -73,7 +73,8 @@
 	<string name="toast_error_set_wallpaper">Error to set the photo as wallpaper.</string>
 	<string name="toast_photo_saved">Photo saved successfully.</string>
 	<string name="toast_error_save_photo">Error to save the photo.</string>
-	<string name="toast_error_get_photos">Unable to get photo list, please check your network access.</string>
+	<string name="toast_error_get_photos">Unable to get photo list, please check your network
+		access.</string>
 	<string name="toast_click_first_btn">Click the 1st button first please.</string>
 
 	<!-- Share photo intent related. -->
@@ -150,18 +151,25 @@
 	<string name="family_and_friend">Family and Friend</string>
 	<string name="all_contacts">All Contacts</string>
 	<string name="contact_with_upload">Have Recent Upload</string>
-	
+
 	<string name="error_no_network">Please make sure you have network access.</string>
 	<string name="photo_pool">Photo Pool</string>
-	<string name="dp_photo_pool_desc_set">Photostream of photo set</string>
-	<string name="dp_photo_pool_desc_pool">Photostream of photo group</string>
+	<string name="dp_photo_pool_desc_set">Photo set</string>
+	<string name="dp_photo_pool_desc_pool">Photo group</string>
 	<string name="task_loading_photo_pool">Loading photos from photo pool...</string>
-	
+
 	<string name="radio_exif_label">EXIF</string>
 	<string name="radio_comment_label">Comments</string>
 	<string name="radio_pool_label">Photo Pool</string>
 	<string name="section_photo_set">Photo Set</string>
 	<string name="section_photo_group">Photo Group</string>
+
+	<!-- General settings -->
+	<string name="pref_cat_general">General</string>
+	<string name="gen_show_app_title">Show application title</string>
+	<string name="summary_gen_show_app_title">Some pages will have a very long application title,
+		then the tag search view will be very small. You can choose to show or
+		hide the application title.</string>
 </resources>
 
 
