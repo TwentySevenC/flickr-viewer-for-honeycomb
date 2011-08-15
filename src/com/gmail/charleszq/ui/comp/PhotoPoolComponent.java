@@ -3,6 +3,7 @@
  */
 package com.gmail.charleszq.ui.comp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -90,12 +91,54 @@ public class PhotoPoolComponent extends FrameLayout implements
 		task.execute(photoId);
 	}
 
+	private SectionAdapter mSectionAdapter = new SectionAdapter() {
+
+		@Override
+		protected View getHeaderView(String caption, int index,
+				View convertView, ViewGroup parent) {
+
+			TextView result = (TextView) convertView;
+			if (convertView == null) {
+				LayoutInflater li = LayoutInflater.from(getContext());
+				result = (TextView) li.inflate(R.layout.section_header, null);
+			}
+
+			result.setText(caption);
+			return result;
+		}
+
+	};
+
 	@Override
 	public void onPhotoPoolFetched(List<PhotoPlace> photoPlaces) {
 		mProgressBar.setVisibility(View.INVISIBLE);
-		PhotoPoolAdapter adapter = new PhotoPoolAdapter(this.getContext(),
-				photoPlaces);
-		mPhotoPoolListView.setAdapter(adapter);
+
+		if (photoPlaces.isEmpty()) {
+			return;
+		}
+
+		List<PhotoPlace> sets = new ArrayList<PhotoPlace>();
+		List<PhotoPlace> groups = new ArrayList<PhotoPlace>();
+		for (PhotoPlace place : photoPlaces) {
+			if (place.getKind() == PhotoPlace.SET) {
+				sets.add(place);
+			} else {
+				groups.add(place);
+			}
+		}
+
+		mSectionAdapter.clearSections();
+		if (!sets.isEmpty()) {
+			mSectionAdapter.addSection(
+					getContext().getString(R.string.section_photo_set),
+					new PhotoPoolAdapter(getContext(), sets));
+		}
+		if (!groups.isEmpty()) {
+			mSectionAdapter.addSection(
+					getContext().getString(R.string.section_photo_group),
+					new PhotoPoolAdapter(this.getContext(), groups));
+		}
+		mPhotoPoolListView.setAdapter(mSectionAdapter);
 		mPhotoPoolListView.setOnItemClickListener(this);
 	}
 
@@ -189,10 +232,11 @@ public class PhotoPoolComponent extends FrameLayout implements
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int pos, long id) {
-		PhotoPoolAdapter adapter = (PhotoPoolAdapter) arg0.getAdapter();
-		PhotoPlace photoPlace = (PhotoPlace) adapter.getItem(pos);
-		ShowPhotoPoolAction action = new ShowPhotoPoolAction(
-				(Activity) getContext(), photoPlace, false);
-		action.execute();
+		PhotoPlace photoPlace = (PhotoPlace) mSectionAdapter.getItem(pos);
+		if (photoPlace != null) {
+			ShowPhotoPoolAction action = new ShowPhotoPoolAction(
+					(Activity) getContext(), photoPlace, false);
+			action.execute();
+		}
 	}
 }
