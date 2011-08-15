@@ -12,14 +12,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
 import com.gmail.charleszq.actions.GetActivitiesAction;
+import com.gmail.charleszq.actions.TagSearchAction;
 import com.gmail.charleszq.ui.ContactsFragment;
 import com.gmail.charleszq.ui.HelpFragment;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageCache;
 
-public class FlickrViewerActivity extends Activity {
+public class FlickrViewerActivity extends Activity implements
+		OnQueryTextListener {
 
 	/**
 	 * The search view to search tags.
@@ -55,6 +58,8 @@ public class FlickrViewerActivity extends Activity {
 		}
 		actionBar.setDisplayOptions(option);
 		actionBar.setCustomView(mSearchView);
+
+		mSearchView.setOnQueryTextListener(this);
 	}
 
 	@Override
@@ -125,5 +130,18 @@ public class FlickrViewerActivity extends Activity {
 		ft.replace(R.id.main_area, help);
 		ft.addToBackStack(Constants.HELP_BACK_STACK);
 		ft.commit();
+	}
+
+	@Override
+	public boolean onQueryTextChange(String newText) {
+		return false;
+	}
+
+	@Override
+	public boolean onQueryTextSubmit(String query) {
+		TagSearchAction action = new TagSearchAction(this, query);
+		action.execute();
+		mSearchView.setIconified(true);
+		return true;
 	}
 }
