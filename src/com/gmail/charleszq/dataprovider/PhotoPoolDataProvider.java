@@ -18,7 +18,9 @@ import com.gmail.charleszq.R;
 import com.gmail.charleszq.utils.FlickrHelper;
 
 /**
- * @author qiangz
+ * Represents the data provider to get the photos from a given photo set or photo group.
+ * 
+ * @author charles
  * 
  */
 public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
