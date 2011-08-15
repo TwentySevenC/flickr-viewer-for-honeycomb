@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 
@@ -28,6 +30,11 @@ public class FlickrViewerActivity extends Activity implements
 	 * The search view to search tags.
 	 */
 	private SearchView mSearchView;
+
+	/**
+	 * The latest query string.
+	 */
+	private String mLatestQuery;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,15 @@ public class FlickrViewerActivity extends Activity implements
 		actionBar.setCustomView(mSearchView);
 
 		mSearchView.setOnQueryTextListener(this);
+		mSearchView.setOnSearchClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (mLatestQuery != null) {
+					mSearchView.setQuery(mLatestQuery, false);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -139,6 +155,7 @@ public class FlickrViewerActivity extends Activity implements
 
 	@Override
 	public boolean onQueryTextSubmit(String query) {
+		mLatestQuery = query;
 		TagSearchAction action = new TagSearchAction(this, query);
 		action.execute();
 		mSearchView.setIconified(true);
