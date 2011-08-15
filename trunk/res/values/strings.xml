@@ -160,6 +160,8 @@
 	<string name="radio_exif_label">EXIF</string>
 	<string name="radio_comment_label">Comments</string>
 	<string name="radio_pool_label">Photo Pool</string>
+	<string name="section_photo_set">Photo Set</string>
+	<string name="section_photo_group">Photo Group</string>
 </resources>
 
 
