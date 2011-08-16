@@ -23,7 +23,7 @@ import com.gmail.charleszq.utils.FlickrHelper;
  */
 public class RecentActivitiesDataProvider {
 
-	private static final int PER_PAGE = 10;
+	private static final int PER_PAGE = 20;
 	private static final String TAG = RecentActivitiesDataProvider.class
 			.getName();
 
@@ -34,6 +34,11 @@ public class RecentActivitiesDataProvider {
 	 * The check interval of activities on my photos.
 	 */
 	private int mMyPhotoInterval = Constants.SERVICE_CHECK_INTERVAL;
+	
+	/**
+	 * The page size.
+	 */
+	private int mPageSize = -1;
 
 	/**
 	 * Constructor.
@@ -65,7 +70,7 @@ public class RecentActivitiesDataProvider {
 		List<Item> items = new ArrayList<Item>();
 		try {
 			if (!mOnlyMyPhoto) {
-				ItemList userComments = ai.userComments(PER_PAGE, 1);
+				ItemList userComments = ai.userComments(getPageSize(), 1);
 				if (userComments != null) {
 					for (int i = 0; i < userComments.size(); i++) {
 						Item item = (Item) userComments.get(i);
@@ -82,7 +87,7 @@ public class RecentActivitiesDataProvider {
 				sInterval = "1d"; //$NON-NLS-1$
 			}
 
-			ItemList photoComments = ai.userPhotos(PER_PAGE, 1, sInterval);
+			ItemList photoComments = ai.userPhotos(getPageSize(), 1, sInterval);
 			if (photoComments != null) {
 				for (int j = 0; j < photoComments.size(); j++) {
 					Item item = (Item) photoComments.get(j);
@@ -107,4 +112,15 @@ public class RecentActivitiesDataProvider {
 	public void setCheckInterval(int interval) {
 		this.mMyPhotoInterval = interval;
 	}
+
+	private int getPageSize() {
+		return mPageSize == -1 ? PER_PAGE : mPageSize;
+	}
+
+	public void setPageSize(int mPageSize) {
+		this.mPageSize = mPageSize;
+	}
+	
+	
+	
 }
