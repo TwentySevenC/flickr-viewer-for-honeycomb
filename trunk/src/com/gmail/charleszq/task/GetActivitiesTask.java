@@ -37,6 +37,8 @@ public class GetActivitiesTask extends
 	protected List<Item> doInBackground(String... arg0) {
 		String token = arg0[0];
 		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(token);
+		dp.setPageSize(30);
+		dp.setCheckInterval(24);
 		return dp.getRecentActivities();
 	}
 	
