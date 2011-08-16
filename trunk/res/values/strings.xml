@@ -173,6 +173,7 @@
 		hide the application title.</string>
 		
 	<string name="app_title_tags_search_result">Tags</string>
+	<string name="tag_search_hint">Search by Tags</string>
 </resources>
 
 
