@@ -14,6 +14,10 @@ import android.net.Uri;
 import android.os.Bundle;
 
 /**
+ * Represents the cursor to be used as the recent tag search suggestion, since
+ * <code>SearchView</code> can only use a <code>CursorAdapter</code> which will
+ * take a <code>Cursor</code>.
+ * 
  * @author charles
  * 
  */
@@ -22,6 +26,11 @@ public class RecentTagsCursor implements Cursor {
 	private List<String> mRecentTags;
 	private int mCurrentPosition = 0;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param tags the recent searched tags.
+	 */
 	public RecentTagsCursor(List<String> tags) {
 		this.mRecentTags = tags;
 	}
@@ -123,7 +132,7 @@ public class RecentTagsCursor implements Cursor {
 	@Override
 	public boolean moveToPrevious() {
 		int pos = mCurrentPosition - 1;
-		if( pos < 0 ) {
+		if (pos < 0) {
 			return false;
 		} else {
 			mCurrentPosition = pos;
