@@ -171,7 +171,12 @@
 	<string name="summary_gen_show_app_title">Some pages will have a very long application title,
 		then the tag search view will be very small. You can choose to show or
 		hide the application title.</string>
-		
+	<string name="gen_tag_search_mode">Tag search mode</string>
+	<string name="summary_gen_tag_search_mode">When 2 or more tags provided to search, check
+		this to use the \'AND\' search mode, otherwise, \'any\' mode, that is,
+		\'OR\' mode, will be used.
+	</string>
+
 	<string name="app_title_tags_search_result">Tags</string>
 	<string name="tag_search_hint">Search by Tags</string>
 </resources>

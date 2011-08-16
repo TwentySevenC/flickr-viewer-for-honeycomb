@@ -96,7 +96,7 @@ public class FlickrViewerActivity extends Activity implements
 			public boolean onSuggestionClick(int arg0) {
 				cursor.moveToPosition(arg0);
 				String tag = cursor.getString(0);
-				mSearchView.setQuery(tag, true);
+				mSearchView.setQuery(tag, false);
 				return true;
 			}
 
