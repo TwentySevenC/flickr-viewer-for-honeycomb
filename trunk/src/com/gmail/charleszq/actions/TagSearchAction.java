@@ -4,12 +4,16 @@
 package com.gmail.charleszq.actions;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.PaginationPhotoListDataProvider;
 import com.gmail.charleszq.dataprovider.TagSearchPhotoListDataProvider;
+import com.gmail.charleszq.dataprovider.TagSearchPhotoListDataProvider.TagSearchMode;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
+import com.gmail.charleszq.utils.Constants;
 
 /**
  * @author qiangz
@@ -36,7 +40,12 @@ public class TagSearchAction extends ActivityAwareAction {
 	public void execute() {
 		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 				.getApplication();
-		final PaginationPhotoListDataProvider photoListDataProvider = new TagSearchPhotoListDataProvider(mTags);
+		SharedPreferences sp = app.getSharedPreferences(
+				Constants.DEF_PREF_NAME, Context.MODE_APPEND);
+		boolean useAndMode = sp.getBoolean(Constants.SETTING_TAG_SRH_MODE_AND,
+				false);
+		final PaginationPhotoListDataProvider photoListDataProvider = new TagSearchPhotoListDataProvider(
+				mTags, useAndMode ? TagSearchMode.AND : TagSearchMode.ANY);
 		photoListDataProvider.setPageSize(app.getPageSize());
 		final AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
 				photoListDataProvider, null, mActivity.getResources()

@@ -29,6 +29,32 @@ public class TagSearchPhotoListDataProvider extends
 	private static final long serialVersionUID = -3491095189211143857L;
 
 	/**
+	 * Search mode.
+	 */
+	public static enum TagSearchMode {
+		ANY {
+
+			@Override
+			public String toString() {
+				return "any"; //$NON-NLS-1$
+			}
+
+		},
+		AND {
+			@Override
+			public String toString() {
+				return "all"; //$NON-NLS-1$
+			}
+		}
+
+	}
+
+	/**
+	 * The search mode
+	 */
+	private TagSearchMode mSearchMode = TagSearchMode.ANY;
+
+	/**
 	 * The tags to be searched.
 	 */
 	private String mTags;
@@ -36,9 +62,9 @@ public class TagSearchPhotoListDataProvider extends
 	/**
 	 * Constructor.
 	 */
-	public TagSearchPhotoListDataProvider(String tags) {
+	public TagSearchPhotoListDataProvider(String tags, TagSearchMode searchMode) {
 		this.mTags = tags;
-		prepareSearchParameter();
+		this.mSearchMode = searchMode;
 	}
 
 	/**
@@ -54,6 +80,8 @@ public class TagSearchPhotoListDataProvider extends
 		extras.add(Extras.TAGS);
 		extras.add(Extras.GEO);
 		parameter.setExtras(extras);
+		
+		parameter.setTagMode(mSearchMode.toString());
 
 		parameter.setSort(SearchParameters.DATE_POSTED_DESC);
 		return parameter;

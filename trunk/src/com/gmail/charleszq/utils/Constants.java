@@ -31,6 +31,7 @@ public final class Constants {
 	public static final String ENABLE_PHOTO_ACT_NOTIF = "notif.enable.photo.activity"; //$NON-NLS-1$
 	public static final String NOTIF_PHOTO_ACT_INTERVAL = "notif.photo.activity.interval"; //$NON-NLS-1$
 	public static final String SETTING_SHOW_APP_TITLE = "show.app.title"; //$NON-NLS-1$
+	public static final String SETTING_TAG_SRH_MODE_AND = "tag.search.mode"; //$NON-NLS-1$
 	
 	public static final String FLICKR_TOKEN = "flickr.token"; //$NON-NLS-1$
 	public static final String FLICKR_USER_ID = "flickr.user.id"; //$NON-NLS-1$
