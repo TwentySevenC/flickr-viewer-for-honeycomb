@@ -1,6 +1,8 @@
 package com.gmail.charleszq;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import android.app.ActionBar;
@@ -11,13 +13,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.widget.CursorAdapter;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.SearchView.OnSuggestionListener;
+import android.widget.SimpleCursorAdapter;
 
 import com.gmail.charleszq.actions.GetActivitiesAction;
 import com.gmail.charleszq.actions.TagSearchAction;
+import com.gmail.charleszq.model.RecentTagsCursor;
 import com.gmail.charleszq.ui.ContactsFragment;
 import com.gmail.charleszq.ui.HelpFragment;
 import com.gmail.charleszq.utils.Constants;
@@ -32,9 +36,19 @@ public class FlickrViewerActivity extends Activity implements
 	private SearchView mSearchView;
 
 	/**
-	 * The latest query string.
+	 * The list to store the recent searched tags.
 	 */
-	private String mLatestQuery;
+	private List<String> mRecentSuggestions = new ArrayList<String>();
+
+	/**
+	 * The filterd suggestion list.
+	 */
+	private List<String> mRecentSuggestionFilterd = new ArrayList<String>();
+
+	/**
+	 * The adapter for the suggestion list.
+	 */
+	private CursorAdapter mSuggestionAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +69,7 @@ public class FlickrViewerActivity extends Activity implements
 		mSearchView = new SearchView(this);
 		mSearchView.setIconified(true);
 		mSearchView.setSubmitButtonEnabled(true);
-		mSearchView.setQueryHint("Search by Tags");
+		mSearchView.setQueryHint(getString(R.string.tag_search_hint));
 		int option = ActionBar.DISPLAY_SHOW_CUSTOM
 				| ActionBar.DISPLAY_SHOW_HOME;
 		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
@@ -68,13 +82,27 @@ public class FlickrViewerActivity extends Activity implements
 		actionBar.setCustomView(mSearchView);
 
 		mSearchView.setOnQueryTextListener(this);
-		mSearchView.setOnSearchClickListener(new OnClickListener() {
+		final RecentTagsCursor cursor = new RecentTagsCursor(
+				mRecentSuggestionFilterd);
+		mSuggestionAdapter = new SimpleCursorAdapter(
+				this,
+				android.R.layout.simple_list_item_1,
+				cursor,
+				new String[] { "_id" }, new int[] { android.R.id.text1 }, CursorAdapter.FLAG_AUTO_REQUERY); //$NON-NLS-1$
+		mSearchView.setSuggestionsAdapter(mSuggestionAdapter);
+		mSearchView.setOnSuggestionListener(new OnSuggestionListener() {
 
 			@Override
-			public void onClick(View v) {
-				if (mLatestQuery != null) {
-					mSearchView.setQuery(mLatestQuery, false);
-				}
+			public boolean onSuggestionClick(int arg0) {
+				cursor.moveToPosition(arg0);
+				String tag = cursor.getString(0);
+				mSearchView.setQuery(tag, true);
+				return true;
+			}
+
+			@Override
+			public boolean onSuggestionSelect(int arg0) {
+				return false;
 			}
 		});
 	}
@@ -151,12 +179,25 @@ public class FlickrViewerActivity extends Activity implements
 
 	@Override
 	public boolean onQueryTextChange(String newText) {
-		return false;
+		if (newText.trim().length() > 0) {
+			mRecentSuggestionFilterd.clear();
+			for (String tag : mRecentSuggestions) {
+				if (tag.contains(newText)) {
+					mRecentSuggestionFilterd.add(tag);
+				}
+			}
+			mSuggestionAdapter.notifyDataSetChanged();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean onQueryTextSubmit(String query) {
-		mLatestQuery = query;
+		if (!mRecentSuggestions.contains(query)) {
+			mRecentSuggestions.add(query);
+		}
 		TagSearchAction action = new TagSearchAction(this, query);
 		action.execute();
 		mSearchView.setIconified(true);
