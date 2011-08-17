@@ -1,0 +1,114 @@
+/**
+ * 
+ */
+package com.gmail.charleszq.fapi;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.aetrion.flickr.FlickrException;
+import com.aetrion.flickr.Parameter;
+import com.aetrion.flickr.Response;
+import com.aetrion.flickr.Transport;
+import com.aetrion.flickr.util.XMLUtilities;
+import com.gmail.charleszq.model.FlickrGallery;
+
+/**
+ * Represents the interface to get the gallery information from flickr. To get
+ * an instance of this class, use the following way: <br/>
+ * GalleryInterface gi = FlickrHelper.getInstance().getGalleryInterface();
+ * 
+ * @author charles
+ * 
+ */
+public class GalleryInterface {
+
+	private static final String KEY_METHOD = "method"; //$NON-NLS-1$
+	private static final String KEY_API_KEY = "api_key"; //$NON-NLS-1$
+	private static final String KEY_PER_PAGE = "per_page"; //$NON-NLS-1$
+	private static final String KEY_PAGE = "page"; //$NON-NLS-1$
+	private static final String KEY_USER_ID = "user_id"; //$NON-NLS-1$
+
+	private static final String METHOD_GET_LIST = "flickr.galleries.getList"; //$NON-NLS-1$
+
+	/**
+	 * The api key.
+	 */
+	private String mApiKey;
+
+	/**
+	 * Only support REST for now.
+	 */
+	private Transport mTransport;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param apiKey
+	 * @param transport
+	 */
+	public GalleryInterface(String apiKey, Transport transport) {
+		this.mApiKey = apiKey;
+		this.mTransport = transport;
+	}
+
+	/**
+	 * Returns the gallery list of a given user.
+	 * 
+	 * @param userId
+	 * @param pageSize
+	 * @param pageNo
+	 * @return
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws FlickrException
+	 */
+	public List<FlickrGallery> getGalleries(String userId, int perPage, int page)
+			throws IOException, SAXException, FlickrException {
+		List<Parameter> parameters = new ArrayList<Parameter>();
+		parameters.add(new Parameter(KEY_METHOD, METHOD_GET_LIST));
+		parameters.add(new Parameter(KEY_API_KEY, mApiKey));
+		parameters.add(new Parameter(KEY_USER_ID, userId));
+		if (perPage > 0) {
+			parameters
+					.add(new Parameter(KEY_PER_PAGE, String.valueOf(perPage)));
+		}
+		if (page > 0) {
+			parameters.add(new Parameter(KEY_PAGE, String.valueOf(page)));
+		}
+
+		List<FlickrGallery> galleries = new ArrayList<FlickrGallery>();
+		Response response = mTransport.get(mTransport.getPath(), parameters);
+		if (response.isError()) {
+			throw new FlickrException(response.getErrorCode(),
+					response.getErrorMessage());
+		}
+		Element galleriesElement = response.getPayload();
+		NodeList galleryNodes = galleriesElement
+				.getElementsByTagName("gallery"); //$NON-NLS-1$
+		for (int i = 0; i < galleryNodes.getLength(); i++) {
+			Element galleryElement = (Element) galleryNodes.item(i);
+			FlickrGallery gallery = new FlickrGallery();
+			gallery.setGalleryId(galleryElement.getAttribute("id")); //$NON-NLS-1$
+			gallery.setGalleryUrl(galleryElement.getAttribute("url")); //$NON-NLS-1$
+			gallery.setOwnerId(galleryElement.getAttribute("owner")); //$NON-NLS-1$
+			gallery.setPrimaryPhotoId(galleryElement
+					.getAttribute("primary_photo_id")); //$NON-NLS-1$
+			gallery.setPhotoCount(Integer.parseInt(galleryElement
+					.getAttribute("count_photos"))); //$NON-NLS-1$
+			String title = XMLUtilities.getChildValue(galleryElement, "title"); //$NON-NLS-1$
+			gallery.setTitle(title == null ? "" : title); //$NON-NLS-1$
+
+			String desc = XMLUtilities.getChildValue(galleryElement,
+					"description"); //$NON-NLS-1$
+			gallery.setDescription(desc == null ? "" : desc); //$NON-NLS-1$
+			galleries.add(gallery);
+		}
+		return galleries;
+	}
+}

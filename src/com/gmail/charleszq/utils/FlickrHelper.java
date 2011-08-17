@@ -9,6 +9,7 @@ import com.aetrion.flickr.auth.Auth;
 import com.aetrion.flickr.auth.Permission;
 import com.aetrion.flickr.interestingness.InterestingnessInterface;
 import com.aetrion.flickr.photos.PhotosInterface;
+import com.gmail.charleszq.fapi.GalleryInterface;
 
 public final class FlickrHelper {
 
@@ -36,7 +37,7 @@ public final class FlickrHelper {
 			return null;
 		}
 	}
-	
+
 	public Flickr getFlickrAuthed(String token) {
 		Flickr f = getFlickr();
 		RequestContext requestContext = RequestContext.getRequestContext();
@@ -44,10 +45,10 @@ public final class FlickrHelper {
 		auth.setPermission(Permission.WRITE);
 		auth.setToken(token);
 		requestContext.setAuth(auth);
-		
+
 		return f;
 	}
-	
+
 	public InterestingnessInterface getInterestingInterface() {
 		Flickr f = getFlickr();
 		if (f != null) {
@@ -62,6 +63,14 @@ public final class FlickrHelper {
 		if (f != null) {
 			return f.getPhotosInterface();
 		} else {
+			return null;
+		}
+	}
+
+	public GalleryInterface getGalleryInterface() {
+		try {
+			return new GalleryInterface(API_KEY, new REST());
+		} catch (ParserConfigurationException e) {
 			return null;
 		}
 	}
