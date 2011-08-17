@@ -203,9 +203,7 @@ public class PhotoPoolComponent extends FrameLayout implements
 				}
 			}
 
-			if (photoPoolId == null) {
-				// poolIcon.setImageDrawable(null);
-			} else {
+			if (photoPoolId != null) {
 				Bitmap cacheBitmap = ImageCache.getFromCache(photoPoolId);
 				if (cacheBitmap != null) {
 					poolIcon.setImageBitmap(cacheBitmap);
