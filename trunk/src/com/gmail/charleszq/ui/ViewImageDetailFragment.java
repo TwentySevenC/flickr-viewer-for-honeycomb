@@ -45,6 +45,7 @@ import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.tags.Tag;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.actions.AddFavAction;
 import com.gmail.charleszq.actions.IAction;
 import com.gmail.charleszq.actions.SaveImageWallpaperAction;
 import com.gmail.charleszq.actions.SharePhotoAction;
@@ -54,7 +55,6 @@ import com.gmail.charleszq.actions.ShowWriteCommentAction;
 import com.gmail.charleszq.event.IExifListener;
 import com.gmail.charleszq.event.IUserCommentsFetchedListener;
 import com.gmail.charleszq.model.UserComment;
-import com.gmail.charleszq.task.AddPhotoAsFavoriteTask;
 import com.gmail.charleszq.task.GetPhotoCommentsTask;
 import com.gmail.charleszq.task.GetPhotoExifTask;
 import com.gmail.charleszq.task.ImageDownloadTask;
@@ -155,9 +155,17 @@ public class ViewImageDetailFragment extends Fragment implements
 			}
 			return true;
 		case R.id.menu_item_add_as_fav:
-			AddPhotoAsFavoriteTask task = new AddPhotoAsFavoriteTask(
-					getActivity());
-			task.execute(mCurrentPhoto.getId());
+			app = (FlickrViewerApplication) getActivity().getApplication();
+			token = app.getFlickrToken();
+			AddFavAction addfavAction = new AddFavAction(getActivity(),
+					mCurrentPhoto.getId());
+			if (token == null) {
+				ShowAuthDialogAction dlgact = new ShowAuthDialogAction(
+						getActivity(), addfavAction);
+				dlgact.execute();
+			} else {
+				addfavAction.execute();
+			}
 			return true;
 		case R.id.menu_item_show_owner_photos:
 			ShowPeoplePhotosAction showOwnerPhotosAction = new ShowPeoplePhotosAction(
@@ -342,10 +350,10 @@ public class ViewImageDetailFragment extends Fragment implements
 				float velocityY) {
 			int dx = (int) (e2.getX() - e1.getX());
 			int dy = (int) (e2.getY() - e1.getY());
-			if( Math.abs(dx) <= Math.abs(dy) ) {
+			if (Math.abs(dx) <= Math.abs(dy)) {
 				return false;
 			}
-			
+
 			if (dx > 50) {
 				mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
 						getActivity(), R.anim.push_left_in));
