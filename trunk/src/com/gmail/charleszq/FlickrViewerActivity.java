@@ -15,15 +15,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.CursorAdapter;
 import android.widget.SearchView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SearchView.OnSuggestionListener;
-import android.widget.SimpleCursorAdapter;
 
 import com.gmail.charleszq.actions.GetActivitiesAction;
 import com.gmail.charleszq.actions.TagSearchAction;
 import com.gmail.charleszq.model.RecentTagsCursor;
 import com.gmail.charleszq.ui.ContactsFragment;
 import com.gmail.charleszq.ui.HelpFragment;
+import com.gmail.charleszq.ui.MainNavFragment;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageCache;
 
@@ -57,7 +58,7 @@ public class FlickrViewerActivity extends Activity implements
 
 		addTagSearchButton();
 
-		showHelpPage();
+		initializeFragments();
 		handleIntent();
 	}
 
@@ -168,12 +169,18 @@ public class FlickrViewerActivity extends Activity implements
 		getActionBar().setTitle(sb.toString());
 	}
 
-	private void showHelpPage() {
-		HelpFragment help = new HelpFragment();
+	private void initializeFragments() {
+		
 		FragmentManager fm = getFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
+
+		MainNavFragment menu = new MainNavFragment();
+		ft.replace(R.id.nav_frg, menu);
+		
+		HelpFragment help = new HelpFragment();
 		ft.replace(R.id.main_area, help);
-		ft.addToBackStack(Constants.HELP_BACK_STACK);
+		
+//		ft.addToBackStack(Constants.HELP_BACK_STACK);
 		ft.commit();
 	}
 
