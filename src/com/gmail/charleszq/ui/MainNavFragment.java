@@ -21,14 +21,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -50,12 +50,12 @@ import com.gmail.charleszq.utils.ImageUtils;
  * @author charles
  */
 public class MainNavFragment extends Fragment {
-
+	
 	/**
 	 * the handler.
 	 */
 	private Handler mHandler = new Handler();
-
+	
 	/**
 	 * The item click listner to handle the main menus.
 	 */
@@ -64,7 +64,9 @@ public class MainNavFragment extends Fragment {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 
-			cleanFragmentBackStack();
+			if (position != 2) {
+				cleanFragmentBackStack();
+			}
 
 			ListView list = (ListView) parent;
 			list.setItemChecked(position, true);
@@ -91,7 +93,15 @@ public class MainNavFragment extends Fragment {
 				}
 
 				break;
-			case 2:
+			case 2: // my photo sets and groups
+				FragmentManager fm = getActivity().getFragmentManager();
+				FragmentTransaction ft2 = fm.beginTransaction();
+				Fragment setFragment = new PhotoCollectionFragment();
+				ft2.replace(R.id.nav_frg, setFragment);
+				ft2.addToBackStack(Constants.HELP_BACK_STACK);
+				ft2.commit();
+				break;
+			case 3: // contacts
 				ShowMyContactsAction contactAction = new ShowMyContactsAction(
 						getActivity());
 				if (token == null) {
@@ -102,7 +112,7 @@ public class MainNavFragment extends Fragment {
 					contactAction.execute();
 				}
 				break;
-			case 3:
+			case 4:
 				ShowFavoritesAction favAction = new ShowFavoritesAction(
 						getActivity(), null);
 				if (token == null) {
@@ -113,7 +123,7 @@ public class MainNavFragment extends Fragment {
 					favAction.execute();
 				}
 				break;
-			case 4:
+			case 5:
 				GetActivitiesAction aaction = new GetActivitiesAction(
 						getActivity());
 				if (token == null) {
@@ -124,7 +134,7 @@ public class MainNavFragment extends Fragment {
 					aaction.execute();
 				}
 				break;
-			case 5:
+			case 6:
 				Fragment frag = new SettingsFragment();
 				FragmentTransaction ft = getFragmentManager()
 						.beginTransaction();
@@ -161,7 +171,7 @@ public class MainNavFragment extends Fragment {
 				createNavCommandItems());
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(mItemClickListener);
-
+		
 		handleUserPanel(view);
 		return view;
 	}
@@ -196,11 +206,10 @@ public class MainNavFragment extends Fragment {
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						getActivity());
 				builder.setMessage(
-						getActivity().getResources().getString(
-								R.string.logout_msg))
-						.setCancelable(false)
+						getActivity().getString(
+								R.string.logout_msg)).setCancelable(false)
 						.setPositiveButton(
-								getActivity().getResources().getString(
+								getActivity().getString(
 										R.string.btn_yes),
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
@@ -208,9 +217,8 @@ public class MainNavFragment extends Fragment {
 										app.logout();
 										userPanel.setVisibility(View.INVISIBLE);
 									}
-								})
-						.setNegativeButton(
-								getActivity().getResources().getString(
+								}).setNegativeButton(
+								getActivity().getString(
 										R.string.btn_no),
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
@@ -349,37 +357,42 @@ public class MainNavFragment extends Fragment {
 		List<CommandItem> list = new ArrayList<CommandItem>();
 		CommandItem item = new CommandItem();
 		item.imageResId = R.drawable.interesting;
-		item.title = getActivity().getResources().getString(
+		item.title = getActivity().getString(
 				R.string.item_interesting_photo);
 		list.add(item);
 
 		item = new CommandItem();
 		item.imageResId = R.drawable.photos;
-		item.title = getActivity().getResources().getString(
+		item.title = getActivity().getString(
 				R.string.item_my_photo);
 		list.add(item);
 
 		item = new CommandItem();
+		item.imageResId = R.drawable.gallery;
+		item.title = getActivity().getString(R.string.item_my_sets);
+		list.add(item);
+
+		item = new CommandItem();
 		item.imageResId = R.drawable.contacts;
-		item.title = getActivity().getResources().getString(
+		item.title = getActivity().getString(
 				R.string.item_my_contact);
 		list.add(item);
 
 		item = new CommandItem();
 		item.imageResId = R.drawable.myfavorite;
-		item.title = getActivity().getResources().getString(
+		item.title = getActivity().getString(
 				R.string.item_my_fav);
 		list.add(item);
 
 		item = new CommandItem();
 		item.imageResId = R.drawable.activities;
-		item.title = getActivity().getResources().getString(
+		item.title = getActivity().getString(
 				R.string.item_recent_activities);
 		list.add(item);
 
 		item = new CommandItem();
 		item.imageResId = R.drawable.settings;
-		item.title = getActivity().getResources().getString(
+		item.title = getActivity().getString(
 				R.string.item_settings);
 		list.add(item);
 

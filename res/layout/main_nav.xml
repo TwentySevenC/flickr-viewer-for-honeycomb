@@ -6,9 +6,6 @@
 		android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:padding="50dp" />
-	<View android:layout_width="1dp" android:layout_height="fill_parent"
-		android:layout_alignParentRight="true" android:background="@drawable/sep" />
-
 	<LinearLayout android:id="@+id/user_panel"
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:padding="50dp"
