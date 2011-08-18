@@ -15,6 +15,7 @@ import com.aetrion.flickr.photos.PhotoList;
 import com.aetrion.flickr.photos.PhotoPlace;
 import com.aetrion.flickr.photosets.PhotosetsInterface;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.fapi.GalleryInterface;
 import com.gmail.charleszq.ui.comp.UserPhotoCollectionComponent.ListItemAdapterPhotoPlace;
 import com.gmail.charleszq.utils.FlickrHelper;
 
@@ -53,7 +54,7 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 
 		Set<String> extras = new HashSet<String>();
 		extras.add(Extras.TAGS);
-		extras.add(Extras.GEO);
+//		extras.add(Extras.GEO);
 		extras.add(Extras.OWNER_NAME);
 
 		Flickr f = FlickrHelper.getInstance().getFlickr();
@@ -67,7 +68,10 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 			return gi.getPhotos(mPhotoPlaceId, null, extras, mPageSize,
 					mPageNumber);
 		case ListItemAdapterPhotoPlace.PHOTO_GALLERY:
-			return new PhotoList();
+			GalleryInterface galleryInterface = FlickrHelper.getInstance()
+					.getGalleryInterface();
+			return galleryInterface.getPhotos(mPhotoPlaceId, extras, mPageSize,
+					mPageNumber);
 
 		}
 		return null;
