@@ -98,7 +98,7 @@ public class MainNavFragment extends Fragment {
 				FragmentTransaction ft2 = fm.beginTransaction();
 				Fragment setFragment = new PhotoCollectionFragment();
 				ft2.replace(R.id.nav_frg, setFragment);
-				ft2.addToBackStack(Constants.HELP_BACK_STACK);
+				ft2.addToBackStack(Constants.USER_COLL_BACK_STACK);
 				ft2.commit();
 				break;
 			case 3: // contacts
@@ -148,8 +148,6 @@ public class MainNavFragment extends Fragment {
 
 	private void cleanFragmentBackStack() {
 		FragmentManager fm = getFragmentManager();
-		fm.popBackStack(Constants.HELP_BACK_STACK,
-				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		fm.popBackStack(Constants.PHOTO_LIST_BACK_STACK,
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		fm.popBackStack(Constants.SETTING_BACK_STACK,
