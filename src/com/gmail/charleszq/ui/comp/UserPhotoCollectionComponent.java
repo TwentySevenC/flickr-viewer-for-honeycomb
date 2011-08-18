@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -34,6 +35,7 @@ import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IListItemAdapter;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
+import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 
@@ -46,8 +48,9 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  */
 public class UserPhotoCollectionComponent extends FrameLayout implements
 		IUserPhotoCollectionFetched, OnItemClickListener {
-	
-	private static final String TAG = UserPhotoCollectionComponent.class.getName();
+
+	private static final String TAG = UserPhotoCollectionComponent.class
+			.getName();
 
 	/**
 	 * The list view
@@ -58,7 +61,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	 * the progress bar.
 	 */
 	private ProgressBar mProgressBar;
-	
+
 	private UserPhotoCollectionTask task;
 
 	/**
@@ -100,7 +103,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	}
 
 	public void initialize(String userId, String token) {
-		if( task != null && !task.isCancelled()) {
+		if (task != null && !task.isCancelled()) {
 			task.cancel(true);
 		}
 		task = new UserPhotoCollectionTask(this);
@@ -233,36 +236,41 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	@Override
 	public void onItemClick(AdapterView<?> parentView, View view, int pos,
 			long id) {
+
+		ListView list = (ListView) parentView;
+		list.setItemChecked(pos, true);
+
 		IListItemAdapter item = (IListItemAdapter) mSectionAdapter.getItem(pos);
 		PhotoPlace photoPlace = new ListItemAdapterPhotoPlace(item);
 		if (photoPlace != null) {
+			FragmentManager fm = ((Activity) getContext()).getFragmentManager();
+			fm.popBackStack(Constants.PHOTO_LIST_BACK_STACK,
+					FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			ShowPhotoPoolAction action = new ShowPhotoPoolAction(
 					(Activity) getContext(), photoPlace, false);
 			action.execute();
 		}
 	}
-	
+
 	@Override
 	protected void onDetachedFromWindow() {
-		if( task != null && !task.isCancelled() ) {
+		if (task != null && !task.isCancelled()) {
 			Log.d(TAG, "cancel the running task."); //$NON-NLS-1$
 			task.cancel(true);
 		}
 		super.onDetachedFromWindow();
 	}
 
-
-
 	public static class ListItemAdapterPhotoPlace extends PhotoPlace {
 
 		public static final int PHOTO_GALLERY = 1002;
-		
+
 		public ListItemAdapterPhotoPlace(IListItemAdapter item) {
 			super(PHOTO_GALLERY, item.getId(), item.getTitle());
 			Object obj = item.getObject();
-			if( obj instanceof FlickrGallery ) {
+			if (obj instanceof FlickrGallery) {
 				setKind(PHOTO_GALLERY);
-			} else if( obj instanceof Photoset ) {
+			} else if (obj instanceof Photoset) {
 				setKind(PhotoPlace.SET);
 			} else {
 				setKind(PhotoPlace.POOL);
