@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,8 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  */
 public class UserPhotoCollectionComponent extends FrameLayout implements
 		IUserPhotoCollectionFetched, OnItemClickListener {
+	
+	private static final String TAG = UserPhotoCollectionComponent.class.getName();
 
 	/**
 	 * The list view
@@ -55,6 +58,8 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	 * the progress bar.
 	 */
 	private ProgressBar mProgressBar;
+	
+	private UserPhotoCollectionTask task;
 
 	/**
 	 * @param context
@@ -95,7 +100,10 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	}
 
 	public void initialize(String userId, String token) {
-		UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
+		if( task != null && !task.isCancelled()) {
+			task.cancel(true);
+		}
+		task = new UserPhotoCollectionTask(this);
 		task.execute(userId, token);
 	}
 
@@ -233,6 +241,17 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 			action.execute();
 		}
 	}
+	
+	@Override
+	protected void onDetachedFromWindow() {
+		if( task != null && !task.isCancelled() ) {
+			Log.d(TAG, "cancel the running task."); //$NON-NLS-1$
+			task.cancel(true);
+		}
+		super.onDetachedFromWindow();
+	}
+
+
 
 	public static class ListItemAdapterPhotoPlace extends PhotoPlace {
 
