@@ -2,7 +2,8 @@
 <resources>
 	<string name="app_name">Flickr Viewer HD</string>
 
-	<string name="menu_item_back_main_menu">Main Menu</string>
+	<string name="menu_item_back_main_menu">Back to Main Menu</string>
+	<string name="menu_item_refresh_user_collection">Refresh Gallery/Set/Group List</string>
 	<string name="menu_item_remove_fav">Remove from Favorites</string>
 	<string name="menu_share_title">Share</string>
 	<string name="menu_write_comment">Comment</string>

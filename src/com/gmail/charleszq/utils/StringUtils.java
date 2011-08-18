@@ -84,10 +84,17 @@ public final class StringUtils {
 		}
 
 		StringBuilder builder = new StringBuilder();
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		String line;
-		while ((line = reader.readLine()) != null) {
-			builder.append(line);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+			}
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
 		}
 
 		List<IListItemAdapter> list = new ArrayList<IListItemAdapter>();
@@ -106,11 +113,16 @@ public final class StringUtils {
 			array.put(toJson(item));
 		}
 
-		// TODO write array.toString() to file.
-		FileWriter writer = new FileWriter(file);
-		writer.write(array.toString());
-		writer.flush();
-		writer.close();
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(file);
+			writer.write(array.toString());
+			writer.flush();
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
 	}
 
 	private static JSONObject toJson(IListItemAdapter item)

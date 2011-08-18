@@ -4,6 +4,7 @@
 
 package com.gmail.charleszq;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
@@ -28,7 +30,7 @@ import com.gmail.charleszq.utils.Constants;
  * @author charles
  */
 public class FlickrViewerApplication extends Application {
-	
+
 	private static final String TAG = FlickrViewerApplication.class.getName();
 
 	private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
@@ -86,7 +88,8 @@ public class FlickrViewerApplication extends Application {
 	 */
 	public int getContactUploadCheckInterval() {
 		String interval = getSharedPreferenceValue(
-				Constants.NOTIF_CONTACT_UPLOAD_INTERVAL, String.valueOf(Constants.SERVICE_CHECK_INTERVAL));
+				Constants.NOTIF_CONTACT_UPLOAD_INTERVAL, String
+						.valueOf(Constants.SERVICE_CHECK_INTERVAL));
 		return Integer.parseInt(interval);
 	}
 
@@ -98,7 +101,8 @@ public class FlickrViewerApplication extends Application {
 	 */
 	public int getPhotoActivityCheckInterval() {
 		String interval = getSharedPreferenceValue(
-				Constants.NOTIF_PHOTO_ACT_INTERVAL, String.valueOf(Constants.SERVICE_CHECK_INTERVAL)); 
+				Constants.NOTIF_PHOTO_ACT_INTERVAL, String
+						.valueOf(Constants.SERVICE_CHECK_INTERVAL));
 		return Integer.parseInt(interval);
 	}
 
@@ -125,6 +129,16 @@ public class FlickrViewerApplication extends Application {
 	 * Clear the user token
 	 */
 	public void logout() {
+		// delete the user cache file.
+		String token = getFlickrToken();
+		File root = new File(Environment.getExternalStorageDirectory(),
+				Constants.SD_CARD_FOLDER_NAME);
+		if (root.exists()) {
+			File cacheFile = new File(root, token + ".dat"); //$NON-NLS-1$
+			if (cacheFile.exists()) {
+				cacheFile.delete();
+			}
+		}
 		saveFlickrAuthToken(null, null, null);
 	}
 
@@ -145,10 +159,10 @@ public class FlickrViewerApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.d(TAG,"Application created."); //$NON-NLS-1$
+		Log.d(TAG, "Application created."); //$NON-NLS-1$
 		registerTimeCheckReceiver();
 	}
-	
+
 	/**
 	 * Registers a broadcast receiver on the alert manager to check photo
 	 * activity or contact upload in the fixed time schedule.
@@ -162,7 +176,7 @@ public class FlickrViewerApplication extends Application {
 		handleContactUploadService();
 		handlePhotoActivityService();
 	}
-	
+
 	/**
 	 * Registers alarm to check activities on my photoes.
 	 */

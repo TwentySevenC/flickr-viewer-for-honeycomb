@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -17,13 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.aetrion.flickr.photos.PhotoPlace;
 import com.aetrion.flickr.photosets.Photoset;
@@ -31,11 +30,10 @@ import com.gmail.charleszq.R;
 import com.gmail.charleszq.actions.ShowPhotoPoolAction;
 import com.gmail.charleszq.model.FlickrGallery;
 import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask;
+import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IListItemAdapter;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
-import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 
@@ -62,7 +60,13 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	 */
 	private ProgressBar mProgressBar;
 
+	/**
+	 * The async task to fetch the gallery/set/group list of this user.
+	 */
 	private UserPhotoCollectionTask task;
+
+	private String mUserId;
+	private String mToken;
 
 	/**
 	 * @param context
@@ -103,11 +107,26 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	}
 
 	public void initialize(String userId, String token) {
+		this.mUserId = userId;
+		this.mToken = token;
+
 		if (task != null && !task.isCancelled()) {
 			task.cancel(true);
 		}
 		task = new UserPhotoCollectionTask(this);
 		task.execute(userId, token);
+	}
+
+	/**
+	 * Refreshes the collection list from the server side.
+	 */
+	public void refreshList() {
+		if (mUserId == null || mToken == null) {
+			return;
+		}
+		mProgressBar.setVisibility(View.VISIBLE);
+		task = new UserPhotoCollectionTask(this,true);
+		task.execute(mUserId, mToken);
 	}
 
 	@Override
@@ -243,9 +262,6 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		IListItemAdapter item = (IListItemAdapter) mSectionAdapter.getItem(pos);
 		PhotoPlace photoPlace = new ListItemAdapterPhotoPlace(item);
 		if (photoPlace != null) {
-			FragmentManager fm = ((Activity) getContext()).getFragmentManager();
-			fm.popBackStack(Constants.PHOTO_LIST_BACK_STACK,
-					FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			ShowPhotoPoolAction action = new ShowPhotoPoolAction(
 					(Activity) getContext(), photoPlace, false);
 			action.execute();
