@@ -266,25 +266,14 @@ public class ViewImageDetailFragment extends Fragment implements
 		mCommentAdapter = new UserCommentAdapter(getActivity(), this.mComments);
 		commentListView.setAdapter(mCommentAdapter);
 
-		// view swithcer
-		mViewSwitcher = (ViewAnimator) view.findViewById(R.id.switcher);
-		mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
-				getActivity(), R.anim.push_left_in));
-		mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
-				getActivity(), R.anim.push_right_out));
-		mGestureDector = new GestureDetector(mGestureListener);
-		list.setOnTouchListener(mOnTouchListener);
-		commentListView.setOnTouchListener(mOnTouchListener);
-
-		// photo pool
-		PhotoPoolComponent photoPool = (PhotoPoolComponent) view
-				.findViewById(R.id.photo_detail_pool);
-		photoPool.initialize(mCurrentPhoto.getId(), mOnTouchListener);
-
 		// radio group
 		mRadioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+		
+		// view swithcer
+		mViewSwitcher = (ViewAnimator) view.findViewById(R.id.switcher);
+		
 		mRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
+			
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				switch (checkedId) {
@@ -300,6 +289,20 @@ public class ViewImageDetailFragment extends Fragment implements
 				}
 			}
 		});
+		
+		mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
+				getActivity(), R.anim.push_left_in));
+		mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
+				getActivity(), R.anim.push_right_out));
+		mGestureDector = new GestureDetector(mGestureListener);
+		list.setOnTouchListener(mOnTouchListener);
+		commentListView.setOnTouchListener(mOnTouchListener);
+
+		// photo pool
+		PhotoPoolComponent photoPool = (PhotoPoolComponent) view
+				.findViewById(R.id.photo_detail_pool);
+		photoPool.initialize(mCurrentPhoto.getId(), mOnTouchListener);
+
 
 		// comment progress bar
 		mCommentProgressBar = view.findViewById(R.id.commentProgressBar);

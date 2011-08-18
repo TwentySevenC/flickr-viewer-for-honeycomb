@@ -2,6 +2,7 @@
 <resources>
 	<string name="app_name">Flickr Viewer HD</string>
 
+	<string name="menu_item_back_main_menu">Main Menu</string>
 	<string name="menu_item_remove_fav">Remove from Favorites</string>
 	<string name="menu_share_title">Share</string>
 	<string name="menu_write_comment">Comment</string>
@@ -165,6 +166,7 @@
 	<string name="radio_pool_label">Photo Pool</string>
 	<string name="section_photo_set">Photo Set</string>
 	<string name="section_photo_group">Photo Group</string>
+	<string name="section_photo_gallery">Gallery</string>
 
 	<!-- General settings -->
 	<string name="pref_cat_general">General</string>
