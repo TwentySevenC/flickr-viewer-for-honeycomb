@@ -3,13 +3,19 @@
  */
 package com.gmail.charleszq.task;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.util.Log;
 
 import com.aetrion.flickr.groups.Group;
 import com.aetrion.flickr.groups.pools.PoolsInterface;
@@ -20,7 +26,9 @@ import com.gmail.charleszq.R;
 import com.gmail.charleszq.fapi.GalleryInterface;
 import com.gmail.charleszq.model.FlickrGallery;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IListItemAdapter;
+import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.charleszq.utils.StringUtils;
 
 /**
  * Represents the task to fetch the collection of a user, his gallery list,
@@ -34,6 +42,8 @@ import com.gmail.charleszq.utils.FlickrHelper;
 public class UserPhotoCollectionTask extends
 		AsyncTask<String, Integer, Map<Integer, List<IListItemAdapter>>> {
 
+	private static final String TAG = UserPhotoCollectionTask.class.getName();
+
 	private IUserPhotoCollectionFetched mListener;
 
 	/**
@@ -45,14 +55,61 @@ public class UserPhotoCollectionTask extends
 		this.mListener = listener;
 	}
 
+	private Map<Integer, List<IListItemAdapter>> tryGetFromCache()
+			throws IOException, JSONException {
+		File root = new File(Environment.getExternalStorageDirectory(),
+				Constants.SD_CARD_FOLDER_NAME);
+		File cacheFile = new File(root, Constants.USER_COL_CACHE_FILE_NAME);
+		if (!cacheFile.exists()) {
+			return null;
+		}
+
+		List<IListItemAdapter> list = StringUtils.readItemsFromCache(cacheFile);
+		Map<Integer, List<IListItemAdapter>> result = new LinkedHashMap<Integer, List<IListItemAdapter>>();
+
+		List<IListItemAdapter> galleries = new ArrayList<IListItemAdapter>();
+		List<IListItemAdapter> sets = new ArrayList<IListItemAdapter>();
+		List<IListItemAdapter> groups = new ArrayList<IListItemAdapter>();
+		for (IListItemAdapter item : list) {
+			if (FlickrGallery.class.getName().equals(item.getObjectClassType())) {
+				galleries.add(item);
+			} else if (Photoset.class.getName().equals(
+					item.getObjectClassType())) {
+				sets.add(item);
+			} else {
+				groups.add(item);
+			}
+		}
+
+		if (!galleries.isEmpty()) {
+			result.put(R.string.section_photo_gallery, galleries);
+		}
+		if (!sets.isEmpty()) {
+			result.put(R.string.section_photo_set, sets);
+		}
+		if (!groups.isEmpty()) {
+			result.put(R.string.section_photo_group, groups);
+		}
+		return result;
+	}
+
 	@Override
 	protected Map<Integer, List<IListItemAdapter>> doInBackground(
 			String... params) {
 		String userId = params[0];
 		String token = params[1];
 
-		Map<Integer, List<IListItemAdapter>> result = new LinkedHashMap<Integer, List<IListItemAdapter>>();
+		Map<Integer, List<IListItemAdapter>> result = null;
+		try {
+			result = tryGetFromCache();
+		} catch (Exception e1) {
+			Log.d(TAG, "Can not get item list from cache."); //$NON-NLS-1$
+		}
 
+		if( result != null ) {
+			return result;
+		}
+		result = new LinkedHashMap<Integer, List<IListItemAdapter>>();
 		// galleries
 		GalleryInterface gi = FlickrHelper.getInstance().getGalleryInterface();
 		try {
@@ -106,9 +163,30 @@ public class UserPhotoCollectionTask extends
 
 	@Override
 	protected void onPostExecute(Map<Integer, List<IListItemAdapter>> result) {
+		try {
+			tryWriteToCache(result);
+		} catch (Exception e) {
+			Log.w(TAG, "Error to write the cache file."); //$NON-NLS-1$
+		}
 		if (mListener != null) {
 			mListener.onUserPhotoCollectionFetched(result);
 		}
+	}
+
+	private void tryWriteToCache(Map<Integer, List<IListItemAdapter>> result)
+			throws IOException, JSONException {
+		List<IListItemAdapter> list = new ArrayList<IListItemAdapter>();
+		for (List<IListItemAdapter> items : result.values()) {
+			list.addAll(items);
+		}
+
+		File root = new File(Environment.getExternalStorageDirectory(),
+				Constants.SD_CARD_FOLDER_NAME);
+		if (!root.exists()) {
+			root.mkdir();
+		}
+		File cacheFile = new File(root, Constants.USER_COL_CACHE_FILE_NAME);
+		StringUtils.writeItemsToFile(list, cacheFile);
 	}
 
 	public interface IUserPhotoCollectionFetched {
@@ -154,11 +232,12 @@ public class UserPhotoCollectionTask extends
 		int getType();
 
 		/**
-		 * Returns the underlying object of this adapter.
+		 * Returns the underlying object type, that is, the class name, of this
+		 * adapter.
 		 * 
 		 * @return
 		 */
-		Object getObject();
+		String getObjectClassType();
 	}
 
 	private static class ListItemAdapter implements IListItemAdapter {
@@ -207,8 +286,8 @@ public class UserPhotoCollectionTask extends
 		}
 
 		@Override
-		public Object getObject() {
-			return mObject;
+		public String getObjectClassType() {
+			return mObject.getClass().getName();
 		}
 
 		@Override
