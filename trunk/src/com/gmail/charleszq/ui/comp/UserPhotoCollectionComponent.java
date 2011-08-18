@@ -116,7 +116,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		this.mListView.setVisibility(View.VISIBLE);
 		mProgressBar.setVisibility(View.INVISIBLE);
 
-		if (map.isEmpty()) {
+		if (map == null || map.isEmpty()) {
 			return;
 		}
 
@@ -267,10 +267,10 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 
 		public ListItemAdapterPhotoPlace(IListItemAdapter item) {
 			super(PHOTO_GALLERY, item.getId(), item.getTitle());
-			Object obj = item.getObject();
-			if (obj instanceof FlickrGallery) {
+			String obj = item.getObjectClassType();
+			if (FlickrGallery.class.getName().equals(obj)) {
 				setKind(PHOTO_GALLERY);
-			} else if (obj instanceof Photoset) {
+			} else if (Photoset.class.getName().equals(obj)) {
 				setKind(PhotoPlace.SET);
 			} else {
 				setKind(PhotoPlace.POOL);

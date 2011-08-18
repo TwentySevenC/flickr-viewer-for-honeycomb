@@ -21,6 +21,11 @@ public final class Constants {
 	public static final String SD_CARD_FOLDER_NAME = "flickrviewer"; //$NON-NLS-1$
 	
 	/**
+	 * The file name to save the user collections. 
+	 */
+	public static final String USER_COL_CACHE_FILE_NAME = "user.col.data"; //$NON-NLS-1$
+	
+	/**
 	 * The preference setting keys.
 	 */
 	public static final String PHOTO_LIST_CACHE_SIZE = "photo.list.cache.size"; //$NON-NLS-1$
