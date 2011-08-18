@@ -15,10 +15,12 @@ import com.aetrion.flickr.photos.PhotoList;
 import com.aetrion.flickr.photos.PhotoPlace;
 import com.aetrion.flickr.photosets.PhotosetsInterface;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.ui.comp.UserPhotoCollectionComponent.ListItemAdapterPhotoPlace;
 import com.gmail.charleszq.utils.FlickrHelper;
 
 /**
- * Represents the data provider to get the photos from a given photo set or photo group.
+ * Represents the data provider to get the photos from a given photo set or
+ * photo group.
  * 
  * @author charles
  * 
@@ -48,20 +50,25 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 	 */
 	@Override
 	public PhotoList getPhotoList() throws Exception {
-		
+
 		Set<String> extras = new HashSet<String>();
-        extras.add(Extras.TAGS);
-        extras.add(Extras.GEO);
-        extras.add(Extras.OWNER_NAME);
-        
+		extras.add(Extras.TAGS);
+		extras.add(Extras.GEO);
+		extras.add(Extras.OWNER_NAME);
+
 		Flickr f = FlickrHelper.getInstance().getFlickr();
 		switch (mPhotoPlaceKind) {
 		case PhotoPlace.SET:
 			PhotosetsInterface psi = f.getPhotosetsInterface();
-			return psi.getPhotos(mPhotoPlaceId, extras,  Flickr.PRIVACY_LEVEL_NO_FILTER, mPageSize, mPageNumber);
+			return psi.getPhotos(mPhotoPlaceId, extras,
+					Flickr.PRIVACY_LEVEL_NO_FILTER, mPageSize, mPageNumber);
 		case PhotoPlace.POOL:
 			PoolsInterface gi = f.getPoolsInterface();
-			return gi.getPhotos(mPhotoPlaceId, null, extras, mPageSize, mPageNumber);
+			return gi.getPhotos(mPhotoPlaceId, null, extras, mPageSize,
+					mPageNumber);
+		case ListItemAdapterPhotoPlace.PHOTO_GALLERY:
+			return new PhotoList();
+
 		}
 		return null;
 	}

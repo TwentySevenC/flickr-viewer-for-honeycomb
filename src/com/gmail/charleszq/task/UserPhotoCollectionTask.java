@@ -5,7 +5,7 @@ package com.gmail.charleszq.task;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +51,7 @@ public class UserPhotoCollectionTask extends
 		String userId = params[0];
 		String token = params[1];
 
-		Map<Integer, List<IListItemAdapter>> result = new HashMap<Integer, List<IListItemAdapter>>();
+		Map<Integer, List<IListItemAdapter>> result = new LinkedHashMap<Integer, List<IListItemAdapter>>();
 
 		// galleries
 		GalleryInterface gi = FlickrHelper.getInstance().getGalleryInterface();
@@ -128,6 +128,8 @@ public class UserPhotoCollectionTask extends
 		public static final int PHOTO_GROUP_ID = 0;
 		public static final int PHOTO_ID = 1;
 
+		String getId();
+
 		/**
 		 * Returns the collection title, that is, the gallery title, photo set
 		 * title or the group name.
@@ -141,7 +143,7 @@ public class UserPhotoCollectionTask extends
 		 * 
 		 * @return
 		 */
-		String getPhotoIdentifier();
+		String getBuddyIconPhotoIdentifier();
 
 		/**
 		 * Returns the photo url type, either 0 or 1, that is, the url or the
@@ -181,7 +183,7 @@ public class UserPhotoCollectionTask extends
 		}
 
 		@Override
-		public String getPhotoIdentifier() {
+		public String getBuddyIconPhotoIdentifier() {
 			if (mObject instanceof FlickrGallery) {
 				return ((FlickrGallery) mObject).getPrimaryPhotoId();
 			} else if (mObject instanceof Photoset) {
@@ -207,6 +209,19 @@ public class UserPhotoCollectionTask extends
 		@Override
 		public Object getObject() {
 			return mObject;
+		}
+
+		@Override
+		public String getId() {
+			if (mObject instanceof FlickrGallery) {
+				return ((FlickrGallery) mObject).getGalleryId();
+			} else if (mObject instanceof Photoset) {
+				return ((Photoset) mObject).getId();
+			} else if (mObject instanceof Group) {
+				return ((Group) mObject).getId();
+			} else {
+				throw new IllegalArgumentException("Object type not supported."); //$NON-NLS-1$
+			}
 		}
 
 	}
