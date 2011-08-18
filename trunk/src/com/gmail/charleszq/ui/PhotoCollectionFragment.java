@@ -5,7 +5,6 @@ package com.gmail.charleszq.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,12 +54,8 @@ public class PhotoCollectionFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_item_back_main_menu) {
 			FragmentManager fm = getFragmentManager();
-			FragmentTransaction ft = fm.beginTransaction();
-
-			MainNavFragment menu = new MainNavFragment();
-			ft.replace(R.id.nav_frg, menu);
-			ft.addToBackStack(Constants.MAIN_MENU_BACK_STACK);
-			ft.commit();
+			fm.popBackStack(Constants.USER_COLL_BACK_STACK,
+					FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
