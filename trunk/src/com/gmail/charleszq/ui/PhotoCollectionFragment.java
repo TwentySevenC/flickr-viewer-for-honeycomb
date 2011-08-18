@@ -24,18 +24,20 @@ import com.gmail.charleszq.utils.Constants;
  */
 public class PhotoCollectionFragment extends Fragment {
 
+	private UserPhotoCollectionComponent mCollectionComponent;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.user_collection_frag, null);
 
-		UserPhotoCollectionComponent comp = (UserPhotoCollectionComponent) view
+		mCollectionComponent = (UserPhotoCollectionComponent) view
 				.findViewById(R.id.user_collection_list);
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String userId = app.getUserId();
 		String token = app.getFlickrToken();
-		comp.initialize(userId, token);
+		mCollectionComponent.initialize(userId, token);
 		return view;
 	}
 
@@ -52,13 +54,20 @@ public class PhotoCollectionFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.menu_item_back_main_menu) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_back_main_menu:
 			FragmentManager fm = getFragmentManager();
 			fm.popBackStack(Constants.USER_COLL_BACK_STACK,
 					FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			return true;
+		case R.id.menu_item_refresh_user_col:
+			if (mCollectionComponent != null) {
+				mCollectionComponent.refreshList();
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 
 }

@@ -47,19 +47,32 @@ public class UserPhotoCollectionTask extends
 	private IUserPhotoCollectionFetched mListener;
 
 	/**
+	 * The auth token
+	 */
+	private String mToken;
+
+	private boolean mIsForceFromServer = false;
+
+	/**
 	 * Constructor.
 	 * 
 	 * @param listener
 	 */
 	public UserPhotoCollectionTask(IUserPhotoCollectionFetched listener) {
+		this(listener, false);
+	}
+
+	public UserPhotoCollectionTask(IUserPhotoCollectionFetched listener,
+			boolean forceFetch) {
 		this.mListener = listener;
+		this.mIsForceFromServer = forceFetch;
 	}
 
 	private Map<Integer, List<IListItemAdapter>> tryGetFromCache()
 			throws IOException, JSONException {
 		File root = new File(Environment.getExternalStorageDirectory(),
 				Constants.SD_CARD_FOLDER_NAME);
-		File cacheFile = new File(root, Constants.USER_COL_CACHE_FILE_NAME);
+		File cacheFile = new File(root, mToken + ".dat"); //$NON-NLS-1$
 		if (!cacheFile.exists()) {
 			return null;
 		}
@@ -97,17 +110,19 @@ public class UserPhotoCollectionTask extends
 	protected Map<Integer, List<IListItemAdapter>> doInBackground(
 			String... params) {
 		String userId = params[0];
-		String token = params[1];
+		mToken = params[1];
 
 		Map<Integer, List<IListItemAdapter>> result = null;
-		try {
-			result = tryGetFromCache();
-		} catch (Exception e1) {
-			Log.d(TAG, "Can not get item list from cache."); //$NON-NLS-1$
-		}
+		if (!mIsForceFromServer) {
+			try {
+				result = tryGetFromCache();
+			} catch (Exception e1) {
+				Log.d(TAG, "Can not get item list from cache."); //$NON-NLS-1$
+			}
 
-		if( result != null ) {
-			return result;
+			if (result != null) {
+				return result;
+			}
 		}
 		result = new LinkedHashMap<Integer, List<IListItemAdapter>>();
 		// galleries
@@ -144,7 +159,7 @@ public class UserPhotoCollectionTask extends
 
 		// photo groups
 		PoolsInterface poolInterface = FlickrHelper.getInstance()
-				.getFlickrAuthed(token).getPoolsInterface();
+				.getFlickrAuthed(mToken).getPoolsInterface();
 		try {
 			Collection<?> groups = poolInterface.getGroups();
 			if (!groups.isEmpty()) {
@@ -185,7 +200,7 @@ public class UserPhotoCollectionTask extends
 		if (!root.exists()) {
 			root.mkdir();
 		}
-		File cacheFile = new File(root, Constants.USER_COL_CACHE_FILE_NAME);
+		File cacheFile = new File(root, mToken + ".dat"); //$NON-NLS-1$
 		StringUtils.writeItemsToFile(list, cacheFile);
 	}
 
