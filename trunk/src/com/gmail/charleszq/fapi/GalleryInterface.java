@@ -6,6 +6,7 @@ package com.gmail.charleszq.fapi;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -15,6 +16,10 @@ import com.aetrion.flickr.FlickrException;
 import com.aetrion.flickr.Parameter;
 import com.aetrion.flickr.Response;
 import com.aetrion.flickr.Transport;
+import com.aetrion.flickr.photos.Extras;
+import com.aetrion.flickr.photos.PhotoList;
+import com.aetrion.flickr.photos.PhotoUtils;
+import com.aetrion.flickr.util.StringUtilities;
 import com.aetrion.flickr.util.XMLUtilities;
 import com.gmail.charleszq.model.FlickrGallery;
 
@@ -33,8 +38,10 @@ public class GalleryInterface {
 	private static final String KEY_PER_PAGE = "per_page"; //$NON-NLS-1$
 	private static final String KEY_PAGE = "page"; //$NON-NLS-1$
 	private static final String KEY_USER_ID = "user_id"; //$NON-NLS-1$
+	private static final String KEY_GALLERY_ID = "gallery_id"; //$NON-NLS-1$
 
 	private static final String METHOD_GET_LIST = "flickr.galleries.getList"; //$NON-NLS-1$
+	private static final String METHOD_GET_PHOTOS = "flickr.galleries.getPhotos"; //$NON-NLS-1$
 
 	/**
 	 * The api key.
@@ -110,5 +117,48 @@ public class GalleryInterface {
 			galleries.add(gallery);
 		}
 		return galleries;
+	}
+
+	@SuppressWarnings("unchecked")
+	public PhotoList getPhotos(String galleryId, Set<String> extras,
+			int perPage, int page) throws IOException, SAXException,
+			FlickrException {
+		List<Parameter> parameters = new ArrayList<Parameter>();
+		parameters.add(new Parameter(KEY_METHOD, METHOD_GET_PHOTOS));
+		parameters.add(new Parameter(KEY_API_KEY, mApiKey));
+		parameters.add(new Parameter(KEY_GALLERY_ID, galleryId));
+		if (perPage > 0) {
+			parameters
+					.add(new Parameter(KEY_PER_PAGE, String.valueOf(perPage)));
+		}
+		if (page > 0) {
+			parameters.add(new Parameter(KEY_PAGE, String.valueOf(page)));
+		}
+
+		if (extras != null && !extras.isEmpty()) {
+			parameters.add(new Parameter(Extras.KEY_EXTRAS, StringUtilities
+					.join(extras, ","))); //$NON-NLS-1$
+		}
+
+		Response response = mTransport.get(mTransport.getPath(), parameters);
+		if (response.isError()) {
+			throw new FlickrException(response.getErrorCode(),
+					response.getErrorMessage());
+		}
+		PhotoList photos = new PhotoList();
+		Element photoset = response.getPayload();
+        NodeList photoElements = photoset.getElementsByTagName("photo"); //$NON-NLS-1$
+        photos.setPage(photoset.getAttribute("page")); //$NON-NLS-1$
+        photos.setPages(photoset.getAttribute("pages")); //$NON-NLS-1$
+        photos.setPerPage(photoset.getAttribute("per_page")); //$NON-NLS-1$
+        photos.setTotal(photoset.getAttribute("total")); //$NON-NLS-1$
+
+        for (int i = 0; i < photoElements.getLength(); i++) {
+            Element photoElement = (Element) photoElements.item(i);
+            photos.add(PhotoUtils.createPhoto(photoElement, photoset));
+        }
+
+        return photos;
+
 	}
 }
