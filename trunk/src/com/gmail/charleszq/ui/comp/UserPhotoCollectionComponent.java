@@ -6,6 +6,7 @@ package com.gmail.charleszq.ui.comp;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -13,6 +14,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -20,7 +23,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.aetrion.flickr.photos.PhotoPlace;
+import com.aetrion.flickr.photosets.Photoset;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.actions.ShowPhotoPoolAction;
+import com.gmail.charleszq.model.FlickrGallery;
 import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask;
@@ -37,7 +44,7 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  * 
  */
 public class UserPhotoCollectionComponent extends FrameLayout implements
-		IUserPhotoCollectionFetched {
+		IUserPhotoCollectionFetched, OnItemClickListener {
 
 	/**
 	 * The list view
@@ -87,7 +94,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		mProgressBar = (ProgressBar) findViewById(R.id.progress);
 	}
 
-	public void initialize(String userId, String token ) {
+	public void initialize(String userId, String token) {
 		UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
 		task.execute(userId, token);
 	}
@@ -108,6 +115,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 					new PhotoPoolAdapter(getContext(), map.get(key)));
 		}
 		mListView.setAdapter(mSectionAdapter);
+		mListView.setOnItemClickListener(this);
 	}
 
 	private SectionAdapter mSectionAdapter = new SectionAdapter() {
@@ -180,7 +188,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 			poolTitle.setText(place.getTitle());
 
 			Drawable drawable = poolIcon.getDrawable();
-			String photoPoolId = place.getPhotoIdentifier();
+			String photoPoolId = place.getBuddyIconPhotoIdentifier();
 			if (drawable != null && drawable instanceof DownloadedDrawable) {
 				ImageDownloadTask task = ((DownloadedDrawable) drawable)
 						.getBitmapDownloaderTask();
@@ -210,6 +218,36 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		class ViewHolder {
 			ImageView image;
 			TextView title;
+		}
+
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parentView, View view, int pos,
+			long id) {
+		IListItemAdapter item = (IListItemAdapter) mSectionAdapter.getItem(pos);
+		PhotoPlace photoPlace = new ListItemAdapterPhotoPlace(item);
+		if (photoPlace != null) {
+			ShowPhotoPoolAction action = new ShowPhotoPoolAction(
+					(Activity) getContext(), photoPlace, false);
+			action.execute();
+		}
+	}
+
+	public static class ListItemAdapterPhotoPlace extends PhotoPlace {
+
+		public static final int PHOTO_GALLERY = 1002;
+		
+		public ListItemAdapterPhotoPlace(IListItemAdapter item) {
+			super(PHOTO_GALLERY, item.getId(), item.getTitle());
+			Object obj = item.getObject();
+			if( obj instanceof FlickrGallery ) {
+				setKind(PHOTO_GALLERY);
+			} else if( obj instanceof Photoset ) {
+				setKind(PhotoPlace.SET);
+			} else {
+				setKind(PhotoPlace.POOL);
+			}
 		}
 
 	}

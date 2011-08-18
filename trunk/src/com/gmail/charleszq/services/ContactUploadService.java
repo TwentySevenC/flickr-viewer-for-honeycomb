@@ -85,7 +85,7 @@ public class ContactUploadService extends IntentService {
 				Log.d(TAG, col.size() + " contacts have new photos uploaded."); //$NON-NLS-1$
 				sendNotifications(col);
 			} else {
-				Log.i(TAG,"No recent upload."); //$NON-NLS-1$
+				Log.i(TAG,"No recent uploads from my contacts."); //$NON-NLS-1$
 			}
 		} catch (Exception e) {
 		    Log.w(TAG, "unable to get recent upload: " + e.getMessage()); //$NON-NLS-1$
