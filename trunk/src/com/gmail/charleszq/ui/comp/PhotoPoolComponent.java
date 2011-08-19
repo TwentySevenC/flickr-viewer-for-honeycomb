@@ -45,6 +45,7 @@ public class PhotoPoolComponent extends FrameLayout implements
 
 	private ListView mPhotoPoolListView;
 	private ProgressBar mProgressBar;
+	private SectionAdapter mSectionAdapter = null;
 
 	/**
 	 * @param context
@@ -91,24 +92,6 @@ public class PhotoPoolComponent extends FrameLayout implements
 		task.execute(photoId);
 	}
 
-	private SectionAdapter mSectionAdapter = new SectionAdapter() {
-
-		@Override
-		protected View getHeaderView(String caption, int index,
-				View convertView, ViewGroup parent) {
-
-			TextView result = (TextView) convertView;
-			if (convertView == null) {
-				LayoutInflater li = LayoutInflater.from(getContext());
-				result = (TextView) li.inflate(R.layout.section_header, null);
-			}
-
-			result.setText(caption);
-			return result;
-		}
-
-	};
-
 	@Override
 	public void onPhotoPoolFetched(List<PhotoPlace> photoPlaces) {
 		mProgressBar.setVisibility(View.INVISIBLE);
@@ -126,7 +109,9 @@ public class PhotoPoolComponent extends FrameLayout implements
 				groups.add(place);
 			}
 		}
-
+		if( mSectionAdapter == null ) {
+			mSectionAdapter = new SimpleSectionAdapter(getContext());
+		}
 		mSectionAdapter.clearSections();
 		if (!sets.isEmpty()) {
 			mSectionAdapter.addSection(

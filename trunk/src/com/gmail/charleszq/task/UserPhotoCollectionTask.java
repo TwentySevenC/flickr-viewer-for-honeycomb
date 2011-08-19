@@ -25,7 +25,7 @@ import com.aetrion.flickr.photosets.PhotosetsInterface;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.fapi.GalleryInterface;
 import com.gmail.charleszq.model.FlickrGallery;
-import com.gmail.charleszq.task.UserPhotoCollectionTask.IListItemAdapter;
+import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.StringUtils;
@@ -217,44 +217,9 @@ public class UserPhotoCollectionTask extends
 				Map<Integer, List<IListItemAdapter>> map);
 	}
 
-	public interface IListItemAdapter {
-		public static final int PHOTO_GROUP_ID = 0;
-		public static final int PHOTO_ID = 1;
-
-		String getId();
-
-		/**
-		 * Returns the collection title, that is, the gallery title, photo set
-		 * title or the group name.
-		 * 
-		 * @return
-		 */
-		String getTitle();
-
-		/**
-		 * Returns the photo url or the photo id.
-		 * 
-		 * @return
-		 */
-		String getBuddyIconPhotoIdentifier();
-
-		/**
-		 * Returns the photo url type, either 0 or 1, that is, the url or the
-		 * photo id.
-		 * 
-		 * @return
-		 */
-		int getType();
-
-		/**
-		 * Returns the underlying object type, that is, the class name, of this
-		 * adapter.
-		 * 
-		 * @return
-		 */
-		String getObjectClassType();
-	}
-
+	/**
+	 * Represents the model for photo gallery, set and groups. 
+	 */
 	private static class ListItemAdapter implements IListItemAdapter {
 
 		private Object mObject;
