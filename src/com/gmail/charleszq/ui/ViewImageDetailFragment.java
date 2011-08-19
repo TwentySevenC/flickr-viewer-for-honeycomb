@@ -136,8 +136,8 @@ public class ViewImageDetailFragment extends Fragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_item_share:
-			IAction action = new SharePhotoAction(getActivity(),
-					mBitmapRef.get(), this.mCurrentPhoto.getUrl());
+			IAction action = new SharePhotoAction(getActivity(), mBitmapRef
+					.get(), this.mCurrentPhoto.getUrl());
 			action.execute();
 			return true;
 		case R.id.menu_item_write_comment:
@@ -246,7 +246,9 @@ public class ViewImageDetailFragment extends Fragment implements
 			tagsText.setVisibility(View.GONE);
 		} else {
 			StringBuilder sb = new StringBuilder();
-			sb.append(getActivity().getResources().getString(R.string.msg_tags));
+			sb
+					.append(getActivity().getResources().getString(
+							R.string.msg_tags));
 			for (Tag tag : tags) {
 				sb.append(tag.getValue()).append(" "); //$NON-NLS-1$
 			}
@@ -268,12 +270,12 @@ public class ViewImageDetailFragment extends Fragment implements
 
 		// radio group
 		mRadioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
-		
+
 		// view swithcer
 		mViewSwitcher = (ViewAnimator) view.findViewById(R.id.switcher);
-		
+
 		mRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
+
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				switch (checkedId) {
@@ -289,7 +291,7 @@ public class ViewImageDetailFragment extends Fragment implements
 				}
 			}
 		});
-		
+
 		mViewSwitcher.setInAnimation(AnimationUtils.loadAnimation(
 				getActivity(), R.anim.push_left_in));
 		mViewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(
@@ -302,7 +304,6 @@ public class ViewImageDetailFragment extends Fragment implements
 		PhotoPoolComponent photoPool = (PhotoPoolComponent) view
 				.findViewById(R.id.photo_detail_pool);
 		photoPool.initialize(mCurrentPhoto.getId(), mOnTouchListener);
-
 
 		// comment progress bar
 		mCommentProgressBar = view.findViewById(R.id.commentProgressBar);
@@ -614,20 +615,22 @@ public class ViewImageDetailFragment extends Fragment implements
 		super.onPrepareOptionsMenu(menu);
 		MenuItem ownerPhotoItem = menu
 				.findItem(R.id.menu_item_show_owner_photos);
-		if (ownerPhotoItem == null) {
-			return;
-		}
+		MenuItem favItem = menu.findItem(R.id.menu_item_add_as_fav);
+		
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String userId = app.getUserId();
-		if (userId == null) {
+		if (userId == null || mCurrentPhoto == null
+				|| mCurrentPhoto.getOwner() == null) {
 			return;
 		}
 
-		if (userId.equals(mCurrentPhoto.getOwner().getId())) {
-			ownerPhotoItem.setVisible(false);
-		} else {
-			ownerPhotoItem.setVisible(true);
+		boolean same = userId.equals(mCurrentPhoto.getOwner().getId());
+		if( ownerPhotoItem != null ) {
+			ownerPhotoItem.setVisible(!same);
+		}
+		if(favItem != null) {
+			favItem.setVisible(!same);
 		}
 	}
 
