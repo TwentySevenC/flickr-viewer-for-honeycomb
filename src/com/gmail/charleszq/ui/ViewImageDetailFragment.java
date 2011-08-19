@@ -352,6 +352,10 @@ public class ViewImageDetailFragment extends Fragment implements
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
+			if( e1 == null || e2 == null ) {
+				return false;
+			}
+			
 			int dx = (int) (e2.getX() - e1.getX());
 			int dy = (int) (e2.getY() - e1.getY());
 			if (Math.abs(dx) <= Math.abs(dy)) {
