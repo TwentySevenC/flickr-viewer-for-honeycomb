@@ -16,23 +16,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.aetrion.flickr.photos.PhotoPlace;
 import com.aetrion.flickr.photosets.Photoset;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.actions.ShowPhotoPoolAction;
 import com.gmail.charleszq.model.FlickrGallery;
+import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
-import com.gmail.charleszq.task.UserPhotoCollectionTask.IListItemAdapter;
+import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
@@ -64,6 +64,11 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	 * The async task to fetch the gallery/set/group list of this user.
 	 */
 	private UserPhotoCollectionTask task;
+	
+	/**
+	 * The section adapter.
+	 */
+	private SectionAdapter mSectionAdapter = null;
 
 	private String mUserId;
 	private String mToken;
@@ -139,6 +144,9 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 			return;
 		}
 
+		if( mSectionAdapter == null ) {
+			mSectionAdapter = new SimpleSectionAdapter(getContext());
+		}
 		mSectionAdapter.clearSections();
 		for (Integer key : map.keySet()) {
 			mSectionAdapter.addSection(getContext().getString(key),
@@ -147,24 +155,6 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		mListView.setAdapter(mSectionAdapter);
 		mListView.setOnItemClickListener(this);
 	}
-
-	private SectionAdapter mSectionAdapter = new SectionAdapter() {
-
-		@Override
-		protected View getHeaderView(String caption, int index,
-				View convertView, ViewGroup parent) {
-
-			TextView result = (TextView) convertView;
-			if (convertView == null) {
-				LayoutInflater li = LayoutInflater.from(getContext());
-				result = (TextView) li.inflate(R.layout.section_header, null);
-			}
-
-			result.setText(caption);
-			return result;
-		}
-
-	};
 
 	private class PhotoPoolAdapter extends BaseAdapter {
 

@@ -28,7 +28,7 @@ import android.text.util.Linkify.TransformFilter;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.gmail.charleszq.task.UserPhotoCollectionTask.IListItemAdapter;
+import com.gmail.charleszq.model.IListItemAdapter;
 
 /**
  * Represents the util class to handle html text.
@@ -136,6 +136,9 @@ public final class StringUtils {
 		return obj;
 	}
 
+	/**
+	 * Represents the adapter constructed from a JSON object.
+	 */
 	private static class JsonItemAdapter implements IListItemAdapter {
 
 		private JSONObject mObject;
