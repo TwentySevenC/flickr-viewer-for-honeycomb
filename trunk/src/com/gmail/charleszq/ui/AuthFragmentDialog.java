@@ -14,8 +14,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -42,7 +42,7 @@ public class AuthFragmentDialog extends DialogFragment implements
 		IAuthDoneListener {
 
 	/**
-	 * The auth interface
+	 * The oauth interface
 	 */
 	private AuthInterface mAuthInterface;
 
@@ -138,7 +138,11 @@ public class AuthFragmentDialog extends DialogFragment implements
 	private OnClickListener mClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-
+			/*Intent intent = new Intent(AuthFragmentDialog.this.getActivity(),
+                    OAuthActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(OAuthActivity.ID_METHOD, OAuthActivity.ID_OAUTH);
+            AuthFragmentDialog.this.startActivity(intent);*/
 			if (mAuthInterface == null) {
 				Flickr f = FlickrHelper.getInstance().getFlickr();
 				mAuthInterface = f.getAuthInterface();
