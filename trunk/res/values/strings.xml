@@ -157,6 +157,7 @@
 	<string name="family_and_friend">Family and Friend</string>
 	<string name="all_contacts">All Contacts</string>
 	<string name="contact_with_upload">Have Recent Upload</string>
+	<string name="contact_filter_hint">Filter Contacts</string>
 
 	<string name="error_no_network">Please make sure you have network access.</string>
 	<string name="photo_pool">Photo Pool</string>

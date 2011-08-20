@@ -140,6 +140,7 @@ public class ContactsFragment extends Fragment implements
 		inflater.inflate(R.menu.menu_contacts, menu);
 		MenuItem item = menu.findItem(R.id.menu_item_search);
 		SearchView sview = (SearchView) item.getActionView();
+		sview.setQueryHint(getActivity().getString(R.string.contact_filter_hint));
 		sview.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
