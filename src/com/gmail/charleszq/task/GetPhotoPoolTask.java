@@ -26,7 +26,6 @@ public class GetPhotoPoolTask extends
 		mListener = listener;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected List<PhotoPlace> doInBackground(String... arg0) {
 		String photoId = arg0[0];

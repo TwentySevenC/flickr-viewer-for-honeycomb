@@ -119,7 +119,6 @@ public class GalleryInterface {
 		return galleries;
 	}
 
-	@SuppressWarnings("unchecked")
 	public PhotoList getPhotos(String galleryId, Set<String> extras,
 			int perPage, int page) throws IOException, SAXException,
 			FlickrException {

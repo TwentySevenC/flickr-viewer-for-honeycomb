@@ -200,7 +200,6 @@ public class ViewImageDetailFragment extends Fragment implements
 		ft.commitAllowingStateLoss();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
