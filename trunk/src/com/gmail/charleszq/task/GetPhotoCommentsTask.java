@@ -40,7 +40,6 @@ public class GetPhotoCommentsTask extends
 		this.mListener = listener;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected List<UserComment> doInBackground(String... params) {
 

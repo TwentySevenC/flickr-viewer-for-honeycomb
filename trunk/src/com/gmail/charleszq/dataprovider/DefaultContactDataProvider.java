@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * TODO refactor.
  * @author qiangz
  */
 public class DefaultContactDataProvider implements IContactDataProvider {
@@ -33,7 +32,6 @@ public class DefaultContactDataProvider implements IContactDataProvider {
      * com.gmail.charleszq.dataprovider.IContactDataProvider#getContacts(java.lang.String
      * )
      */
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<Contact> getContacts(String userId) {
         Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);

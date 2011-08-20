@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.CursorAdapter;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -180,8 +181,20 @@ public class FlickrViewerActivity extends Activity implements
 		HelpFragment help = new HelpFragment();
 		ft.replace(R.id.main_area, help);
 		
-//		ft.addToBackStack(Constants.HELP_BACK_STACK);
 		ft.commit();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if( item.getItemId() == android.R.id.home ) {
+			FragmentManager fm = getFragmentManager();
+			int count = fm.getBackStackEntryCount();
+			for( int i = 0; i < count; i ++ ) {
+				fm.popBackStack();
+			}
+			return true;
+		} 
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

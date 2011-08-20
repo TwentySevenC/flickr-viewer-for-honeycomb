@@ -14,6 +14,7 @@ public final class Constants {
 	 * The preference name.
 	 */
 	public static final String DEF_PREF_NAME = "flickr_viewer"; //$NON-NLS-1$
+	public static final String ID_SCHEME = "flickr-viewer-hd-oauth"; //$NON-NLS-1$
 
 	/**
 	 * The folder name stored in the sd card to save temp files of this

@@ -353,7 +353,6 @@ public class PhotoListFragment extends Fragment implements
 
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onPhotoListReady(PhotoList list, boolean cancelled) {
         if (list == null || list.isEmpty() || cancelled) {

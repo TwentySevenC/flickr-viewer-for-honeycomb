@@ -20,7 +20,6 @@ public class GetPhotoExifTask extends
         this.mExifListener = exifListener;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected Collection<Exif> doInBackground(String... params) {
         if (this.isCancelled()) {
