@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.gmail.charleszq" android:installLocation="preferExternal" android:versionName="1.0.5" android:versionCode="6">
-	<uses-sdk android:minSdkVersion="11"/>
+	package="com.gmail.charleszq" android:installLocation="preferExternal"
+	android:versionName="1.0.5" android:versionCode="6">
+	<uses-sdk android:minSdkVersion="11" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 	<uses-permission android:name="android.permission.SET_WALLPAPER"></uses-permission>
@@ -22,8 +23,6 @@
 				<action android:name="INTENT_ACTION_ACT_ON_MY_PHOTO" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
-		</activity>
-		<activity android:name="OAuthActivity" android:label="@string/flickr_oauth">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -33,6 +32,6 @@
 		</activity>
 		<service android:name=".services.ContactUploadService"></service>
 		<service android:name=".services.PhotoActivityService"></service>
-		<receiver android:name=".services.TimeUpReceiver"/>
+		<receiver android:name=".services.TimeUpReceiver" />
 	</application>
 </manifest>
