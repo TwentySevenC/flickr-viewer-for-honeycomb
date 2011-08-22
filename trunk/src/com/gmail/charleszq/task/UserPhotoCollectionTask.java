@@ -133,6 +133,10 @@ public class UserPhotoCollectionTask extends
 				List<IListItemAdapter> ga = new ArrayList<IListItemAdapter>();
 				for (FlickrGallery gallery : galleries) {
 					ga.add(new ListItemAdapter(gallery));
+					Log
+							.d(
+									TAG,
+									"Gallery item count: " + gallery.getTotalCount()); //$NON-NLS-1$
 				}
 				result.put(R.string.section_photo_gallery, ga);
 			}
@@ -218,7 +222,7 @@ public class UserPhotoCollectionTask extends
 	}
 
 	/**
-	 * Represents the model for photo gallery, set and groups. 
+	 * Represents the model for photo gallery, set and groups.
 	 */
 	private static class ListItemAdapter implements IListItemAdapter {
 
@@ -280,6 +284,15 @@ public class UserPhotoCollectionTask extends
 				return ((Group) mObject).getId();
 			} else {
 				throw new IllegalArgumentException("Object type not supported."); //$NON-NLS-1$
+			}
+		}
+
+		@Override
+		public int getItemCount() {
+			if (mObject instanceof FlickrGallery) {
+				return ((FlickrGallery) mObject).getTotalCount();
+			} else {
+				return 0;
 			}
 		}
 
