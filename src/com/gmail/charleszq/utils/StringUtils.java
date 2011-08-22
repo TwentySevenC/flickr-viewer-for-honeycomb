@@ -44,6 +44,7 @@ public final class StringUtils {
 	static final String KEY_ICON_ID = "iconid"; //$NON-NLS-1$
 	static final String KEY_TYPE = "type"; //$NON-NLS-1$
 	static final String KEY_OBJ_TYPE = "obj"; //$NON-NLS-1$
+	static final String KEY_ITEM_COUNT = "cnt";  //$NON-NLS-1$
 
 	/**
 	 * Example: [http://www.flickr.com/photos/example/2910192942/]
@@ -189,6 +190,15 @@ public final class StringUtils {
 				return mObject.getString(StringUtils.KEY_OBJ_TYPE);
 			} catch (JSONException e) {
 				return null;
+			}
+		}
+
+		@Override
+		public int getItemCount() {
+			try {
+				return mObject.getInt(StringUtils.KEY_ITEM_COUNT);
+			} catch (JSONException ex) {
+				return 0;
 			}
 		}
 	}

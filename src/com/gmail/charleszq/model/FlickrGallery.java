@@ -14,6 +14,7 @@ public class FlickrGallery {
 	private String ownerId;
 	private String primaryPhotoId;
 	private int photoCount;
+	private int videoCount;
 	private String title;
 	private String description;
 
@@ -71,6 +72,18 @@ public class FlickrGallery {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setVideoCount(int videoCount) {
+		this.videoCount = videoCount;
+	}
+
+	public int getVideoCount() {
+		return videoCount;
+	}
+
+	public int getTotalCount() {
+		return getPhotoCount() + getVideoCount();
 	}
 
 }

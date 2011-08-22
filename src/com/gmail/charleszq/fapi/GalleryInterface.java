@@ -92,8 +92,8 @@ public class GalleryInterface {
 		List<FlickrGallery> galleries = new ArrayList<FlickrGallery>();
 		Response response = mTransport.get(mTransport.getPath(), parameters);
 		if (response.isError()) {
-			throw new FlickrException(response.getErrorCode(),
-					response.getErrorMessage());
+			throw new FlickrException(response.getErrorCode(), response
+					.getErrorMessage());
 		}
 		Element galleriesElement = response.getPayload();
 		NodeList galleryNodes = galleriesElement
@@ -108,6 +108,8 @@ public class GalleryInterface {
 					.getAttribute("primary_photo_id")); //$NON-NLS-1$
 			gallery.setPhotoCount(Integer.parseInt(galleryElement
 					.getAttribute("count_photos"))); //$NON-NLS-1$
+			gallery.setVideoCount(Integer.parseInt(galleryElement
+					.getAttribute("count_videos"))); //$NON-NLS-1$
 			String title = XMLUtilities.getChildValue(galleryElement, "title"); //$NON-NLS-1$
 			gallery.setTitle(title == null ? "" : title); //$NON-NLS-1$
 
@@ -141,23 +143,23 @@ public class GalleryInterface {
 
 		Response response = mTransport.get(mTransport.getPath(), parameters);
 		if (response.isError()) {
-			throw new FlickrException(response.getErrorCode(),
-					response.getErrorMessage());
+			throw new FlickrException(response.getErrorCode(), response
+					.getErrorMessage());
 		}
 		PhotoList photos = new PhotoList();
 		Element photoset = response.getPayload();
-        NodeList photoElements = photoset.getElementsByTagName("photo"); //$NON-NLS-1$
-        photos.setPage(photoset.getAttribute("page")); //$NON-NLS-1$
-        photos.setPages(photoset.getAttribute("pages")); //$NON-NLS-1$
-        photos.setPerPage(photoset.getAttribute("per_page")); //$NON-NLS-1$
-        photos.setTotal(photoset.getAttribute("total")); //$NON-NLS-1$
+		NodeList photoElements = photoset.getElementsByTagName("photo"); //$NON-NLS-1$
+		photos.setPage(photoset.getAttribute("page")); //$NON-NLS-1$
+		photos.setPages(photoset.getAttribute("pages")); //$NON-NLS-1$
+		photos.setPerPage(photoset.getAttribute("per_page")); //$NON-NLS-1$
+		photos.setTotal(photoset.getAttribute("total")); //$NON-NLS-1$
 
-        for (int i = 0; i < photoElements.getLength(); i++) {
-            Element photoElement = (Element) photoElements.item(i);
-            photos.add(PhotoUtils.createPhoto(photoElement, photoset));
-        }
+		for (int i = 0; i < photoElements.getLength(); i++) {
+			Element photoElement = (Element) photoElements.item(i);
+			photos.add(PhotoUtils.createPhoto(photoElement, photoset));
+		}
 
-        return photos;
+		return photos;
 
 	}
 }

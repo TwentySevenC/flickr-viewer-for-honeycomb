@@ -49,4 +49,13 @@ public interface IListItemAdapter {
 	 * @return
 	 */
 	String getObjectClassType();
+
+	/**
+	 * Since the gallery has a limitation that only 18 photos/videos can be put
+	 * into it, this method is mainly for this reason, for photo set and photo
+	 * group, just return 0 for now.
+	 * 
+	 * @return
+	 */
+	int getItemCount();
 }
