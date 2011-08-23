@@ -4,5 +4,11 @@
 	<com.google.android.maps.MapView
 		android:id="@+id/mapView" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:enabled="true"
-		android:clickable="true" android:apiKey="08VmASU5hfyIN4AGGxnTmE8E8RKxD4pVQD_ZNDQ" />
+		android:clickable="true" android:apiKey="08VmASU5hfyIOAKOvItF8A9Vm4pw7FxOkhJ0h7w" />
+	<!-- api key @ office 
+	<com.google.android.maps.MapView
+		android:id="@+id/mapView" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:enabled="true"
+		android:clickable="true" android:apiKey="08VmASU5hfyIN4AGGxnTmE8E8RKxD4pVQD_ZNDQ" />	
+	-->
 </FrameLayout>
