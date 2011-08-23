@@ -122,6 +122,7 @@ public class ContactUploadService extends IntentService {
 				R.string.notif_message_recent_upload);
 		Intent notificationIntent = new Intent(
 				Constants.CONTACT_UPLOAD_PHOTO_NOTIF_INTENT_ACTION);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		notificationIntent.putExtra(Constants.CONTACT_IDS_WITH_PHOTO_UPLOADED,
 				cIds.toArray(new String[0]));
 		PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0,

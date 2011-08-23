@@ -73,7 +73,7 @@ public class RecentActivitiesDataProvider {
 				ItemList userComments = ai.userComments(getPageSize(), 1);
 				if (userComments != null) {
 					for (int i = 0; i < userComments.size(); i++) {
-						Item item = (Item) userComments.get(i);
+						Item item = userComments.get(i);
 						Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
 						if ("photo".equals(item.getType())) { //$NON-NLS-1$
 							items.add(item);
@@ -90,7 +90,7 @@ public class RecentActivitiesDataProvider {
 			ItemList photoComments = ai.userPhotos(getPageSize(), 1, sInterval);
 			if (photoComments != null) {
 				for (int j = 0; j < photoComments.size(); j++) {
-					Item item = (Item) photoComments.get(j);
+					Item item = photoComments.get(j);
 					Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
 					if ("photo".equals(item.getType())) { //$NON-NLS-1$
 						items.add(item);
