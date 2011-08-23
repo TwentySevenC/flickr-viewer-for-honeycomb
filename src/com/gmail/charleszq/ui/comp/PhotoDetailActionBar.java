@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aetrion.flickr.people.User;
+import com.aetrion.flickr.photos.Photo;
+import com.gmail.charleszq.PhotoLocationActivity;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.event.IUserInfoFetchedListener;
 import com.gmail.charleszq.task.GetUserInfoTask;
@@ -30,66 +32,85 @@ import com.gmail.charleszq.task.GetUserInfoTask;
  * @author charles
  */
 public class PhotoDetailActionBar extends FrameLayout implements
-        IUserInfoFetchedListener, OnClickListener {
+		IUserInfoFetchedListener, OnClickListener {
 
-    private ImageView mBuddyIcon;
-    private TextView mUserName;
+	private ImageView mBuddyIcon;
+	private TextView mUserName;
 
-    private User mPhotoOwner;
+	private Photo mCurrentPhoto;
+	private ImageView mLocationButton;
 
-    public PhotoDetailActionBar(Context context) {
-        super(context);
-        buildLayout();
-    }
+	public PhotoDetailActionBar(Context context) {
+		super(context);
+		buildLayout();
+	}
 
-    public PhotoDetailActionBar(Context context, AttributeSet attrs,
-            int defStyle) {
-        super(context, attrs, defStyle);
-        buildLayout();
-    }
+	public PhotoDetailActionBar(Context context, AttributeSet attrs,
+			int defStyle) {
+		super(context, attrs, defStyle);
+		buildLayout();
+	}
 
-    public PhotoDetailActionBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        buildLayout();
-    }
+	public PhotoDetailActionBar(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		buildLayout();
+	}
 
-    /**
-     * Builds the layout.
-     */
-    protected void buildLayout() {
-        LayoutInflater li = LayoutInflater.from(getContext());
-        li.inflate(R.layout.photo_detail_action_bar, this, true);
+	/**
+	 * Builds the layout.
+	 */
+	protected void buildLayout() {
+		LayoutInflater li = LayoutInflater.from(getContext());
+		li.inflate(R.layout.photo_detail_action_bar, this, true);
 
-        mBuddyIcon = (ImageView) this.findViewById(R.id.user_icon);
-        mBuddyIcon.setOnClickListener(this);
+		mBuddyIcon = (ImageView) this.findViewById(R.id.user_icon);
+		mBuddyIcon.setOnClickListener(this);
 
-        mUserName = (TextView) findViewById(R.id.user_name);
-        mUserName.setText(getContext().getResources().getString(R.string.loading_user_info));
+		mUserName = (TextView) findViewById(R.id.user_name);
+		mUserName.setText(getContext().getResources().getString(
+				R.string.loading_user_info));
+		mLocationButton = (ImageView) findViewById(R.id.btn_show_on_map);
+		mLocationButton.setOnClickListener(this);
+	}
 
-    }
+	/**
+	 * @param owner
+	 */
+	public void setPhoto(Photo photo) {
+		this.mCurrentPhoto = photo;
+		mUserName.setText(mCurrentPhoto.getOwner().getUsername());
 
-    /**
-     * @param owner
-     */
-    public void setUser(User owner) {
-        this.mPhotoOwner = owner;
-        mUserName.setText(mPhotoOwner.getUsername());
-        GetUserInfoTask task = new GetUserInfoTask(mBuddyIcon, this, null);
-        task.execute(owner.getId());
-    }
+		if (mCurrentPhoto.getGeoData() != null) {
+			mLocationButton.setVisibility(View.VISIBLE);
+		} else {
+			mLocationButton.setVisibility(View.INVISIBLE);
+		}
+		GetUserInfoTask task = new GetUserInfoTask(mBuddyIcon, this, null);
+		task.execute(mCurrentPhoto.getOwner().getId());
+	}
 
-    @Override
-    public void onUserInfoFetched(User user) {
-        mUserName.setText(user.getUsername());
-        ProgressBar pbar = (ProgressBar) findViewById(R.id.progress);
-        pbar.setVisibility(INVISIBLE);
-    }
+	@Override
+	public void onUserInfoFetched(User user) {
+		mUserName.setText(user.getUsername());
+		ProgressBar pbar = (ProgressBar) findViewById(R.id.progress);
+		pbar.setVisibility(INVISIBLE);
+	}
 
 	@Override
 	public void onClick(View v) {
-		String url = "http://www.flickr.com/photos/" + mPhotoOwner.getId(); //$NON-NLS-1$
-		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-		this.getContext().startActivity(intent);
+		if (v == mBuddyIcon) {
+			String url = "http://www.flickr.com/photos/" + mCurrentPhoto.getOwner().getId(); //$NON-NLS-1$
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			this.getContext().startActivity(intent);
+		} else if (v == mLocationButton) {
+			int lat = (int) (mCurrentPhoto.getGeoData().getLatitude() * 1E6);
+			int lng = (int) (mCurrentPhoto.getGeoData().getLongitude() * 1E6);
+			Intent intent = new Intent(getContext(),
+					PhotoLocationActivity.class);
+			intent.putExtra(PhotoLocationActivity.LAT_VAL, lat);
+			intent.putExtra(PhotoLocationActivity.LONG_VAL, lng);
+			getContext().startActivity(intent);
+		}
 	}
 
 }

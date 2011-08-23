@@ -222,6 +222,7 @@ public class MainNavFragment extends Fragment {
 						.setPositiveButton(
 								getActivity().getString(R.string.btn_yes),
 								new DialogInterface.OnClickListener() {
+									@Override
 									public void onClick(DialogInterface dialog,
 											int id) {
 										app.logout();
@@ -231,6 +232,7 @@ public class MainNavFragment extends Fragment {
 						.setNegativeButton(
 								getActivity().getString(R.string.btn_no),
 								new DialogInterface.OnClickListener() {
+									@Override
 									public void onClick(DialogInterface dialog,
 											int id) {
 										dialog.cancel();

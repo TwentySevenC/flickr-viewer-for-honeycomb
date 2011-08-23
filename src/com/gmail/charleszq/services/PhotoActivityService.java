@@ -89,6 +89,7 @@ public class PhotoActivityService extends IntentService {
                 R.string.notif_message_act_on_my_photo);
         Intent notificationIntent = new Intent(
                 Constants.ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 notificationIntent, 0);
 

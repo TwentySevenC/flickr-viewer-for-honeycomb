@@ -90,7 +90,7 @@ public class ShowFavoritesAction extends ActivityAwareAction {
             ContextMenuInfo info = item.getMenuInfo();
             int pos = ((AdapterContextMenuInfo) info).position;
             try {
-                Photo photo = (Photo) mDataProvider.getPhotoList().get(pos);
+                Photo photo = mDataProvider.getPhotoList().get(pos);
                 RemoveFavAction action = new RemoveFavAction(mActivity, photo.getId());
                 action.execute();
                 return true;
