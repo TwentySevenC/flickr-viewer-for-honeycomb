@@ -128,6 +128,7 @@ public class PhotoLocationActivity extends MapActivity implements
 		}
 
 		mMapView = (MapView) findViewById(R.id.mapView);
+		mMapView.setBuiltInZoomControls(true);
 
 		MapController mc = mMapView.getController();
 		mPhotoGeoPoint = new GeoPoint(mLatitude, mLongtitude);
@@ -147,8 +148,9 @@ public class PhotoLocationActivity extends MapActivity implements
 			return;
 		}
 
+		//use 'null' as the message not shows the progress dialog.
 		GetPhotoImageTask task = new GetPhotoImageTask(this,
-				PhotoType.SMALL_URL, this);
+				PhotoType.SMALL_URL, this, null);
 		task.execute(mPhotoId);
 	}
 
@@ -189,7 +191,7 @@ public class PhotoLocationActivity extends MapActivity implements
 		if (mPhotoGeoPoint == null) {
 			return;
 		}
-
+		
 		MapOverlay mapOverlay = new MapOverlay(this, mPhotoGeoPoint,
 				R.drawable.pushpin);
 		List<Overlay> listOfOverlays = mMapView.getOverlays();

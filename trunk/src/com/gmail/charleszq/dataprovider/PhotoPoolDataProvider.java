@@ -54,7 +54,7 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 
 		Set<String> extras = new HashSet<String>();
 		extras.add(Extras.TAGS);
-//		extras.add(Extras.GEO);
+		extras.add(Extras.GEO);
 		extras.add(Extras.OWNER_NAME);
 
 		Flickr f = FlickrHelper.getInstance().getFlickr();
