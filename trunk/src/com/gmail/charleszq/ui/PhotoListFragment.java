@@ -264,25 +264,33 @@ public class PhotoListFragment extends Fragment implements
 
 			Photo photo = (Photo) getItem(position);
 
-			ImageView photoImage;
+			ImageView photoImage, geoMarker;
 			TextView titleView;
 
 			ViewHolder holder = (ViewHolder) view.getTag();
 			if (holder == null) {
 				photoImage = (ImageView) view.findViewById(R.id.small_img);
 				titleView = (TextView) view.findViewById(R.id.title);
+				geoMarker = (ImageView) view.findViewById(R.id.geo_icon);
 
 				holder = new ViewHolder();
 				holder.image = photoImage;
 				holder.titleView = titleView;
+				holder.getMarker = geoMarker;
 				view.setTag(holder);
 
 			} else {
 				photoImage = holder.image;
 				titleView = holder.titleView;
+				geoMarker = holder.getMarker;
 			}
 			titleView.setText(photo.getTitle());
 			photoImage.setScaleType(ScaleType.CENTER_CROP);
+			if( photo.getGeoData() == null ) {
+				geoMarker.setVisibility(View.INVISIBLE);
+			} else {
+				geoMarker.setVisibility(View.VISIBLE);
+			}
 
 			Drawable drawable = photoImage.getDrawable();
 			String smallUrl = photo.getSmallUrl();
@@ -335,6 +343,7 @@ public class PhotoListFragment extends Fragment implements
 		private static class ViewHolder {
 			ImageView image;
 			TextView titleView;
+			ImageView getMarker;
 		}
 
 		private File getSavedImageFile(String photoId) {
