@@ -109,6 +109,7 @@ public class PhotoDetailActionBar extends FrameLayout implements
 					PhotoLocationActivity.class);
 			intent.putExtra(PhotoLocationActivity.LAT_VAL, lat);
 			intent.putExtra(PhotoLocationActivity.LONG_VAL, lng);
+			intent.putExtra(PhotoLocationActivity.PHOTO_ID, mCurrentPhoto.getId());
 			getContext().startActivity(intent);
 		}
 	}
