@@ -20,6 +20,11 @@ public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends
 	protected Activity mActivity;
 	protected String mDialogMessage;
 	
+	/**
+	 * Constructor.
+	 * @param activity
+	 * @param msg if this is <code>null</code>, then don't show the progress dialog.
+	 */
 	public ProgressDialogAsyncTask(Activity activity, String msg) {
 		this.mActivity = activity;
 		this.mDialogMessage = msg;
@@ -40,6 +45,9 @@ public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
+		if( mDialogMessage == null ) {
+			return;
+		}
 		mDialog = ProgressDialog.show(mActivity, "", mDialogMessage); //$NON-NLS-1$
         mDialog.setCancelable(true);
         mDialog.setCanceledOnTouchOutside(true);

@@ -47,6 +47,13 @@ public class GetPhotoImageTask extends
 		this.mPhotoFetchedListener = listener;
 	}
 
+	public GetPhotoImageTask(Activity act, PhotoType photoType,
+			IPhotoFetchedListener listener, String msg) {
+		super(act, msg);
+		mPhotoType = photoType;
+		this.mPhotoFetchedListener = listener;
+	}
+
 	@Override
 	protected Bitmap doInBackground(String... arg0) {
 
@@ -66,9 +73,8 @@ public class GetPhotoImageTask extends
 			Log.d(TAG, "Photo description: " + mCurrentPhoto.getDescription()); //$NON-NLS-1$
 			GeoData geo = mCurrentPhoto.getGeoData();
 			if (geo != null) {
-				Log.d(TAG,
-						"geo data: " + geo.getLatitude() + ", "  //$NON-NLS-1$//$NON-NLS-2$
-								+ geo.getLongitude());
+				Log.d(TAG, "geo data: " + geo.getLatitude() + ", " //$NON-NLS-1$//$NON-NLS-2$
+						+ geo.getLongitude());
 			}
 			String url = mCurrentPhoto.getMediumUrl();
 			switch (mPhotoType) {

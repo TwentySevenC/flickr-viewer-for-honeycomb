@@ -287,7 +287,7 @@ public class PhotoListFragment extends Fragment implements
 			titleView.setText(photo.getTitle());
 			photoImage.setScaleType(ScaleType.CENTER_CROP);
 			if( photo.getGeoData() == null ) {
-				geoMarker.setVisibility(View.INVISIBLE);
+				geoMarker.setVisibility(View.GONE);
 			} else {
 				geoMarker.setVisibility(View.VISIBLE);
 			}
