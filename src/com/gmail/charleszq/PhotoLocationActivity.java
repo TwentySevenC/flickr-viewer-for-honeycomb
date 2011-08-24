@@ -148,7 +148,7 @@ public class PhotoLocationActivity extends MapActivity implements
 		}
 
 		GetPhotoImageTask task = new GetPhotoImageTask(this,
-				PhotoType.SMALL_SQR_URL, this);
+				PhotoType.SMALL_URL, this);
 		task.execute(mPhotoId);
 	}
 
