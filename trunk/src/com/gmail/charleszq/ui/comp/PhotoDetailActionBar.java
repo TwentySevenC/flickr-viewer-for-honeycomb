@@ -78,8 +78,6 @@ public class PhotoDetailActionBar extends FrameLayout implements
 	 */
 	public void setPhoto(Photo photo) {
 		this.mCurrentPhoto = photo;
-		mUserName.setText(mCurrentPhoto.getOwner().getUsername());
-
 		if (mCurrentPhoto.getGeoData() != null) {
 			mLocationButton.setVisibility(View.VISIBLE);
 		} else {

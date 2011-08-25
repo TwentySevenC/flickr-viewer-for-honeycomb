@@ -73,8 +73,7 @@ import com.gmail.charleszq.utils.StringUtils;
 public class ViewImageDetailFragment extends Fragment implements
 		IUserCommentsFetchedListener, IExifListener {
 
-	private static final String TAG = ViewImageDetailFragment.class
-			.getSimpleName();
+	private static final String TAG = ViewImageDetailFragment.class.getName();
 
 	private static final String PHOTO_ID_ATTR = "photo.id"; //$NON-NLS-1$
 	private static final String PHOTO_TITLE_ATTR = "photo.title"; //$NON-NLS-1$
@@ -105,6 +104,10 @@ public class ViewImageDetailFragment extends Fragment implements
 	 * Default constructor for the framework.
 	 */
 	public ViewImageDetailFragment() {
+		initEmptyPhoto();
+	}
+	
+	private void initEmptyPhoto() {
 		mCurrentPhoto = new Photo();
 		mCurrentPhoto.setDescription(StringUtils.EMPTY_STRING);
 		mCurrentPhoto.setTitle(StringUtils.EMPTY_STRING);
@@ -218,10 +221,16 @@ public class ViewImageDetailFragment extends Fragment implements
 		hookDoubleTapOnImage(image);
 
 		if (savedInstanceState != null) {
+			Log.d(TAG, "Restore photo information from bundle."); //$NON-NLS-1$
 			String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
 			String photoTitle = savedInstanceState.getString(PHOTO_TITLE_ATTR);
 			String ownerId = savedInstanceState.getString(PHOTO_OWNER_ID);
 			String desc = savedInstanceState.getString(PHOTO_DESC_ATTR);
+			
+			if( mCurrentPhoto == null ) {
+				initEmptyPhoto();
+			}
+			
 			mCurrentPhoto.setId(photoId);
 			mCurrentPhoto.setTitle(photoTitle);
 			mCurrentPhoto.setDescription(desc);
@@ -356,10 +365,10 @@ public class ViewImageDetailFragment extends Fragment implements
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			if( e1 == null || e2 == null ) {
+			if (e1 == null || e2 == null) {
 				return false;
 			}
-			
+
 			int dx = (int) (e2.getX() - e1.getX());
 			int dy = (int) (e2.getY() - e1.getY());
 			if (Math.abs(dx) <= Math.abs(dy)) {
@@ -437,6 +446,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		outState.putString(PHOTO_TITLE_ATTR, mCurrentPhoto.getTitle());
 		outState.putString(PHOTO_OWNER_ID, mCurrentPhoto.getOwner().getId());
 		outState.putString(PHOTO_DESC_ATTR, mCurrentPhoto.getDescription());
+		Log.d(TAG, "Photo information saved to bundle."); //$NON-NLS-1$
 	}
 
 	@Override
@@ -624,7 +634,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		MenuItem ownerPhotoItem = menu
 				.findItem(R.id.menu_item_show_owner_photos);
 		MenuItem favItem = menu.findItem(R.id.menu_item_add_as_fav);
-		
+
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String userId = app.getUserId();
@@ -634,10 +644,10 @@ public class ViewImageDetailFragment extends Fragment implements
 		}
 
 		boolean same = userId.equals(mCurrentPhoto.getOwner().getId());
-		if( ownerPhotoItem != null ) {
+		if (ownerPhotoItem != null) {
 			ownerPhotoItem.setVisible(!same);
 		}
-		if(favItem != null) {
+		if (favItem != null) {
 			favItem.setVisible(!same);
 		}
 	}
