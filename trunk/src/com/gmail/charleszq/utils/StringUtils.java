@@ -38,6 +38,8 @@ import com.gmail.charleszq.model.IListItemAdapter;
 public final class StringUtils {
 
 	private static final String TAG = StringUtils.class.getName();
+	
+	public static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	static final String KEY_ID = "id"; //$NON-NLS-1$
 	static final String KEY_TITLE = "title"; //$NON-NLS-1$

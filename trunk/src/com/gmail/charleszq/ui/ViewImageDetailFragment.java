@@ -106,6 +106,11 @@ public class ViewImageDetailFragment extends Fragment implements
 	 */
 	public ViewImageDetailFragment() {
 		mCurrentPhoto = new Photo();
+		mCurrentPhoto.setDescription(StringUtils.EMPTY_STRING);
+		mCurrentPhoto.setTitle(StringUtils.EMPTY_STRING);
+		User user = new User();
+		user.setUsername(StringUtils.EMPTY_STRING);
+		mCurrentPhoto.setOwner(user);
 	}
 
 	/**
