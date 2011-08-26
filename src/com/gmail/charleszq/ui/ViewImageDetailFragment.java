@@ -10,9 +10,8 @@ import java.util.Collection;
 import java.util.List;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -45,6 +44,7 @@ import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.tags.Tag;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.ViewBigPhotoActivity;
 import com.gmail.charleszq.actions.AddFavAction;
 import com.gmail.charleszq.actions.IAction;
 import com.gmail.charleszq.actions.SaveImageWallpaperAction;
@@ -106,7 +106,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	public ViewImageDetailFragment() {
 		initEmptyPhoto();
 	}
-	
+
 	private void initEmptyPhoto() {
 		mCurrentPhoto = new Photo();
 		mCurrentPhoto.setDescription(StringUtils.EMPTY_STRING);
@@ -144,8 +144,8 @@ public class ViewImageDetailFragment extends Fragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_item_share:
-			IAction action = new SharePhotoAction(getActivity(), mBitmapRef
-					.get(), this.mCurrentPhoto.getUrl());
+			IAction action = new SharePhotoAction(getActivity(),
+					mBitmapRef.get(), this.mCurrentPhoto.getUrl());
 			action.execute();
 			return true;
 		case R.id.menu_item_write_comment:
@@ -200,12 +200,17 @@ public class ViewImageDetailFragment extends Fragment implements
 	}
 
 	private void showBigImage() {
-		FragmentManager fm = getActivity().getFragmentManager();
-		ViewBigImageFragment fragment = new ViewBigImageFragment(mCurrentPhoto);
-		FragmentTransaction ft = fm.beginTransaction();
-		ft.replace(R.id.main_area, fragment);
-		ft.addToBackStack("BigImage"); //$NON-NLS-1$
-		ft.commitAllowingStateLoss();
+		// FragmentManager fm = getActivity().getFragmentManager();
+		// ViewBigImageFragment fragment = new
+		// ViewBigImageFragment(mCurrentPhoto);
+		// FragmentTransaction ft = fm.beginTransaction();
+		// ft.replace(R.id.main_area, fragment);
+		//		ft.addToBackStack("BigImage"); //$NON-NLS-1$
+		// ft.commitAllowingStateLoss();
+		Intent intent = new Intent(getActivity(), ViewBigPhotoActivity.class);
+		intent.putExtra(ViewBigPhotoActivity.PHOTO_ID_KEY,
+				mCurrentPhoto.getId());
+		getActivity().startActivity(intent);
 	}
 
 	@Override
@@ -226,11 +231,11 @@ public class ViewImageDetailFragment extends Fragment implements
 			String photoTitle = savedInstanceState.getString(PHOTO_TITLE_ATTR);
 			String ownerId = savedInstanceState.getString(PHOTO_OWNER_ID);
 			String desc = savedInstanceState.getString(PHOTO_DESC_ATTR);
-			
-			if( mCurrentPhoto == null ) {
+
+			if (mCurrentPhoto == null) {
 				initEmptyPhoto();
 			}
-			
+
 			mCurrentPhoto.setId(photoId);
 			mCurrentPhoto.setTitle(photoTitle);
 			mCurrentPhoto.setDescription(desc);
@@ -259,9 +264,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			tagsText.setVisibility(View.GONE);
 		} else {
 			StringBuilder sb = new StringBuilder();
-			sb
-					.append(getActivity().getResources().getString(
-							R.string.msg_tags));
+			sb.append(getActivity().getResources().getString(R.string.msg_tags));
 			for (Tag tag : tags) {
 				sb.append(tag.getValue()).append(" "); //$NON-NLS-1$
 			}

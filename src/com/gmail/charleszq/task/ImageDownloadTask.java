@@ -104,12 +104,22 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 			PhotosInterface pi = f.getPhotosInterface();
 			try {
 				Photo photo = pi.getPhoto(mUrl);
-				if (mParamType.equals(ParamType.PHOTO_ID_SMALL_SQUARE)) {
+				switch (mParamType) {
+				case PHOTO_ID_SMALL_SQUARE:
 					url = photo.getSmallSquareUrl();
-				} else {
-					// TODO other url types.
-					url = null;
+					break;
+				case PHOTO_ID_LARGE:
+					url = photo.getLargeUrl();
+					break;
+				case PHOTO_ID_SMALL:
+					url = photo.getSmallUrl();
+					break;
+				case PHOTO_ID_MEDIUM:
+					url = photo.getMediumUrl();
+				default:
+					break;
 				}
+
 			} catch (Exception e) {
 				Log.e(TAG,
 						"Unable to get the photo detail information: " + e.getMessage()); //$NON-NLS-1$

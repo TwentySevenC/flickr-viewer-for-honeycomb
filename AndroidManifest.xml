@@ -30,11 +30,12 @@
 				<data android:scheme="flickr-viewer-hd-oauth" />
 			</intent-filter>
 		</activity>
+		<activity android:name="PhotoLocationActivity"></activity>
+		<activity android:name="ViewBigPhotoActivity"></activity>
 		<service android:name=".services.ContactUploadService"></service>
 		<service android:name=".services.PhotoActivityService"></service>
 		<receiver android:name=".services.TimeUpReceiver" />
 		<uses-library android:name="com.google.android.maps"
 			android:required="true"></uses-library>
-		<activity android:name="PhotoLocationActivity"></activity>
 	</application>
 </manifest>
