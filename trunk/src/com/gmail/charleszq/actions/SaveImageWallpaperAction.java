@@ -85,7 +85,7 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 			}
 		} else {
 			final ImageDownloadTask task = new ImageDownloadTask(null,
-					ParamType.PHOTO_URL, this);
+					ParamType.PHOTO_ID_LARGE, this);
 			mDialog = ProgressDialog
 					.show(mActivity,
 							"", mActivity.getResources().getString(R.string.saving_photo)); //$NON-NLS-1$
@@ -100,7 +100,7 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 					}
 				}
 			});
-			task.execute(mCurrentPhoto.getLargeUrl());
+			task.execute(mCurrentPhoto.getId());
 		}
 
 	}
