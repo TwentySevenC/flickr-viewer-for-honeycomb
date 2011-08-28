@@ -190,7 +190,7 @@ public class RecentActivityFragment extends Fragment implements OnItemClickListe
     @Override
     public void onItemClick(AdapterView<?> parentView, View view, int pos, long id) {
         Item item = (Item) mAdapter.getItem(pos);
-        GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(), item.getId());
+        GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(), item.getId(),null);
         action.execute();
     }
 

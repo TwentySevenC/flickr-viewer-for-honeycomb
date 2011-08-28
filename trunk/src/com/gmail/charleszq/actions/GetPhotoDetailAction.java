@@ -17,37 +17,48 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
+import android.widget.Toast;
 
 /**
  * @author qiangz
  */
-public class GetPhotoDetailAction extends ActivityAwareAction implements IPhotoFetchedListener {
+public class GetPhotoDetailAction extends ActivityAwareAction implements
+		IPhotoFetchedListener {
 
-    private String mPhotoId;
+	private String mPhotoId;
+	private String mPhotoSecret;
 
-    public GetPhotoDetailAction(Activity activity, String photoId) {
-        super(activity);
-        this.mPhotoId = photoId;
-    }
+	public GetPhotoDetailAction(Activity activity, String photoId, String photoSecret) {
+		super(activity);
+		this.mPhotoId = photoId;
+		this.mPhotoSecret = photoSecret;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see com.gmail.charleszq.actions.IAction#execute()
-     */
-    @Override
-    public void execute() {
-        GetPhotoImageTask task = new GetPhotoImageTask(mActivity, this);
-        task.execute(mPhotoId);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gmail.charleszq.actions.IAction#execute()
+	 */
+	@Override
+	public void execute() {
+		GetPhotoImageTask task = new GetPhotoImageTask(mActivity, this);
+		task.execute(mPhotoId, mPhotoSecret);
+	}
 
-    @Override
-    public void onPhotoFetched(Photo photo, Bitmap bitmap) {
-        ViewImageDetailFragment fragment = new ViewImageDetailFragment(
-                photo, bitmap);
-        FragmentManager fm = mActivity.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.main_area, fragment);
-        ft.addToBackStack("Detail Image"); //$NON-NLS-1$
-        ft.commitAllowingStateLoss();
-    }
+	@Override
+	public void onPhotoFetched(Photo photo, Bitmap bitmap) {
+		if (photo == null) {
+			Toast.makeText(mActivity,
+					"Unable to get the photo detail information.",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		ViewImageDetailFragment fragment = new ViewImageDetailFragment(photo,
+				bitmap);
+		FragmentManager fm = mActivity.getFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.replace(R.id.main_area, fragment);
+		ft.addToBackStack("Detail Image"); //$NON-NLS-1$
+		ft.commitAllowingStateLoss();
+	}
 }

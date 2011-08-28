@@ -435,7 +435,7 @@ public class ViewImageDetailFragment extends Fragment implements
 
 		// exif
 		mExifTask = new GetPhotoExifTask(this);
-		mExifTask.execute(photoId);
+		mExifTask.execute(photoId, mCurrentPhoto.getSecret());
 
 		// comments
 		mPhotoCommentTask = new GetPhotoCommentsTask(this);

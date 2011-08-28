@@ -364,7 +364,7 @@ public class PhotoListFragment extends Fragment implements
 			long id) {
 		mSelectedPhoto = (Photo) mGridAdapter.getItem(position);
 		GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(),
-				mSelectedPhoto.getId());
+				mSelectedPhoto.getId(), mSelectedPhoto.getSecret());
 		action.execute();
 
 	}

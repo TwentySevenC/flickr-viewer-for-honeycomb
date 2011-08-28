@@ -29,7 +29,14 @@ public class GetPhotoPoolTask extends
 	@Override
 	protected List<PhotoPlace> doInBackground(String... arg0) {
 		String photoId = arg0[0];
-		Flickr f = FlickrHelper.getInstance().getFlickr();
+		String flickrToken = arg0[1];
+		
+		Flickr f = null;
+		if( flickrToken == null ) {
+			f = FlickrHelper.getInstance().getFlickr();
+		} else {
+			f = FlickrHelper.getInstance().getFlickrAuthed(flickrToken);
+		}
 		if (f != null) {
 			PhotosInterface pi = f.getPhotosInterface();
 			try {

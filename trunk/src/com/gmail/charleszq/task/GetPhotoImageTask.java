@@ -14,6 +14,7 @@ import android.util.Log;
 import com.aetrion.flickr.photos.GeoData;
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotosInterface;
+import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageUtils;
@@ -61,15 +62,24 @@ public class GetPhotoImageTask extends
 			return null;
 		}
 
-		PhotosInterface pi = FlickrHelper.getInstance().getPhotosInterface();
+		FlickrViewerApplication app = (FlickrViewerApplication) mActivity.getApplication();
+		String token = app.getFlickrToken();
+		PhotosInterface pi = null;
+		if( token != null ) {
+			pi = FlickrHelper.getInstance().getFlickrAuthed(token).getPhotosInterface();
+		} else {
+			pi = FlickrHelper.getInstance().getPhotosInterface();
+		}
+		
 		if (pi == null) {
 			return null;
 		}
 
 		String photoId = arg0[0];
+		String secret = arg0[1];
 
 		try {
-			mCurrentPhoto = pi.getPhoto(photoId);
+			mCurrentPhoto = pi.getPhoto(photoId, secret);
 			Log.d(TAG, "Photo description: " + mCurrentPhoto.getDescription()); //$NON-NLS-1$
 			GeoData geo = mCurrentPhoto.getGeoData();
 			if (geo != null) {
