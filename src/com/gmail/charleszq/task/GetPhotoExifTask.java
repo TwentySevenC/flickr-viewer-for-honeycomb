@@ -1,4 +1,3 @@
-
 package com.gmail.charleszq.task;
 
 import com.aetrion.flickr.photos.Exif;
@@ -12,41 +11,44 @@ import android.util.Log;
 import java.util.Collection;
 
 public class GetPhotoExifTask extends
-        AsyncTask<String, Integer, Collection<Exif>> {
+		AsyncTask<String, Integer, Collection<Exif>> {
 
-    private IExifListener mExifListener;
+	private static final String TAG = GetPhotoExifTask.class.getName();
 
-    public GetPhotoExifTask(IExifListener exifListener) {
-        this.mExifListener = exifListener;
-    }
+	private IExifListener mExifListener;
 
-    @Override
-    protected Collection<Exif> doInBackground(String... params) {
-        if (this.isCancelled()) {
-            return null;
-        }
+	public GetPhotoExifTask(IExifListener exifListener) {
+		this.mExifListener = exifListener;
+	}
 
-        PhotosInterface pi = FlickrHelper.getInstance().getPhotosInterface();
-        if (pi == null) {
-            return null;
-        }
+	@Override
+	protected Collection<Exif> doInBackground(String... params) {
+		if (this.isCancelled()) {
+			return null;
+		}
 
-        String photoId = params[0];
-        Collection<Exif> exifs = null;
-        try {
-            exifs = pi.getExif(photoId, FlickrHelper.API_SEC);
-        } catch (Exception e) {
-            Log.e("GetBigImageAndExifTask", "Error to get exif information: "  //$NON-NLS-1$//$NON-NLS-2$
-                    + e.getMessage());
-        }
+		PhotosInterface pi = FlickrHelper.getInstance().getPhotosInterface();
+		if (pi == null) {
+			return null;
+		}
 
-        return exifs;
-    }
+		String photoId = params[0];
+		String secret = params[1];
+		Collection<Exif> exifs = null;
+		try {
+			exifs = pi.getExif(photoId, secret);
+		} catch (Exception e) {
+			Log.e(TAG, "Error to get exif information: " //$NON-NLS-1$
+					+ e.getMessage());
+		}
 
-    @Override
-    protected void onPostExecute(Collection<Exif> result) {
-        super.onPostExecute(result);
-        mExifListener.onExifInfoFetched(result);
-    }
+		return exifs;
+	}
+
+	@Override
+	protected void onPostExecute(Collection<Exif> result) {
+		super.onPostExecute(result);
+		mExifListener.onExifInfoFetched(result);
+	}
 
 }

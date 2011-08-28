@@ -15,20 +15,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.aetrion.flickr.photos.PhotoPlace;
+import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.actions.ShowPhotoPoolAction;
 import com.gmail.charleszq.task.GetPhotoPoolTask;
-import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
 import com.gmail.charleszq.task.ImageDownloadTask;
+import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
@@ -88,8 +89,14 @@ public class PhotoPoolComponent extends FrameLayout implements
 	 */
 	public void initialize(String photoId, OnTouchListener listener) {
 		mPhotoPoolListView.setOnTouchListener(listener);
+		
+		String token = null;
+		if( getContext() instanceof Activity ) {
+			FlickrViewerApplication app = (FlickrViewerApplication) ((Activity)getContext()).getApplication();
+			token = app.getFlickrToken();
+		}
 		GetPhotoPoolTask task = new GetPhotoPoolTask(this);
-		task.execute(photoId);
+		task.execute(photoId,token);
 	}
 
 	@Override
