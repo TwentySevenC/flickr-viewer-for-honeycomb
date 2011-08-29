@@ -26,4 +26,11 @@ public interface IPhotoListDataProvider extends Serializable {
      * The photo list will be cached, to invalidate the cache, call this method.
      */
     void invalidatePhotoList();
+    
+    /**
+     * Returns <code>true</code> if the returned photo list has the information that whether the
+     * photo is public or private.
+     * @return
+     */
+    boolean hasPrivateInfo();
 }

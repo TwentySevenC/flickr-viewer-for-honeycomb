@@ -63,5 +63,4 @@ public class FavoritePhotosDataProvider extends
     public String getDescription(Context context) {
         return context.getResources().getString(R.string.my_favs);
     }
-
 }
