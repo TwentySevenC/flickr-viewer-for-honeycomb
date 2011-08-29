@@ -78,6 +78,8 @@ public class PhotoLocationActivity extends MapActivity implements
 	 * The photo id.
 	 */
 	private String mPhotoId = null;
+	
+	private String mPhotoSecret = null;
 
 	/*
 	 * (non-Javadoc)
@@ -151,7 +153,7 @@ public class PhotoLocationActivity extends MapActivity implements
 		//use 'null' as the message not shows the progress dialog.
 		GetPhotoImageTask task = new GetPhotoImageTask(this,
 				PhotoType.SMALL_URL, this, null);
-		task.execute(mPhotoId);
+		task.execute(mPhotoId, mPhotoSecret);
 	}
 
 	@Override
@@ -268,6 +270,7 @@ public class PhotoLocationActivity extends MapActivity implements
 	@Override
 	public void onPhotoFetched(Photo photo, Bitmap bitmap) {
 		mPhotoId = photo.getId();
+		mPhotoSecret = photo.getSecret();
 		mPhotoBitmapRef = new WeakReference<Bitmap>(bitmap);
 		drawPhotoLayer();
 	}
