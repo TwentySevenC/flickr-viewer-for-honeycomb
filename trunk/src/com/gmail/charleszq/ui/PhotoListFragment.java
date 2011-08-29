@@ -4,22 +4,9 @@
 
 package com.gmail.charleszq.ui;
 
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotoList;
-import com.gmail.charleszq.FlickrViewerActivity;
-import com.gmail.charleszq.FlickrViewerApplication;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.actions.GetPhotoDetailAction;
-import com.gmail.charleszq.dataprovider.PaginationPhotoListDataProvider;
-import com.gmail.charleszq.event.FlickrViewerMessage;
-import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
-import com.gmail.charleszq.event.IPhotoListReadyListener;
-import com.gmail.charleszq.task.AsyncPhotoListTask;
-import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.ui.comp.IContextMenuHandler;
-import com.gmail.charleszq.utils.Constants;
-import com.gmail.charleszq.utils.ImageCache;
-import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -40,13 +27,26 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import com.aetrion.flickr.photos.Photo;
+import com.aetrion.flickr.photos.PhotoList;
+import com.gmail.charleszq.FlickrViewerActivity;
+import com.gmail.charleszq.FlickrViewerApplication;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.actions.GetPhotoDetailAction;
+import com.gmail.charleszq.dataprovider.PaginationPhotoListDataProvider;
+import com.gmail.charleszq.event.FlickrViewerMessage;
+import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
+import com.gmail.charleszq.event.IPhotoListReadyListener;
+import com.gmail.charleszq.task.AsyncPhotoListTask;
+import com.gmail.charleszq.task.ImageDownloadTask;
+import com.gmail.charleszq.ui.comp.IContextMenuHandler;
+import com.gmail.charleszq.utils.Constants;
+import com.gmail.charleszq.utils.ImageCache;
+import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 
 /**
  * @author charles
@@ -91,6 +91,11 @@ public class PhotoListFragment extends Fragment implements
 	private Photo mSelectedPhoto;
 
 	private IContextMenuHandler mContextMenuHandler = null;
+
+	/**
+	 * The marker to say whether to show the private marker or not.
+	 */
+	private boolean mShowPrivatePhotoMarker = true;
 
 	/**
 	 * Default constructor.
@@ -153,7 +158,8 @@ public class PhotoListFragment extends Fragment implements
 				.getApplication();
 		mCurrentGridColumnCount = app.getGridNumColumns();
 		mGridView.setNumColumns(mCurrentGridColumnCount);
-		mGridAdapter = new MyAdapter(getActivity(), mPhotoList);
+		mGridAdapter = new MyAdapter(getActivity(), mPhotoList,
+				mShowPrivatePhotoMarker);
 		mGridView.setAdapter(mGridAdapter);
 		mGridView.setOnItemClickListener(this);
 
@@ -171,6 +177,15 @@ public class PhotoListFragment extends Fragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_photo_list, menu);
+	}
+
+	/**
+	 * Sets the marker to say whether shows the private photo marker or not.
+	 * 
+	 * @param show
+	 */
+	public void setShowPrivatePhotoMarker(boolean show) {
+		this.mShowPrivatePhotoMarker = show;
 	}
 
 	@Override
@@ -232,10 +247,13 @@ public class PhotoListFragment extends Fragment implements
 
 		private PhotoList mPhotoList;
 		private Context mContext;
+		private boolean mShowPrivatePhoto = true;
 
-		public MyAdapter(Context context, PhotoList mPhotoList) {
-			this.mPhotoList = mPhotoList;
+		public MyAdapter(Context context, PhotoList photoList,
+				boolean showPrivate) {
 			this.mContext = context;
+			this.mPhotoList = photoList;
+			this.mShowPrivatePhoto = showPrivate;
 		}
 
 		@Override
@@ -293,14 +311,15 @@ public class PhotoListFragment extends Fragment implements
 			photoImage.setScaleType(ScaleType.CENTER_CROP);
 
 			boolean showGeoMarker = photo.getGeoData() != null;
-			boolean showPrivateMarker = !photo.isPublicFlag();
+			boolean showPrivateMarker = !photo.isPublicFlag()
+					&& mShowPrivatePhoto;
 			if (!showGeoMarker && !showPrivateMarker) {
 				geoMarker.setVisibility(View.INVISIBLE);
 				privateMarker.setVisibility(View.GONE);
 			} else if (showGeoMarker && !showPrivateMarker) {
 				geoMarker.setVisibility(View.VISIBLE);
 				privateMarker.setVisibility(View.GONE);
-			} else if( !showGeoMarker && showPrivateMarker ) {
+			} else if (!showGeoMarker && showPrivateMarker) {
 				geoMarker.setVisibility(View.GONE);
 				privateMarker.setVisibility(View.VISIBLE);
 			} else {
@@ -381,7 +400,7 @@ public class PhotoListFragment extends Fragment implements
 			long id) {
 		mSelectedPhoto = (Photo) mGridAdapter.getItem(position);
 		GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(),
-				mSelectedPhoto.getId(), mSelectedPhoto.getSecret());
+				mSelectedPhoto);
 		action.execute();
 
 	}

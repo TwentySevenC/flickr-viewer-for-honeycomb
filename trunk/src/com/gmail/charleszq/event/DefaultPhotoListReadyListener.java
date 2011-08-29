@@ -76,6 +76,9 @@ public class DefaultPhotoListReadyListener implements IPhotoListReadyListener {
 
 		PhotoListFragment fragment = new PhotoListFragment(list,
 				(PaginationPhotoListDataProvider) mDataProvider, mMenuHandler);
+		if( !mDataProvider.hasPrivateInfo() ) {
+			fragment.setShowPrivatePhotoMarker(false);
+		}
 		FragmentManager fm = ((Activity) mContext).getFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

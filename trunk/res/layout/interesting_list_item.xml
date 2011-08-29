@@ -11,10 +11,12 @@
 		android:paddingLeft="20dp" android:layout_marginTop="5dp"
 		android:layout_gravity="center_horizontal" android:layout_height="wrap_content">
 		<ImageView android:id="@+id/geo_icon" android:layout_height="24dp"
-			android:src="@drawable/location" android:visibility="invisible"
-			android:layout_width="24dp" android:scaleType="fitXY" />
-		<ImageView android:id="@+id/private_icon" android:layout_height="24dp"
-			android:src="@drawable/lock" android:visibility="invisible"
+			android:layout_marginRight="2dp" android:src="@drawable/location"
+			android:visibility="invisible" android:layout_width="24dp"
+			android:scaleType="fitXY" />
+		<ImageView android:id="@+id/private_icon"
+			android:layout_height="24dp" android:layout_marginRight="2dp"
+			android:src="@drawable/private_photo_marker" android:visibility="invisible"
 			android:layout_width="24dp" android:scaleType="fitXY" />
 		<TextView android:id="@+id/title" android:layout_width="fill_parent"
 			android:gravity="left|center" android:singleLine="true"

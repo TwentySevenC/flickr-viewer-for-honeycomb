@@ -42,6 +42,11 @@ public abstract class PaginationPhotoListDataProvider implements
     public void invalidatePhotoList() {
         this.mPhotoList = null;
     }
+    
+	@Override
+	public boolean hasPrivateInfo() {
+		return true;
+	}
 
     /**
      * @return

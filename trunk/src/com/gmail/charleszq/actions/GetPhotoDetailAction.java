@@ -28,10 +28,20 @@ public class GetPhotoDetailAction extends ActivityAwareAction implements
 	private String mPhotoId;
 	private String mPhotoSecret;
 
-	public GetPhotoDetailAction(Activity activity, String photoId, String photoSecret) {
+	private Photo mCurrentPhoto = null;
+
+	public GetPhotoDetailAction(Activity activity, String photoId,
+			String photoSecret) {
 		super(activity);
 		this.mPhotoId = photoId;
 		this.mPhotoSecret = photoSecret;
+	}
+
+	public GetPhotoDetailAction(Activity activity, Photo photo) {
+		super(activity);
+		this.mPhotoId = photo.getId();
+		this.mPhotoSecret = photo.getSecret();
+		this.mCurrentPhoto = photo;
 	}
 
 	/*
@@ -52,6 +62,11 @@ public class GetPhotoDetailAction extends ActivityAwareAction implements
 					mActivity.getString(R.string.error_get_photo_detail),
 					Toast.LENGTH_SHORT).show();
 			return;
+		}
+
+		if (mCurrentPhoto != null && mCurrentPhoto.getGeoData() != null
+				&& photo.getGeoData() == null) {
+			photo.setGeoData(mCurrentPhoto.getGeoData());
 		}
 		ViewImageDetailFragment fragment = new ViewImageDetailFragment(photo,
 				bitmap);

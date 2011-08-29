@@ -47,6 +47,7 @@ public class PhotoLocationActivity extends MapActivity implements
 	public static final String LAT_VAL = "lat"; //$NON-NLS-1$
 	public static final String LONG_VAL = "long"; //$NON-NLS-1$
 	public static final String PHOTO_ID = "photo.id"; //$NON-NLS-1$
+	public static final String PHOTO_SECRET = "photo.secret"; //$NON-NLS-1$
 
 	/**
 	 * The zoom level of the map view.
@@ -78,7 +79,7 @@ public class PhotoLocationActivity extends MapActivity implements
 	 * The photo id.
 	 */
 	private String mPhotoId = null;
-	
+
 	private String mPhotoSecret = null;
 
 	/*
@@ -123,10 +124,13 @@ public class PhotoLocationActivity extends MapActivity implements
 			mLatitude = icicle.getInt(LAT_VAL);
 			mLongtitude = icicle.getInt(LONG_VAL);
 			mPhotoId = icicle.getString(PHOTO_ID);
+			mPhotoSecret = icicle.getString(PHOTO_SECRET);
 		} else {
 			mLatitude = intent.getExtras().getInt(LAT_VAL);
 			mLongtitude = intent.getExtras().getInt(LONG_VAL);
 			mPhotoId = intent.getExtras().getString(PHOTO_ID);
+			mPhotoSecret = intent.getExtras().getString(PHOTO_SECRET);
+			
 		}
 
 		mMapView = (MapView) findViewById(R.id.mapView);
@@ -150,7 +154,7 @@ public class PhotoLocationActivity extends MapActivity implements
 			return;
 		}
 
-		//use 'null' as the message not shows the progress dialog.
+		// use 'null' as the message not shows the progress dialog.
 		GetPhotoImageTask task = new GetPhotoImageTask(this,
 				PhotoType.SMALL_URL, this, null);
 		task.execute(mPhotoId, mPhotoSecret);
@@ -193,7 +197,7 @@ public class PhotoLocationActivity extends MapActivity implements
 		if (mPhotoGeoPoint == null) {
 			return;
 		}
-		
+
 		MapOverlay mapOverlay = new MapOverlay(this, mPhotoGeoPoint,
 				R.drawable.pushpin);
 		List<Overlay> listOfOverlays = mMapView.getOverlays();
@@ -269,6 +273,9 @@ public class PhotoLocationActivity extends MapActivity implements
 	 */
 	@Override
 	public void onPhotoFetched(Photo photo, Bitmap bitmap) {
+		if (photo == null) {
+			return;
+		}
 		mPhotoId = photo.getId();
 		mPhotoSecret = photo.getSecret();
 		mPhotoBitmapRef = new WeakReference<Bitmap>(bitmap);

@@ -96,4 +96,9 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 		return sb.toString();
 	}
 
+	@Override
+	public boolean hasPrivateInfo() {
+		return false;
+	}
+
 }

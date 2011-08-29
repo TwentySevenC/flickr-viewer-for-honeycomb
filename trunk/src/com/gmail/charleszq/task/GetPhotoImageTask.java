@@ -79,7 +79,7 @@ public class GetPhotoImageTask extends
 		String secret = arg0[1];
 
 		try {
-			mCurrentPhoto = pi.getPhoto(photoId, secret);
+			mCurrentPhoto = pi.getInfo(photoId, secret);
 			Log.d(TAG, "Photo description: " + mCurrentPhoto.getDescription()); //$NON-NLS-1$
 			GeoData geo = mCurrentPhoto.getGeoData();
 			if (geo != null) {
