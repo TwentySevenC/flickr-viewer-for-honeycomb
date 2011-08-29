@@ -186,6 +186,8 @@
 
 	<string name="app_title_tags_search_result">Tags</string>
 	<string name="tag_search_hint">Search by Tags</string>
+	
+	<string name="error_get_photo_detail">Unable to get the detail information.</string>
 </resources>
 
 

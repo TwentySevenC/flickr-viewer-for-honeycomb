@@ -49,7 +49,7 @@ public class GetPhotoDetailAction extends ActivityAwareAction implements
 	public void onPhotoFetched(Photo photo, Bitmap bitmap) {
 		if (photo == null) {
 			Toast.makeText(mActivity,
-					"Unable to get the photo detail information.",
+					mActivity.getString(R.string.error_get_photo_detail),
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
