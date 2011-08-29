@@ -142,6 +142,11 @@ public final class ImageUtils {
 	 * @return <code>true</code> if success, <code>false</code> otherwise.
 	 */
 	public static boolean saveImageToFile(File destFile, Bitmap bitmap) {
+		
+		if( bitmap == null ) {
+			return false;
+		}
+		
 		FileOutputStream fos = null;
 		try {
 			if (destFile.exists()) {

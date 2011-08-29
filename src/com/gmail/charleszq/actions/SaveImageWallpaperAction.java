@@ -100,7 +100,7 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 					}
 				}
 			});
-			task.execute(mCurrentPhoto.getId());
+			task.execute(mCurrentPhoto.getId(), mCurrentPhoto.getSecret());
 		}
 
 	}
