@@ -264,7 +264,7 @@ public class PhotoListFragment extends Fragment implements
 
 			Photo photo = (Photo) getItem(position);
 
-			ImageView photoImage, geoMarker;
+			ImageView photoImage, geoMarker, privateMarker;
 			TextView titleView;
 
 			ViewHolder holder = (ViewHolder) view.getTag();
@@ -272,24 +272,40 @@ public class PhotoListFragment extends Fragment implements
 				photoImage = (ImageView) view.findViewById(R.id.small_img);
 				titleView = (TextView) view.findViewById(R.id.title);
 				geoMarker = (ImageView) view.findViewById(R.id.geo_icon);
+				privateMarker = (ImageView) view
+						.findViewById(R.id.private_icon);
 
 				holder = new ViewHolder();
 				holder.image = photoImage;
 				holder.titleView = titleView;
 				holder.getMarker = geoMarker;
+				holder.privateMarker = privateMarker;
+
 				view.setTag(holder);
 
 			} else {
 				photoImage = holder.image;
 				titleView = holder.titleView;
 				geoMarker = holder.getMarker;
+				privateMarker = holder.privateMarker;
 			}
 			titleView.setText(photo.getTitle());
 			photoImage.setScaleType(ScaleType.CENTER_CROP);
-			if( photo.getGeoData() == null ) {
+
+			boolean showGeoMarker = photo.getGeoData() != null;
+			boolean showPrivateMarker = !photo.isPublicFlag();
+			if (!showGeoMarker && !showPrivateMarker) {
 				geoMarker.setVisibility(View.INVISIBLE);
+				privateMarker.setVisibility(View.GONE);
+			} else if (showGeoMarker && !showPrivateMarker) {
+				geoMarker.setVisibility(View.VISIBLE);
+				privateMarker.setVisibility(View.GONE);
+			} else if( !showGeoMarker && showPrivateMarker ) {
+				geoMarker.setVisibility(View.GONE);
+				privateMarker.setVisibility(View.VISIBLE);
 			} else {
 				geoMarker.setVisibility(View.VISIBLE);
+				privateMarker.setVisibility(View.VISIBLE);
 			}
 
 			Drawable drawable = photoImage.getDrawable();
@@ -344,6 +360,7 @@ public class PhotoListFragment extends Fragment implements
 			ImageView image;
 			TextView titleView;
 			ImageView getMarker;
+			ImageView privateMarker;
 		}
 
 		private File getSavedImageFile(String photoId) {
