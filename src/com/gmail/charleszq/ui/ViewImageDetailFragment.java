@@ -200,13 +200,6 @@ public class ViewImageDetailFragment extends Fragment implements
 	}
 
 	private void showBigImage() {
-		// FragmentManager fm = getActivity().getFragmentManager();
-		// ViewBigImageFragment fragment = new
-		// ViewBigImageFragment(mCurrentPhoto);
-		// FragmentTransaction ft = fm.beginTransaction();
-		// ft.replace(R.id.main_area, fragment);
-		//		ft.addToBackStack("BigImage"); //$NON-NLS-1$
-		// ft.commitAllowingStateLoss();
 		Intent intent = new Intent(getActivity(), ViewBigPhotoActivity.class);
 		intent.putExtra(ViewBigPhotoActivity.PHOTO_ID_KEY,
 				mCurrentPhoto.getId());
