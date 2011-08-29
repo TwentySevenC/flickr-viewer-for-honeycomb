@@ -59,6 +59,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	 * The photo id key to save photo id in intent or saved bundle.
 	 */
 	public static final String PHOTO_ID_KEY = "p.id"; //$NON-NLS-1$
+	public static final String PHOTO_SECRET_KEY = "p.sec"; //$NON-NLS-1$
 
 	private Matrix matrix = new Matrix();
 	private Matrix savedMatrix = new Matrix();
@@ -79,6 +80,11 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	 * The photo id comes from the intent extra.
 	 */
 	private String mPhotoId;
+	
+	/**
+	 * The photo secret.
+	 */
+	private String mPhotoSecret;
 
 	/**
 	 * The progress bar.
@@ -102,12 +108,15 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 
 		if (savedInstanceState != null) {
 			mPhotoId = savedInstanceState.getString(PHOTO_ID_KEY);
+			mPhotoSecret = savedInstanceState.getString(PHOTO_SECRET_KEY);
 		} else {
 			Intent intent = getIntent();
 			mPhotoId = intent.getExtras().getString(PHOTO_ID_KEY);
+			mPhotoSecret = intent.getExtras().getString(PHOTO_SECRET_KEY);
 		}
 		mPhoto = new Photo();
 		mPhoto.setId(mPhotoId);
+		mPhoto.setSecret(mPhotoSecret);
 
 		mProgressBar = (ProgressBar) findViewById(R.id.progress);
 		mImageView = (ImageView) findViewById(R.id.big_image);
@@ -140,7 +149,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 			} else {
 				ImageDownloadTask task = new ImageDownloadTask(mImageView,
 						ParamType.PHOTO_ID_LARGE, this);
-				task.execute(mPhotoId);
+				task.execute(mPhotoId, mPhotoSecret);
 			}
 		} else {
 			mProgressBar.setVisibility(View.GONE);
@@ -173,6 +182,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString(PHOTO_ID_KEY, mPhotoId);
+		outState.putString(PHOTO_SECRET_KEY, mPhotoSecret);
 		Log.d(TAG, "Photo id saved."); //$NON-NLS-1$
 	}
 

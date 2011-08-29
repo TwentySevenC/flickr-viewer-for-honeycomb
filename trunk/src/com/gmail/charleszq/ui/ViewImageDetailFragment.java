@@ -210,6 +210,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		Intent intent = new Intent(getActivity(), ViewBigPhotoActivity.class);
 		intent.putExtra(ViewBigPhotoActivity.PHOTO_ID_KEY,
 				mCurrentPhoto.getId());
+		intent.putExtra(ViewBigPhotoActivity.PHOTO_SECRET_KEY, mCurrentPhoto.getSecret());
 		getActivity().startActivity(intent);
 	}
 

@@ -36,6 +36,11 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 	private static final String TAG = ImageDownloadTask.class.getName();
 	private WeakReference<ImageView> imgRef = null;
 	private String mUrl;
+	
+	/**
+	 * The photo secret
+	 */
+	private String mPhotoSecret = null;
 
 	public static enum ParamType {
 		PHOTO_URL, PHOTO_ID_SMALL, PHOTO_ID_SMALL_SQUARE, PHOTO_ID_MEDIUM, PHOTO_ID_LARGE, PHOTO_SET_ID, PHOTO_POOL_ID
@@ -80,6 +85,9 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 	@Override
 	protected Bitmap doInBackground(String... params) {
 		mUrl = params[0];
+		if( params.length > 1 ) {
+			mPhotoSecret = params[1];
+		}
 		String url = mUrl;
 		Flickr f = FlickrHelper.getInstance().getFlickr();
 		if (ParamType.PHOTO_SET_ID.equals(mParamType)) {
@@ -103,7 +111,7 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 		} else if (!mParamType.equals(ParamType.PHOTO_URL)) {
 			PhotosInterface pi = f.getPhotosInterface();
 			try {
-				Photo photo = pi.getPhoto(mUrl);
+				Photo photo = pi.getPhoto(mUrl, mPhotoSecret);
 				switch (mParamType) {
 				case PHOTO_ID_SMALL_SQUARE:
 					url = photo.getSmallSquareUrl();
