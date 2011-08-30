@@ -29,7 +29,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ImageView.ScaleType;
 
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotoList;
@@ -308,7 +307,6 @@ public class PhotoListFragment extends Fragment implements
 				privateMarker = holder.privateMarker;
 			}
 			titleView.setText(photo.getTitle());
-			photoImage.setScaleType(ScaleType.CENTER_CROP);
 
 			boolean showGeoMarker = photo.getGeoData() != null;
 			boolean showPrivateMarker = !photo.isPublicFlag()

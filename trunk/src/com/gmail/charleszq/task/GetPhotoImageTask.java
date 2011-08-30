@@ -7,8 +7,13 @@
 
 package com.gmail.charleszq.task;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.util.Log;
 
 import com.aetrion.flickr.photos.GeoData;
@@ -16,6 +21,7 @@ import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotosInterface;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageUtils;
 
@@ -62,15 +68,17 @@ public class GetPhotoImageTask extends
 			return null;
 		}
 
-		FlickrViewerApplication app = (FlickrViewerApplication) mActivity.getApplication();
+		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+				.getApplication();
 		String token = app.getFlickrToken();
 		PhotosInterface pi = null;
-		if( token != null ) {
-			pi = FlickrHelper.getInstance().getFlickrAuthed(token).getPhotosInterface();
+		if (token != null) {
+			pi = FlickrHelper.getInstance().getFlickrAuthed(token)
+					.getPhotosInterface();
 		} else {
 			pi = FlickrHelper.getInstance().getPhotosInterface();
 		}
-		
+
 		if (pi == null) {
 			return null;
 		}
@@ -107,17 +115,18 @@ public class GetPhotoImageTask extends
 
 			// TODO get cached image from sdcard will make the UI look a little
 			// strange, research later.
-			// File root = new File(Environment.getExternalStorageDirectory(),
-			// Constants.SD_CARD_FOLDER_NAME);
-			//            File imageFile = new File(root, photoId + ".jpg"); //$NON-NLS-1$
+			File root = new File(Environment.getExternalStorageDirectory(),
+					Constants.SD_CARD_FOLDER_NAME);
+			File imageFile = new File(root, photoId + ".jpg"); //$NON-NLS-1$
 
 			Bitmap mDownloadedBitmap = null;
-			// if (imageFile.exists()) {
-			// mDownloadedBitmap = BitmapFactory.decodeStream(new
-			// FileInputStream(imageFile));
-			// } else {
-			mDownloadedBitmap = ImageUtils.downloadImage(url);
-			// }
+			if (imageFile.exists()) {
+				mDownloadedBitmap = BitmapFactory
+						.decodeStream(new FileInputStream(imageFile));
+				mDownloadedBitmap = ImageUtils.resize(mDownloadedBitmap, 0.5f);
+			} else {
+				mDownloadedBitmap = ImageUtils.downloadImage(url);
+			}
 			return mDownloadedBitmap;
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
