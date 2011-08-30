@@ -10,7 +10,7 @@ package com.gmail.charleszq.actions;
 import android.app.Activity;
 
 /**
- * @author qiangz
+ * @author charles
  */
 public abstract class ActivityAwareAction implements IAction {
 

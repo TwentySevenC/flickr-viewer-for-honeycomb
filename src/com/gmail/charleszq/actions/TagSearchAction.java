@@ -16,7 +16,7 @@ import com.gmail.charleszq.task.AsyncPhotoListTask;
 import com.gmail.charleszq.utils.Constants;
 
 /**
- * @author qiangz
+ * @author charles
  * 
  */
 public class TagSearchAction extends ActivityAwareAction {

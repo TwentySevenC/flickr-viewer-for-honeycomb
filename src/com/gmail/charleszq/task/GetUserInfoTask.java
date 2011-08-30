@@ -27,7 +27,7 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  * Represents the task to get user information, and set the buddy icon to a
  * provided <code>ImageView</code>.
  * 
- * @author qiangz
+ * @author charles
  */
 public class GetUserInfoTask extends AsyncTask<String, Integer, User> {
 

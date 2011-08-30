@@ -22,7 +22,7 @@ import com.gmail.charleszq.utils.Constants;
 /**
  * Represents the service to check whether my photos got comments or not.s
  * 
- * @author qiangz
+ * @author charles
  * 
  */
 public class PhotoActivityService extends IntentService {

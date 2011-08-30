@@ -12,7 +12,7 @@ import com.aetrion.flickr.contacts.Contact;
 import java.util.Collection;
 
 /**
- * @author qiangz
+ * @author charles
  *
  */
 public interface IContactDataProvider {

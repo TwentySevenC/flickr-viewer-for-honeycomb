@@ -12,7 +12,7 @@
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center" />
 		<com.gmail.charleszq.ui.comp.PhotoDetailActionBar
-			android:background="@drawable/photo_detail_action_bar_bg"
+			style="@android:style/Holo.ButtonBar"
 			android:layout_centerHorizontal="true" android:id="@+id/user_action_bar"
 			android:layout_alignParentBottom="true" android:layout_height="wrap_content"
 			android:layout_marginLeft="50dp" android:layout_marginRight="50dp"
@@ -83,7 +83,7 @@
 			</ViewAnimator>
 			<ScrollView android:layout_width="fill_parent"
 				android:scrollbars="vertical" android:fillViewport="true"
-				android:background="@drawable/photo_detail_action_bar_bg"
+				android:padding="10dp" style="@android:style/Holo.ButtonBar"
 				android:layout_height="0dp" android:layout_weight="1"
 				android:layout_margin="10dp">
 				<TextView android:id="@+id/photo_desc"

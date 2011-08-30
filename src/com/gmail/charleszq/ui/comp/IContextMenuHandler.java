@@ -11,7 +11,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnCreateContextMenuListener;
 
 /**
- * @author qiangz
+ * @author charles
  *
  */
 public interface IContextMenuHandler extends OnCreateContextMenuListener, OnMenuItemClickListener {

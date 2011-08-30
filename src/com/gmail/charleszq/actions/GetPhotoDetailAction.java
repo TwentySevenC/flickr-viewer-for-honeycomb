@@ -20,7 +20,7 @@ import android.graphics.Bitmap;
 import android.widget.Toast;
 
 /**
- * @author qiangz
+ * @author charles
  */
 public class GetPhotoDetailAction extends ActivityAwareAction implements
 		IPhotoFetchedListener {

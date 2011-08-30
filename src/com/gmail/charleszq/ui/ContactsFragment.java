@@ -49,7 +49,7 @@ import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 
 /**
- * @author qiangz
+ * @author charles
  */
 public class ContactsFragment extends Fragment implements
 		IContactsFetchedListener, OnItemClickListener {

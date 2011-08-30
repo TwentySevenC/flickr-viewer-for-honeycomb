@@ -40,7 +40,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author qiangz
+ * @author charles
  */
 public class RecentActivityFragment extends Fragment implements
 		OnItemClickListener {

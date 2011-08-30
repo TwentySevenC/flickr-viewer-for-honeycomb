@@ -16,7 +16,7 @@ import com.gmail.charleszq.task.AsyncPhotoListTask;
 import android.app.Activity;
 
 /**
- * @author qiangz
+ * @author charles
  */
 public class ShowInterestingPhotosAction extends ActivityAwareAction {
 

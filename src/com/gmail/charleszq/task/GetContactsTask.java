@@ -18,7 +18,7 @@ import android.app.Activity;
 import java.util.Collection;
 
 /**
- * @author qiangz
+ * @author charles
  */
 public class GetContactsTask extends ProgressDialogAsyncTask<String, Integer, Collection<Contact>> {
 
