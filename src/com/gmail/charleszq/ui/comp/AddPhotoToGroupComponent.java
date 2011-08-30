@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -42,7 +44,7 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  * 
  */
 public class AddPhotoToGroupComponent extends FrameLayout implements
-		OnClickListener, IUserPhotoCollectionFetched {
+		OnClickListener, IUserPhotoCollectionFetched, OnItemClickListener {
 
 	private ListView mListView;
 	private Button mOkButton, mCancelButton;
@@ -87,6 +89,8 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mCancelButton = (Button) findViewById(R.id.cancel_btn);
 		mOkButton.setOnClickListener(this);
 		mCancelButton.setOnClickListener(this);
+		mListView.setOnItemClickListener(this);
+		mListView.setItemsCanFocus(false);
 	}
 
 	/**
@@ -230,6 +234,19 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 			CheckedTextView title;
 		}
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget
+	 * .AdapterView, android.view.View, int, long)
+	 */
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		mListView.setItemChecked(position, !mListView.isItemChecked(position));
 	}
 
 }
