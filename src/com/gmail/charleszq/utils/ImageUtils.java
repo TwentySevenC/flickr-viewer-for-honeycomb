@@ -142,11 +142,11 @@ public final class ImageUtils {
 	 * @return <code>true</code> if success, <code>false</code> otherwise.
 	 */
 	public static boolean saveImageToFile(File destFile, Bitmap bitmap) {
-		
-		if( bitmap == null ) {
+
+		if (bitmap == null) {
 			return false;
 		}
-		
+
 		FileOutputStream fos = null;
 		try {
 			if (destFile.exists()) {
@@ -221,5 +221,27 @@ public final class ImageUtils {
 		Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
 				matrix, true);
 		return resizedBitmap;
+	}
+
+	/**
+	 * 
+	 * @param bitmap
+	 * @param destValue
+	 * @param isHeight
+	 * @return
+	 */
+	public static Bitmap resize(Bitmap bitmap, float destValue, boolean isHeight) {
+
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+
+		float factor = 1.0f;
+		if (isHeight) {
+			factor = destValue / height;
+		} else {
+			factor = destValue / width;
+		}
+
+		return resize(bitmap, factor);
 	}
 }
