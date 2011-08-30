@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * @author qiangz
+ * @author charles
  */
 public class DefaultContactDataProvider implements IContactDataProvider {
 

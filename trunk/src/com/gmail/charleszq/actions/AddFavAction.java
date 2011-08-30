@@ -8,7 +8,7 @@ import android.app.Activity;
 import com.gmail.charleszq.task.AddPhotoAsFavoriteTask;
 
 /**
- * @author qiangz
+ * @author charles
  * 
  */
 public class AddFavAction extends ActivityAwareAction {

@@ -13,7 +13,7 @@ import com.gmail.charleszq.dataprovider.PhotoPoolDataProvider;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
 
 /**
- * @author qiangz
+ * @author chalres
  * 
  */
 public class ShowPhotoPoolAction extends ActivityAwareAction {

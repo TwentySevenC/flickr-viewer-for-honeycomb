@@ -25,7 +25,7 @@ import android.widget.Toast;
  * Represents the default photo list ready listener, which shows the default
  * photo grid view after photo fetched.
  * 
- * @author qiangz
+ * @author charles
  */
 public class DefaultPhotoListReadyListener implements IPhotoListReadyListener {
 

@@ -30,7 +30,7 @@ import com.gmail.charleszq.utils.FlickrHelper;
  * Represents the service to check whether there are new photos uploaded by my
  * contacts.
  * 
- * @author qiangz
+ * @author charles
  * 
  */
 public class ContactUploadService extends IntentService {

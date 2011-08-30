@@ -18,7 +18,7 @@ import android.app.FragmentTransaction;
  * Represents the action to show the auth dialog TODO: can add a finish action
  * to do after auth.
  * 
- * @author qiangz
+ * @author charles
  */
 public class ShowAuthDialogAction extends ActivityAwareAction {
 

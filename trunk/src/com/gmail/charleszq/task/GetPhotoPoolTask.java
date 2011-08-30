@@ -14,7 +14,11 @@ import com.aetrion.flickr.photos.PhotosInterface;
 import com.gmail.charleszq.utils.FlickrHelper;
 
 /**
- * @author qiangz
+ * Represents the task to fetch the photo group/set of a given photo, the
+ * execute parameter should be [<photoId>, <token>], the token could be
+ * <code>null</code>, in this case, will use the un-authed called.
+ * 
+ * @author charles
  * 
  */
 public class GetPhotoPoolTask extends
@@ -30,9 +34,9 @@ public class GetPhotoPoolTask extends
 	protected List<PhotoPlace> doInBackground(String... arg0) {
 		String photoId = arg0[0];
 		String flickrToken = arg0[1];
-		
+
 		Flickr f = null;
-		if( flickrToken == null ) {
+		if (flickrToken == null) {
 			f = FlickrHelper.getInstance().getFlickr();
 		} else {
 			f = FlickrHelper.getInstance().getFlickrAuthed(flickrToken);
