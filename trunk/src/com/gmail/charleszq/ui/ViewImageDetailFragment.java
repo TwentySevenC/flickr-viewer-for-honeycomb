@@ -37,6 +37,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
+import android.widget.ViewSwitcher;
 
 import com.aetrion.flickr.people.User;
 import com.aetrion.flickr.photos.Exif;
@@ -58,6 +59,7 @@ import com.gmail.charleszq.model.UserComment;
 import com.gmail.charleszq.task.GetPhotoCommentsTask;
 import com.gmail.charleszq.task.GetPhotoExifTask;
 import com.gmail.charleszq.task.ImageDownloadTask;
+import com.gmail.charleszq.ui.comp.AddPhotoToGroupComponent;
 import com.gmail.charleszq.ui.comp.PhotoDetailActionBar;
 import com.gmail.charleszq.ui.comp.PhotoPoolComponent;
 import com.gmail.charleszq.utils.ImageCache;
@@ -194,6 +196,14 @@ public class ViewImageDetailFragment extends Fragment implements
 					getActivity(), mCurrentPhoto, true);
 			wallAction.execute();
 			return true;
+		case R.id.menu_item_add_photo_to_group:
+			app = (FlickrViewerApplication) getActivity().getApplication();
+			token = app.getFlickrToken();
+			String userId = app.getUserId();
+			// TODO auth check
+			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token);
+			mAddGroupViewSwither.showNext();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -203,7 +213,8 @@ public class ViewImageDetailFragment extends Fragment implements
 		Intent intent = new Intent(getActivity(), ViewBigPhotoActivity.class);
 		intent.putExtra(ViewBigPhotoActivity.PHOTO_ID_KEY,
 				mCurrentPhoto.getId());
-		intent.putExtra(ViewBigPhotoActivity.PHOTO_SECRET_KEY, mCurrentPhoto.getSecret());
+		intent.putExtra(ViewBigPhotoActivity.PHOTO_SECRET_KEY,
+				mCurrentPhoto.getSecret());
 		getActivity().startActivity(intent);
 	}
 
@@ -323,8 +334,17 @@ public class ViewImageDetailFragment extends Fragment implements
 				.findViewById(R.id.user_action_bar);
 		pBar.setPhoto(mCurrentPhoto);
 
+		// the add group view switcher
+		mAddGroupViewSwither = (ViewSwitcher) view
+				.findViewById(R.id.add_group_switcher);
+		mAddPhotoToGroupComponent = (AddPhotoToGroupComponent) view
+				.findViewById(R.id.add_photo_to_set_view);
+
 		return view;
 	}
+
+	private ViewSwitcher mAddGroupViewSwither;
+	private AddPhotoToGroupComponent mAddPhotoToGroupComponent;
 
 	private void hookDoubleTapOnImage(ImageView image) {
 		final GestureDetector imageGestureDector = new GestureDetector(

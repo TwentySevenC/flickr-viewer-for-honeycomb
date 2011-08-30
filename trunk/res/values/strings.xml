@@ -8,14 +8,17 @@
 	<string name="menu_share_title">Share</string>
 	<string name="menu_write_comment">Comment</string>
 	<string name="menu_item_setting">Settings</string>
+	<string name="menu_item_add_photo_to_group">Add to Gallery/Set/Group</string>
 	<string name="menu_previous_page">Previous Page</string>
 	<string name="menu_next_page">Next Page</string>
-	<string name="menu_item_ok">OK</string>
 	<string name="menu_item_save">Save</string>
 	<string name="menu_item_set_wall_paper">Set as Wallpaper</string>
 	<string name="add_fav_photo">Add as Favorite</string>
 	<string name="show_owner_photos">Show Owner\'s Photos</string>
 	<string name="view_big_photo">View Big Photo</string>
+	
+	<string name="ok_btn">OK</string>
+	<string name="cancel_btn">Cancel</string>
 
 	<string name="photo_list">Photo List</string>
 	<string name="photo_grid_column_count">Grid column count</string>

@@ -112,6 +112,7 @@ public class UserPhotoCollectionTask extends
 		String userId = params[0];
 		mToken = params[1];
 
+		// the key of this map is the string resource id of gallery, or photo set, or photo group.
 		Map<Integer, List<IListItemAdapter>> result = null;
 		if (!mIsForceFromServer) {
 			try {
