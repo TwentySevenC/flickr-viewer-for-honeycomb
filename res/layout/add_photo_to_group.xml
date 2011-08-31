@@ -11,7 +11,9 @@
 		<ListView android:layout_height="fill_parent" android:id="@+id/group_check_list"
 			android:choiceMode="multipleChoice" android:layout_width="match_parent" />
 		<!-- Create new gallery -->
-		
+		<com.gmail.charleszq.ui.comp.CreateGalleryComponent
+			android:id="@+id/crt_gallery" android:layout_height="fill_parent"
+			android:layout_width="match_parent" />
 	</ViewAnimator>
 	<LinearLayout android:layout_width="fill_parent"
 		style="@android:style/Holo.ButtonBar" android:layout_height="wrap_content"

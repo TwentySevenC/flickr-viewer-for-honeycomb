@@ -194,7 +194,8 @@
 	<!-- Create gallery -->
 	<string name="crt_gallery_desc">No gallery available to add this photo, you need to create one.</string>
 	<string name="crt_gallery_title">Title*</string>
-	<string name="crt_gallery_desc_man">Description*</string>
+	<string name="crt_gallery_desc_man">Description</string>
+	<string name="error_no_title">Please input title</string>
 </resources>
 
 

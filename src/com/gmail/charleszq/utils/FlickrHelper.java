@@ -69,7 +69,7 @@ public final class FlickrHelper {
 
 	public GalleryInterface getGalleryInterface() {
 		try {
-			return new GalleryInterface(API_KEY, new REST());
+			return new GalleryInterface(API_KEY, API_SEC, new REST());
 		} catch (ParserConfigurationException e) {
 			return null;
 		}
