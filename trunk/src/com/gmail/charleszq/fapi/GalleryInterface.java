@@ -16,6 +16,7 @@ import com.aetrion.flickr.FlickrException;
 import com.aetrion.flickr.Parameter;
 import com.aetrion.flickr.Response;
 import com.aetrion.flickr.Transport;
+import com.aetrion.flickr.auth.AuthUtilities;
 import com.aetrion.flickr.photos.Extras;
 import com.aetrion.flickr.photos.PhotoList;
 import com.aetrion.flickr.photos.PhotoUtils;
@@ -42,6 +43,7 @@ public class GalleryInterface {
 
 	private static final String METHOD_GET_LIST = "flickr.galleries.getList"; //$NON-NLS-1$
 	private static final String METHOD_GET_PHOTOS = "flickr.galleries.getPhotos"; //$NON-NLS-1$
+	private static final Object METHOD_CREATE = "flickr.galleries.create"; //$NON-NLS-1$
 
 	/**
 	 * The api key.
@@ -53,15 +55,19 @@ public class GalleryInterface {
 	 */
 	private Transport mTransport;
 
+	private String mSharedSecret;
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param apiKey
 	 * @param transport
 	 */
-	public GalleryInterface(String apiKey, Transport transport) {
+	public GalleryInterface(String apiKey, String sharedSecret,
+			Transport transport) {
 		this.mApiKey = apiKey;
 		this.mTransport = transport;
+		this.mSharedSecret = sharedSecret;
 	}
 
 	/**
@@ -92,8 +98,8 @@ public class GalleryInterface {
 		List<FlickrGallery> galleries = new ArrayList<FlickrGallery>();
 		Response response = mTransport.get(mTransport.getPath(), parameters);
 		if (response.isError()) {
-			throw new FlickrException(response.getErrorCode(), response
-					.getErrorMessage());
+			throw new FlickrException(response.getErrorCode(),
+					response.getErrorMessage());
 		}
 		Element galleriesElement = response.getPayload();
 		NodeList galleryNodes = galleriesElement
@@ -143,8 +149,8 @@ public class GalleryInterface {
 
 		Response response = mTransport.get(mTransport.getPath(), parameters);
 		if (response.isError()) {
-			throw new FlickrException(response.getErrorCode(), response
-					.getErrorMessage());
+			throw new FlickrException(response.getErrorCode(),
+					response.getErrorMessage());
 		}
 		PhotoList photos = new PhotoList();
 		Element photoset = response.getPayload();
@@ -161,5 +167,40 @@ public class GalleryInterface {
 
 		return photos;
 
+	}
+
+	/**
+	 * Creates a gallery, return -1 says there is error, returns the gallery id
+	 * if success.
+	 * 
+	 * @param title
+	 * @param description
+	 * @param primaryPhotoId
+	 * @return
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws FlickrException
+	 */
+	public String createGallery(String title, String description,
+			String primaryPhotoId) throws IOException, SAXException,
+			FlickrException {
+		List<Parameter> parameters = new ArrayList<Parameter>();
+		parameters.add(new Parameter(KEY_METHOD, METHOD_CREATE));
+		parameters.add(new Parameter(KEY_API_KEY, mApiKey));
+
+		parameters.add(new Parameter("title", title)); //$NON-NLS-1$
+		parameters.add(new Parameter(
+				"description", description == null ? title : description)); //$NON-NLS-1$
+		parameters.add(new Parameter("primary_photo_id", primaryPhotoId)); //$NON-NLS-1$
+		parameters.add(new Parameter("api_sig", //$NON-NLS-1$
+				AuthUtilities.getSignature(mSharedSecret, parameters)));
+
+		Response response = mTransport.post(mTransport.getPath(), parameters);
+		if (response.isError()) {
+			throw new FlickrException(response.getErrorCode(),
+					response.getErrorMessage());
+		}
+		Element gallery = response.getPayload();
+		return gallery.getAttribute("id"); //$NON-NLS-1$
 	}
 }

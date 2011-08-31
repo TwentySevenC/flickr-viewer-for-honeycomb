@@ -67,6 +67,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	private ListView mListView;
 	private Button mOkButton, mCancelButton;
 	private SectionAdapter mSectionAdapter;
+	private CreateGalleryComponent mCreateGalleryComponent;
 
 	private Photo mCurrentPhoto;
 	private String mUserId;
@@ -121,6 +122,8 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 				getContext(), R.anim.push_right_in));
 		mViewContainer.setOutAnimation(AnimationUtils.loadAnimation(
 				getContext(), R.anim.push_left_out));
+
+		mCreateGalleryComponent = (CreateGalleryComponent) findViewById(R.id.crt_gallery);
 
 		mListView = (ListView) findViewById(R.id.group_check_list);
 		mOkButton = (Button) findViewById(R.id.ok_btn);
@@ -177,6 +180,14 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 			vs.setOutAnimation(AnimationUtils.loadAnimation(getContext(),
 					R.anim.push_right_out));
 			vs.showPrevious();
+		} else if( view == mOkButton ) {
+			int index = mViewContainer.getDisplayedChild();
+			if( index == IDX_CRT_GALLERY ) {
+				boolean val = mCreateGalleryComponent.validate();
+				if( val ) {
+					//call method to create gallery.
+				}
+			}
 		}
 	}
 
@@ -226,6 +237,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 			} else {
 				// no gallery to store this photo, prompt user to create a new
 				// gallery.
+				mViewContainer.setDisplayedChild(IDX_CRT_GALLERY);
 			}
 		}
 	}
