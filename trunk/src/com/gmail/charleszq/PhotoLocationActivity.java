@@ -157,6 +157,7 @@ public class PhotoLocationActivity extends MapActivity implements
 		// use 'null' as the message not shows the progress dialog.
 		GetPhotoImageTask task = new GetPhotoImageTask(this,
 				PhotoType.SMALL_URL, this, null);
+		task.setCacheImageScale(0.25f);
 		task.execute(mPhotoId, mPhotoSecret);
 	}
 

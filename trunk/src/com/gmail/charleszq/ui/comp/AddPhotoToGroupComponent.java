@@ -20,29 +20,34 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ViewAnimator;
 import android.widget.ViewSwitcher;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotoPlace;
+import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.model.IListItemAdapter;
+import com.gmail.charleszq.task.CreateGalleryTask;
 import com.gmail.charleszq.task.GetPhotoPoolTask;
-import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
 import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask;
+import com.gmail.charleszq.task.CreateGalleryTask.ICreateGalleryListener;
+import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
+import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
@@ -55,13 +60,13 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  */
 public class AddPhotoToGroupComponent extends FrameLayout implements
 		OnClickListener, IUserPhotoCollectionFetched, OnItemClickListener,
-		IPhotoPoolListener {
+		IPhotoPoolListener, ICreateGalleryListener {
 
 	private static final String TAG = AddPhotoToGroupComponent.class.getName();
 	private static final int IDX_PROGRESS = 0;
 	private static final int IDX_LIST = 1;
 	private static final int IDX_CRT_GALLERY = 2;
-	private static final int IDX_CRT_SET = 3;
+	// private static final int IDX_CRT_SET = 3;
 
 	private ViewAnimator mViewContainer;
 	private ListView mListView;
@@ -180,15 +185,28 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 			vs.setOutAnimation(AnimationUtils.loadAnimation(getContext(),
 					R.anim.push_right_out));
 			vs.showPrevious();
-		} else if( view == mOkButton ) {
+		} else if (view == mOkButton) {
 			int index = mViewContainer.getDisplayedChild();
-			if( index == IDX_CRT_GALLERY ) {
+			if (index == IDX_CRT_GALLERY) {
 				boolean val = mCreateGalleryComponent.validate();
-				if( val ) {
-					//call method to create gallery.
+				if (val) {
+					// call method to create gallery.
+					CreateGalleryTask cgTask = new CreateGalleryTask(this);
+					String title = mCreateGalleryComponent.getGalleryTile();
+					String desc = mCreateGalleryComponent
+							.getGalleryDescription();
+					if (desc == null) {
+						desc = title;
+					}
+					cgTask.execute(title, desc, mCurrentPhoto.getId());
+					mViewContainer.setDisplayedChild(IDX_PROGRESS);
 				}
 			}
 		}
+
+		InputMethodManager imeManager = (InputMethodManager) getContext()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imeManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	}
 
 	/*
@@ -229,8 +247,9 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mViewContainer.setDisplayedChild(IDX_LIST);
 
 		if (count == 0) {
-			Log.d(TAG,
-					"No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
+			Log
+					.d(TAG,
+							"No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
 			if (mIsMyOwnPhoto) {
 				// no photo set/group avaliable to add this photo, prompt user
 				// to create a new photo set.
@@ -366,6 +385,20 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		// get user's set/group list
 		UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
 		task.execute(mUserId, mToken);
+	}
+
+	@Override
+	public void onGalleryCreated(boolean ok, String result) {
+		if (ok) {
+			onClick(mCancelButton);
+			Toast.makeText(getContext(), "Gallery created", Toast.LENGTH_SHORT) //$NON-NLS-1$
+					.show();
+			FlickrViewerApplication.USER_POOL_FORCE_SERVER = true;
+		} else {
+			mViewContainer.setDisplayedChild(IDX_CRT_GALLERY);
+			Log.w(TAG, result);
+			Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 }
