@@ -94,11 +94,11 @@ public class CreateGalleryComponent extends AbstractComponent {
 		}
 	}
 
-	public String getTile() {
+	public String getGalleryTile() {
 		return mTitle.getText().toString();
 	}
 
-	public String getDescription() {
+	public String getGalleryDescription() {
 		if (mDescription.getText() == null) {
 			return null;
 		} else {

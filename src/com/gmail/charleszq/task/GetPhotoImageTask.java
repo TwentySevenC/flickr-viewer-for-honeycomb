@@ -26,6 +26,8 @@ import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageUtils;
 
 /**
+ * Represents the task to fetch photo image from flickr.
+ * 
  * @author charles
  */
 public class GetPhotoImageTask extends
@@ -34,6 +36,8 @@ public class GetPhotoImageTask extends
 	private static final int MSG_ID = R.string.loading_photo_detail;
 	private static final String TAG = GetPhotoImageTask.class.getName();
 	private Photo mCurrentPhoto;
+	
+	private float mCacheImageScale = 0.5f;
 
 	public static enum PhotoType {
 		SMALL_SQR_URL, SMALL_URL, MEDIUM_URL, LARGE_URL, ORG_URL
@@ -59,6 +63,10 @@ public class GetPhotoImageTask extends
 		super(act, msg);
 		mPhotoType = photoType;
 		this.mPhotoFetchedListener = listener;
+	}
+	
+	public void setCacheImageScale(float scale) {
+		this.mCacheImageScale = scale;
 	}
 
 	@Override
@@ -113,8 +121,6 @@ public class GetPhotoImageTask extends
 				break;
 			}
 
-			// TODO get cached image from sdcard will make the UI look a little
-			// strange, research later.
 			File root = new File(Environment.getExternalStorageDirectory(),
 					Constants.SD_CARD_FOLDER_NAME);
 			File imageFile = new File(root, photoId + ".jpg"); //$NON-NLS-1$
@@ -123,7 +129,7 @@ public class GetPhotoImageTask extends
 			if (imageFile.exists()) {
 				mDownloadedBitmap = BitmapFactory
 						.decodeStream(new FileInputStream(imageFile));
-				mDownloadedBitmap = ImageUtils.resize(mDownloadedBitmap, 0.5f);
+				mDownloadedBitmap = ImageUtils.resize(mDownloadedBitmap, mCacheImageScale);
 			} else {
 				mDownloadedBitmap = ImageUtils.downloadImage(url);
 			}

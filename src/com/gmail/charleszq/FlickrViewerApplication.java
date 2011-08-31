@@ -36,6 +36,12 @@ public class FlickrViewerApplication extends Application {
 	private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
 
 	/**
+	 * The boolean to say whether we need to fetch user's gallery/set/group from
+	 * server side or not.
+	 */
+	public static boolean USER_POOL_FORCE_SERVER = false;
+
+	/**
 	 * Returns the defiend page size of the grid view.
 	 * 
 	 * @return the page size.
