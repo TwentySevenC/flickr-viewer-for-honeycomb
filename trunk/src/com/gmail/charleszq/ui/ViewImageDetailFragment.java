@@ -200,8 +200,11 @@ public class ViewImageDetailFragment extends Fragment implements
 			app = (FlickrViewerApplication) getActivity().getApplication();
 			token = app.getFlickrToken();
 			String userId = app.getUserId();
-			// TODO auth check
 			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token);
+			mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
+					getActivity(), R.anim.push_right_in));
+			mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
+					getActivity(), R.anim.push_left_out));
 			mAddGroupViewSwither.showNext();
 			return true;
 		default:
@@ -651,10 +654,13 @@ public class ViewImageDetailFragment extends Fragment implements
 		MenuItem ownerPhotoItem = menu
 				.findItem(R.id.menu_item_show_owner_photos);
 		MenuItem favItem = menu.findItem(R.id.menu_item_add_as_fav);
+		MenuItem addToGroupItem = menu
+				.findItem(R.id.menu_item_add_photo_to_group);
 
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String userId = app.getUserId();
+		addToGroupItem.setVisible(userId != null);
 		if (userId == null || mCurrentPhoto == null
 				|| mCurrentPhoto.getOwner() == null) {
 			return;

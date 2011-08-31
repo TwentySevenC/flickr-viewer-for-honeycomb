@@ -191,6 +191,10 @@
 	<string name="tag_search_hint">Search by Tags</string>
 	
 	<string name="error_get_photo_detail">Unable to get the detail information.</string>
+	<!-- Create gallery -->
+	<string name="crt_gallery_desc">No gallery available to add this photo, you need to create one.</string>
+	<string name="crt_gallery_title">Title*</string>
+	<string name="crt_gallery_desc_man">Description*</string>
 </resources>
 
 

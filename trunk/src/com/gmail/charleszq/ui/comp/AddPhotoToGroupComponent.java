@@ -17,29 +17,32 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ViewAnimator;
 import android.widget.ViewSwitcher;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotoPlace;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.task.GetPhotoPoolTask;
-import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
+import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
+import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
@@ -54,9 +57,17 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		OnClickListener, IUserPhotoCollectionFetched, OnItemClickListener,
 		IPhotoPoolListener {
 
+	private static final String TAG = AddPhotoToGroupComponent.class.getName();
+	private static final int IDX_PROGRESS = 0;
+	private static final int IDX_LIST = 1;
+	private static final int IDX_CRT_GALLERY = 2;
+	private static final int IDX_CRT_SET = 3;
+
+	private ViewAnimator mViewContainer;
 	private ListView mListView;
 	private Button mOkButton, mCancelButton;
 	private SectionAdapter mSectionAdapter;
+
 	private Photo mCurrentPhoto;
 	private String mUserId;
 	private String mToken;
@@ -104,9 +115,17 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	private void buildLayout() {
 		LayoutInflater li = LayoutInflater.from(getContext());
 		li.inflate(R.layout.add_photo_to_group, this, true);
+
+		mViewContainer = (ViewAnimator) findViewById(R.id.views);
+		mViewContainer.setInAnimation(AnimationUtils.loadAnimation(
+				getContext(), R.anim.push_right_in));
+		mViewContainer.setOutAnimation(AnimationUtils.loadAnimation(
+				getContext(), R.anim.push_left_out));
+
 		mListView = (ListView) findViewById(R.id.group_check_list);
 		mOkButton = (Button) findViewById(R.id.ok_btn);
 		mCancelButton = (Button) findViewById(R.id.cancel_btn);
+
 		mOkButton.setOnClickListener(this);
 		mCancelButton.setOnClickListener(this);
 		mListView.setOnItemClickListener(this);
@@ -126,9 +145,10 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		this.mCurrentPhoto = photo;
 		this.mUserId = authUserId;
 		this.mToken = token;
-		
+
 		mCheckedItems.clear();
 		mPhotoGroupIds.clear();
+		mViewContainer.setDisplayedChild(IDX_PROGRESS);
 
 		mSectionAdapter = new SimpleSectionAdapter(getContext());
 		mListView.setAdapter(mSectionAdapter);
@@ -150,8 +170,13 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	 */
 	@Override
 	public void onClick(View view) {
-		if( view == mCancelButton ) {
-			((ViewSwitcher)getParent()).showPrevious();
+		if (view == mCancelButton) {
+			ViewSwitcher vs = (ViewSwitcher) getParent();
+			vs.setInAnimation(AnimationUtils.loadAnimation(getContext(),
+					R.anim.push_left_in));
+			vs.setOutAnimation(AnimationUtils.loadAnimation(getContext(),
+					R.anim.push_right_out));
+			vs.showPrevious();
 		}
 	}
 
@@ -166,6 +191,8 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	public void onUserPhotoCollectionFetched(
 			Map<Integer, List<IListItemAdapter>> map) {
 		mSectionAdapter.clearSections();
+
+		int count = 0; // whether we finally got at least one item in the list.
 		for (Integer key : map.keySet()) {
 			if (mIsMyOwnPhoto) {
 				if (key == R.string.section_photo_gallery) {
@@ -181,12 +208,26 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 			for (IListItemAdapter item : values) {
 				if (!mPhotoGroupIds.contains(item.getId())) {
 					items.add(item);
+					count++;
 				}
 			}
 			mSectionAdapter.addSection(getContext().getString(key),
 					new PhotoPoolAdapter(getContext(), items, mCheckedItems));
 		}
 		mListView.setAdapter(mSectionAdapter);
+		mViewContainer.setDisplayedChild(IDX_LIST);
+
+		if (count == 0) {
+			Log.d(TAG,
+					"No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
+			if (mIsMyOwnPhoto) {
+				// no photo set/group avaliable to add this photo, prompt user
+				// to create a new photo set.
+			} else {
+				// no gallery to store this photo, prompt user to create a new
+				// gallery.
+			}
+		}
 	}
 
 	private class PhotoPoolAdapter extends BaseAdapter {
