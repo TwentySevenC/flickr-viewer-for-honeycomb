@@ -38,7 +38,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotoPlace;
-import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.task.CreateGalleryTask;
@@ -393,7 +392,6 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 			onClick(mCancelButton);
 			Toast.makeText(getContext(), "Gallery created", Toast.LENGTH_SHORT) //$NON-NLS-1$
 					.show();
-			FlickrViewerApplication.USER_POOL_FORCE_SERVER = true;
 		} else {
 			mViewContainer.setDisplayedChild(IDX_CRT_GALLERY);
 			Log.w(TAG, result);

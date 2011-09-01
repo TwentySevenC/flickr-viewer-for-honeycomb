@@ -22,7 +22,6 @@ import com.aetrion.flickr.groups.pools.PoolsInterface;
 import com.aetrion.flickr.photosets.Photoset;
 import com.aetrion.flickr.photosets.Photosets;
 import com.aetrion.flickr.photosets.PhotosetsInterface;
-import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.fapi.GalleryInterface;
 import com.gmail.charleszq.model.FlickrGallery;
@@ -115,9 +114,6 @@ public class UserPhotoCollectionTask extends
 
 		// the key of this map is the string resource id of gallery, or photo
 		// set, or photo group.
-		mIsForceFromServer = mIsForceFromServer
-				|| FlickrViewerApplication.USER_POOL_FORCE_SERVER;
-
 		Map<Integer, List<IListItemAdapter>> result = null;
 		if (!mIsForceFromServer) {
 			try {
@@ -127,9 +123,6 @@ public class UserPhotoCollectionTask extends
 			}
 
 			if (result != null) {
-				if (FlickrViewerApplication.USER_POOL_FORCE_SERVER) {
-					FlickrViewerApplication.USER_POOL_FORCE_SERVER = false;
-				}
 				return result;
 			}
 		}
@@ -187,9 +180,6 @@ public class UserPhotoCollectionTask extends
 			// Ignore.
 		}
 
-		if (FlickrViewerApplication.USER_POOL_FORCE_SERVER) {
-			FlickrViewerApplication.USER_POOL_FORCE_SERVER = false;
-		}
 		return result;
 	}
 

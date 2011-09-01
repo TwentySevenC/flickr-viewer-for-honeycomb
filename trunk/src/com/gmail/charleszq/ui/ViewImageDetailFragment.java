@@ -272,7 +272,8 @@ public class ViewImageDetailFragment extends Fragment implements
 			tagsText.setVisibility(View.GONE);
 		} else {
 			StringBuilder sb = new StringBuilder();
-			sb.append(getActivity().getResources().getString(R.string.msg_tags));
+			sb.append(getActivity().getString(R.string.msg_tags));
+			sb.append(" "); //$NON-NLS-1$
 			for (Tag tag : tags) {
 				sb.append(tag.getValue()).append(" "); //$NON-NLS-1$
 			}
