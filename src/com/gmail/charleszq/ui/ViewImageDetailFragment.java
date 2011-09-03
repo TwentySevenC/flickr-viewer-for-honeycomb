@@ -18,26 +18,26 @@ import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.GestureDetector.OnDoubleTapListener;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 import android.widget.ViewSwitcher;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.aetrion.flickr.people.User;
 import com.aetrion.flickr.photos.Exif;
@@ -63,8 +63,8 @@ import com.gmail.charleszq.ui.comp.AddPhotoToGroupComponent;
 import com.gmail.charleszq.ui.comp.PhotoDetailActionBar;
 import com.gmail.charleszq.ui.comp.PhotoPoolComponent;
 import com.gmail.charleszq.utils.ImageCache;
-import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 import com.gmail.charleszq.utils.StringUtils;
+import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 
 /**
  * The fragment to view the detail information of a picture, including exif,
@@ -196,17 +196,17 @@ public class ViewImageDetailFragment extends Fragment implements
 					getActivity(), mCurrentPhoto, true);
 			wallAction.execute();
 			return true;
-		case R.id.menu_item_add_photo_to_group:
-			app = (FlickrViewerApplication) getActivity().getApplication();
-			token = app.getFlickrToken();
-			String userId = app.getUserId();
-			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token);
-			mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
-					getActivity(), R.anim.push_right_in));
-			mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
-					getActivity(), R.anim.push_left_out));
-			mAddGroupViewSwither.showNext();
-			return true;
+//		case R.id.menu_item_add_photo_to_group:
+//			app = (FlickrViewerApplication) getActivity().getApplication();
+//			token = app.getFlickrToken();
+//			String userId = app.getUserId();
+//			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token);
+//			mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
+//					getActivity(), R.anim.push_right_in));
+//			mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
+//					getActivity(), R.anim.push_left_out));
+//			mAddGroupViewSwither.showNext();
+//			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -655,13 +655,13 @@ public class ViewImageDetailFragment extends Fragment implements
 		MenuItem ownerPhotoItem = menu
 				.findItem(R.id.menu_item_show_owner_photos);
 		MenuItem favItem = menu.findItem(R.id.menu_item_add_as_fav);
-		MenuItem addToGroupItem = menu
-				.findItem(R.id.menu_item_add_photo_to_group);
+//		MenuItem addToGroupItem = menu
+//				.findItem(R.id.menu_item_add_photo_to_group);
 
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String userId = app.getUserId();
-		addToGroupItem.setVisible(userId != null);
+//		addToGroupItem.setVisible(userId != null);
 		if (userId == null || mCurrentPhoto == null
 				|| mCurrentPhoto.getOwner() == null) {
 			return;
