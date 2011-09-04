@@ -349,7 +349,7 @@ public class PhotoListFragment extends Fragment implements
 				}
 			} else {
 				Bitmap cacheBitmap = ImageCache.getFromCache(smallUrl);
-				if (cacheBitmap != null) {
+				if (cacheBitmap != null && !cacheBitmap.isRecycled()) {
 					photoImage.setImageBitmap(cacheBitmap);
 				} else {
 					File f = getSavedImageFile(photo.getId());
