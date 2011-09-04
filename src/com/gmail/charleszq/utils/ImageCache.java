@@ -44,6 +44,11 @@ public final class ImageCache {
 	}
 
 	public static Bitmap getFromCache(String url) {
-		return cache.get(url);
+		Bitmap bitmap = cache.get(url);
+		if (bitmap != null && bitmap.isRecycled()) {
+			return null;
+		} else {
+			return bitmap;
+		}
 	}
 }
