@@ -220,6 +220,17 @@ public class ViewImageDetailFragment extends Fragment implements
 				mCurrentPhoto.getSecret());
 		getActivity().startActivity(intent);
 	}
+	
+	@Override
+	public void onDestroyView() {
+		if( mBitmapRef != null && mBitmapRef.get() != null ) {
+			Bitmap bm = mBitmapRef.get();
+			bm.recycle();
+			bm = null;
+			Log.d(TAG, "Bitmap released."); //$NON-NLS-1$
+		}
+		super.onDestroyView();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

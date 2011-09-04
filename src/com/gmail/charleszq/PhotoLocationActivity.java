@@ -100,6 +100,20 @@ public class PhotoLocationActivity extends MapActivity implements
 	}
 
 	@Override
+	protected void onDestroy() {
+		if (mPhotoBitmapRef != null) {
+			Bitmap bm = mPhotoBitmapRef.get();
+			if (bm != null) {
+				bm.recycle();
+				bm = null;
+				Log.d(TAG, "Destroy the bitmap reference."); //$NON-NLS-1$
+			}
+		}
+		mMapView = null;
+		super.onDestroy();
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
 			finish();
@@ -130,7 +144,7 @@ public class PhotoLocationActivity extends MapActivity implements
 			mLongtitude = intent.getExtras().getInt(LONG_VAL);
 			mPhotoId = intent.getExtras().getString(PHOTO_ID);
 			mPhotoSecret = intent.getExtras().getString(PHOTO_SECRET);
-			
+
 		}
 
 		mMapView = (MapView) findViewById(R.id.mapView);

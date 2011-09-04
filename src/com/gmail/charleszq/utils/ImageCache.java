@@ -1,4 +1,3 @@
-
 package com.gmail.charleszq.utils;
 
 import java.util.LinkedList;
@@ -9,32 +8,42 @@ import java.util.concurrent.ConcurrentHashMap;
 import android.graphics.Bitmap;
 
 public final class ImageCache {
-	
-    private static Map<String, Bitmap> cache = new ConcurrentHashMap<String, Bitmap>();
-    private static Queue<String> queue = new LinkedList<String>();
 
-    public static int CACHE_SIZE = Constants.DEF_CACHE_SIZE;
+	private static Map<String, Bitmap> cache = new ConcurrentHashMap<String, Bitmap>();
+	private static Queue<String> queue = new LinkedList<String>();
 
-    public static void dispose() {
-        cache.clear();
-    }
+	public static int CACHE_SIZE = Constants.DEF_CACHE_SIZE;
 
-    public static void saveToCache(String url, Bitmap bitmap) {
+	public static void dispose() {
+		for (Bitmap bm : cache.values()) {
+			if (bm != null) {
+				bm.recycle();
+			}
+		}
+		cache.clear();
+	}
 
-        if (url == null || bitmap == null) {
-            return;
-        }
+	public static void saveToCache(String url, Bitmap bitmap) {
 
-        if (cache.size() >= CACHE_SIZE) {
-            String firstKey = queue.poll();
-            cache.remove(firstKey);
-        }
+		if (url == null || bitmap == null) {
+			return;
+		}
 
-        cache.put(url, bitmap);
-        queue.add(url);
-    }
+		if (cache.size() >= CACHE_SIZE) {
+			String firstKey = queue.poll();
+			Bitmap toBeRemoved = cache.get(firstKey);
+			cache.remove(firstKey);
+			if (toBeRemoved != null) {
+				toBeRemoved.recycle();
+				toBeRemoved = null;
+			}
+		}
 
-    public static Bitmap getFromCache(String url) {
-        return cache.get(url);
-    }
+		cache.put(url, bitmap);
+		queue.add(url);
+	}
+
+	public static Bitmap getFromCache(String url) {
+		return cache.get(url);
+	}
 }

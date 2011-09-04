@@ -113,4 +113,13 @@ public class PhotoDetailActionBar extends FrameLayout implements
 		}
 	}
 
+	@Override
+	protected void onDetachedFromWindow() {
+		this.mBuddyIcon = null;
+		mLocationButton = null;
+		super.onDetachedFromWindow();
+	}
+	
+	
+
 }

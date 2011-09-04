@@ -95,6 +95,11 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	 * The image view.
 	 */
 	private ImageView mImageView;
+	
+	/**
+	 * the bitmap of the big photo.
+	 */
+	private Bitmap mPhotoBitmap = null;
 
 	/*
 	 * (non-Javadoc)
@@ -170,7 +175,20 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		if (mProgressBar != null) {
 			mProgressBar.setVisibility(View.GONE);
 		}
-		mImageView.setImageBitmap(bitmap);
+		this.mPhotoBitmap = bitmap;
+		mImageView.setImageBitmap(mPhotoBitmap);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if( mPhotoBitmap != null ) {
+			mPhotoBitmap.recycle();
+			mPhotoBitmap = null;
+			Log.d(TAG, "Bitmap released."); //$NON-NLS-1$
+		}
+		mImageView = null;
+		mPhoto = null;
+		super.onDestroy();
 	}
 
 	/*
