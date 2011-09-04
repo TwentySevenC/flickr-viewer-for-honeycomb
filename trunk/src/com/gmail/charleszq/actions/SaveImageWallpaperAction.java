@@ -15,6 +15,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.aetrion.flickr.photos.Photo;
@@ -34,6 +35,8 @@ import com.gmail.charleszq.utils.ImageUtils;
  */
 public class SaveImageWallpaperAction extends ActivityAwareAction implements
 		IImageDownloadDoneListener {
+	
+	private static final String TAG = SaveImageWallpaperAction.class.getName();
 
 	private boolean mSetAsWallpaper = false;
 	private Photo mCurrentPhoto;
@@ -66,8 +69,9 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 		if (photoFile.exists()) {
 			if (mSetAsWallpaper) {
 				WallpaperManager wmgr = WallpaperManager.getInstance(mActivity);
+				FileInputStream fis = null;
 				try {
-					FileInputStream fis = new FileInputStream(photoFile);
+					fis = new FileInputStream(photoFile);
 					wmgr.setStream(fis);
 					Toast.makeText(
 							mActivity,
@@ -75,6 +79,13 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 									R.string.toast_wallpaper_changed),
 							Toast.LENGTH_SHORT).show();
 				} catch (IOException e) {
+				} finally {
+					if (fis != null) {
+						try {
+							fis.close();
+						} catch (IOException e) {
+						}
+					}
 				}
 			} else {
 				Toast.makeText(
@@ -87,7 +98,8 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 			final ImageDownloadTask task = new ImageDownloadTask(null,
 					ParamType.PHOTO_ID_LARGE, this);
 			mDialog = ProgressDialog
-					.show(mActivity,
+					.show(
+							mActivity,
 							"", mActivity.getResources().getString(R.string.saving_photo)); //$NON-NLS-1$
 			mDialog.setCancelable(true);
 			mDialog.setCanceledOnTouchOutside(true);
@@ -134,11 +146,12 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 							Toast.LENGTH_SHORT).show();
 				}
 			} else {
-				Toast.makeText(
-						mActivity,
-						mActivity.getResources().getString(
-								R.string.toast_photo_saved), Toast.LENGTH_SHORT)
-						.show();
+				Toast
+						.makeText(
+								mActivity,
+								mActivity.getResources().getString(
+										R.string.toast_photo_saved),
+								Toast.LENGTH_SHORT).show();
 			}
 		} else {
 			Toast.makeText(
@@ -150,6 +163,12 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 
 		if (mDialog != null && mDialog.isShowing()) {
 			mDialog.dismiss();
+		}
+
+		if (bitmap != null) {
+			Log.d(TAG, "Release the downloaded bitmap."); //$NON-NLS-1$
+			bitmap.recycle();
+			bitmap = null;
 		}
 	}
 
