@@ -25,7 +25,7 @@ public final class ImageCache {
 
 	public static void saveToCache(String url, Bitmap bitmap) {
 
-		if (url == null || bitmap == null) {
+		if (url == null || bitmap == null || bitmap.isRecycled()) {
 			return;
 		}
 
@@ -34,7 +34,7 @@ public final class ImageCache {
 			Bitmap toBeRemoved = cache.get(firstKey);
 			cache.remove(firstKey);
 			if (toBeRemoved != null) {
-				toBeRemoved.recycle();
+				// toBeRemoved.recycle();
 				toBeRemoved = null;
 			}
 		}
@@ -45,10 +45,11 @@ public final class ImageCache {
 
 	public static Bitmap getFromCache(String url) {
 		Bitmap bitmap = cache.get(url);
-		if (bitmap != null && bitmap.isRecycled()) {
-			return null;
-		} else {
-			return bitmap;
+		if (bitmap == null || bitmap.isRecycled()) {
+			cache.remove(url);
+			bitmap = null;
 		}
+
+		return bitmap;
 	}
 }
