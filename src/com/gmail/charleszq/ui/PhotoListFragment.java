@@ -168,8 +168,9 @@ public class PhotoListFragment extends Fragment implements
 
 		// change action bar title
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
-		act.changeActionBarTitle(mPhotoListDataProvider
-				.getDescription(getActivity()));
+		if (mPhotoListDataProvider != null) {
+			act.changeActionBarTitle(mPhotoListDataProvider.getDescription(act));
+		}
 		return mRootContainer;
 	}
 
