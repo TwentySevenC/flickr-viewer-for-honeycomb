@@ -4,20 +4,20 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.contacts.Contact;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.event.IContactsFetchedListener;
-import com.gmail.charleszq.task.GetContactsTask;
-import com.gmail.charleszq.ui.ContactsFragment;
-import com.gmail.charleszq.utils.Constants;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.event.IContactsFetchedListener;
+import com.gmail.charleszq.task.GetContactsTask;
+import com.gmail.charleszq.ui.ContactsFragment;
+import com.gmail.charleszq.utils.Constants;
+import com.gmail.yuyang226.flickr.contacts.Contact;
 
 /**
  * @author charles

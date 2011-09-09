@@ -9,14 +9,14 @@ import java.util.List;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.people.PeopleInterface;
-import com.aetrion.flickr.people.User;
-import com.aetrion.flickr.photos.comments.Comment;
-import com.aetrion.flickr.photos.comments.CommentsInterface;
 import com.gmail.charleszq.event.IUserCommentsFetchedListener;
 import com.gmail.charleszq.model.UserComment;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.people.PeopleInterface;
+import com.gmail.yuyang226.flickr.people.User;
+import com.gmail.yuyang226.flickr.photos.comments.Comment;
+import com.gmail.yuyang226.flickr.photos.comments.CommentsInterface;
 
 /**
  * Represents the async task to get the comment for a specified photo which is

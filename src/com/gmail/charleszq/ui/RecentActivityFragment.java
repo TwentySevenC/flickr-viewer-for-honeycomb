@@ -7,16 +7,10 @@
 
 package com.gmail.charleszq.ui;
 
-import com.aetrion.flickr.activity.Event;
-import com.aetrion.flickr.activity.Item;
-import com.gmail.charleszq.FlickrViewerActivity;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.actions.GetPhotoDetailAction;
-import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
-import com.gmail.charleszq.utils.ImageCache;
-import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
-import com.gmail.charleszq.utils.StringUtils;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -34,10 +28,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import com.gmail.charleszq.FlickrViewerActivity;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.actions.GetPhotoDetailAction;
+import com.gmail.charleszq.task.ImageDownloadTask;
+import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
+import com.gmail.charleszq.utils.ImageCache;
+import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.charleszq.utils.StringUtils;
+import com.gmail.yuyang226.flickr.activity.Event;
+import com.gmail.yuyang226.flickr.activity.Item;
 
 /**
  * @author charles

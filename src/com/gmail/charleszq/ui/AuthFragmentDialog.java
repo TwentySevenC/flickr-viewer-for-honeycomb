@@ -19,11 +19,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.auth.Auth;
-import com.aetrion.flickr.auth.AuthInterface;
-import com.aetrion.flickr.auth.Permission;
-import com.aetrion.flickr.people.User;
 import com.gmail.charleszq.FlickrViewerActivity;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -31,6 +26,12 @@ import com.gmail.charleszq.actions.IAction;
 import com.gmail.charleszq.event.IAuthDoneListener;
 import com.gmail.charleszq.task.AuthTask;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.auth.Permission;
+import com.gmail.yuyang226.flickr.oauth.OAuth;
+import com.gmail.yuyang226.flickr.oauth.OAuthInterface;
+import com.gmail.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.people.User;
 
 /**
  * Represents the auth dialog to grant this application the permission to access
@@ -44,7 +45,7 @@ public class AuthFragmentDialog extends DialogFragment implements
 	/**
 	 * The oauth interface
 	 */
-	private AuthInterface mAuthInterface;
+	private OAuthInterface mAuthInterface;
 
 	/**
 	 * Auth dialog might be brought up in several places if not authed before,
@@ -92,8 +93,9 @@ public class AuthFragmentDialog extends DialogFragment implements
 		if (type == AuthTask.TYPE_FROB) {
 			mFrob = result.toString();
 			try {
+				//FIXME oauthToken
 				URL url = mAuthInterface.buildAuthenticationUrl(
-						Permission.WRITE, mFrob);
+						Permission.WRITE, (OAuthToken)null);
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url
 						.toExternalForm()));
 				getActivity().startActivity(intent);
@@ -102,13 +104,14 @@ public class AuthFragmentDialog extends DialogFragment implements
 
 			}
 		} else { // auth done
-			Auth auth = (Auth) result;
+			OAuth auth = (OAuth) result;
 
 			FlickrViewerActivity mainActivity = (FlickrViewerActivity) getActivity();
 			FlickrViewerApplication app = (FlickrViewerApplication) mainActivity.getApplication();
 			
 			User user = auth.getUser();
-			app.saveFlickrAuthToken(auth.getToken(), user.getId(), user
+			//FIXME save token and token secret
+			app.saveFlickrAuthToken(auth.getToken().getOauthToken(), user.getId(), user
 					.getUsername());
 
 			app.handleContactUploadService();
@@ -145,7 +148,7 @@ public class AuthFragmentDialog extends DialogFragment implements
             AuthFragmentDialog.this.startActivity(intent);*/
 			if (mAuthInterface == null) {
 				Flickr f = FlickrHelper.getInstance().getFlickr();
-				mAuthInterface = f.getAuthInterface();
+				mAuthInterface = f.getOAuthInterface();
 			}
 
 			Integer tag = (Integer) v.getTag();

@@ -8,10 +8,10 @@ import java.util.List;
 
 import android.os.AsyncTask;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.photos.PhotoPlace;
-import com.aetrion.flickr.photos.PhotosInterface;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.photos.PhotoPlace;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
 /**
  * Represents the task to fetch the photo group/set of a given photo, the

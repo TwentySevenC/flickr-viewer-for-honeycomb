@@ -4,10 +4,6 @@
 
 package com.gmail.charleszq.ui;
 
-import com.gmail.charleszq.FlickrViewerApplication;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.task.WriteCommentTask;
-
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.gmail.charleszq.FlickrViewerApplication;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.task.WriteCommentTask;
 
 /**
  * @author charles

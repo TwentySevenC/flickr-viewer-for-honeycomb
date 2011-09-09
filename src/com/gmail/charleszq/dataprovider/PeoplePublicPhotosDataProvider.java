@@ -4,17 +4,17 @@
 
 package com.gmail.charleszq.dataprovider;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.people.PeopleInterface;
-import com.aetrion.flickr.photos.Extras;
-import com.aetrion.flickr.photos.PhotoList;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.utils.FlickrHelper;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.content.Context;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.people.PeopleInterface;
+import com.gmail.yuyang226.flickr.photos.Extras;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * Represents the data provider to get public photos.

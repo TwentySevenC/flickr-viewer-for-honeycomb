@@ -4,9 +4,7 @@
 
 package com.gmail.charleszq.actions;
 
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.utils.Constants;
-import com.gmail.charleszq.utils.ImageUtils;
+import java.io.File;
 
 import android.app.Activity;
 import android.content.ClipboardManager;
@@ -17,7 +15,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
-import java.io.File;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.utils.Constants;
+import com.gmail.charleszq.utils.ImageUtils;
 
 /**
  * Represents the action to share photos to other applicataions, like twitter,

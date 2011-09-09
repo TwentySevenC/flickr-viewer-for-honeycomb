@@ -16,10 +16,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.auth.Permission;
 import com.gmail.charleszq.utils.FlickrHelper;
-import com.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.auth.Permission;
+import com.gmail.yuyang226.flickr.oauth.OAuthToken;
 
 /**
  * @author Toby Yu(yuyang226@gmail.com)

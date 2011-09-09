@@ -13,11 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.aetrion.flickr.activity.Item;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.RecentActivitiesDataProvider;
 import com.gmail.charleszq.utils.Constants;
+import com.gmail.yuyang226.flickr.activity.Item;
 
 /**
  * Represents the service to check whether my photos got comments or not.s

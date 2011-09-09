@@ -17,18 +17,18 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
-import com.aetrion.flickr.groups.Group;
-import com.aetrion.flickr.groups.pools.PoolsInterface;
-import com.aetrion.flickr.photosets.Photoset;
-import com.aetrion.flickr.photosets.Photosets;
-import com.aetrion.flickr.photosets.PhotosetsInterface;
 import com.gmail.charleszq.R;
-import com.gmail.charleszq.fapi.GalleryInterface;
-import com.gmail.charleszq.model.FlickrGallery;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.StringUtils;
+import com.gmail.yuyang226.flickr.galleries.GalleriesInterface;
+import com.gmail.yuyang226.flickr.galleries.Gallery;
+import com.gmail.yuyang226.flickr.groups.Group;
+import com.gmail.yuyang226.flickr.groups.pools.PoolsInterface;
+import com.gmail.yuyang226.flickr.photosets.Photoset;
+import com.gmail.yuyang226.flickr.photosets.Photosets;
+import com.gmail.yuyang226.flickr.photosets.PhotosetsInterface;
 
 /**
  * Represents the task to fetch the collection of a user, his gallery list,
@@ -84,7 +84,7 @@ public class UserPhotoCollectionTask extends
 		List<IListItemAdapter> sets = new ArrayList<IListItemAdapter>();
 		List<IListItemAdapter> groups = new ArrayList<IListItemAdapter>();
 		for (IListItemAdapter item : list) {
-			if (FlickrGallery.class.getName().equals(item.getObjectClassType())) {
+			if (Gallery.class.getName().equals(item.getObjectClassType())) {
 				galleries.add(item);
 			} else if (Photoset.class.getName().equals(
 					item.getObjectClassType())) {
@@ -129,12 +129,12 @@ public class UserPhotoCollectionTask extends
 		
 		result = new LinkedHashMap<Integer, List<IListItemAdapter>>();
 		// galleries
-		GalleryInterface gi = FlickrHelper.getInstance().getGalleryInterface();
+		GalleriesInterface gi = FlickrHelper.getInstance().getFlickr().getGalleriesInterface();
 		try {
-			List<FlickrGallery> galleries = gi.getGalleries(userId, -1, -1);
+			List<Gallery> galleries = gi.getList(userId, -1, -1);
 			if (!galleries.isEmpty()) {
 				List<IListItemAdapter> ga = new ArrayList<IListItemAdapter>();
-				for (FlickrGallery gallery : galleries) {
+				for (Gallery gallery : galleries) {
 					ga.add(new ListItemAdapter(gallery));
 					Log
 							.d(
@@ -237,8 +237,8 @@ public class UserPhotoCollectionTask extends
 
 		@Override
 		public String getTitle() {
-			if (mObject instanceof FlickrGallery) {
-				return ((FlickrGallery) mObject).getTitle();
+			if (mObject instanceof Gallery) {
+				return ((Gallery) mObject).getTitle();
 			} else if (mObject instanceof Photoset) {
 				return ((Photoset) mObject).getTitle();
 			} else if (mObject instanceof Group) {
@@ -250,8 +250,8 @@ public class UserPhotoCollectionTask extends
 
 		@Override
 		public String getBuddyIconPhotoIdentifier() {
-			if (mObject instanceof FlickrGallery) {
-				return ((FlickrGallery) mObject).getPrimaryPhotoId();
+			if (mObject instanceof Gallery) {
+				return ((Gallery) mObject).getPrimaryPhotoId();
 			} else if (mObject instanceof Photoset) {
 				return ((Photoset) mObject).getPrimaryPhoto().getId();
 			} else if (mObject instanceof Group) {
@@ -263,7 +263,7 @@ public class UserPhotoCollectionTask extends
 
 		@Override
 		public int getType() {
-			if (mObject instanceof FlickrGallery || mObject instanceof Photoset) {
+			if (mObject instanceof Gallery || mObject instanceof Photoset) {
 				return PHOTO_ID;
 			} else if (mObject instanceof Group) {
 				return PHOTO_GROUP_ID;
@@ -279,8 +279,8 @@ public class UserPhotoCollectionTask extends
 
 		@Override
 		public String getId() {
-			if (mObject instanceof FlickrGallery) {
-				return ((FlickrGallery) mObject).getGalleryId();
+			if (mObject instanceof Gallery) {
+				return ((Gallery) mObject).getGalleryId();
 			} else if (mObject instanceof Photoset) {
 				return ((Photoset) mObject).getId();
 			} else if (mObject instanceof Group) {
@@ -292,8 +292,8 @@ public class UserPhotoCollectionTask extends
 
 		@Override
 		public int getItemCount() {
-			if (mObject instanceof FlickrGallery) {
-				return ((FlickrGallery) mObject).getTotalCount();
+			if (mObject instanceof Gallery) {
+				return ((Gallery) mObject).getTotalCount();
 			} else {
 				return 0;
 			}

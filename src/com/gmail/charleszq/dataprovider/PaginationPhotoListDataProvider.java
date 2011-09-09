@@ -4,10 +4,10 @@
 
 package com.gmail.charleszq.dataprovider;
 
-import com.aetrion.flickr.photos.PhotoList;
-import com.gmail.charleszq.utils.Constants;
-
 import android.content.Context;
+
+import com.gmail.charleszq.utils.Constants;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * Represents the photo list data provider which has the pagination feature.

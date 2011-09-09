@@ -9,12 +9,12 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.activity.ActivityInterface;
-import com.aetrion.flickr.activity.Item;
-import com.aetrion.flickr.activity.ItemList;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.activity.ActivityInterface;
+import com.gmail.yuyang226.flickr.activity.Item;
+import com.gmail.yuyang226.flickr.activity.ItemList;
 
 /**
  * Represents the data provider for the activities.

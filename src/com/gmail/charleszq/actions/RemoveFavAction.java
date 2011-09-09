@@ -7,16 +7,16 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.favorites.FavoritesInterface;
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.utils.FlickrHelper;
-
-import android.app.Activity;
-import android.os.AsyncTask;
-import android.widget.Toast;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.favorites.FavoritesInterface;
 
 /**
  * Represents the action to remove a photo from the favorite list.

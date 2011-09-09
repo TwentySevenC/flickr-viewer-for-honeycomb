@@ -1,9 +1,9 @@
 
 package com.gmail.charleszq.event;
 
-import com.aetrion.flickr.photos.Exif;
-
 import java.util.Collection;
+
+import com.gmail.yuyang226.flickr.photos.Exif;
 
 /**
  * @author charles

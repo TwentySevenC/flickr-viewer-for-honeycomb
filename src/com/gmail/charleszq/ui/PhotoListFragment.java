@@ -30,8 +30,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotoList;
 import com.gmail.charleszq.FlickrViewerActivity;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -46,6 +44,8 @@ import com.gmail.charleszq.ui.comp.IContextMenuHandler;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * @author charles

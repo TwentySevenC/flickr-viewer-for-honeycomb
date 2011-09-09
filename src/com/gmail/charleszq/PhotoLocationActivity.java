@@ -21,11 +21,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.aetrion.flickr.photos.Photo;
 import com.gmail.charleszq.task.GetPhotoImageTask;
 import com.gmail.charleszq.task.GetPhotoImageTask.IPhotoFetchedListener;
 import com.gmail.charleszq.task.GetPhotoImageTask.PhotoType;
 import com.gmail.charleszq.utils.ImageUtils;
+import com.gmail.yuyang226.flickr.photos.Photo;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;

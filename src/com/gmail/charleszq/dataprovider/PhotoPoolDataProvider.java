@@ -8,16 +8,16 @@ import java.util.Set;
 
 import android.content.Context;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.groups.pools.PoolsInterface;
-import com.aetrion.flickr.photos.Extras;
-import com.aetrion.flickr.photos.PhotoList;
-import com.aetrion.flickr.photos.PhotoPlace;
-import com.aetrion.flickr.photosets.PhotosetsInterface;
 import com.gmail.charleszq.R;
-import com.gmail.charleszq.fapi.GalleryInterface;
 import com.gmail.charleszq.ui.comp.UserPhotoCollectionComponent.ListItemAdapterPhotoPlace;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.galleries.GalleriesInterface;
+import com.gmail.yuyang226.flickr.groups.pools.PoolsInterface;
+import com.gmail.yuyang226.flickr.photos.Extras;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
+import com.gmail.yuyang226.flickr.photos.PhotoPlace;
+import com.gmail.yuyang226.flickr.photosets.PhotosetsInterface;
 
 /**
  * Represents the data provider to get the photos from a given photo set or
@@ -68,8 +68,8 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 			return gi.getPhotos(mPhotoPlaceId, null, extras, mPageSize,
 					mPageNumber);
 		case ListItemAdapterPhotoPlace.PHOTO_GALLERY:
-			GalleryInterface galleryInterface = FlickrHelper.getInstance()
-					.getGalleryInterface();
+			GalleriesInterface galleryInterface = FlickrHelper.getInstance().getFlickr()
+					.getGalleriesInterface();
 			return galleryInterface.getPhotos(mPhotoPlaceId, extras, mPageSize,
 					mPageNumber);
 

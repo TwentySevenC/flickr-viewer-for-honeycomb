@@ -24,11 +24,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.aetrion.flickr.photos.PhotoPlace;
-import com.aetrion.flickr.photosets.Photoset;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.actions.ShowPhotoPoolAction;
-import com.gmail.charleszq.model.FlickrGallery;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
@@ -36,6 +33,9 @@ import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.galleries.Gallery;
+import com.gmail.yuyang226.flickr.photos.PhotoPlace;
+import com.gmail.yuyang226.flickr.photosets.Photoset;
 
 /**
  * Represents the UI component to show the photo collection information for a
@@ -274,7 +274,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		public ListItemAdapterPhotoPlace(IListItemAdapter item) {
 			super(PHOTO_GALLERY, item.getId(), item.getTitle());
 			String obj = item.getObjectClassType();
-			if (FlickrGallery.class.getName().equals(obj)) {
+			if (Gallery.class.getName().equals(obj)) {
 				setKind(PHOTO_GALLERY);
 			} else if (Photoset.class.getName().equals(obj)) {
 				setKind(PhotoPlace.SET);

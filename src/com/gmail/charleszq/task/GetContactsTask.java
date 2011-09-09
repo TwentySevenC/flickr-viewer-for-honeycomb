@@ -7,15 +7,15 @@
 
 package com.gmail.charleszq.task;
 
-import com.aetrion.flickr.contacts.Contact;
+import java.util.Collection;
+
+import android.app.Activity;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.DefaultContactDataProvider;
 import com.gmail.charleszq.event.IContactsFetchedListener;
-
-import android.app.Activity;
-
-import java.util.Collection;
+import com.gmail.yuyang226.flickr.contacts.Contact;
 
 /**
  * @author charles

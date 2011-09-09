@@ -7,9 +7,9 @@
 
 package com.gmail.charleszq.event;
 
-import com.aetrion.flickr.contacts.Contact;
-
 import java.util.Collection;
+
+import com.gmail.yuyang226.flickr.contacts.Contact;
 
 /**
  * @author charles

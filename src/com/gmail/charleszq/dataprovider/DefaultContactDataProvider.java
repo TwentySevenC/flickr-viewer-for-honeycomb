@@ -7,13 +7,13 @@
 
 package com.gmail.charleszq.dataprovider;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.contacts.Contact;
-import com.aetrion.flickr.contacts.ContactsInterface;
-import com.gmail.charleszq.utils.FlickrHelper;
-
 import java.util.ArrayList;
 import java.util.Collection;
+
+import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.contacts.Contact;
+import com.gmail.yuyang226.flickr.contacts.ContactsInterface;
 
 /**
  * @author charles

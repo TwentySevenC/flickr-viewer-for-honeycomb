@@ -12,18 +12,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.groups.Group;
-import com.aetrion.flickr.groups.GroupsInterface;
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotosInterface;
-import com.aetrion.flickr.photosets.Photoset;
-import com.aetrion.flickr.photosets.PhotosetsInterface;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.groups.Group;
+import com.gmail.yuyang226.flickr.groups.GroupsInterface;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
+import com.gmail.yuyang226.flickr.photosets.Photoset;
+import com.gmail.yuyang226.flickr.photosets.PhotosetsInterface;
 
 /**
  * Represents the image download task which takes an image url as the parameter,

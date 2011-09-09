@@ -5,8 +5,8 @@ package com.gmail.charleszq.task;
 
 import android.os.AsyncTask;
 
-import com.aetrion.flickr.auth.AuthInterface;
 import com.gmail.charleszq.event.IAuthDoneListener;
+import com.gmail.yuyang226.flickr.oauth.OAuthInterface;
 
 /**
  * @author charles
@@ -19,10 +19,10 @@ public class AuthTask extends AsyncTask<String, Integer, Object> {
 
 	private int mTaskType = TYPE_FROB;
 	private IAuthDoneListener mListener;
-	private AuthInterface mAuthInterface;
+	private OAuthInterface mAuthInterface;
 
 	public AuthTask(int type, IAuthDoneListener listener,
-			AuthInterface authInterface) {
+			OAuthInterface authInterface) {
 		this.mTaskType = type;
 		this.mListener = listener;
 		this.mAuthInterface = authInterface;
@@ -35,7 +35,8 @@ public class AuthTask extends AsyncTask<String, Integer, Object> {
 	 */
 	@Override
 	protected Object doInBackground(String... params) {
-		if (mTaskType == TYPE_FROB) {
+		//FIXME use new OAuthToken here
+		/*if (mTaskType == TYPE_FROB) {
 			try {
 				return mAuthInterface.getFrob();
 			} catch (Exception e) {
@@ -47,7 +48,7 @@ public class AuthTask extends AsyncTask<String, Integer, Object> {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		return null;
 	}
 

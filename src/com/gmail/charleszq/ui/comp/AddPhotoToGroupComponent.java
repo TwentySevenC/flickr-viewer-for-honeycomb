@@ -20,11 +20,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -34,22 +35,21 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 import android.widget.ViewSwitcher;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotoPlace;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.task.CreateGalleryTask;
-import com.gmail.charleszq.task.GetPhotoPoolTask;
-import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.CreateGalleryTask.ICreateGalleryListener;
+import com.gmail.charleszq.task.GetPhotoPoolTask;
 import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
+import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
+import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotoPlace;
 
 /**
  * Represents the UI component to add a photo to a set/group/gallery.

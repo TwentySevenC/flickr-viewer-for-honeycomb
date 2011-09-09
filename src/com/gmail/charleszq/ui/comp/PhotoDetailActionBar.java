@@ -16,12 +16,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.aetrion.flickr.people.User;
-import com.aetrion.flickr.photos.Photo;
 import com.gmail.charleszq.PhotoLocationActivity;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.event.IUserInfoFetchedListener;
 import com.gmail.charleszq.task.GetUserInfoTask;
+import com.gmail.yuyang226.flickr.people.User;
+import com.gmail.yuyang226.flickr.photos.Photo;
 
 /**
  * Represents the UI component that provides a list of actions which can be

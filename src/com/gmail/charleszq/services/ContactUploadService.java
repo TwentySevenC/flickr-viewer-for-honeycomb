@@ -18,13 +18,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.contacts.Contact;
-import com.aetrion.flickr.contacts.ContactsInterface;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.contacts.Contact;
+import com.gmail.yuyang226.flickr.contacts.ContactsInterface;
 
 /**
  * Represents the service to check whether there are new photos uploaded by my
