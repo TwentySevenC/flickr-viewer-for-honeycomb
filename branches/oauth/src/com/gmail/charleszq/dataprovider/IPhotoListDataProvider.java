@@ -1,8 +1,9 @@
 
 package com.gmail.charleszq.dataprovider;
 
-import com.aetrion.flickr.photos.PhotoList;
 import java.io.Serializable;
+
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * Represents the data provider to provide a list of photos.

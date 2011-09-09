@@ -3,13 +3,13 @@
  */
 package com.gmail.charleszq.task;
 
-import com.aetrion.flickr.activity.Item;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.dataprovider.RecentActivitiesDataProvider;
+import java.util.List;
 
 import android.app.Activity;
 
-import java.util.List;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.dataprovider.RecentActivitiesDataProvider;
+import com.gmail.yuyang226.flickr.activity.Item;
 
 /**
  * Represents the task to get the rencent activites.

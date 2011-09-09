@@ -1,14 +1,14 @@
 package com.gmail.charleszq.task;
 
-import com.aetrion.flickr.photos.Exif;
-import com.aetrion.flickr.photos.PhotosInterface;
-import com.gmail.charleszq.event.IExifListener;
-import com.gmail.charleszq.utils.FlickrHelper;
+import java.util.Collection;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.util.Collection;
+import com.gmail.charleszq.event.IExifListener;
+import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.photos.Exif;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
 public class GetPhotoExifTask extends
 		AsyncTask<String, Integer, Collection<Exif>> {

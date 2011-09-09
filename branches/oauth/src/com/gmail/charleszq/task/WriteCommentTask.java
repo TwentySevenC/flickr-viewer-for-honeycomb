@@ -4,13 +4,13 @@
 
 package com.gmail.charleszq.task;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.photos.comments.CommentsInterface;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.utils.FlickrHelper;
-
 import android.app.DialogFragment;
 import android.widget.Toast;
+
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.photos.comments.CommentsInterface;
 
 /**
  * @author charles

@@ -16,14 +16,14 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
-import com.aetrion.flickr.photos.GeoData;
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotosInterface;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageUtils;
+import com.gmail.yuyang226.flickr.photos.GeoData;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
 /**
  * Represents the task to fetch photo image from flickr.

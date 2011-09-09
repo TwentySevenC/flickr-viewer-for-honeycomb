@@ -14,14 +14,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.people.PeopleInterface;
-import com.aetrion.flickr.people.User;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
 import com.gmail.charleszq.event.IUserInfoFetchedListener;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.people.PeopleInterface;
+import com.gmail.yuyang226.flickr.people.User;
 
 /**
  * Represents the task to get user information, and set the buddy icon to a

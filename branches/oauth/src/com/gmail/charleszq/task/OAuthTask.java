@@ -11,11 +11,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.auth.Permission;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
-import com.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.auth.Permission;
+import com.gmail.yuyang226.flickr.oauth.OAuthToken;
 
 /**
  * Represents the task to start the oauth process.

@@ -4,7 +4,14 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.photos.Photo;
+import android.app.Activity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.FavoritePhotosDataProvider;
@@ -14,14 +21,7 @@ import com.gmail.charleszq.event.DefaultPhotoListReadyListener;
 import com.gmail.charleszq.event.IPhotoListReadyListener;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
 import com.gmail.charleszq.ui.comp.IContextMenuHandler;
-
-import android.app.Activity;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import com.gmail.yuyang226.flickr.photos.Photo;
 
 /**
  * @author charles

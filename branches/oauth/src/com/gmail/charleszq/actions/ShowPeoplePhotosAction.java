@@ -4,7 +4,11 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.photos.PhotoList;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.widget.Toast;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.PeoplePublicPhotosDataProvider;
@@ -12,11 +16,7 @@ import com.gmail.charleszq.event.IPhotoListReadyListener;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
 import com.gmail.charleszq.ui.PhotoListFragment;
 import com.gmail.charleszq.utils.Constants;
-
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.widget.Toast;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * Represents the action to show all the public photos of a given user.

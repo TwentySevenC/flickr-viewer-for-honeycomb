@@ -16,9 +16,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.CursorAdapter;
 import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SearchView.OnSuggestionListener;
+import android.widget.SimpleCursorAdapter;
 
 import com.gmail.charleszq.actions.GetActivitiesAction;
 import com.gmail.charleszq.actions.TagSearchAction;

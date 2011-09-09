@@ -18,13 +18,13 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.aetrion.flickr.photos.Photo;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
 import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageUtils;
+import com.gmail.yuyang226.flickr.photos.Photo;
 
 /**
  * Represents the action to save a photo to sd card, and after that to set it as
