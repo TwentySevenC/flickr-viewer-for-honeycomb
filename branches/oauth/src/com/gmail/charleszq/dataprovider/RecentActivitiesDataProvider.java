@@ -28,13 +28,14 @@ public class RecentActivitiesDataProvider {
 			.getName();
 
 	private String mToken;
+	private String mSecret;
 	private boolean mOnlyMyPhoto = false;
 
 	/**
 	 * The check interval of activities on my photos.
 	 */
 	private int mMyPhotoInterval = Constants.SERVICE_CHECK_INTERVAL;
-	
+
 	/**
 	 * The page size.
 	 */
@@ -46,12 +47,14 @@ public class RecentActivitiesDataProvider {
 	 * @param token
 	 *            the access token
 	 */
-	public RecentActivitiesDataProvider(String token) {
+	public RecentActivitiesDataProvider(String token, String secret) {
 		this.mToken = token;
+		this.mSecret = secret;
 	}
 
-	public RecentActivitiesDataProvider(String token, boolean onlyMyPhoto) {
-		this(token);
+	public RecentActivitiesDataProvider(String token, String secret,
+			boolean onlyMyPhoto) {
+		this(token, secret);
 		this.mOnlyMyPhoto = onlyMyPhoto;
 	}
 
@@ -64,7 +67,7 @@ public class RecentActivitiesDataProvider {
 	 * @return
 	 */
 	public List<Item> getRecentActivities() {
-		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
+		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken, mSecret);
 		ActivityInterface ai = f.getActivityInterface();
 
 		List<Item> items = new ArrayList<Item>();
@@ -120,7 +123,5 @@ public class RecentActivitiesDataProvider {
 	public void setPageSize(int mPageSize) {
 		this.mPageSize = mPageSize;
 	}
-	
-	
-	
+
 }

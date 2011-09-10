@@ -73,6 +73,8 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	private String mUserId;
 	private String mToken;
 
+	private String mSecret;
+
 	/**
 	 * @param context
 	 */
@@ -111,15 +113,16 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		mProgressBar = (ProgressBar) findViewById(R.id.progress);
 	}
 
-	public void initialize(String userId, String token) {
+	public void initialize(String userId, String token, String secret ) {
 		this.mUserId = userId;
 		this.mToken = token;
+		this.mSecret = secret;
 
 		if (task != null && !task.isCancelled()) {
 			task.cancel(true);
 		}
 		task = new UserPhotoCollectionTask(this);
-		task.execute(userId, token);
+		task.execute(userId, token, secret);
 	}
 
 	/**
@@ -131,7 +134,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		}
 		mProgressBar.setVisibility(View.VISIBLE);
 		task = new UserPhotoCollectionTask(this,true);
-		task.execute(mUserId, mToken);
+		task.execute(mUserId, mToken, mSecret);
 	}
 
 	@Override

@@ -11,8 +11,6 @@ import com.gmail.yuyang226.flickr.oauth.OAuth;
 import com.gmail.yuyang226.flickr.oauth.OAuthToken;
 import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
-
-
 public final class FlickrHelper {
 
 	private static FlickrHelper instance = null;
@@ -40,12 +38,11 @@ public final class FlickrHelper {
 		}
 	}
 
-	public Flickr getFlickrAuthed(String token) {
-		//FIXME , String tokenSecret
+	public Flickr getFlickrAuthed(String token, String secret) {
 		Flickr f = getFlickr();
 		RequestContext requestContext = RequestContext.getRequestContext();
 		OAuth auth = new OAuth();
-		auth.setToken(new OAuthToken(token, ""));
+		auth.setToken(new OAuthToken(token, secret));
 		requestContext.setOAuth(auth);
 		return f;
 	}

@@ -5,12 +5,14 @@ package com.gmail.charleszq.task;
 
 import java.net.URL;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.Flickr;
@@ -56,6 +58,8 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 			Flickr f = FlickrHelper.getInstance().getFlickr();
 			OAuthToken oauthToken = f.getOAuthInterface().getRequestToken(
 					OAUTH_CALLBACK_URI.toString());
+			saveTokenSecrent(oauthToken.getOauthTokenSecret());
+
 			Log.d(TAG, "OAuthToken: " + oauthToken); //$NON-NLS-1$
 			URL oauthUrl = f.getOAuthInterface().buildAuthenticationUrl(
 					Permission.WRITE, oauthToken);
@@ -65,6 +69,19 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 			Log.e(TAG, "Error to oauth: " + ex.getMessage()); //$NON-NLS-1$
 			return null;
 		}
+	}
+
+	/**
+	 * Saves the oauth token secrent.
+	 * 
+	 * @param tokenSecret
+	 */
+	private void saveTokenSecrent(String tokenSecret) {
+		Activity act = (Activity) mContext;
+		FlickrViewerApplication app = (FlickrViewerApplication) act
+				.getApplication();
+		app.saveFlickrTokenSecret(tokenSecret);
+		Log.d(TAG, "oauth token secrent saved: " + tokenSecret); //$NON-NLS-1$
 	}
 
 	@Override

@@ -37,12 +37,14 @@ public class PhotoActivityService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		
 		String token = null;
+		String secret = null;
 		int intervalInHours = Constants.SERVICE_CHECK_INTERVAL;
 		
 		Context context = getApplicationContext();
 		if( context instanceof FlickrViewerApplication ) {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
+			secret = app.getFlickrTokenSecrent();
 			if( token == null || !app.isPhotoActivityCheckEnabled() ) {
 				Log.d(TAG, "No authed or notification is disabled."); //$NON-NLS-1$
 				return;
@@ -52,12 +54,12 @@ public class PhotoActivityService extends IntentService {
 			return;
 		}
 		
-		checkPhotoActivities(token, intervalInHours);
+		checkPhotoActivities(token, secret, intervalInHours);
 		
 	}
 
-	private void checkPhotoActivities(String token, int intervalInHours) {
-		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(token, true);
+	private void checkPhotoActivities(String token, String secret, int intervalInHours) {
+		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(token, secret, true);
         dp.setCheckInterval(intervalInHours);
         List<Item> items = dp.getRecentActivities();
         Log.d(TAG, "Recent activity task executed, item size: " + items.size()); //$NON-NLS-1$

@@ -21,9 +21,11 @@ import com.gmail.yuyang226.flickr.contacts.ContactsInterface;
 public class DefaultContactDataProvider implements IContactDataProvider {
 
     private String mToken;
+	private String mSecret;
 
-    public DefaultContactDataProvider(String token) {
+    public DefaultContactDataProvider(String token, String secret) {
         this.mToken = token;
+        this.mSecret = secret;
     }
 
     /*
@@ -34,7 +36,7 @@ public class DefaultContactDataProvider implements IContactDataProvider {
      */
     @Override
     public Collection<Contact> getContacts(String userId) {
-        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
+        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken,mSecret);
         ContactsInterface ci = f.getContactsInterface();
         try {
             return ci.getList();

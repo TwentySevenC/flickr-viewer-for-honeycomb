@@ -25,58 +25,64 @@ import com.gmail.yuyang226.flickr.favorites.FavoritesInterface;
  */
 public class RemoveFavAction extends ActivityAwareAction {
 
-    private String mPhotoId;
+	private String mPhotoId;
 
-    /**
-     * @param activity
-     */
-    public RemoveFavAction(Activity activity, String photoId) {
-        super(activity);
-        this.mPhotoId = photoId;
-    }
+	/**
+	 * @param activity
+	 */
+	public RemoveFavAction(Activity activity, String photoId) {
+		super(activity);
+		this.mPhotoId = photoId;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see com.gmail.charleszq.actions.IAction#execute()
-     */
-    @Override
-    public void execute() {
-        AsyncTask<String, Integer, Boolean> task = new AsyncTask<String, Integer, Boolean>() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.gmail.charleszq.actions.IAction#execute()
+	 */
+	@Override
+	public void execute() {
+		AsyncTask<String, Integer, Boolean> task = new AsyncTask<String, Integer, Boolean>() {
 
-            @Override
-            protected Boolean doInBackground(String... arg0) {
-                String photoId = arg0[0];
-                FlickrViewerApplication app = (FlickrViewerApplication) mActivity.getApplication();
-                String mToken = app.getFlickrToken();
-                Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
-                FavoritesInterface fi = f.getFavoritesInterface();
-                try {
-                    fi.remove(photoId);
-                } catch (Exception e) {
-                    return false;
-                }
-                return true;
-            }
+			@Override
+			protected Boolean doInBackground(String... arg0) {
+				String photoId = arg0[0];
+				FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+						.getApplication();
+				String mToken = app.getFlickrToken();
+				String secret = app.getFlickrTokenSecrent();
+				Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken,
+						secret);
+				FavoritesInterface fi = f.getFavoritesInterface();
+				try {
+					fi.remove(photoId);
+				} catch (Exception e) {
+					return false;
+				}
+				return true;
+			}
 
-            @Override
-            protected void onPostExecute(Boolean result) {
-                super.onPostExecute(result);
-                String msg = mActivity.getResources().getString(R.string.remove_fav_done);
-                if (!result) {
-                    msg = mActivity.getResources().getString(R.string.remove_fav_error);
-                }
-                Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+			@Override
+			protected void onPostExecute(Boolean result) {
+				super.onPostExecute(result);
+				String msg = mActivity.getResources().getString(
+						R.string.remove_fav_done);
+				if (!result) {
+					msg = mActivity.getResources().getString(
+							R.string.remove_fav_error);
+				}
+				Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
 
-                if (result) {
-                    FlickrViewerMessage fmsg = new FlickrViewerMessage(
-                            FlickrViewerMessage.FAV_PHOTO_REMOVED, null);
-                    FlickrViewerApplication app = (FlickrViewerApplication) mActivity
-                            .getApplication();
-                    app.handleMessage(fmsg);
-                }
-            }
-        };
+				if (result) {
+					FlickrViewerMessage fmsg = new FlickrViewerMessage(
+							FlickrViewerMessage.FAV_PHOTO_REMOVED, null);
+					FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+							.getApplication();
+					app.handleMessage(fmsg);
+				}
+			}
+		};
 
-        task.execute(mPhotoId);
-    }
+		task.execute(mPhotoId);
+	}
 }

@@ -37,7 +37,7 @@ public class PhotoCollectionFragment extends Fragment {
 				.getApplication();
 		String userId = app.getUserId();
 		String token = app.getFlickrToken();
-		mCollectionComponent.initialize(userId, token);
+		mCollectionComponent.initialize(userId, token, app.getFlickrTokenSecrent());
 		return view;
 	}
 

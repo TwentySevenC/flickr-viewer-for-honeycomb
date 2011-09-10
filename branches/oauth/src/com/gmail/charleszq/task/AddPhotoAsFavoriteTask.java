@@ -51,7 +51,8 @@ public class AddPhotoAsFavoriteTask extends
 				.getApplication();
 		String token = app.getFlickrToken();
 
-		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token);
+		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token,
+				app.getFlickrTokenSecrent());
 		FavoritesInterface fi = f.getFavoritesInterface();
 		try {
 			fi.add(photoId);

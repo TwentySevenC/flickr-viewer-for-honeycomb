@@ -36,7 +36,7 @@ public class GetPhotoImageTask extends
 	private static final int MSG_ID = R.string.loading_photo_detail;
 	private static final String TAG = GetPhotoImageTask.class.getName();
 	private Photo mCurrentPhoto;
-	
+
 	private float mCacheImageScale = 0.5f;
 
 	public static enum PhotoType {
@@ -64,7 +64,7 @@ public class GetPhotoImageTask extends
 		mPhotoType = photoType;
 		this.mPhotoFetchedListener = listener;
 	}
-	
+
 	public void setCacheImageScale(float scale) {
 		this.mCacheImageScale = scale;
 	}
@@ -79,9 +79,10 @@ public class GetPhotoImageTask extends
 		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 				.getApplication();
 		String token = app.getFlickrToken();
+		String tokenSecret = app.getFlickrTokenSecrent();
 		PhotosInterface pi = null;
 		if (token != null) {
-			pi = FlickrHelper.getInstance().getFlickrAuthed(token)
+			pi = FlickrHelper.getInstance().getFlickrAuthed(token, tokenSecret)
 					.getPhotosInterface();
 		} else {
 			pi = FlickrHelper.getInstance().getPhotosInterface();
@@ -129,7 +130,8 @@ public class GetPhotoImageTask extends
 			if (imageFile.exists()) {
 				mDownloadedBitmap = BitmapFactory
 						.decodeStream(new FileInputStream(imageFile));
-				mDownloadedBitmap = ImageUtils.resize(mDownloadedBitmap, mCacheImageScale);
+				mDownloadedBitmap = ImageUtils.resize(mDownloadedBitmap,
+						mCacheImageScale);
 			} else {
 				mDownloadedBitmap = ImageUtils.downloadImage(url);
 			}

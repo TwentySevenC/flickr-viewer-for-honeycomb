@@ -4,34 +4,31 @@
 
 package com.gmail.charleszq.ui;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.gmail.charleszq.FlickrViewerActivity;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.actions.IAction;
-import com.gmail.charleszq.event.IAuthDoneListener;
-import com.gmail.charleszq.task.AuthTask;
+import com.gmail.charleszq.task.OAuthTask;
+import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.Flickr;
-import com.gmail.yuyang226.flickr.auth.Permission;
+import com.gmail.yuyang226.flickr.RequestContext;
 import com.gmail.yuyang226.flickr.oauth.OAuth;
 import com.gmail.yuyang226.flickr.oauth.OAuthInterface;
 import com.gmail.yuyang226.flickr.oauth.OAuthToken;
-import com.gmail.yuyang226.flickr.people.User;
 
 /**
  * Represents the auth dialog to grant this application the permission to access
@@ -39,13 +36,9 @@ import com.gmail.yuyang226.flickr.people.User;
  * 
  * @author charles
  */
-public class AuthFragmentDialog extends DialogFragment implements
-		IAuthDoneListener {
+public class AuthFragmentDialog extends DialogFragment {
 
-	/**
-	 * The oauth interface
-	 */
-	private OAuthInterface mAuthInterface;
+	private static final String TAG = AuthFragmentDialog.class.getName();
 
 	/**
 	 * Auth dialog might be brought up in several places if not authed before,
@@ -54,12 +47,10 @@ public class AuthFragmentDialog extends DialogFragment implements
 	 */
 	private IAction mFinishAction;
 
-	private Handler mHandler = new Handler();
-
 	/**
-	 * The frob.
+	 * The handler to run the finish action.
 	 */
-	private String mFrob = null;
+	private Handler mHandler = new Handler();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,45 +73,128 @@ public class AuthFragmentDialog extends DialogFragment implements
 		return view;
 	}
 
-	@Override
-	public void onAuthDone(int type, Object result) {
-		
-		if( result == null ) {
-			Toast.makeText(getActivity(), getActivity().getString(R.string.error_no_network), Toast.LENGTH_LONG).show();
-			return;
-		}
-		
-		if (type == AuthTask.TYPE_FROB) {
-			mFrob = result.toString();
-			try {
-				//FIXME oauthToken
-				URL url = mAuthInterface.buildAuthenticationUrl(
-						Permission.WRITE, (OAuthToken)null);
-				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url
-						.toExternalForm()));
-				getActivity().startActivity(intent);
+	/**
+	 * The button click listener.
+	 */
+	private OnClickListener mClickListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+
+			Integer tag = (Integer) v.getTag();
+			if (tag == R.id.button_auth_done) {
+				AuthFragmentDialog.this.dismiss();
 				return;
-			} catch (MalformedURLException e) {
-
+			} else {
+				OAuthTask task = new OAuthTask(getActivity());
+				task.execute();
 			}
-		} else { // auth done
-			OAuth auth = (OAuth) result;
+		}
+	};
 
-			FlickrViewerActivity mainActivity = (FlickrViewerActivity) getActivity();
-			FlickrViewerApplication app = (FlickrViewerApplication) mainActivity.getApplication();
-			
-			User user = auth.getUser();
-			//FIXME save token and token secret
-			app.saveFlickrAuthToken(auth.getToken().getOauthToken(), user.getId(), user
-					.getUsername());
+	@Override
+	public void onResume() {
+		super.onResume();
+		Intent intent = getActivity().getIntent();
+		String schema = intent.getScheme();
+		Log.d(TAG, "intent schema: " + schema); //$NON-NLS-1$
+		if (Constants.ID_SCHEME.equals(schema)) {
+			Uri uri = intent.getData();
+			String query = uri.getQuery();
+			Log.d(TAG, "Returned Query: " + query); //$NON-NLS-1$
+			String[] data = query.split("&"); //$NON-NLS-1$
+			if (data != null && data.length == 2) {
+				String oauthToken = data[0].substring(data[0].indexOf("=") + 1); //$NON-NLS-1$
+				String oauthVerifier = data[1]
+						.substring(data[1].indexOf("=") + 1); //$NON-NLS-1$
+				Log.d(TAG, "OAuth token: " + oauthToken); //$NON-NLS-1$
+				Log.d(TAG, "OAuth verifier: " + oauthVerifier); //$NON-NLS-1$
 
-			app.handleContactUploadService();
-			app.handlePhotoActivityService();
+				String secret = getTokenSecret();
+				if (secret != null) {
+					GetOAuthTokenTask task = new GetOAuthTokenTask(this);
+					task.execute(oauthToken, secret, oauthVerifier);
+				}
+			}
+		}
 
-			// notify main menu panel to update
+	}
+
+	private String getTokenSecret() {
+		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+				.getApplication();
+		return app.getFlickrTokenSecrent();
+	}
+
+	/**
+	 * Represents the task to get the oauth token and user information.
+	 * <p>
+	 * This task should be called only after you got the request oauth request
+	 * token and the verifier.
+	 * 
+	 * @author charles
+	 * 
+	 */
+	private static class GetOAuthTokenTask extends
+			AsyncTask<String, Integer, OAuth> {
+
+		private AuthFragmentDialog mAuthDialog;
+
+		GetOAuthTokenTask(AuthFragmentDialog context) {
+			this.mAuthDialog = context;
+		}
+
+		@Override
+		protected OAuth doInBackground(String... params) {
+			String oauthToken = params[0];
+			String oauthTokenSecret = params[1];
+			String verifier = params[2];
+
+			Flickr f = FlickrHelper.getInstance().getFlickr();
+			OAuthInterface oauthApi = f.getOAuthInterface();
+			try {
+				OAuthToken oat = new OAuthToken();
+				oat.setOauthToken(oauthToken);
+				oat.setOauthTokenSecret(oauthTokenSecret);
+
+				OAuth oauth = new OAuth();
+				oauth.setToken(oat);
+				RequestContext requestContext = RequestContext
+						.getRequestContext();
+				requestContext.setOAuth(oauth);
+
+				oauth = oauthApi.getAccessToken(oat, verifier);
+				return oauth;
+			} catch (Exception e) {
+				Log.e(AuthFragmentDialog.class.getName(), e.getMessage());
+				return null;
+			}
+
+		}
+
+		@Override
+		protected void onPostExecute(OAuth result) {
+			if (mAuthDialog != null) {
+				mAuthDialog.onOAuthDone(result);
+			}
+		}
+
+	}
+
+	void onOAuthDone(OAuth result) {
+		if (result == null) {
+			Toast.makeText(getActivity(), "Error to auth, please try again.", //$NON-NLS-1$
+					Toast.LENGTH_LONG).show();
+		} else {
+			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+					.getApplication();
+			app.saveFlickrAuthToken(result.getToken().getOauthToken(), result
+					.getUser().getId(), result.getUser().getUsername());
+
+			//
 			MainNavFragment menuFragment = (MainNavFragment) getFragmentManager()
 					.findFragmentById(R.id.nav_frg);
 			menuFragment.handleUserPanel(menuFragment.getView());
+
 			this.dismiss();
 
 			if (mFinishAction != null) {
@@ -134,44 +208,6 @@ public class AuthFragmentDialog extends DialogFragment implements
 
 		}
 	}
-
-	/**
-	 * The button click listener.
-	 */
-	private OnClickListener mClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			/*Intent intent = new Intent(AuthFragmentDialog.this.getActivity(),
-                    OAuthActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(OAuthActivity.ID_METHOD, OAuthActivity.ID_OAUTH);
-            AuthFragmentDialog.this.startActivity(intent);*/
-			if (mAuthInterface == null) {
-				Flickr f = FlickrHelper.getInstance().getFlickr();
-				mAuthInterface = f.getOAuthInterface();
-			}
-
-			Integer tag = (Integer) v.getTag();
-			if (tag == R.id.button_auth) {
-				AuthTask task = new AuthTask(AuthTask.TYPE_FROB,
-						AuthFragmentDialog.this, mAuthInterface);
-				task.execute(""); //$NON-NLS-1$
-			} else if (tag == R.id.button_auth_done) {
-				if (mFrob == null) {
-					Toast.makeText(
-							getActivity(),
-							getActivity().getResources().getString(
-									R.string.toast_click_first_btn),
-							Toast.LENGTH_LONG).show();
-					return;
-				}
-
-				AuthTask authDoneTask = new AuthTask(AuthTask.TYPE_TOKEN,
-						AuthFragmentDialog.this, mAuthInterface);
-				authDoneTask.execute(mFrob);
-			}
-		}
-	};
 
 	/**
 	 * Sets the action after auth.

@@ -20,29 +20,33 @@ import com.gmail.yuyang226.flickr.contacts.Contact;
 /**
  * @author charles
  */
-public class GetContactsTask extends ProgressDialogAsyncTask<String, Integer, Collection<Contact>> {
+public class GetContactsTask extends
+		ProgressDialogAsyncTask<String, Integer, Collection<Contact>> {
 
-    private IContactsFetchedListener mListener;
+	private IContactsFetchedListener mListener;
 
-    public GetContactsTask(Activity activity, IContactsFetchedListener listener) {
-        super(activity, R.string.loading_contacts);
-        this.mListener = listener;
-    }
+	public GetContactsTask(Activity activity, IContactsFetchedListener listener) {
+		super(activity, R.string.loading_contacts);
+		this.mListener = listener;
+	}
 
-    @Override
-    protected Collection<Contact> doInBackground(String... params) {
-        FlickrViewerApplication app = (FlickrViewerApplication) mActivity.getApplication();
-        String token = app.getFlickrToken();
-        DefaultContactDataProvider dp = new DefaultContactDataProvider(token);
-        return dp.getContacts(params[0]);
-    }
+	@Override
+	protected Collection<Contact> doInBackground(String... params) {
+		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+				.getApplication();
+		String token = app.getFlickrToken();
+		String secret = app.getFlickrTokenSecrent();
+		DefaultContactDataProvider dp = new DefaultContactDataProvider(token,
+				secret);
+		return dp.getContacts(params[0]);
+	}
 
-    @Override
-    protected void onPostExecute(Collection<Contact> result) {
-        super.onPostExecute(result);
-        if (mListener != null) {
-            mListener.onContactsFetched(result);
-        }
-    }
+	@Override
+	protected void onPostExecute(Collection<Contact> result) {
+		super.onPostExecute(result);
+		if (mListener != null) {
+			mListener.onContactsFetched(result);
+		}
+	}
 
 }

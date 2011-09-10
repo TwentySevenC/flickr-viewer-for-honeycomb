@@ -50,6 +50,7 @@ public class UserPhotoCollectionTask extends
 	 * The auth token
 	 */
 	private String mToken;
+	private String mSecret;
 
 	private boolean mIsForceFromServer = false;
 
@@ -111,6 +112,7 @@ public class UserPhotoCollectionTask extends
 			String... params) {
 		String userId = params[0];
 		mToken = params[1];
+		mSecret = params[2];
 
 		// the key of this map is the string resource id of gallery, or photo
 		// set, or photo group.
@@ -166,7 +168,7 @@ public class UserPhotoCollectionTask extends
 
 		// photo groups
 		PoolsInterface poolInterface = FlickrHelper.getInstance()
-				.getFlickrAuthed(mToken).getPoolsInterface();
+				.getFlickrAuthed(mToken, mSecret).getPoolsInterface();
 		try {
 			Collection<?> groups = poolInterface.getGroups();
 			if (!groups.isEmpty()) {

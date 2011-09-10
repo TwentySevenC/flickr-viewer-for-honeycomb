@@ -35,6 +35,7 @@ public final class Constants {
 	public static final String SETTING_SHOW_APP_TITLE = "show.app.title"; //$NON-NLS-1$
 	public static final String SETTING_TAG_SRH_MODE_AND = "tag.search.mode"; //$NON-NLS-1$
 
+	public static final String FLICKR_TOKEN_SECRENT = "token.secret"; //$NON-NLS-1$
 	public static final String FLICKR_TOKEN = "flickr.token"; //$NON-NLS-1$
 	public static final String FLICKR_USER_ID = "flickr.user.id"; //$NON-NLS-1$
 	public static final String FLICKR_USER_NAME = "flickr.user.name"; //$NON-NLS-1$

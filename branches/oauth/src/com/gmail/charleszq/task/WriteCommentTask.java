@@ -17,12 +17,10 @@ import com.gmail.yuyang226.flickr.photos.comments.CommentsInterface;
  */
 public class WriteCommentTask extends ProgressDialogAsyncTask<String, Integer, Boolean> {
 
-    private String mToken;
     private DialogFragment mDialog;
 
-    public WriteCommentTask(String token, DialogFragment dialog) {
+    public WriteCommentTask(DialogFragment dialog) {
         super(dialog.getActivity(), R.string.adding_comments);
-        this.mToken = token;
         mDialog = dialog;
     }
 
@@ -30,8 +28,10 @@ public class WriteCommentTask extends ProgressDialogAsyncTask<String, Integer, B
     protected Boolean doInBackground(String... params) {
         String photoId = params[0];
         String comment = params[1];
+        String token = params[2];
+        String secret = params[3];
 
-        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
+        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token,secret);
         CommentsInterface ci = f.getCommentsInterface();
         try {
             ci.addComment(photoId, comment);

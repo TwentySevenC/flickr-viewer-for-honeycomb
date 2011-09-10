@@ -72,6 +72,18 @@ public class FlickrViewerApplication extends Application {
 		editor.commit();
 	}
 
+	public void saveFlickrTokenSecret(String tokenSecrent) {
+		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
+				Context.MODE_PRIVATE);
+		Editor editor = sp.edit();
+		editor.putString(Constants.FLICKR_TOKEN_SECRENT, tokenSecrent);
+		editor.commit();
+	}
+
+	public String getFlickrTokenSecrent() {
+		return getSharedPreferenceValue(Constants.FLICKR_TOKEN_SECRENT, null);
+	}
+
 	public String getUserName() {
 		return getSharedPreferenceValue(Constants.FLICKR_USER_NAME, null);
 	}

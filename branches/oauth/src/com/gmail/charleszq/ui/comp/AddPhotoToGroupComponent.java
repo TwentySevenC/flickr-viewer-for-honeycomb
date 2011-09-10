@@ -88,6 +88,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	 * The set to store the group/set ids which the given photo is already in.
 	 */
 	private Set<String> mPhotoGroupIds = new HashSet<String>();
+	private String mSecret;
 
 	/**
 	 * @param context
@@ -148,10 +149,12 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	 *            the authed user id, if user is not authed, this UI should not
 	 *            be shown.
 	 */
-	public void init(Photo photo, String authUserId, String token) {
+	public void init(Photo photo, String authUserId, String token,
+			String tokenSecret) {
 		this.mCurrentPhoto = photo;
 		this.mUserId = authUserId;
 		this.mToken = token;
+		this.mSecret = tokenSecret;
 
 		mCheckedItems.clear();
 		mPhotoGroupIds.clear();
@@ -163,10 +166,10 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mIsMyOwnPhoto = authUserId.equals(mCurrentPhoto.getOwner().getId());
 		if (mIsMyOwnPhoto) {
 			GetPhotoPoolTask getPhotoPoolTask = new GetPhotoPoolTask(this);
-			getPhotoPoolTask.execute(photo.getId(), token);
+			getPhotoPoolTask.execute(photo.getId(), token, tokenSecret);
 		} else {
 			UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
-			task.execute(authUserId, token);
+			task.execute(authUserId, token, tokenSecret);
 		}
 	}
 
@@ -383,7 +386,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 
 		// get user's set/group list
 		UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
-		task.execute(mUserId, mToken);
+		task.execute(mUserId, mToken, mSecret);
 	}
 
 	@Override
