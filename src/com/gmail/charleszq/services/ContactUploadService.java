@@ -50,10 +50,12 @@ public class ContactUploadService extends IntentService {
 		Context context = getApplicationContext();
 		
 		String token = null;
+		String secret = null;
 		int intervalInHours = Constants.SERVICE_CHECK_INTERVAL;
 		if( context instanceof FlickrViewerApplication) {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
+			secret = app.getFlickrTokenSecrent();
 			intervalInHours = app.getContactUploadCheckInterval();
 			
 			if( token == null || !app.isContactUploadCheckEnabled() ) {
@@ -67,11 +69,11 @@ public class ContactUploadService extends IntentService {
 			return;
 		}
 		
-		checkContactUpload(token, intervalInHours);
+		checkContactUpload(token, secret, intervalInHours);
 	}
 	
-	private void checkContactUpload(String token, int intervalInHours ) {
-		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token);
+	private void checkContactUpload(String token, String secret, int intervalInHours ) {
+		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token, secret);
 		ContactsInterface ci = f.getContactsInterface();
 		Date sinceDate = new Date();
 		Long time = sinceDate.getTime() - intervalInHours * 60 * 60 * 1000;

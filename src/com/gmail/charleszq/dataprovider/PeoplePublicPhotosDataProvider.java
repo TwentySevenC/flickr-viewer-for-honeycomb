@@ -45,6 +45,8 @@ public class PeoplePublicPhotosDataProvider extends
 	 */
 	private String mToken;
 
+	private String mSecret;
+
 	/**
 	 * Constructor.
 	 * 
@@ -52,10 +54,11 @@ public class PeoplePublicPhotosDataProvider extends
 	 * @param token
 	 */
 	public PeoplePublicPhotosDataProvider(String userId, String token,
-			String userName) {
+			String userName, String secret) {
 		this.mUserId = userId;
 		this.mToken = token;
 		this.mUserName = userName;
+		this.mSecret = secret;
 	}
 
 	/*
@@ -66,7 +69,7 @@ public class PeoplePublicPhotosDataProvider extends
 	 */
 	@Override
 	public PhotoList getPhotoList() throws Exception {
-		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
+		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken, mSecret);
 
 		PeopleInterface pi = f.getPeopleInterface();
 		Set<String> extras = new HashSet<String>();
