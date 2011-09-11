@@ -9,7 +9,6 @@ import com.gmail.yuyang226.flickr.galleries.GalleriesInterface;
 import com.gmail.yuyang226.flickr.interestingness.InterestingnessInterface;
 import com.gmail.yuyang226.flickr.oauth.OAuth;
 import com.gmail.yuyang226.flickr.oauth.OAuthToken;
-import com.gmail.yuyang226.flickr.people.User;
 import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
 public final class FlickrHelper {
