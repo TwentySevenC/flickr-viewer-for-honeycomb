@@ -9,6 +9,7 @@ import com.gmail.yuyang226.flickr.galleries.GalleriesInterface;
 import com.gmail.yuyang226.flickr.interestingness.InterestingnessInterface;
 import com.gmail.yuyang226.flickr.oauth.OAuth;
 import com.gmail.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.people.User;
 import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
 public final class FlickrHelper {
@@ -42,6 +43,10 @@ public final class FlickrHelper {
 		Flickr f = getFlickr();
 		RequestContext requestContext = RequestContext.getRequestContext();
 		OAuth auth = new OAuth();
+		User user = new User();
+		user.setId("8308954@N06");
+		user.setUsername("Yang Yu");
+		auth.setUser(user);
 		auth.setToken(new OAuthToken(token, secret));
 		requestContext.setOAuth(auth);
 		return f;

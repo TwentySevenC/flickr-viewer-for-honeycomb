@@ -13,8 +13,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,10 +25,8 @@ import com.gmail.charleszq.task.OAuthTask;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.Flickr;
-import com.gmail.yuyang226.flickr.RequestContext;
 import com.gmail.yuyang226.flickr.oauth.OAuth;
 import com.gmail.yuyang226.flickr.oauth.OAuthInterface;
-import com.gmail.yuyang226.flickr.oauth.OAuthToken;
 
 /**
  * Represents the auth dialog to grant this application the permission to access
@@ -152,18 +150,7 @@ public class AuthFragmentDialog extends DialogFragment {
 			Flickr f = FlickrHelper.getInstance().getFlickr();
 			OAuthInterface oauthApi = f.getOAuthInterface();
 			try {
-				OAuthToken oat = new OAuthToken();
-				oat.setOauthToken(oauthToken);
-				oat.setOauthTokenSecret(oauthTokenSecret);
-
-				OAuth oauth = new OAuth();
-				oauth.setToken(oat);
-				RequestContext requestContext = RequestContext
-						.getRequestContext();
-				requestContext.setOAuth(oauth);
-
-				oauth = oauthApi.getAccessToken(oat, verifier);
-				return oauth;
+				return oauthApi.getAccessToken(oauthToken, oauthTokenSecret, verifier);
 			} catch (Exception e) {
 				Log.e(AuthFragmentDialog.class.getName(), e.getMessage());
 				return null;
@@ -187,8 +174,7 @@ public class AuthFragmentDialog extends DialogFragment {
 		} else {
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
-			app.saveFlickrAuthToken(result.getToken().getOauthToken(), result
-					.getUser().getId(), result.getUser().getUsername());
+			app.saveFlickrAuthToken(result);
 
 			//
 			MainNavFragment menuFragment = (MainNavFragment) getFragmentManager()
