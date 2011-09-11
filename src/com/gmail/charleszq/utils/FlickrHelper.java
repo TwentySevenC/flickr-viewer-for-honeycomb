@@ -43,10 +43,6 @@ public final class FlickrHelper {
 		Flickr f = getFlickr();
 		RequestContext requestContext = RequestContext.getRequestContext();
 		OAuth auth = new OAuth();
-		User user = new User();
-		user.setId("8308954@N06");
-		user.setUsername("Yang Yu");
-		auth.setUser(user);
 		auth.setToken(new OAuthToken(token, secret));
 		requestContext.setOAuth(auth);
 		return f;
