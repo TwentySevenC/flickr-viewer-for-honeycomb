@@ -91,12 +91,14 @@ public class PhotoPoolComponent extends FrameLayout implements
 		mPhotoPoolListView.setOnTouchListener(listener);
 		
 		String token = null;
+		String secret = null;
 		if( getContext() instanceof Activity ) {
 			FlickrViewerApplication app = (FlickrViewerApplication) ((Activity)getContext()).getApplication();
 			token = app.getFlickrToken();
+			secret = app.getFlickrTokenSecrent();
 		}
 		GetPhotoPoolTask task = new GetPhotoPoolTask(this);
-		task.execute(photoId,token);
+		task.execute(photoId,token,secret);
 	}
 
 	@Override
