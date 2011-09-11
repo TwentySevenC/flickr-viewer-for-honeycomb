@@ -23,6 +23,10 @@ import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.services.TimeUpReceiver;
 import com.gmail.charleszq.utils.Constants;
+import com.gmail.yuyang226.flickr.RequestContext;
+import com.gmail.yuyang226.flickr.oauth.OAuth;
+import com.gmail.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.people.User;
 
 /**
  * Represents the main application.
@@ -61,12 +65,41 @@ public class FlickrViewerApplication extends Application {
 		String token = getSharedPreferenceValue(Constants.FLICKR_TOKEN, null);
 		return token;
 	}
+	
+	public OAuth loadSavedOAuth() {
+		String userId = getUserId();
+		String userName = getUserName();
+		String token = getFlickrToken();
+		String tokenSecret = getFlickrTokenSecrent();
+		if (userId == null || token == null || tokenSecret == null) {
+			return null;
+		}
+		OAuth oauth = new OAuth();
+		oauth.setToken(new OAuthToken(token, tokenSecret));
+		User user = new User();
+		user.setId(userId);
+		user.setRealName(userName);
+		oauth.setUser(user);
+		RequestContext.getRequestContext().setOAuth(oauth);
+		return oauth;
+	}
 
-	public void saveFlickrAuthToken(String token, String userId, String userName) {
+	public void saveFlickrAuthToken(OAuth oauth) {
 		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
 				Context.MODE_PRIVATE);
 		Editor editor = sp.edit();
-		editor.putString(Constants.FLICKR_TOKEN, token);
+		String oauthToken = null;
+		String tokenSecret = null;
+		String userId = null;
+		String userName = null;
+		if (oauth != null) {
+			oauthToken = oauth.getToken().getOauthToken();
+			tokenSecret = oauth.getToken().getOauthTokenSecret();
+			userId = oauth.getUser().getId();
+			userName = oauth.getUser().getUsername();
+		}
+		editor.putString(Constants.FLICKR_TOKEN, oauthToken);
+		editor.putString(Constants.FLICKR_TOKEN_SECRENT, tokenSecret);
 		editor.putString(Constants.FLICKR_USER_ID, userId);
 		editor.putString(Constants.FLICKR_USER_NAME, userName);
 		editor.commit();
@@ -151,7 +184,7 @@ public class FlickrViewerApplication extends Application {
 				cacheFile.delete();
 			}
 		}
-		saveFlickrAuthToken(null, null, null);
+		saveFlickrAuthToken(null);
 	}
 
 	/**
