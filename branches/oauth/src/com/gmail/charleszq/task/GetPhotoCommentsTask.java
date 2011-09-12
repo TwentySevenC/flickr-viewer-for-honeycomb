@@ -51,7 +51,7 @@ public class GetPhotoCommentsTask extends
 			CommentsInterface ci = f.getCommentsInterface();
 			PeopleInterface pi = f.getPeopleInterface();
 			try {
-				List<Comment> flickrComments = ci.getList(photoId);
+				List<Comment> flickrComments = ci.getList(photoId, null, null);
 				for (Comment c : flickrComments) {
 					UserComment userComment = new UserComment();
 					userComment.setUserName(c.getAuthorName());
