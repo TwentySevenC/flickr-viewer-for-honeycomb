@@ -7,7 +7,8 @@ package com.gmail.charleszq.dataprovider;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
@@ -24,8 +25,7 @@ import com.gmail.yuyang226.flickr.activity.ItemList;
 public class RecentActivitiesDataProvider {
 
 	private static final int PER_PAGE = 20;
-	private static final String TAG = RecentActivitiesDataProvider.class
-			.getName();
+	private static final Logger logger = LoggerFactory.getLogger(RecentActivitiesDataProvider.class);
 
 	private String mToken;
 	private String mSecret;
@@ -77,7 +77,9 @@ public class RecentActivitiesDataProvider {
 				if (userComments != null) {
 					for (int i = 0; i < userComments.size(); i++) {
 						Item item = userComments.get(i);
-						Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
+						if (logger.isDebugEnabled()) {
+							logger.debug("Activity item type: {}", item.getType()); //$NON-NLS-1$
+						}
 						if ("photo".equals(item.getType())) { //$NON-NLS-1$
 							items.add(item);
 						}
@@ -94,7 +96,9 @@ public class RecentActivitiesDataProvider {
 			if (photoComments != null) {
 				for (int j = 0; j < photoComments.size(); j++) {
 					Item item = photoComments.get(j);
-					Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
+					if (logger.isDebugEnabled()) {
+						logger.debug("Activity item type: {}", item.getType()); //$NON-NLS-1$
+					}
 					if ("photo".equals(item.getType())) { //$NON-NLS-1$
 						items.add(item);
 					}

@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -21,7 +24,6 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.FloatMath;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -49,7 +51,7 @@ import com.gmail.yuyang226.flickr.photos.Photo;
 public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		IImageDownloadDoneListener {
 
-	private static final String TAG = ViewBigPhotoActivity.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(ViewBigPhotoActivity.class);
 
 	private static final int NONE = 0;
 	private static final int DRAG = 1;
@@ -184,7 +186,9 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		if( mPhotoBitmap != null ) {
 			mPhotoBitmap.recycle();
 			mPhotoBitmap = null;
-			Log.d(TAG, "Bitmap released."); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Bitmap released."); //$NON-NLS-1$
+			}
 		}
 		mImageView = null;
 		mPhoto = null;
@@ -201,7 +205,9 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		super.onSaveInstanceState(outState);
 		outState.putString(PHOTO_ID_KEY, mPhotoId);
 		outState.putString(PHOTO_SECRET_KEY, mPhotoSecret);
-		Log.d(TAG, "Photo id saved."); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("Photo id={} and photoSecret={} saved", mPhotoId, mPhotoSecret); //$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -213,23 +219,31 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		case MotionEvent.ACTION_DOWN:
 			savedMatrix.set(matrix);
 			start.set(event.getX(), event.getY());
-			Log.d(TAG, "mode=DRAG"); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("mode=DRAG"); //$NON-NLS-1$
+			}
 			mode = DRAG;
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
 			oldDist = spacing(event);
-			Log.d(TAG, "oldDist=" + oldDist); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("oldDist={}", oldDist); //$NON-NLS-1$
+			}
 			if (oldDist > 10f) {
 				savedMatrix.set(matrix);
 				midPoint(mid, event);
 				mode = ZOOM;
-				Log.d(TAG, "mode=ZOOM"); //$NON-NLS-1$
+				if (logger.isDebugEnabled()) {
+					logger.debug("mode=ZOOM"); //$NON-NLS-1$
+				}
 			}
 			break;
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_POINTER_UP:
 			mode = NONE;
-			Log.d(TAG, "mode=NONE"); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("mode=NONE"); //$NON-NLS-1$
+			}
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if (mode == DRAG) {
@@ -239,7 +253,9 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 						- start.y);
 			} else if (mode == ZOOM) {
 				float newDist = spacing(event);
-				Log.d(TAG, "newDist=" + newDist); //$NON-NLS-1$
+				if (logger.isDebugEnabled()) {
+					logger.debug("newDist={}", newDist); //$NON-NLS-1$
+				}
 				if (newDist > 10f) {
 					matrix.set(savedMatrix);
 					float scale = newDist / oldDist;

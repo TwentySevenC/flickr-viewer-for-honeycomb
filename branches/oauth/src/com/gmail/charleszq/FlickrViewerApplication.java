@@ -8,6 +8,9 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
@@ -17,7 +20,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
@@ -35,7 +37,7 @@ import com.gmail.yuyang226.flickr.people.User;
  */
 public class FlickrViewerApplication extends Application {
 
-	private static final String TAG = FlickrViewerApplication.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(FlickrViewerApplication.class);
 
 	private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
 
@@ -204,7 +206,9 @@ public class FlickrViewerApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.d(TAG, "Application created."); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("Application created."); //$NON-NLS-1$
+		}
 		registerTimeCheckReceiver();
 	}
 
@@ -230,12 +234,13 @@ public class FlickrViewerApplication extends Application {
 		PendingIntent pendingIntent = getPhotoCommentPendingIntent();
 		am.cancel(pendingIntent);
 		if (isPhotoActivityCheckEnabled()) {
-
 			int pIntervalInHours = getPhotoActivityCheckInterval();
 			am.setRepeating(AlarmManager.RTC,
 					System.currentTimeMillis() + 5 * 60 * 1000L,
 					pIntervalInHours * 60 * 60 * 1000L, pendingIntent);
-			Log.d(TAG, "Receiver registered to check comments on my photos."); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Receiver registered to check comments on my photos."); //$NON-NLS-1$
+			}
 		}
 	}
 
@@ -252,7 +257,9 @@ public class FlickrViewerApplication extends Application {
 			am.setRepeating(AlarmManager.RTC,
 					System.currentTimeMillis() + 2 * 60 * 1000L,
 					cIntervalInHours * 60 * 60 * 1000L, pendingIntent);
-			Log.d(TAG, "Receiver registered to check contact upload."); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Receiver registered to check contact upload."); //$NON-NLS-1$
+			}
 		}
 	}
 
