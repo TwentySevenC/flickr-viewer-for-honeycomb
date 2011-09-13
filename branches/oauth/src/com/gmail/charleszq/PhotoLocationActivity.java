@@ -188,8 +188,8 @@ public class PhotoLocationActivity extends MapActivity implements
 				redrawPushpin();
 				drawPhotoLayer();
 				if (logger.isDebugEnabled()) {
-					logger.debug("Map view zoom level changed from {} to {}", 
-							mZoomLevel, zoomLevel); //$NON-NLS-1$
+					logger.debug("Map view zoom level changed from {} to {}", //$NON-NLS-1$
+							mZoomLevel, zoomLevel); 
 				}
 				mZoomLevel = zoomLevel;
 			}

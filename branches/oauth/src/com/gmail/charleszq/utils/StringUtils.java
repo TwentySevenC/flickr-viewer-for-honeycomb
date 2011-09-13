@@ -56,7 +56,7 @@ public final class StringUtils {
 
 	public static void formatHtmlString(String string, TextView textView) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("formatHtmlString parameters: string={}; textView={}", string, textView);
+			logger.debug("formatHtmlString parameters: string={}; textView={}", string, textView); //$NON-NLS-1$
 		}
 
 		textView.setText(Html.fromHtml(string));
