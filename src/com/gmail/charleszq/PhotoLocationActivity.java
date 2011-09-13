@@ -10,6 +10,9 @@ package com.gmail.charleszq;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +21,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.gmail.charleszq.task.GetPhotoImageTask;
@@ -41,7 +43,7 @@ import com.google.android.maps.Overlay;
 public class PhotoLocationActivity extends MapActivity implements
 		IPhotoFetchedListener {
 
-	private static final String TAG = PhotoLocationActivity.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(PhotoLocationActivity.class);
 	private static final int INVALID_LAT_LNG_VAL = (int) (360 * 1E6);
 
 	public static final String LAT_VAL = "lat"; //$NON-NLS-1$
@@ -106,7 +108,9 @@ public class PhotoLocationActivity extends MapActivity implements
 			if (bm != null) {
 				bm.recycle();
 				bm = null;
-				Log.d(TAG, "Destroy the bitmap reference."); //$NON-NLS-1$
+				if (logger.isDebugEnabled()) {
+					logger.debug("Destroy the bitmap reference."); //$NON-NLS-1$
+				}
 			}
 		}
 		mMapView = null;
@@ -183,8 +187,11 @@ public class PhotoLocationActivity extends MapActivity implements
 			if (zoomLevel != mZoomLevel) {
 				redrawPushpin();
 				drawPhotoLayer();
+				if (logger.isDebugEnabled()) {
+					logger.debug("Map view zoom level changed from {} to {}", 
+							mZoomLevel, zoomLevel); //$NON-NLS-1$
+				}
 				mZoomLevel = zoomLevel;
-				Log.d(TAG, "Map view zoom level changed."); //$NON-NLS-1$
 			}
 		}
 	}

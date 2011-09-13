@@ -5,13 +5,15 @@ package com.gmail.charleszq.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -27,7 +29,7 @@ import com.gmail.yuyang226.flickr.activity.Item;
  */
 public class PhotoActivityService extends IntentService {
 
-	private static final String TAG = PhotoActivityService.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(PhotoActivityService.class);
 	
 	public PhotoActivityService() {
 		super(Constants.ENABLE_PHOTO_ACT_NOTIF);
@@ -46,11 +48,14 @@ public class PhotoActivityService extends IntentService {
 			token = app.getFlickrToken();
 			secret = app.getFlickrTokenSecrent();
 			if( token == null || !app.isPhotoActivityCheckEnabled() ) {
-				Log.d(TAG, "No authed or notification is disabled."); //$NON-NLS-1$
+				if (logger.isDebugEnabled()) {
+					logger.debug("Invalid auth({}) or notification is disabled, enabled={}"
+							, token, app.isPhotoActivityCheckEnabled()); //$NON-NLS-1$
+				}
 				return;
 			}
 		} else {
-			Log.w(TAG, "Error, application context is not the application."); //$NON-NLS-1$
+			logger.warn("Error, application context is not the application."); //$NON-NLS-1$
 			return;
 		}
 		
@@ -62,7 +67,10 @@ public class PhotoActivityService extends IntentService {
 		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(token, secret, true);
         dp.setCheckInterval(intervalInHours);
         List<Item> items = dp.getRecentActivities();
-        Log.d(TAG, "Recent activity task executed, item size: " + items.size()); //$NON-NLS-1$
+        if (logger.isDebugEnabled()) {
+        	logger.debug("Recent activity task executed, item size={}, items={}", 
+        			items.size(), items); //$NON-NLS-1$
+        }
         if (!items.isEmpty()) {
             sendNotification();
         }

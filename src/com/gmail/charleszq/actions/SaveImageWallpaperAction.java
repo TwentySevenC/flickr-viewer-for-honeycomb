@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
@@ -15,7 +18,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.gmail.charleszq.R;
@@ -36,8 +38,7 @@ import com.gmail.yuyang226.flickr.photos.Photo;
 public class SaveImageWallpaperAction extends ActivityAwareAction implements
 		IImageDownloadDoneListener {
 	
-	private static final String TAG = SaveImageWallpaperAction.class.getName();
-
+	private static final Logger logger = LoggerFactory.getLogger(SaveImageWallpaperAction.class);
 	private boolean mSetAsWallpaper = false;
 	private Photo mCurrentPhoto;
 
@@ -166,7 +167,9 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 		}
 
 		if (bitmap != null) {
-			Log.d(TAG, "Release the downloaded bitmap."); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Release the downloaded bitmap."); //$NON-NLS-1$
+			}
 			bitmap.recycle();
 			bitmap = null;
 		}
