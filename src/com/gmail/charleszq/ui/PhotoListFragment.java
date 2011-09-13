@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -172,6 +173,13 @@ public class PhotoListFragment extends Fragment implements
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
 		if (mPhotoListDataProvider != null) {
 			act.changeActionBarTitle(mPhotoListDataProvider.getDescription(act));
+		} else {
+			//TODO need to test.
+			FragmentManager fm = getFragmentManager();
+			int count = fm.getBackStackEntryCount();
+			for( int i = 0; i < count; i ++ ) {
+				fm.popBackStack();
+			}
 		}
 		return mRootContainer;
 	}
