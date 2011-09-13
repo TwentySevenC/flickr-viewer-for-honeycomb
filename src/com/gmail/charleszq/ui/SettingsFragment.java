@@ -4,6 +4,9 @@
 
 package com.gmail.charleszq.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +14,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.gmail.charleszq.FlickrViewerActivity;
 import com.gmail.charleszq.FlickrViewerApplication;
@@ -27,7 +29,7 @@ import com.gmail.charleszq.utils.ImageCache;
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
 
-	private static final String TAG = SettingsFragment.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(SettingsFragment.class);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,9 @@ public class SettingsFragment extends PreferenceFragment implements
 		super.onStart();
 		PreferenceManager pm = getPreferenceManager();
 		SharedPreferences sp = pm.getSharedPreferences();
-		Log.d(TAG, "Preference name: " + pm.getSharedPreferencesName()); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("Preference name: {}", pm.getSharedPreferencesName()); //$NON-NLS-1$
+		}
 		sp.registerOnSharedPreferenceChangeListener(this);
 
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
@@ -58,7 +62,9 @@ public class SettingsFragment extends PreferenceFragment implements
 			String size = sharedPreferences.getString(key, String
 					.valueOf(Constants.DEF_CACHE_SIZE));
 			ImageCache.CACHE_SIZE = Integer.parseInt(size);
-			Log.d(TAG, "Cache size changed: " + size); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Cache size changed: {}", size); //$NON-NLS-1$
+			}
 			return;
 		}
 

@@ -12,10 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.model.IListItemAdapter;
@@ -42,8 +43,7 @@ import com.gmail.yuyang226.flickr.photosets.PhotosetsInterface;
 public class UserPhotoCollectionTask extends
 		AsyncTask<String, Integer, Map<Integer, List<IListItemAdapter>>> {
 
-	private static final String TAG = UserPhotoCollectionTask.class.getName();
-
+	private static final Logger logger = LoggerFactory.getLogger(UserPhotoCollectionTask.class);
 	private IUserPhotoCollectionFetched mListener;
 
 	/**
@@ -121,7 +121,7 @@ public class UserPhotoCollectionTask extends
 			try {
 				result = tryGetFromCache();
 			} catch (Exception e1) {
-				Log.d(TAG, "Can not get item list from cache."); //$NON-NLS-1$
+				logger.debug("Can not get item list from cache.", e1); //$NON-NLS-1$
 			}
 
 			if (result != null) {
@@ -138,10 +138,9 @@ public class UserPhotoCollectionTask extends
 				List<IListItemAdapter> ga = new ArrayList<IListItemAdapter>();
 				for (Gallery gallery : galleries) {
 					ga.add(new ListItemAdapter(gallery));
-					Log
-							.d(
-									TAG,
-									"Gallery item count: " + gallery.getTotalCount()); //$NON-NLS-1$
+					if (logger.isDebugEnabled()) {
+						logger.debug("Gallery item count: {}", gallery.getTotalCount()); //$NON-NLS-1$
+					}
 				}
 				result.put(R.string.section_photo_gallery, ga);
 			}
@@ -190,7 +189,7 @@ public class UserPhotoCollectionTask extends
 		try {
 			tryWriteToCache(result);
 		} catch (Exception e) {
-			Log.w(TAG, "Error to write the cache file."); //$NON-NLS-1$
+			logger.warn("Error to write the cache file.", e); //$NON-NLS-1$
 		}
 		if (mListener != null) {
 			mListener.onUserPhotoCollectionFetched(result);

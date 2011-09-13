@@ -13,11 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,8 +62,7 @@ import com.gmail.yuyang226.flickr.photos.PhotoPlace;
 public class AddPhotoToGroupComponent extends FrameLayout implements
 		OnClickListener, IUserPhotoCollectionFetched, OnItemClickListener,
 		IPhotoPoolListener, ICreateGalleryListener {
-
-	private static final String TAG = AddPhotoToGroupComponent.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(AddPhotoToGroupComponent.class);
 	private static final int IDX_PROGRESS = 0;
 	private static final int IDX_LIST = 1;
 	private static final int IDX_CRT_GALLERY = 2;
@@ -249,9 +250,9 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mViewContainer.setDisplayedChild(IDX_LIST);
 
 		if (count == 0) {
-			Log
-					.d(TAG,
-							"No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
+			}
 			if (mIsMyOwnPhoto) {
 				// no photo set/group avaliable to add this photo, prompt user
 				// to create a new photo set.
@@ -397,7 +398,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 					.show();
 		} else {
 			mViewContainer.setDisplayedChild(IDX_CRT_GALLERY);
-			Log.w(TAG, result);
+			logger.warn("Gallery Creation Result: {}", result);
 			Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
 		}
 	}

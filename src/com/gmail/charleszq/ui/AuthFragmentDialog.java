@@ -4,6 +4,9 @@
 
 package com.gmail.charleszq.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,7 +39,7 @@ import com.gmail.yuyang226.flickr.oauth.OAuthInterface;
  */
 public class AuthFragmentDialog extends DialogFragment {
 
-	private static final String TAG = AuthFragmentDialog.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(AuthFragmentDialog.class);
 
 	/**
 	 * Auth dialog might be brought up in several places if not authed before,
@@ -94,18 +97,23 @@ public class AuthFragmentDialog extends DialogFragment {
 		super.onResume();
 		Intent intent = getActivity().getIntent();
 		String schema = intent.getScheme();
-		Log.d(TAG, "intent schema: " + schema); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("intent schema: {}", schema); //$NON-NLS-1$
+		}
 		if (Constants.ID_SCHEME.equals(schema)) {
 			Uri uri = intent.getData();
 			String query = uri.getQuery();
-			Log.d(TAG, "Returned Query: " + query); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Returned Query: {}", query); //$NON-NLS-1$
+			}
 			String[] data = query.split("&"); //$NON-NLS-1$
 			if (data != null && data.length == 2) {
 				String oauthToken = data[0].substring(data[0].indexOf("=") + 1); //$NON-NLS-1$
 				String oauthVerifier = data[1]
 						.substring(data[1].indexOf("=") + 1); //$NON-NLS-1$
-				Log.d(TAG, "OAuth token: " + oauthToken); //$NON-NLS-1$
-				Log.d(TAG, "OAuth verifier: " + oauthVerifier); //$NON-NLS-1$
+				if (logger.isDebugEnabled()) {
+					logger.debug("OAuth Token: {}; OAuth Verifier: {}", oauthToken, oauthVerifier); //$NON-NLS-1$
+				}
 
 				String secret = getTokenSecret();
 				if (secret != null) {

@@ -5,12 +5,14 @@ package com.gmail.charleszq.task;
 
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.utils.Constants;
@@ -27,8 +29,7 @@ import com.gmail.yuyang226.flickr.oauth.OAuthToken;
  */
 public class OAuthTask extends AsyncTask<Void, Integer, String> {
 
-	private static final String TAG = OAuthTask.class.getName();
-
+	private static final Logger logger = LoggerFactory.getLogger(OAuthTask.class);
 	private static final Uri OAUTH_CALLBACK_URI = Uri.parse(Constants.ID_SCHEME
 			+ "://oauth"); //$NON-NLS-1$
 
@@ -59,14 +60,17 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 			OAuthToken oauthToken = f.getOAuthInterface().getRequestToken(
 					OAUTH_CALLBACK_URI.toString());
 			saveTokenSecrent(oauthToken.getOauthTokenSecret());
-
-			Log.d(TAG, "OAuthToken: " + oauthToken); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("OAuthToken: {}", oauthToken); //$NON-NLS-1$
+			}
 			URL oauthUrl = f.getOAuthInterface().buildAuthenticationUrl(
 					Permission.WRITE, oauthToken);
-			Log.d(TAG, "OAuth URL: " + oauthUrl); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("OAuth URL: {}", oauthUrl); //$NON-NLS-1$
+			}
 			return oauthUrl.toString();
-		} catch (Exception ex) {
-			Log.e(TAG, "Error to oauth: " + ex.getMessage()); //$NON-NLS-1$
+		} catch (Exception e) {
+			logger.error("Error to oauth", e); //$NON-NLS-1$
 			return null;
 		}
 	}
@@ -81,7 +85,9 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 		FlickrViewerApplication app = (FlickrViewerApplication) act
 				.getApplication();
 		app.saveFlickrTokenSecret(tokenSecret);
-		Log.d(TAG, "oauth token secrent saved: " + tokenSecret); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("oauth token secrent saved: {}", tokenSecret); //$NON-NLS-1$
+		}
 	}
 
 	@Override

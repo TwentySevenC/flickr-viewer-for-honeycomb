@@ -6,8 +6,10 @@ package com.gmail.charleszq.task;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.gmail.charleszq.event.IUserCommentsFetchedListener;
 import com.gmail.charleszq.model.UserComment;
@@ -33,7 +35,7 @@ import com.gmail.yuyang226.flickr.photos.comments.CommentsInterface;
 public class GetPhotoCommentsTask extends
 		AsyncTask<String, Integer, List<UserComment>> {
 
-	private static final String TAG = GetPhotoCommentsTask.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(GetPhotoCommentsTask.class);
 	private IUserCommentsFetchedListener mListener;
 	
 	public GetPhotoCommentsTask(IUserCommentsFetchedListener listener) {
@@ -63,7 +65,7 @@ public class GetPhotoCommentsTask extends
 					comments.add(userComment);
 				}
 			} catch (Exception e) {
-				Log.w(TAG, e.getMessage());
+				logger.warn(e.getLocalizedMessage(), e);
 			}
 		}
 		return comments;

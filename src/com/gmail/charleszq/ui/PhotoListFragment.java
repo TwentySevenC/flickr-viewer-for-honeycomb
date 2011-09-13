@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -16,7 +19,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,7 +57,7 @@ public class PhotoListFragment extends Fragment implements
 		IFlickrViewerMessageHandler {
 
 	private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider"; //$NON-NLS-1$
-	private static final String TAG = PhotoListFragment.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(PhotoListFragment.class);
 
 	private PhotoList mPhotoList;
 	private MyAdapter mGridAdapter;
@@ -424,7 +426,9 @@ public class PhotoListFragment extends Fragment implements
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_ATTR_DATA_PROVIDER,
 				mPhotoListDataProvider);
-		Log.d(TAG, "data provider is saved."); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("data provider [{}] is saved.", mPhotoListDataProvider); //$NON-NLS-1$
+		}
 	}
 
 	@Override

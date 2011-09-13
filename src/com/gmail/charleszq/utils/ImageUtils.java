@@ -16,6 +16,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,8 +31,7 @@ import android.util.Log;
 import com.gmail.charleszq.task.ImageDownloadTask;
 
 public final class ImageUtils {
-
-	private static final String LOG_TAG = "ImageDownloader"; //$NON-NLS-1$
+	private static final Logger logger = LoggerFactory.getLogger(ImageUtils.class);
 
 	private static Map<String, SoftReference<Bitmap>> imageCache = new ConcurrentHashMap<String, SoftReference<Bitmap>>(
 			20);
@@ -90,13 +91,13 @@ public final class ImageUtils {
 			}
 		} catch (IOException e) {
 			getRequest.abort();
-			Log.w(LOG_TAG, "I/O error while retrieving bitmap from " + url, e); //$NON-NLS-1$
+			logger.warn("I/O error while retrieving bitmap from " + url, e); //$NON-NLS-1$
 		} catch (IllegalStateException e) {
 			getRequest.abort();
-			Log.w(LOG_TAG, "Incorrect URL: " + url); //$NON-NLS-1$
+			logger.warn("Incorrect URL:" + url, e); //$NON-NLS-1$
 		} catch (Exception e) {
 			getRequest.abort();
-			Log.w(LOG_TAG, "Error while retrieving bitmap from " + url, e); //$NON-NLS-1$
+			logger.warn("Error while retrieving bitmap from " + url, e); //$NON-NLS-1$
 		} finally {
 			if ((client instanceof AndroidHttpClient)) {
 				((AndroidHttpClient) client).close();
