@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +19,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -75,7 +77,7 @@ import com.gmail.yuyang226.flickr.tags.Tag;
 public class ViewImageDetailFragment extends Fragment implements
 		IUserCommentsFetchedListener, IExifListener {
 
-	private static final String TAG = ViewImageDetailFragment.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(ViewImageDetailFragment.class);
 
 	private static final String PHOTO_ID_ATTR = "photo.id"; //$NON-NLS-1$
 	private static final String PHOTO_TITLE_ATTR = "photo.title"; //$NON-NLS-1$
@@ -245,7 +247,9 @@ public class ViewImageDetailFragment extends Fragment implements
 		hookDoubleTapOnImage(image);
 
 		if (savedInstanceState != null) {
-			Log.d(TAG, "Restore photo information from bundle."); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Restore photo information from bundle: {}", savedInstanceState); //$NON-NLS-1$
+			}
 			String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
 			String photoTitle = savedInstanceState.getString(PHOTO_TITLE_ATTR);
 			String ownerId = savedInstanceState.getString(PHOTO_OWNER_ID);
@@ -460,7 +464,9 @@ public class ViewImageDetailFragment extends Fragment implements
 	public void onStart() {
 		super.onStart();
 		String photoId = mCurrentPhoto.getId();
-		Log.d(TAG, "Current photo id: " + photoId); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("Current photo id: {}", photoId); //$NON-NLS-1$
+		}
 
 		// exif
 		mExifTask = new GetPhotoExifTask(this);
@@ -478,7 +484,9 @@ public class ViewImageDetailFragment extends Fragment implements
 		outState.putString(PHOTO_TITLE_ATTR, mCurrentPhoto.getTitle());
 		outState.putString(PHOTO_OWNER_ID, mCurrentPhoto.getOwner().getId());
 		outState.putString(PHOTO_DESC_ATTR, mCurrentPhoto.getDescription());
-		Log.d(TAG, "Photo information saved to bundle."); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("Photo information saved to bundle: {}", outState); //$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -636,7 +644,9 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	@Override
 	public void onCommentFetched(List<UserComment> comments) {
-		Log.d(TAG, "comments fetched, comment size: " + comments.size()); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("Comments fetched, size={}, contents={}", comments.size(), comments); //$NON-NLS-1$
+		}
 		this.mComments.clear();
 		for (UserComment comment : comments) {
 			mComments.add(comment);
@@ -647,7 +657,9 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	@Override
 	public void onExifInfoFetched(Collection<Exif> exifs) {
-		Log.d(TAG, "exif fetched."); //$NON-NLS-1$
+		if (logger.isDebugEnabled()) {
+			logger.debug("Exif fetched, contents={}", exifs); //$NON-NLS-1$
+		}
 		if (exifs == null) {
 			mExifProgressBar.setVisibility(View.INVISIBLE);
 			return;

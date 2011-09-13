@@ -10,11 +10,13 @@ package com.gmail.charleszq.task;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.util.Log;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -34,7 +36,7 @@ public class GetPhotoImageTask extends
 		ProgressDialogAsyncTask<String, Integer, Bitmap> {
 
 	private static final int MSG_ID = R.string.loading_photo_detail;
-	private static final String TAG = GetPhotoImageTask.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(GetPhotoImageTask.class);
 	private Photo mCurrentPhoto;
 
 	private float mCacheImageScale = 0.5f;
@@ -97,11 +99,13 @@ public class GetPhotoImageTask extends
 
 		try {
 			mCurrentPhoto = pi.getInfo(photoId, secret);
-			Log.d(TAG, "Photo description: " + mCurrentPhoto.getDescription()); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Photo description: {}", mCurrentPhoto.getDescription()); //$NON-NLS-1$
+			}
 			GeoData geo = mCurrentPhoto.getGeoData();
-			if (geo != null) {
-				Log.d(TAG, "geo data: " + geo.getLatitude() + ", " //$NON-NLS-1$//$NON-NLS-2$
-						+ geo.getLongitude());
+			if (geo != null && logger.isDebugEnabled()) {
+				logger.debug("Geo data: latitude={}, longtitude={}", 
+						geo.getLatitude(), geo.getLongitude()); //$NON-NLS-1$
 			}
 			String url = mCurrentPhoto.getMediumUrl();
 			switch (mPhotoType) {
@@ -137,7 +141,7 @@ public class GetPhotoImageTask extends
 			}
 			return mDownloadedBitmap;
 		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
+			logger.error(e.getLocalizedMessage(), e);
 		}
 		return null;
 	}

@@ -9,9 +9,11 @@ package com.gmail.charleszq.task;
 
 import java.lang.ref.WeakReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
@@ -31,7 +33,7 @@ import com.gmail.yuyang226.flickr.people.User;
  */
 public class GetUserInfoTask extends AsyncTask<String, Integer, User> {
 
-    private static final String TAG = GetUserInfoTask.class.getSimpleName();
+    private static final Logger logger = LoggerFactory.getLogger(GetUserInfoTask.class);
 
     /**
      * The image view to show the buddy icon.
@@ -77,7 +79,7 @@ public class GetUserInfoTask extends AsyncTask<String, Integer, User> {
     @Override
     protected void onPostExecute(User result) {
         if (result == null) {
-            Log.d(TAG, "Unable to get user information."); //$NON-NLS-1$
+        	logger.warn("Unable to get user information."); //$NON-NLS-1$
             return;
         }
         if (mListener != null) {

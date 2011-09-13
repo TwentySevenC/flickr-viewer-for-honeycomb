@@ -2,8 +2,10 @@ package com.gmail.charleszq.task;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.gmail.charleszq.event.IExifListener;
 import com.gmail.charleszq.utils.FlickrHelper;
@@ -13,7 +15,7 @@ import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 public class GetPhotoExifTask extends
 		AsyncTask<String, Integer, Collection<Exif>> {
 
-	private static final String TAG = GetPhotoExifTask.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(GetPhotoExifTask.class);
 
 	private IExifListener mExifListener;
 
@@ -38,8 +40,7 @@ public class GetPhotoExifTask extends
 		try {
 			exifs = pi.getExif(photoId, secret);
 		} catch (Exception e) {
-			Log.e(TAG, "Error to get exif information: " //$NON-NLS-1$
-					+ e.getMessage());
+			logger.error("Error to get exif information", e); //$NON-NLS-1$
 		}
 
 		return exifs;

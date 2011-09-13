@@ -6,10 +6,12 @@ package com.gmail.charleszq.task;
 
 import java.lang.ref.WeakReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
@@ -33,7 +35,7 @@ import com.gmail.yuyang226.flickr.photosets.PhotosetsInterface;
  */
 public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 
-	private static final String TAG = ImageDownloadTask.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(ImageDownloadTask.class);
 	private WeakReference<ImageView> imgRef = null;
 	private String mUrl;
 	
@@ -129,8 +131,7 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 				}
 
 			} catch (Exception e) {
-				Log.e(TAG,
-						"Unable to get the photo detail information: " + e.getMessage()); //$NON-NLS-1$
+				logger.error("Unable to get the photo detail information", e); //$NON-NLS-1$
 				return null;
 			}
 		}

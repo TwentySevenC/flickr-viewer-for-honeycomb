@@ -6,12 +6,14 @@ package com.gmail.charleszq.ui.comp;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +49,7 @@ import com.gmail.yuyang226.flickr.photosets.Photoset;
 public class UserPhotoCollectionComponent extends FrameLayout implements
 		IUserPhotoCollectionFetched, OnItemClickListener {
 
-	private static final String TAG = UserPhotoCollectionComponent.class
-			.getName();
+	private static final Logger logger = LoggerFactory.getLogger(UserPhotoCollectionComponent.class);
 
 	/**
 	 * The list view
@@ -264,7 +265,9 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	@Override
 	protected void onDetachedFromWindow() {
 		if (task != null && !task.isCancelled()) {
-			Log.d(TAG, "cancel the running task."); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("cancel the running task: {}", task); //$NON-NLS-1$
+			}
 			task.cancel(true);
 		}
 		super.onDetachedFromWindow();
