@@ -104,8 +104,8 @@ public class GetPhotoImageTask extends
 			}
 			GeoData geo = mCurrentPhoto.getGeoData();
 			if (geo != null && logger.isDebugEnabled()) {
-				logger.debug("Geo data: latitude={}, longtitude={}", 
-						geo.getLatitude(), geo.getLongitude()); //$NON-NLS-1$
+				logger.debug("Geo data: latitude={}, longtitude={}",  //$NON-NLS-1$
+						geo.getLatitude(), geo.getLongitude()); 
 			}
 			String url = mCurrentPhoto.getMediumUrl();
 			switch (mPhotoType) {

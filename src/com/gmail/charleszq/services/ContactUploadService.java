@@ -37,7 +37,8 @@ import com.gmail.yuyang226.flickr.contacts.ContactsInterface;
  */
 public class ContactUploadService extends IntentService {
 
-	private static final Logger logger = LoggerFactory.getLogger(ContactUploadService.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ContactUploadService.class);
 
 	/**
 	 * Constructor.
@@ -49,53 +50,59 @@ public class ContactUploadService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("Contact upload service, in onHandleIntent, intent={}", intent);  //$NON-NLS-1$
+			logger
+					.debug(
+							"Contact upload service, in onHandleIntent, intent={}", intent); //$NON-NLS-1$
 		}
-	
+
 		Context context = getApplicationContext();
-		
+
 		String token = null;
 		String secret = null;
 		int intervalInHours = Constants.SERVICE_CHECK_INTERVAL;
-		if( context instanceof FlickrViewerApplication) {
+		if (context instanceof FlickrViewerApplication) {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
 			secret = app.getFlickrTokenSecrent();
 			intervalInHours = app.getContactUploadCheckInterval();
-			
-			if( token == null || !app.isContactUploadCheckEnabled() ) {
+
+			if (token == null || !app.isContactUploadCheckEnabled()) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("Invalid oauth={} or notification is disabled, enabled={}"
-							, token, app.isContactUploadCheckEnabled()); //$NON-NLS-1$
+					logger.debug(
+							"Invalid oauth={} or notification is disabled, enabled={}" //$NON-NLS-1$
+							, token, app.isContactUploadCheckEnabled());
 				}
 				return;
 			}
-			
-			
+
 		} else {
 			logger.warn("Error to get application context={}", context); //$NON-NLS-1$
 			return;
 		}
-		
+
 		checkContactUpload(token, secret, intervalInHours);
 	}
-	
-	private void checkContactUpload(String token, String secret, int intervalInHours ) {
+
+	private void checkContactUpload(String token, String secret,
+			int intervalInHours) {
 		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(token, secret);
 		ContactsInterface ci = f.getContactsInterface();
 		Date sinceDate = new Date();
 		Long time = sinceDate.getTime() - intervalInHours * 60 * 60 * 1000;
 		sinceDate = new Date(time);
 		try {
-		    Date now = new Date();
-		    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); //$NON-NLS-1$
-		    if (logger.isDebugEnabled()) {
-		    	logger.debug("Task runs at {}", formater.format(now)); //$NON-NLS-1$
-		    }
-            Collection<?> col = ci.getListRecentlyUploaded(sinceDate, "all"); //$NON-NLS-1$
+			Date now = new Date();
+			SimpleDateFormat formater = new SimpleDateFormat(
+					"yyyy-MM-dd hh:mm:ss"); //$NON-NLS-1$
+			if (logger.isDebugEnabled()) {
+				logger.debug("Task runs at {}", formater.format(now)); //$NON-NLS-1$
+			}
+			Collection<?> col = ci.getListRecentlyUploaded(sinceDate, "all"); //$NON-NLS-1$
 			if (col.size() > 0) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("There are {} contacts have new photos uploaded.", col.size()); //$NON-NLS-1$
+					logger
+							.debug(
+									"There are {} contacts have new photos uploaded.", col.size()); //$NON-NLS-1$
 				}
 				sendNotifications(col);
 			} else {
@@ -103,15 +110,15 @@ public class ContactUploadService extends IntentService {
 			}
 		} catch (Exception e) {
 			logger.warn("unable to get recent upload", e); //$NON-NLS-1$
-		} 
+		}
 	}
-	
-    private void sendNotifications(Collection<?> col) {
-    	
-    	Context mContext = getApplicationContext();
-    	
+
+	private void sendNotifications(Collection<?> col) {
+
+		Context mContext = getApplicationContext();
+
 		// notification manager.
-		NotificationManager notifManager = (NotificationManager)mContext
+		NotificationManager notifManager = (NotificationManager) mContext
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		// notification itself.
@@ -119,8 +126,9 @@ public class ContactUploadService extends IntentService {
 				mContext.getResources().getString(
 						R.string.notif_message_recent_upload), System
 						.currentTimeMillis());
-		notif.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
-		notif.flags =  Notification.FLAG_AUTO_CANCEL;
+		notif.defaults = Notification.DEFAULT_LIGHTS
+				| Notification.DEFAULT_SOUND;
+		notif.flags = Notification.FLAG_AUTO_CANCEL;
 		// init the contact id string array
 		List<String> cIds = new ArrayList<String>();
 		Iterator<?> it = col.iterator();

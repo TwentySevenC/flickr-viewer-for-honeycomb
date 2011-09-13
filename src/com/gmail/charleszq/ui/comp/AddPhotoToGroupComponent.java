@@ -398,7 +398,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 					.show();
 		} else {
 			mViewContainer.setDisplayedChild(IDX_CRT_GALLERY);
-			logger.warn("Gallery Creation Result: {}", result);
+			logger.warn("Gallery Creation Result: {}", result); //$NON-NLS-1$
 			Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
 		}
 	}

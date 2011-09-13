@@ -49,8 +49,8 @@ public class PhotoActivityService extends IntentService {
 			secret = app.getFlickrTokenSecrent();
 			if( token == null || !app.isPhotoActivityCheckEnabled() ) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("Invalid auth({}) or notification is disabled, enabled={}"
-							, token, app.isPhotoActivityCheckEnabled()); //$NON-NLS-1$
+					logger.debug("Invalid auth({}) or notification is disabled, enabled={}" //$NON-NLS-1$
+							, token, app.isPhotoActivityCheckEnabled()); 
 				}
 				return;
 			}
@@ -68,8 +68,8 @@ public class PhotoActivityService extends IntentService {
         dp.setCheckInterval(intervalInHours);
         List<Item> items = dp.getRecentActivities();
         if (logger.isDebugEnabled()) {
-        	logger.debug("Recent activity task executed, item size={}, items={}", 
-        			items.size(), items); //$NON-NLS-1$
+        	logger.debug("Recent activity task executed, item size={}, items={}",  //$NON-NLS-1$
+        			items.size(), items);
         }
         if (!items.isEmpty()) {
             sendNotification();
