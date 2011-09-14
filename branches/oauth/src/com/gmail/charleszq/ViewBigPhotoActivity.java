@@ -51,7 +51,8 @@ import com.gmail.yuyang226.flickr.photos.Photo;
 public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		IImageDownloadDoneListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(ViewBigPhotoActivity.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger("ViewBigPhotoActivity"); //$NON-NLS-1$
 
 	private static final int NONE = 0;
 	private static final int DRAG = 1;
@@ -82,7 +83,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	 * The photo id comes from the intent extra.
 	 */
 	private String mPhotoId;
-	
+
 	/**
 	 * The photo secret.
 	 */
@@ -97,7 +98,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	 * The image view.
 	 */
 	private ImageView mImageView;
-	
+
 	/**
 	 * the bitmap of the big photo.
 	 */
@@ -129,7 +130,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		mImageView = (ImageView) findViewById(R.id.big_image);
 		mImageView.setOnTouchListener(this);
 
-//		mImageView.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
+		// mImageView.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
 	}
 
 	/*
@@ -180,10 +181,10 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		this.mPhotoBitmap = bitmap;
 		mImageView.setImageBitmap(mPhotoBitmap);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
-		if( mPhotoBitmap != null ) {
+		if (mPhotoBitmap != null) {
 			mPhotoBitmap.recycle();
 			mPhotoBitmap = null;
 			if (logger.isDebugEnabled()) {
@@ -206,7 +207,9 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		outState.putString(PHOTO_ID_KEY, mPhotoId);
 		outState.putString(PHOTO_SECRET_KEY, mPhotoSecret);
 		if (logger.isDebugEnabled()) {
-			logger.debug("Photo id={} and photoSecret={} saved", mPhotoId, mPhotoSecret); //$NON-NLS-1$
+			logger
+					.debug(
+							"Photo id={} and photoSecret={} saved", mPhotoId, mPhotoSecret); //$NON-NLS-1$
 		}
 	}
 

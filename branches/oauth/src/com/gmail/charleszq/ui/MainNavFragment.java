@@ -227,6 +227,14 @@ public class MainNavFragment extends Fragment {
 											int id) {
 										app.logout();
 										userPanel.setVisibility(View.INVISIBLE);
+										goHome();
+									}
+									
+									private void goHome() {
+										FragmentManager fm = getActivity().getFragmentManager();
+										for(int i = 0; i < fm.getBackStackEntryCount(); i ++ ) {
+											fm.popBackStack();
+										}
 									}
 								})
 						.setNegativeButton(

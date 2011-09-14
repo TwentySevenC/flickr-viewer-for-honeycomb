@@ -15,7 +15,7 @@ import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 public class GetPhotoExifTask extends
 		AsyncTask<String, Integer, Collection<Exif>> {
 
-	private static final Logger logger = LoggerFactory.getLogger(GetPhotoExifTask.class);
+	private static final Logger logger = LoggerFactory.getLogger("GetPhotoExifTask"); //$NON-NLS-1$
 
 	private IExifListener mExifListener;
 
