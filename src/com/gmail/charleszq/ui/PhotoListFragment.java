@@ -174,6 +174,7 @@ public class PhotoListFragment extends Fragment implements
 		if (mPhotoListDataProvider != null) {
 			act.changeActionBarTitle(mPhotoListDataProvider.getDescription(act));
 		} else {
+			logger.warn("Photo grid view, data provider is null."); //$NON-NLS-1$
 			//TODO need to test.
 			FragmentManager fm = getFragmentManager();
 			int count = fm.getBackStackEntryCount();
