@@ -30,6 +30,8 @@ import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.Flickr;
 import com.gmail.yuyang226.flickr.oauth.OAuth;
 import com.gmail.yuyang226.flickr.oauth.OAuthInterface;
+import com.gmail.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.people.User;
 
 /**
  * Represents the auth dialog to grant this application the permission to access
@@ -39,7 +41,8 @@ import com.gmail.yuyang226.flickr.oauth.OAuthInterface;
  */
 public class AuthFragmentDialog extends DialogFragment {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthFragmentDialog.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(AuthFragmentDialog.class);
 
 	/**
 	 * Auth dialog might be brought up in several places if not authed before,
@@ -112,7 +115,8 @@ public class AuthFragmentDialog extends DialogFragment {
 				String oauthVerifier = data[1]
 						.substring(data[1].indexOf("=") + 1); //$NON-NLS-1$
 				if (logger.isDebugEnabled()) {
-					logger.debug("OAuth Token: {}; OAuth Verifier: {}", oauthToken, oauthVerifier); //$NON-NLS-1$
+					logger.debug(
+							"OAuth Token: {}; OAuth Verifier: {}", oauthToken, oauthVerifier); //$NON-NLS-1$
 				}
 
 				String secret = getTokenSecret();
@@ -158,7 +162,8 @@ public class AuthFragmentDialog extends DialogFragment {
 			Flickr f = FlickrHelper.getInstance().getFlickr();
 			OAuthInterface oauthApi = f.getOAuthInterface();
 			try {
-				return oauthApi.getAccessToken(oauthToken, oauthTokenSecret, verifier);
+				return oauthApi.getAccessToken(oauthToken, oauthTokenSecret,
+						verifier);
 			} catch (Exception e) {
 				Log.e(AuthFragmentDialog.class.getName(), e.getMessage());
 				return null;
@@ -177,9 +182,21 @@ public class AuthFragmentDialog extends DialogFragment {
 
 	void onOAuthDone(OAuth result) {
 		if (result == null) {
-			Toast.makeText(getActivity(), "Error to auth, please try again.", //$NON-NLS-1$
+			Toast.makeText(getActivity(), getActivity().getString(R.string.fail_to_oauth),
 					Toast.LENGTH_LONG).show();
 		} else {
+
+			User user = result.getUser();
+			OAuthToken token = result.getToken();
+			if (user == null || user.getId() == null || token == null
+					|| token.getOauthToken() == null
+					|| token.getOauthTokenSecret() == null) {
+				Toast.makeText(
+						getActivity(),
+						getActivity().getString(R.string.fail_to_oauth),
+						Toast.LENGTH_LONG).show();
+				return;
+			}
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
 			app.saveFlickrAuthToken(result);
