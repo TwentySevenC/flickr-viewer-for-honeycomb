@@ -77,7 +77,8 @@ import com.gmail.yuyang226.flickr.tags.Tag;
 public class ViewImageDetailFragment extends Fragment implements
 		IUserCommentsFetchedListener, IExifListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(ViewImageDetailFragment.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ViewImageDetailFragment.class);
 
 	private static final String PHOTO_ID_ATTR = "photo.id"; //$NON-NLS-1$
 	private static final String PHOTO_TITLE_ATTR = "photo.title"; //$NON-NLS-1$
@@ -98,6 +99,10 @@ public class ViewImageDetailFragment extends Fragment implements
 	private ViewAnimator mViewSwitcher;
 	private View mCommentProgressBar;
 	private View mExifProgressBar;
+	
+
+	private ViewSwitcher mAddGroupViewSwither;
+	private AddPhotoToGroupComponent mAddPhotoToGroupComponent;
 
 	/**
 	 * The radio group to switch among exif, comment and pool views.
@@ -148,8 +153,8 @@ public class ViewImageDetailFragment extends Fragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_item_share:
-			IAction action = new SharePhotoAction(getActivity(),
-					mBitmapRef.get(), this.mCurrentPhoto.getUrl());
+			IAction action = new SharePhotoAction(getActivity(), mBitmapRef
+					.get(), this.mCurrentPhoto.getUrl());
 			action.execute();
 			return true;
 		case R.id.menu_item_write_comment:
@@ -198,17 +203,17 @@ public class ViewImageDetailFragment extends Fragment implements
 					getActivity(), mCurrentPhoto, true);
 			wallAction.execute();
 			return true;
-//		case R.id.menu_item_add_photo_to_group:
-//			app = (FlickrViewerApplication) getActivity().getApplication();
-//			token = app.getFlickrToken();
-//			String userId = app.getUserId();
-//			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token);
-//			mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
-//					getActivity(), R.anim.push_right_in));
-//			mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
-//					getActivity(), R.anim.push_left_out));
-//			mAddGroupViewSwither.showNext();
-//			return true;
+			// case R.id.menu_item_add_photo_to_group:
+			// app = (FlickrViewerApplication) getActivity().getApplication();
+			// token = app.getFlickrToken();
+			// String userId = app.getUserId();
+			// mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token);
+			// mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
+			// getActivity(), R.anim.push_right_in));
+			// mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
+			// getActivity(), R.anim.push_left_out));
+			// mAddGroupViewSwither.showNext();
+			// return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -216,10 +221,10 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	private void showBigImage() {
 		Intent intent = new Intent(getActivity(), ViewBigPhotoActivity.class);
-		intent.putExtra(ViewBigPhotoActivity.PHOTO_ID_KEY,
-				mCurrentPhoto.getId());
-		intent.putExtra(ViewBigPhotoActivity.PHOTO_SECRET_KEY,
-				mCurrentPhoto.getSecret());
+		intent.putExtra(ViewBigPhotoActivity.PHOTO_ID_KEY, mCurrentPhoto
+				.getId());
+		intent.putExtra(ViewBigPhotoActivity.PHOTO_SECRET_KEY, mCurrentPhoto
+				.getSecret());
 		getActivity().startActivity(intent);
 	}
 
@@ -236,9 +241,9 @@ public class ViewImageDetailFragment extends Fragment implements
 		hookDoubleTapOnImage(image);
 
 		if (savedInstanceState != null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Restore photo information from bundle: {}", savedInstanceState); //$NON-NLS-1$
-			}
+			logger
+					.debug(
+							"Restore photo information from bundle: {}", savedInstanceState); //$NON-NLS-1$
 			String photoId = savedInstanceState.getString(PHOTO_ID_ATTR);
 			String photoTitle = savedInstanceState.getString(PHOTO_TITLE_ATTR);
 			String ownerId = savedInstanceState.getString(PHOTO_OWNER_ID);
@@ -351,9 +356,6 @@ public class ViewImageDetailFragment extends Fragment implements
 		return view;
 	}
 
-	private ViewSwitcher mAddGroupViewSwither;
-	private AddPhotoToGroupComponent mAddPhotoToGroupComponent;
-
 	private void hookDoubleTapOnImage(ImageView image) {
 		final GestureDetector imageGestureDector = new GestureDetector(
 				new SimpleOnGestureListener());
@@ -453,9 +455,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	public void onStart() {
 		super.onStart();
 		String photoId = mCurrentPhoto.getId();
-		if (logger.isDebugEnabled()) {
-			logger.debug("Current photo id: {}", photoId); //$NON-NLS-1$
-		}
+		logger.debug("Current photo id: {}", photoId); //$NON-NLS-1$
 
 		// exif
 		mExifTask = new GetPhotoExifTask(this);
@@ -473,9 +473,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		outState.putString(PHOTO_TITLE_ATTR, mCurrentPhoto.getTitle());
 		outState.putString(PHOTO_OWNER_ID, mCurrentPhoto.getOwner().getId());
 		outState.putString(PHOTO_DESC_ATTR, mCurrentPhoto.getDescription());
-		if (logger.isDebugEnabled()) {
-			logger.debug("Photo information saved to bundle: {}", outState); //$NON-NLS-1$
-		}
+		logger.debug("Photo information saved to bundle: {}", outState); //$NON-NLS-1$
 	}
 
 	@Override
@@ -633,9 +631,9 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	@Override
 	public void onCommentFetched(List<UserComment> comments) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Comments fetched, size={}, contents={}", comments.size(), comments); //$NON-NLS-1$
-		}
+		logger
+				.debug(
+						"Comments fetched, size={}, contents={}", comments.size(), comments); //$NON-NLS-1$
 		this.mComments.clear();
 		for (UserComment comment : comments) {
 			mComments.add(comment);
@@ -646,9 +644,7 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	@Override
 	public void onExifInfoFetched(Collection<Exif> exifs) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Exif fetched, contents={}", exifs); //$NON-NLS-1$
-		}
+		logger.debug("Exif fetched, contents={}", exifs); //$NON-NLS-1$
 		if (exifs == null) {
 			mExifProgressBar.setVisibility(View.INVISIBLE);
 			return;
@@ -667,13 +663,13 @@ public class ViewImageDetailFragment extends Fragment implements
 		MenuItem ownerPhotoItem = menu
 				.findItem(R.id.menu_item_show_owner_photos);
 		MenuItem favItem = menu.findItem(R.id.menu_item_add_as_fav);
-//		MenuItem addToGroupItem = menu
-//				.findItem(R.id.menu_item_add_photo_to_group);
+		// MenuItem addToGroupItem = menu
+		// .findItem(R.id.menu_item_add_photo_to_group);
 
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String userId = app.getUserId();
-//		addToGroupItem.setVisible(userId != null);
+		// addToGroupItem.setVisible(userId != null);
 		if (userId == null || mCurrentPhoto == null
 				|| mCurrentPhoto.getOwner() == null) {
 			return;

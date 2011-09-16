@@ -37,7 +37,8 @@ import com.gmail.yuyang226.flickr.people.User;
  */
 public class FlickrViewerApplication extends Application {
 
-	private static final Logger logger = LoggerFactory.getLogger(FlickrViewerApplication.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(FlickrViewerApplication.class);
 
 	private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
 
@@ -67,7 +68,7 @@ public class FlickrViewerApplication extends Application {
 		String token = getSharedPreferenceValue(Constants.FLICKR_TOKEN, null);
 		return token;
 	}
-	
+
 	public OAuth loadSavedOAuth() {
 		String userId = getUserId();
 		String userName = getUserName();
@@ -206,9 +207,6 @@ public class FlickrViewerApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		if (logger.isDebugEnabled()) {
-			logger.debug("Application created."); //$NON-NLS-1$
-		}
 		registerTimeCheckReceiver();
 	}
 
@@ -238,9 +236,7 @@ public class FlickrViewerApplication extends Application {
 			am.setRepeating(AlarmManager.RTC,
 					System.currentTimeMillis() + 5 * 60 * 1000L,
 					pIntervalInHours * 60 * 60 * 1000L, pendingIntent);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Receiver registered to check comments on my photos."); //$NON-NLS-1$
-			}
+			logger.debug("Receiver registered to check comments on my photos."); //$NON-NLS-1$
 		}
 	}
 
@@ -257,9 +253,7 @@ public class FlickrViewerApplication extends Application {
 			am.setRepeating(AlarmManager.RTC,
 					System.currentTimeMillis() + 2 * 60 * 1000L,
 					cIntervalInHours * 60 * 60 * 1000L, pendingIntent);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Receiver registered to check contact upload."); //$NON-NLS-1$
-			}
+			logger.debug("Receiver registered to check contact upload."); //$NON-NLS-1$
 		}
 	}
 

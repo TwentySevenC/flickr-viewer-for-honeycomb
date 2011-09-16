@@ -62,7 +62,8 @@ import com.gmail.yuyang226.flickr.photos.PhotoPlace;
 public class AddPhotoToGroupComponent extends FrameLayout implements
 		OnClickListener, IUserPhotoCollectionFetched, OnItemClickListener,
 		IPhotoPoolListener, ICreateGalleryListener {
-	private static final Logger logger = LoggerFactory.getLogger(AddPhotoToGroupComponent.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(AddPhotoToGroupComponent.class);
 	private static final int IDX_PROGRESS = 0;
 	private static final int IDX_LIST = 1;
 	private static final int IDX_CRT_GALLERY = 2;
@@ -250,9 +251,8 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mViewContainer.setDisplayedChild(IDX_LIST);
 
 		if (count == 0) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
-			}
+			logger
+					.debug("No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
 			if (mIsMyOwnPhoto) {
 				// no photo set/group avaliable to add this photo, prompt user
 				// to create a new photo set.

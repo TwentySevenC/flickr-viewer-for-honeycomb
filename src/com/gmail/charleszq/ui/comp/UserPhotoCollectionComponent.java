@@ -49,7 +49,8 @@ import com.gmail.yuyang226.flickr.photosets.Photoset;
 public class UserPhotoCollectionComponent extends FrameLayout implements
 		IUserPhotoCollectionFetched, OnItemClickListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserPhotoCollectionComponent.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(UserPhotoCollectionComponent.class);
 
 	/**
 	 * The list view
@@ -65,7 +66,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	 * The async task to fetch the gallery/set/group list of this user.
 	 */
 	private UserPhotoCollectionTask task;
-	
+
 	/**
 	 * The section adapter.
 	 */
@@ -114,7 +115,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		mProgressBar = (ProgressBar) findViewById(R.id.progress);
 	}
 
-	public void initialize(String userId, String token, String secret ) {
+	public void initialize(String userId, String token, String secret) {
 		this.mUserId = userId;
 		this.mToken = token;
 		this.mSecret = secret;
@@ -134,7 +135,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 			return;
 		}
 		mProgressBar.setVisibility(View.VISIBLE);
-		task = new UserPhotoCollectionTask(this,true);
+		task = new UserPhotoCollectionTask(this, true);
 		task.execute(mUserId, mToken, mSecret);
 	}
 
@@ -148,7 +149,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 			return;
 		}
 
-		if( mSectionAdapter == null ) {
+		if (mSectionAdapter == null) {
 			mSectionAdapter = new SimpleSectionAdapter(getContext());
 		}
 		mSectionAdapter.clearSections();
@@ -265,9 +266,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	@Override
 	protected void onDetachedFromWindow() {
 		if (task != null && !task.isCancelled()) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("cancel the running task: {}", task); //$NON-NLS-1$
-			}
+			logger.debug("cancel the running task: {}", task); //$NON-NLS-1$
 			task.cancel(true);
 		}
 		super.onDetachedFromWindow();

@@ -49,11 +49,6 @@ public class ContactUploadService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		if (logger.isDebugEnabled()) {
-			logger
-					.debug(
-							"Contact upload service, in onHandleIntent, intent={}", intent); //$NON-NLS-1$
-		}
 
 		Context context = getApplicationContext();
 
@@ -67,11 +62,9 @@ public class ContactUploadService extends IntentService {
 			intervalInHours = app.getContactUploadCheckInterval();
 
 			if (token == null || !app.isContactUploadCheckEnabled()) {
-				if (logger.isDebugEnabled()) {
-					logger.debug(
-							"Invalid oauth={} or notification is disabled, enabled={}" //$NON-NLS-1$
-							, token, app.isContactUploadCheckEnabled());
-				}
+				logger.debug(
+						"Invalid oauth={} or notification is disabled, enabled={}" //$NON-NLS-1$
+						, token, app.isContactUploadCheckEnabled());
 				return;
 			}
 
@@ -94,16 +87,12 @@ public class ContactUploadService extends IntentService {
 			Date now = new Date();
 			SimpleDateFormat formater = new SimpleDateFormat(
 					"yyyy-MM-dd hh:mm:ss"); //$NON-NLS-1$
-			if (logger.isDebugEnabled()) {
-				logger.debug("Task runs at {}", formater.format(now)); //$NON-NLS-1$
-			}
+			logger.debug("Task runs at {}", formater.format(now)); //$NON-NLS-1$
 			Collection<?> col = ci.getListRecentlyUploaded(sinceDate, "all"); //$NON-NLS-1$
 			if (col.size() > 0) {
-				if (logger.isDebugEnabled()) {
-					logger
-							.debug(
-									"There are {} contacts have new photos uploaded.", col.size()); //$NON-NLS-1$
-				}
+				logger
+						.debug(
+								"There are {} contacts have new photos uploaded.", col.size()); //$NON-NLS-1$
 				sendNotifications(col);
 			} else {
 				logger.info("No recent uploads from my contacts."); //$NON-NLS-1$

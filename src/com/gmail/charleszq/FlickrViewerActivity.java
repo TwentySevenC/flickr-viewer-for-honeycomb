@@ -7,6 +7,7 @@ import java.util.Set;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -16,9 +17,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.CursorAdapter;
 import android.widget.SearchView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SearchView.OnSuggestionListener;
-import android.widget.SimpleCursorAdapter;
 
 import com.gmail.charleszq.actions.GetActivitiesAction;
 import com.gmail.charleszq.actions.TagSearchAction;
@@ -177,13 +178,41 @@ public class FlickrViewerActivity extends Activity implements
 
 		MainNavFragment menu = new MainNavFragment();
 		ft.replace(R.id.nav_frg, menu);
+		ft.commit();
 		
+		showHelp();
+	}
+	
+	/**
+	 * Shows the help fragment.
+	 */
+	private void showHelp() {
+		FragmentManager fm = getFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
 		HelpFragment help = new HelpFragment();
-		ft.replace(R.id.main_area, help);
-		
+		ft.replace(R.id.main_area, help, Constants.HELP_BACK_STACK);
+		ft.addToBackStack(Constants.HELP_BACK_STACK);
 		ft.commit();
 	}
 	
+	@Override
+	public void onBackPressed() {
+		FragmentManager fm = getFragmentManager();
+		int count = fm.getBackStackEntryCount();
+		if( count == 1 ) {
+			Fragment frg = fm.findFragmentByTag(Constants.HELP_BACK_STACK);
+			if( frg == null ) {
+				//the current fragment is not help.
+				super.onBackPressed();
+				showHelp();
+			} else {
+				finish();
+			}
+		} else {
+			super.onBackPressed();
+		}
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if( item.getItemId() == android.R.id.home ) {
@@ -192,6 +221,7 @@ public class FlickrViewerActivity extends Activity implements
 			for( int i = 0; i < count; i ++ ) {
 				fm.popBackStack();
 			}
+			showHelp();
 			return true;
 		} 
 		return super.onOptionsItemSelected(item);

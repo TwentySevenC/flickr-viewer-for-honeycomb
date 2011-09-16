@@ -29,7 +29,8 @@ import com.gmail.charleszq.utils.ImageCache;
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(SettingsFragment.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(SettingsFragment.class);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +47,6 @@ public class SettingsFragment extends PreferenceFragment implements
 		super.onStart();
 		PreferenceManager pm = getPreferenceManager();
 		SharedPreferences sp = pm.getSharedPreferences();
-		if (logger.isDebugEnabled()) {
-			logger.debug("Preference name: {}", pm.getSharedPreferencesName()); //$NON-NLS-1$
-		}
 		sp.registerOnSharedPreferenceChangeListener(this);
 
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
@@ -62,14 +60,13 @@ public class SettingsFragment extends PreferenceFragment implements
 			String size = sharedPreferences.getString(key, String
 					.valueOf(Constants.DEF_CACHE_SIZE));
 			ImageCache.CACHE_SIZE = Integer.parseInt(size);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Cache size changed: {}", size); //$NON-NLS-1$
-			}
+			logger.debug("Cache size changed: {}", size); //$NON-NLS-1$
 			return;
 		}
 
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
-		FlickrViewerApplication app = (FlickrViewerApplication) act.getApplication();
+		FlickrViewerApplication app = (FlickrViewerApplication) act
+				.getApplication();
 		if (Constants.ENABLE_CONTACT_UPLOAD_NOTIF.equals(key)
 				|| Constants.NOTIF_CONTACT_UPLOAD_INTERVAL.equals(key)) {
 			app.handleContactUploadService();
@@ -81,11 +78,12 @@ public class SettingsFragment extends PreferenceFragment implements
 			app.handlePhotoActivityService();
 			return;
 		}
-		
-		if( Constants.SETTING_SHOW_APP_TITLE.equals(key)) {
+
+		if (Constants.SETTING_SHOW_APP_TITLE.equals(key)) {
 			boolean result = sharedPreferences.getBoolean(key, true);
-			int option = ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM;
-			if( result ) {
+			int option = ActionBar.DISPLAY_SHOW_HOME
+					| ActionBar.DISPLAY_SHOW_CUSTOM;
+			if (result) {
 				option |= ActionBar.DISPLAY_SHOW_TITLE;
 			}
 			getActivity().getActionBar().setDisplayOptions(option);

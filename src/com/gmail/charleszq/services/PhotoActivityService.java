@@ -29,86 +29,85 @@ import com.gmail.yuyang226.flickr.activity.Item;
  */
 public class PhotoActivityService extends IntentService {
 
-	private static final Logger logger = LoggerFactory.getLogger(PhotoActivityService.class);
-	
+	private static final Logger logger = LoggerFactory
+			.getLogger(PhotoActivityService.class);
+
 	public PhotoActivityService() {
 		super(Constants.ENABLE_PHOTO_ACT_NOTIF);
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		
+
 		String token = null;
 		String secret = null;
 		int intervalInHours = Constants.SERVICE_CHECK_INTERVAL;
-		
+
 		Context context = getApplicationContext();
-		if( context instanceof FlickrViewerApplication ) {
+		if (context instanceof FlickrViewerApplication) {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
 			secret = app.getFlickrTokenSecrent();
-			if( token == null || !app.isPhotoActivityCheckEnabled() ) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Invalid auth({}) or notification is disabled, enabled={}" //$NON-NLS-1$
-							, token, app.isPhotoActivityCheckEnabled()); 
-				}
+			if (token == null || !app.isPhotoActivityCheckEnabled()) {
+				logger.debug(
+						"Invalid auth({}) or notification is disabled, enabled={}" //$NON-NLS-1$
+						, token, app.isPhotoActivityCheckEnabled());
 				return;
 			}
 		} else {
 			logger.warn("Error, application context is not the application."); //$NON-NLS-1$
 			return;
 		}
-		
+
 		checkPhotoActivities(token, secret, intervalInHours);
-		
+
 	}
 
-	private void checkPhotoActivities(String token, String secret, int intervalInHours) {
-		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(token, secret, true);
-        dp.setCheckInterval(intervalInHours);
-        List<Item> items = dp.getRecentActivities();
-        if (logger.isDebugEnabled()) {
-        	logger.debug("Recent activity task executed, item size={}, items={}",  //$NON-NLS-1$
-        			items.size(), items);
-        }
-        if (!items.isEmpty()) {
-            sendNotification();
-        }
+	private void checkPhotoActivities(String token, String secret,
+			int intervalInHours) {
+		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(
+				token, secret, true);
+		dp.setCheckInterval(intervalInHours);
+		List<Item> items = dp.getRecentActivities();
+		logger.debug("Recent activity task executed, item size={}, items={}", //$NON-NLS-1$
+				items.size(), items);
+		if (!items.isEmpty()) {
+			sendNotification();
+		}
 	}
-	
+
 	private void sendNotification() {
-		
+
 		Context context = getApplicationContext();
-		
-        // notification manager.
-        NotificationManager notifManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // notification itself.
-        Notification notif = new Notification(R.drawable.icon,
-                context.getResources().getString(
-                        R.string.notif_message_act_on_my_photo), System
-                        .currentTimeMillis());
-        notif.defaults = Notification.DEFAULT_SOUND;
-        notif.flags = Notification.FLAG_AUTO_CANCEL;
+		// notification manager.
+		NotificationManager notifManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // notification intent.
-        CharSequence contentTitle = context.getResources().getString(
-                R.string.app_name);
-        CharSequence contentText = context.getResources().getString(
-                R.string.notif_message_act_on_my_photo);
-        Intent notificationIntent = new Intent(
-                Constants.ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                notificationIntent, 0);
+		// notification itself.
+		Notification notif = new Notification(R.drawable.icon, context
+				.getResources().getString(
+						R.string.notif_message_act_on_my_photo), System
+				.currentTimeMillis());
+		notif.defaults = Notification.DEFAULT_SOUND;
+		notif.flags = Notification.FLAG_AUTO_CANCEL;
 
-        notif.setLatestEventInfo(context, contentTitle, contentText,
-                contentIntent);
+		// notification intent.
+		CharSequence contentTitle = context.getResources().getString(
+				R.string.app_name);
+		CharSequence contentText = context.getResources().getString(
+				R.string.notif_message_act_on_my_photo);
+		Intent notificationIntent = new Intent(
+				Constants.ACT_ON_MY_PHOTO_NOTIF_INTENT_ACTION);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+				notificationIntent, 0);
 
-        // send out the notif
-        notifManager.notify(Constants.ACT_ON_MY_PHOTO_NOTIF_ID, notif);
-    }
+		notif.setLatestEventInfo(context, contentTitle, contentText,
+				contentIntent);
 
-	
+		// send out the notif
+		notifManager.notify(Constants.ACT_ON_MY_PHOTO_NOTIF_ID, notif);
+	}
+
 }

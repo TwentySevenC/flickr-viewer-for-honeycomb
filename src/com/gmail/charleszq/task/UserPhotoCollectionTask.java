@@ -43,7 +43,8 @@ import com.gmail.yuyang226.flickr.photosets.PhotosetsInterface;
 public class UserPhotoCollectionTask extends
 		AsyncTask<String, Integer, Map<Integer, List<IListItemAdapter>>> {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserPhotoCollectionTask.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(UserPhotoCollectionTask.class);
 	private IUserPhotoCollectionFetched mListener;
 
 	/**
@@ -128,19 +129,19 @@ public class UserPhotoCollectionTask extends
 				return result;
 			}
 		}
-		
+
 		result = new LinkedHashMap<Integer, List<IListItemAdapter>>();
 		// galleries
-		GalleriesInterface gi = FlickrHelper.getInstance().getFlickr().getGalleriesInterface();
+		GalleriesInterface gi = FlickrHelper.getInstance().getFlickr()
+				.getGalleriesInterface();
 		try {
 			List<Gallery> galleries = gi.getList(userId, -1, -1);
 			if (!galleries.isEmpty()) {
 				List<IListItemAdapter> ga = new ArrayList<IListItemAdapter>();
 				for (Gallery gallery : galleries) {
 					ga.add(new ListItemAdapter(gallery));
-					if (logger.isDebugEnabled()) {
-						logger.debug("Gallery item count: {}", gallery.getTotalCount()); //$NON-NLS-1$
-					}
+					logger.debug(
+							"Gallery item count: {}", gallery.getTotalCount()); //$NON-NLS-1$
 				}
 				result.put(R.string.section_photo_gallery, ga);
 			}

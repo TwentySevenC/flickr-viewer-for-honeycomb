@@ -25,7 +25,8 @@ import com.gmail.yuyang226.flickr.activity.ItemList;
 public class RecentActivitiesDataProvider {
 
 	private static final int PER_PAGE = 20;
-	private static final Logger logger = LoggerFactory.getLogger(RecentActivitiesDataProvider.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(RecentActivitiesDataProvider.class);
 
 	private String mToken;
 	private String mSecret;
@@ -77,9 +78,7 @@ public class RecentActivitiesDataProvider {
 				if (userComments != null) {
 					for (int i = 0; i < userComments.size(); i++) {
 						Item item = userComments.get(i);
-						if (logger.isDebugEnabled()) {
-							logger.debug("Activity item type: {}", item.getType()); //$NON-NLS-1$
-						}
+						logger.debug("Activity item type: {}", item.getType()); //$NON-NLS-1$
 						if ("photo".equals(item.getType())) { //$NON-NLS-1$
 							items.add(item);
 						}
@@ -96,9 +95,7 @@ public class RecentActivitiesDataProvider {
 			if (photoComments != null) {
 				for (int j = 0; j < photoComments.size(); j++) {
 					Item item = photoComments.get(j);
-					if (logger.isDebugEnabled()) {
-						logger.debug("Activity item type: {}", item.getType()); //$NON-NLS-1$
-					}
+					logger.debug("Activity item type: {}", item.getType()); //$NON-NLS-1$
 					if ("photo".equals(item.getType())) { //$NON-NLS-1$
 						items.add(item);
 					}

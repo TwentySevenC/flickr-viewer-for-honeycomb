@@ -37,8 +37,9 @@ import com.gmail.yuyang226.flickr.photos.Photo;
  */
 public class SaveImageWallpaperAction extends ActivityAwareAction implements
 		IImageDownloadDoneListener {
-	
-	private static final Logger logger = LoggerFactory.getLogger(SaveImageWallpaperAction.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(SaveImageWallpaperAction.class);
 	private boolean mSetAsWallpaper = false;
 	private Photo mCurrentPhoto;
 
@@ -167,9 +168,7 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 		}
 
 		if (bitmap != null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Release the downloaded bitmap."); //$NON-NLS-1$
-			}
+			logger.debug("Release the downloaded bitmap."); //$NON-NLS-1$
 			bitmap.recycle();
 			bitmap = null;
 		}

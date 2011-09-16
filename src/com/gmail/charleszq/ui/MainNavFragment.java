@@ -66,6 +66,8 @@ public class MainNavFragment extends Fragment {
 				long id) {
 
 			if (position != 2) {
+				// position == 2 means the gallery/set/group of mine, at this
+				// time, we don't need to clear the right panel.
 				cleanFragmentBackStack();
 			}
 
@@ -106,7 +108,7 @@ public class MainNavFragment extends Fragment {
 						ft2.commit();
 					}
 				};
-				if( token == null ) {
+				if (token == null) {
 					ShowAuthDialogAction ia = new ShowAuthDialogAction(
 							getActivity(), switchAction);
 					ia.execute();
@@ -160,6 +162,10 @@ public class MainNavFragment extends Fragment {
 		}
 	};
 
+	/**
+	 * Clears all the framgment back stack, the right panel can show only the
+	 * current selected contents.
+	 */
 	private void cleanFragmentBackStack() {
 		FragmentManager fm = getFragmentManager();
 		fm.popBackStack(Constants.PHOTO_LIST_BACK_STACK,
@@ -169,6 +175,8 @@ public class MainNavFragment extends Fragment {
 		fm.popBackStack(Constants.CONTACT_BACK_STACK,
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		fm.popBackStack(Constants.ACTIVITY_BACK_STACK,
+				FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		fm.popBackStack(Constants.HELP_BACK_STACK,
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
@@ -217,9 +225,10 @@ public class MainNavFragment extends Fragment {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						getActivity());
-				builder.setMessage(getActivity().getString(R.string.logout_msg))
-						.setCancelable(false)
-						.setPositiveButton(
+				builder
+						.setMessage(
+								getActivity().getString(R.string.logout_msg))
+						.setCancelable(false).setPositiveButton(
 								getActivity().getString(R.string.btn_yes),
 								new DialogInterface.OnClickListener() {
 									@Override
@@ -229,15 +238,16 @@ public class MainNavFragment extends Fragment {
 										userPanel.setVisibility(View.INVISIBLE);
 										goHome();
 									}
-									
+
 									private void goHome() {
-										FragmentManager fm = getActivity().getFragmentManager();
-										for(int i = 0; i < fm.getBackStackEntryCount(); i ++ ) {
+										FragmentManager fm = getActivity()
+												.getFragmentManager();
+										for (int i = 0; i < fm
+												.getBackStackEntryCount(); i++) {
 											fm.popBackStack();
 										}
 									}
-								})
-						.setNegativeButton(
+								}).setNegativeButton(
 								getActivity().getString(R.string.btn_no),
 								new DialogInterface.OnClickListener() {
 									@Override
