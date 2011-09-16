@@ -58,7 +58,8 @@ public class PhotoListFragment extends Fragment implements
 		IFlickrViewerMessageHandler {
 
 	private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider"; //$NON-NLS-1$
-	private static final Logger logger = LoggerFactory.getLogger(PhotoListFragment.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(PhotoListFragment.class);
 
 	private PhotoList mPhotoList;
 	private MyAdapter mGridAdapter;
@@ -172,13 +173,15 @@ public class PhotoListFragment extends Fragment implements
 		// change action bar title
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
 		if (mPhotoListDataProvider != null) {
-			act.changeActionBarTitle(mPhotoListDataProvider.getDescription(act));
+			act
+					.changeActionBarTitle(mPhotoListDataProvider
+							.getDescription(act));
 		} else {
 			logger.warn("Photo grid view, data provider is null."); //$NON-NLS-1$
-			//TODO need to test.
+			// TODO need to test.
 			FragmentManager fm = getFragmentManager();
 			int count = fm.getBackStackEntryCount();
-			for( int i = 0; i < count; i ++ ) {
+			for (int i = 0; i < count; i++) {
 				fm.popBackStack();
 			}
 		}
@@ -435,9 +438,7 @@ public class PhotoListFragment extends Fragment implements
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_ATTR_DATA_PROVIDER,
 				mPhotoListDataProvider);
-		if (logger.isDebugEnabled()) {
-			logger.debug("data provider [{}] is saved.", mPhotoListDataProvider); //$NON-NLS-1$
-		}
+		logger.debug("data provider [{}] is saved.", mPhotoListDataProvider); //$NON-NLS-1$
 	}
 
 	@Override

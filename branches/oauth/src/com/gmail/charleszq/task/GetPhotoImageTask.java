@@ -36,7 +36,8 @@ public class GetPhotoImageTask extends
 		ProgressDialogAsyncTask<String, Integer, Bitmap> {
 
 	private static final int MSG_ID = R.string.loading_photo_detail;
-	private static final Logger logger = LoggerFactory.getLogger(GetPhotoImageTask.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(GetPhotoImageTask.class);
 	private Photo mCurrentPhoto;
 
 	private float mCacheImageScale = 0.5f;
@@ -99,13 +100,12 @@ public class GetPhotoImageTask extends
 
 		try {
 			mCurrentPhoto = pi.getInfo(photoId, secret);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Photo description: {}", mCurrentPhoto.getDescription()); //$NON-NLS-1$
-			}
+			logger.debug(
+					"Photo description: {}", mCurrentPhoto.getDescription()); //$NON-NLS-1$
 			GeoData geo = mCurrentPhoto.getGeoData();
-			if (geo != null && logger.isDebugEnabled()) {
-				logger.debug("Geo data: latitude={}, longtitude={}",  //$NON-NLS-1$
-						geo.getLatitude(), geo.getLongitude()); 
+			if (geo != null) {
+				logger.debug("Geo data: latitude={}, longtitude={}", //$NON-NLS-1$
+						geo.getLatitude(), geo.getLongitude());
 			}
 			String url = mCurrentPhoto.getMediumUrl();
 			switch (mPhotoType) {

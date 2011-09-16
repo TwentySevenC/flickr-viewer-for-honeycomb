@@ -20,8 +20,6 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import android.text.Html;
 import android.text.util.Linkify;
@@ -38,7 +36,7 @@ import com.gmail.charleszq.model.IListItemAdapter;
  */
 public final class StringUtils {
 
-	private static final Logger logger = LoggerFactory.getLogger(StringUtils.class);
+//	private static final Logger logger = LoggerFactory.getLogger(StringUtils.class);
 	
 	public static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -55,9 +53,6 @@ public final class StringUtils {
 	private static final String FILICK_URL_EXPRESSION = "(\\[http){1}+(s)?+(://){1}+.*\\]{1}+"; //$NON-NLS-1$
 
 	public static void formatHtmlString(String string, TextView textView) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("formatHtmlString parameters: string={}; textView={}", string, textView); //$NON-NLS-1$
-		}
 
 		textView.setText(Html.fromHtml(string));
 		Linkify.addLinks(textView, Pattern.compile(FILICK_URL_EXPRESSION),

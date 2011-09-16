@@ -29,7 +29,8 @@ import com.gmail.yuyang226.flickr.oauth.OAuthToken;
  */
 public class OAuthTask extends AsyncTask<Void, Integer, String> {
 
-	private static final Logger logger = LoggerFactory.getLogger(OAuthTask.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(OAuthTask.class);
 	private static final Uri OAUTH_CALLBACK_URI = Uri.parse(Constants.ID_SCHEME
 			+ "://oauth"); //$NON-NLS-1$
 
@@ -60,14 +61,8 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 			OAuthToken oauthToken = f.getOAuthInterface().getRequestToken(
 					OAUTH_CALLBACK_URI.toString());
 			saveTokenSecrent(oauthToken.getOauthTokenSecret());
-			if (logger.isDebugEnabled()) {
-				logger.debug("OAuthToken: {}", oauthToken); //$NON-NLS-1$
-			}
 			URL oauthUrl = f.getOAuthInterface().buildAuthenticationUrl(
 					Permission.WRITE, oauthToken);
-			if (logger.isDebugEnabled()) {
-				logger.debug("OAuth URL: {}", oauthUrl); //$NON-NLS-1$
-			}
 			return oauthUrl.toString();
 		} catch (Exception e) {
 			logger.error("Error to oauth", e); //$NON-NLS-1$
@@ -85,9 +80,7 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 		FlickrViewerApplication app = (FlickrViewerApplication) act
 				.getApplication();
 		app.saveFlickrTokenSecret(tokenSecret);
-		if (logger.isDebugEnabled()) {
-			logger.debug("oauth token secrent saved: {}", tokenSecret); //$NON-NLS-1$
-		}
+		logger.debug("oauth token secrent saved: {}", tokenSecret); //$NON-NLS-1$
 	}
 
 	@Override

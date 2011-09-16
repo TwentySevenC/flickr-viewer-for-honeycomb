@@ -100,24 +100,18 @@ public class AuthFragmentDialog extends DialogFragment {
 		super.onResume();
 		Intent intent = getActivity().getIntent();
 		String schema = intent.getScheme();
-		if (logger.isDebugEnabled()) {
-			logger.debug("intent schema: {}", schema); //$NON-NLS-1$
-		}
 		if (Constants.ID_SCHEME.equals(schema)) {
 			Uri uri = intent.getData();
 			String query = uri.getQuery();
-			if (logger.isDebugEnabled()) {
-				logger.debug("Returned Query: {}", query); //$NON-NLS-1$
-			}
+			logger.debug("Returned Query: {}", query); //$NON-NLS-1$
 			String[] data = query.split("&"); //$NON-NLS-1$
 			if (data != null && data.length == 2) {
 				String oauthToken = data[0].substring(data[0].indexOf("=") + 1); //$NON-NLS-1$
 				String oauthVerifier = data[1]
 						.substring(data[1].indexOf("=") + 1); //$NON-NLS-1$
-				if (logger.isDebugEnabled()) {
-					logger.debug(
-							"OAuth Token: {}; OAuth Verifier: {}", oauthToken, oauthVerifier); //$NON-NLS-1$
-				}
+				logger
+						.debug(
+								"OAuth Token: {}; OAuth Verifier: {}", oauthToken, oauthVerifier); //$NON-NLS-1$
 
 				String secret = getTokenSecret();
 				if (secret != null) {
@@ -182,7 +176,8 @@ public class AuthFragmentDialog extends DialogFragment {
 
 	void onOAuthDone(OAuth result) {
 		if (result == null) {
-			Toast.makeText(getActivity(), getActivity().getString(R.string.fail_to_oauth),
+			Toast.makeText(getActivity(),
+					getActivity().getString(R.string.fail_to_oauth),
 					Toast.LENGTH_LONG).show();
 		} else {
 
@@ -191,8 +186,7 @@ public class AuthFragmentDialog extends DialogFragment {
 			if (user == null || user.getId() == null || token == null
 					|| token.getOauthToken() == null
 					|| token.getOauthTokenSecret() == null) {
-				Toast.makeText(
-						getActivity(),
+				Toast.makeText(getActivity(),
 						getActivity().getString(R.string.fail_to_oauth),
 						Toast.LENGTH_LONG).show();
 				return;

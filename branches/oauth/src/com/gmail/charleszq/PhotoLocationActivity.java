@@ -43,7 +43,8 @@ import com.google.android.maps.Overlay;
 public class PhotoLocationActivity extends MapActivity implements
 		IPhotoFetchedListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(PhotoLocationActivity.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(PhotoLocationActivity.class);
 	private static final int INVALID_LAT_LNG_VAL = (int) (360 * 1E6);
 
 	public static final String LAT_VAL = "lat"; //$NON-NLS-1$
@@ -108,9 +109,7 @@ public class PhotoLocationActivity extends MapActivity implements
 			if (bm != null) {
 				bm.recycle();
 				bm = null;
-				if (logger.isDebugEnabled()) {
-					logger.debug("Destroy the bitmap reference."); //$NON-NLS-1$
-				}
+				logger.debug("Destroy the bitmap reference."); //$NON-NLS-1$
 			}
 		}
 		mMapView = null;
@@ -187,10 +186,8 @@ public class PhotoLocationActivity extends MapActivity implements
 			if (zoomLevel != mZoomLevel) {
 				redrawPushpin();
 				drawPhotoLayer();
-				if (logger.isDebugEnabled()) {
-					logger.debug("Map view zoom level changed from {} to {}", //$NON-NLS-1$
-							mZoomLevel, zoomLevel); 
-				}
+				logger.debug("Map view zoom level changed from {} to {}", //$NON-NLS-1$
+						mZoomLevel, zoomLevel);
 				mZoomLevel = zoomLevel;
 			}
 		}

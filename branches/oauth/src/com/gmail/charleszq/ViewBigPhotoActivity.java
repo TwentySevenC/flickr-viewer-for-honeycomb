@@ -187,9 +187,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		if (mPhotoBitmap != null) {
 			mPhotoBitmap.recycle();
 			mPhotoBitmap = null;
-			if (logger.isDebugEnabled()) {
-				logger.debug("Bitmap released."); //$NON-NLS-1$
-			}
+			logger.debug("Bitmap released."); //$NON-NLS-1$
 		}
 		mImageView = null;
 		mPhoto = null;
@@ -206,11 +204,8 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		super.onSaveInstanceState(outState);
 		outState.putString(PHOTO_ID_KEY, mPhotoId);
 		outState.putString(PHOTO_SECRET_KEY, mPhotoSecret);
-		if (logger.isDebugEnabled()) {
-			logger
-					.debug(
-							"Photo id={} and photoSecret={} saved", mPhotoId, mPhotoSecret); //$NON-NLS-1$
-		}
+		logger.debug(
+				"Photo id={} and photoSecret={} saved", mPhotoId, mPhotoSecret); //$NON-NLS-1$
 	}
 
 	@Override
@@ -222,31 +217,23 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		case MotionEvent.ACTION_DOWN:
 			savedMatrix.set(matrix);
 			start.set(event.getX(), event.getY());
-			if (logger.isDebugEnabled()) {
-				logger.debug("mode=DRAG"); //$NON-NLS-1$
-			}
+			logger.debug("mode=DRAG"); //$NON-NLS-1$
 			mode = DRAG;
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
 			oldDist = spacing(event);
-			if (logger.isDebugEnabled()) {
-				logger.debug("oldDist={}", oldDist); //$NON-NLS-1$
-			}
+			logger.debug("oldDist={}", oldDist); //$NON-NLS-1$
 			if (oldDist > 10f) {
 				savedMatrix.set(matrix);
 				midPoint(mid, event);
 				mode = ZOOM;
-				if (logger.isDebugEnabled()) {
-					logger.debug("mode=ZOOM"); //$NON-NLS-1$
-				}
+				logger.debug("mode=ZOOM"); //$NON-NLS-1$
 			}
 			break;
 		case MotionEvent.ACTION_UP:
 		case MotionEvent.ACTION_POINTER_UP:
 			mode = NONE;
-			if (logger.isDebugEnabled()) {
-				logger.debug("mode=NONE"); //$NON-NLS-1$
-			}
+			logger.debug("mode=NONE"); //$NON-NLS-1$
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if (mode == DRAG) {
@@ -256,9 +243,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 						- start.y);
 			} else if (mode == ZOOM) {
 				float newDist = spacing(event);
-				if (logger.isDebugEnabled()) {
-					logger.debug("newDist={}", newDist); //$NON-NLS-1$
-				}
+				logger.debug("newDist={}", newDist); //$NON-NLS-1$
 				if (newDist > 10f) {
 					matrix.set(savedMatrix);
 					float scale = newDist / oldDist;

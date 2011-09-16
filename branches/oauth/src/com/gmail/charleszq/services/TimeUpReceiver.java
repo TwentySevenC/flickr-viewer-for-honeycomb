@@ -3,9 +3,6 @@
  */
 package com.gmail.charleszq.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,8 +18,6 @@ import com.gmail.charleszq.utils.Constants;
  */
 public class TimeUpReceiver extends BroadcastReceiver {
 
-	private static final Logger logger = LoggerFactory.getLogger(TimeUpReceiver.class);
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -31,10 +26,6 @@ public class TimeUpReceiver extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Intent={}, Intent action={}", intent, intent.getAction()); //$NON-NLS-1$)
-		}
-
 		if (Constants.INTENT_ACTION_CHECK_CONTACT_UPLOAD_RECEIVER.equals(intent
 				.getAction())) {
 			Intent serviceIntent = new Intent(context.getApplicationContext(),
