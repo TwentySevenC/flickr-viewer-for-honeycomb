@@ -80,7 +80,6 @@
 	<string name="toast_error_save_photo">Error to save the photo.</string>
 	<string name="toast_error_get_photos">Unable to get photo list, please check your network
 		access.</string>
-	<string name="toast_click_first_btn">Click the 1st button first please.</string>
 
 	<!-- Share photo intent related. -->
 	<string name="share_photo_intent_subj">Share Photo</string>

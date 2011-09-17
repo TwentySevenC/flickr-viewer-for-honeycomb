@@ -48,10 +48,9 @@ public class PhotoActivityService extends IntentService {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
 			secret = app.getFlickrTokenSecrent();
-			if (token == null || !app.isPhotoActivityCheckEnabled()) {
-				logger.debug(
-						"Invalid auth({}) or notification is disabled, enabled={}" //$NON-NLS-1$
-						, token, app.isPhotoActivityCheckEnabled());
+			if (token == null || secret == null
+					|| !app.isPhotoActivityCheckEnabled()) {
+				logger.debug("User not login yet.");  //$NON-NLS-1$
 				return;
 			}
 		} else {

@@ -99,7 +99,6 @@ public class ViewImageDetailFragment extends Fragment implements
 	private ViewAnimator mViewSwitcher;
 	private View mCommentProgressBar;
 	private View mExifProgressBar;
-	
 
 	private ViewSwitcher mAddGroupViewSwither;
 	private AddPhotoToGroupComponent mAddPhotoToGroupComponent;
@@ -161,9 +160,10 @@ public class ViewImageDetailFragment extends Fragment implements
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
 			String token = app.getFlickrToken();
+			String tokenSecret = app.getFlickrTokenSecrent();
 			ShowWriteCommentAction commentAction = new ShowWriteCommentAction(
 					getActivity(), mCurrentPhoto.getId());
-			if (token == null) {
+			if (token == null || tokenSecret == null) {
 				ShowAuthDialogAction act = new ShowAuthDialogAction(
 						getActivity(), commentAction);
 				act.execute();
@@ -174,9 +174,10 @@ public class ViewImageDetailFragment extends Fragment implements
 		case R.id.menu_item_add_as_fav:
 			app = (FlickrViewerApplication) getActivity().getApplication();
 			token = app.getFlickrToken();
+			tokenSecret = app.getFlickrTokenSecrent();
 			AddFavAction addfavAction = new AddFavAction(getActivity(),
 					mCurrentPhoto.getId());
-			if (token == null) {
+			if (token == null || tokenSecret == null) {
 				ShowAuthDialogAction dlgact = new ShowAuthDialogAction(
 						getActivity(), addfavAction);
 				dlgact.execute();

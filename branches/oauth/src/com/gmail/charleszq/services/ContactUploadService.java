@@ -61,10 +61,9 @@ public class ContactUploadService extends IntentService {
 			secret = app.getFlickrTokenSecrent();
 			intervalInHours = app.getContactUploadCheckInterval();
 
-			if (token == null || !app.isContactUploadCheckEnabled()) {
-				logger.debug(
-						"Invalid oauth={} or notification is disabled, enabled={}" //$NON-NLS-1$
-						, token, app.isContactUploadCheckEnabled());
+			if (token == null || secret == null
+					|| !app.isContactUploadCheckEnabled()) {
+				logger.debug("User not login yet.");  //$NON-NLS-1$
 				return;
 			}
 
