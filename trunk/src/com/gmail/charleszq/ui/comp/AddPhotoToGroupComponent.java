@@ -13,18 +13,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -34,22 +37,21 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 import android.widget.ViewSwitcher;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotoPlace;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.task.CreateGalleryTask;
-import com.gmail.charleszq.task.GetPhotoPoolTask;
-import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.CreateGalleryTask.ICreateGalleryListener;
+import com.gmail.charleszq.task.GetPhotoPoolTask;
 import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
+import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
+import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotoPlace;
 
 /**
  * Represents the UI component to add a photo to a set/group/gallery.
@@ -60,8 +62,8 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 public class AddPhotoToGroupComponent extends FrameLayout implements
 		OnClickListener, IUserPhotoCollectionFetched, OnItemClickListener,
 		IPhotoPoolListener, ICreateGalleryListener {
-
-	private static final String TAG = AddPhotoToGroupComponent.class.getName();
+	private static final Logger logger = LoggerFactory
+			.getLogger(AddPhotoToGroupComponent.class);
 	private static final int IDX_PROGRESS = 0;
 	private static final int IDX_LIST = 1;
 	private static final int IDX_CRT_GALLERY = 2;
@@ -88,6 +90,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	 * The set to store the group/set ids which the given photo is already in.
 	 */
 	private Set<String> mPhotoGroupIds = new HashSet<String>();
+	private String mSecret;
 
 	/**
 	 * @param context
@@ -148,10 +151,12 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	 *            the authed user id, if user is not authed, this UI should not
 	 *            be shown.
 	 */
-	public void init(Photo photo, String authUserId, String token) {
+	public void init(Photo photo, String authUserId, String token,
+			String tokenSecret) {
 		this.mCurrentPhoto = photo;
 		this.mUserId = authUserId;
 		this.mToken = token;
+		this.mSecret = tokenSecret;
 
 		mCheckedItems.clear();
 		mPhotoGroupIds.clear();
@@ -163,10 +168,10 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mIsMyOwnPhoto = authUserId.equals(mCurrentPhoto.getOwner().getId());
 		if (mIsMyOwnPhoto) {
 			GetPhotoPoolTask getPhotoPoolTask = new GetPhotoPoolTask(this);
-			getPhotoPoolTask.execute(photo.getId(), token);
+			getPhotoPoolTask.execute(photo.getId(), token, tokenSecret);
 		} else {
 			UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
-			task.execute(authUserId, token);
+			task.execute(authUserId, token, tokenSecret);
 		}
 	}
 
@@ -246,9 +251,8 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mViewContainer.setDisplayedChild(IDX_LIST);
 
 		if (count == 0) {
-			Log
-					.d(TAG,
-							"No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
+			logger
+					.debug("No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
 			if (mIsMyOwnPhoto) {
 				// no photo set/group avaliable to add this photo, prompt user
 				// to create a new photo set.
@@ -383,7 +387,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 
 		// get user's set/group list
 		UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
-		task.execute(mUserId, mToken);
+		task.execute(mUserId, mToken, mSecret);
 	}
 
 	@Override
@@ -394,7 +398,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 					.show();
 		} else {
 			mViewContainer.setDisplayedChild(IDX_CRT_GALLERY);
-			Log.w(TAG, result);
+			logger.warn("Gallery Creation Result: {}", result); //$NON-NLS-1$
 			Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
 		}
 	}

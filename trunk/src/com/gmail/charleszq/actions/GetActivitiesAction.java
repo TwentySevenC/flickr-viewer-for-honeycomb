@@ -4,20 +4,20 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.activity.Item;
-import com.gmail.charleszq.FlickrViewerApplication;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.task.GetActivitiesTask;
-import com.gmail.charleszq.task.GetActivitiesTask.IActivityFetchedListener;
-import com.gmail.charleszq.ui.RecentActivityFragment;
-import com.gmail.charleszq.utils.Constants;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.Toast;
 
-import java.util.List;
+import com.gmail.charleszq.FlickrViewerApplication;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.task.GetActivitiesTask;
+import com.gmail.charleszq.task.GetActivitiesTask.IActivityFetchedListener;
+import com.gmail.charleszq.ui.RecentActivityFragment;
+import com.gmail.charleszq.utils.Constants;
+import com.gmail.yuyang226.flickr.activity.Item;
 
 /**
  * @author charles
@@ -65,7 +65,7 @@ public class GetActivitiesAction extends ActivityAwareAction {
 		String token = app.getFlickrToken();
 		GetActivitiesTask task = new GetActivitiesTask(mActivity,
 				mTaskDoneListener);
-		task.execute(token);
+		task.execute(token, app.getFlickrTokenSecrent());
 	}
 
 }

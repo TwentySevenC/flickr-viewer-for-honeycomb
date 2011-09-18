@@ -8,10 +8,10 @@ import java.util.List;
 
 import android.os.AsyncTask;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.photos.PhotoPlace;
-import com.aetrion.flickr.photos.PhotosInterface;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.photos.PhotoPlace;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
 /**
  * Represents the task to fetch the photo group/set of a given photo, the
@@ -34,12 +34,14 @@ public class GetPhotoPoolTask extends
 	protected List<PhotoPlace> doInBackground(String... arg0) {
 		String photoId = arg0[0];
 		String flickrToken = arg0[1];
+		String tokenSecret = arg0[2];
 
 		Flickr f = null;
 		if (flickrToken == null) {
 			f = FlickrHelper.getInstance().getFlickr();
 		} else {
-			f = FlickrHelper.getInstance().getFlickrAuthed(flickrToken);
+			f = FlickrHelper.getInstance().getFlickrAuthed(flickrToken,
+					tokenSecret);
 		}
 		if (f != null) {
 			PhotosInterface pi = f.getPhotosInterface();

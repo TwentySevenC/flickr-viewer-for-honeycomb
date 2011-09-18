@@ -2,14 +2,14 @@ package com.gmail.charleszq.utils;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.REST;
-import com.aetrion.flickr.RequestContext;
-import com.aetrion.flickr.auth.Auth;
-import com.aetrion.flickr.auth.Permission;
-import com.aetrion.flickr.interestingness.InterestingnessInterface;
-import com.aetrion.flickr.photos.PhotosInterface;
-import com.gmail.charleszq.fapi.GalleryInterface;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.REST;
+import com.gmail.yuyang226.flickr.RequestContext;
+import com.gmail.yuyang226.flickr.galleries.GalleriesInterface;
+import com.gmail.yuyang226.flickr.interestingness.InterestingnessInterface;
+import com.gmail.yuyang226.flickr.oauth.OAuth;
+import com.gmail.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
 public final class FlickrHelper {
 
@@ -38,14 +38,12 @@ public final class FlickrHelper {
 		}
 	}
 
-	public Flickr getFlickrAuthed(String token) {
+	public Flickr getFlickrAuthed(String token, String secret) {
 		Flickr f = getFlickr();
 		RequestContext requestContext = RequestContext.getRequestContext();
-		Auth auth = new Auth();
-		auth.setPermission(Permission.WRITE);
-		auth.setToken(token);
-		requestContext.setAuth(auth);
-
+		OAuth auth = new OAuth();
+		auth.setToken(new OAuthToken(token, secret));
+		requestContext.setOAuth(auth);
 		return f;
 	}
 
@@ -67,10 +65,11 @@ public final class FlickrHelper {
 		}
 	}
 
-	public GalleryInterface getGalleryInterface() {
-		try {
-			return new GalleryInterface(API_KEY, API_SEC, new REST());
-		} catch (ParserConfigurationException e) {
+	public GalleriesInterface getGalleryInterface() {
+		Flickr f = getFlickr();
+		if (f != null) {
+			return f.getGalleriesInterface();
+		} else {
 			return null;
 		}
 	}

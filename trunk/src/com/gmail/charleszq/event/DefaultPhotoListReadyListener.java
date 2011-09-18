@@ -7,19 +7,19 @@
 
 package com.gmail.charleszq.event;
 
-import com.aetrion.flickr.photos.PhotoList;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.widget.Toast;
+
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.IPhotoListDataProvider;
 import com.gmail.charleszq.dataprovider.PaginationPhotoListDataProvider;
 import com.gmail.charleszq.ui.PhotoListFragment;
 import com.gmail.charleszq.ui.comp.IContextMenuHandler;
 import com.gmail.charleszq.utils.Constants;
-
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.widget.Toast;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * Represents the default photo list ready listener, which shows the default

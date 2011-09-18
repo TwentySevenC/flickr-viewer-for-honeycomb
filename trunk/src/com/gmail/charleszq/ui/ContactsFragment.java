@@ -38,7 +38,6 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
-import com.aetrion.flickr.contacts.Contact;
 import com.gmail.charleszq.FlickrViewerActivity;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.actions.ShowMyContactsAction;
@@ -47,6 +46,7 @@ import com.gmail.charleszq.event.IContactsFetchedListener;
 import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.contacts.Contact;
 
 /**
  * @author charles

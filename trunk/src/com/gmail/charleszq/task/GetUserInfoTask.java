@@ -9,19 +9,21 @@ package com.gmail.charleszq.task;
 
 import java.lang.ref.WeakReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.people.PeopleInterface;
-import com.aetrion.flickr.people.User;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
 import com.gmail.charleszq.event.IUserInfoFetchedListener;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.people.PeopleInterface;
+import com.gmail.yuyang226.flickr.people.User;
 
 /**
  * Represents the task to get user information, and set the buddy icon to a
@@ -31,7 +33,7 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  */
 public class GetUserInfoTask extends AsyncTask<String, Integer, User> {
 
-    private static final String TAG = GetUserInfoTask.class.getSimpleName();
+    private static final Logger logger = LoggerFactory.getLogger(GetUserInfoTask.class);
 
     /**
      * The image view to show the buddy icon.
@@ -77,7 +79,7 @@ public class GetUserInfoTask extends AsyncTask<String, Integer, User> {
     @Override
     protected void onPostExecute(User result) {
         if (result == null) {
-            Log.d(TAG, "Unable to get user information."); //$NON-NLS-1$
+        	logger.warn("Unable to get user information."); //$NON-NLS-1$
             return;
         }
         if (mListener != null) {

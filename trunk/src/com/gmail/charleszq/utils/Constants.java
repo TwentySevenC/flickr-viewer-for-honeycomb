@@ -35,6 +35,7 @@ public final class Constants {
 	public static final String SETTING_SHOW_APP_TITLE = "show.app.title"; //$NON-NLS-1$
 	public static final String SETTING_TAG_SRH_MODE_AND = "tag.search.mode"; //$NON-NLS-1$
 
+	public static final String FLICKR_TOKEN_SECRENT = "token.secret"; //$NON-NLS-1$
 	public static final String FLICKR_TOKEN = "flickr.token"; //$NON-NLS-1$
 	public static final String FLICKR_USER_ID = "flickr.user.id"; //$NON-NLS-1$
 	public static final String FLICKR_USER_NAME = "flickr.user.name"; //$NON-NLS-1$
@@ -51,9 +52,10 @@ public final class Constants {
 	public static final String SETTING_BACK_STACK = "settings"; //$NON-NLS-1$
 	public static final String CONTACT_BACK_STACK = "contacts"; //$NON-NLS-1$
 	public static final String ACTIVITY_BACK_STACK = "activities"; //$NON-NLS-1$
-	public static final String USER_COLL_BACK_STACK = "help"; //$NON-NLS-1$
+	public static final String USER_COLL_BACK_STACK = "user.coll"; //$NON-NLS-1$
 	public static final String MAIN_MENU_BACK_STACK = "main.menu"; //$NON-NLS-1$
 	public static final String LOCATION_BACK_STACK = "photo.location"; //$NON-NLS-1$
+	public static final String HELP_BACK_STACK = "help"; //$NON-NLS-1$
 
 
 	// notifications

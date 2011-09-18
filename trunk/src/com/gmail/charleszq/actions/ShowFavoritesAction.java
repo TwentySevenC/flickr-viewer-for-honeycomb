@@ -4,7 +4,14 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.photos.Photo;
+import android.app.Activity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.FavoritePhotosDataProvider;
@@ -14,14 +21,7 @@ import com.gmail.charleszq.event.DefaultPhotoListReadyListener;
 import com.gmail.charleszq.event.IPhotoListReadyListener;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
 import com.gmail.charleszq.ui.comp.IContextMenuHandler;
-
-import android.app.Activity;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import com.gmail.yuyang226.flickr.photos.Photo;
 
 /**
  * @author charles
@@ -40,6 +40,7 @@ public class ShowFavoritesAction extends ActivityAwareAction {
 
     /*
      * (non-Javadoc)
+	 * 
      * @see com.gmail.charleszq.actions.IAction#execute()
      */
     @Override
@@ -51,12 +52,14 @@ public class ShowFavoritesAction extends ActivityAwareAction {
             mUserId = app.getUserId();
         }
         PaginationPhotoListDataProvider dp = new FavoritePhotosDataProvider(
-                mUserId, token);
-        IContextMenuHandler menuHandler = new FavContextMenuHandler(mActivity, dp);
-        IPhotoListReadyListener photoReadyListener = new DefaultPhotoListReadyListener(mActivity,
-                dp, menuHandler);
-        AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity, dp, photoReadyListener,
-                mActivity.getResources().getString(R.string.task_loading_favs));
+				mUserId, token, app.getFlickrTokenSecrent());
+		IContextMenuHandler menuHandler = new FavContextMenuHandler(mActivity,
+				dp);
+		IPhotoListReadyListener photoReadyListener = new DefaultPhotoListReadyListener(
+				mActivity, dp, menuHandler);
+		AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity, dp,
+				photoReadyListener, mActivity.getResources().getString(
+						R.string.task_loading_favs));
         task.execute();
     }
 
@@ -70,13 +73,15 @@ public class ShowFavoritesAction extends ActivityAwareAction {
          * 
          * @param activity
          */
-        FavContextMenuHandler(Activity activity, IPhotoListDataProvider dataProvider) {
+		FavContextMenuHandler(Activity activity,
+				IPhotoListDataProvider dataProvider) {
             this.mActivity = activity;
             this.mDataProvider = dataProvider;
         }
 
         @Override
-        public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo info) {
+		public void onCreateContextMenu(ContextMenu menu, View view,
+				ContextMenuInfo info) {
             MenuInflater mi = mActivity.getMenuInflater();
             int start = menu.size();
             mi.inflate(R.menu.menu_remove_fav, menu);
@@ -91,7 +96,8 @@ public class ShowFavoritesAction extends ActivityAwareAction {
             int pos = ((AdapterContextMenuInfo) info).position;
             try {
                 Photo photo = mDataProvider.getPhotoList().get(pos);
-                RemoveFavAction action = new RemoveFavAction(mActivity, photo.getId());
+				RemoveFavAction action = new RemoveFavAction(mActivity, photo
+						.getId());
                 action.execute();
                 return true;
             } catch (Exception e) {

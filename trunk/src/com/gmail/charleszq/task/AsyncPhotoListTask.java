@@ -7,11 +7,11 @@ package com.gmail.charleszq.task;
 import android.app.Activity;
 import android.util.Log;
 
-import com.aetrion.flickr.photos.PhotoList;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.IPhotoListDataProvider;
 import com.gmail.charleszq.event.DefaultPhotoListReadyListener;
 import com.gmail.charleszq.event.IPhotoListReadyListener;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * Represents the task to fetch the photo list of a user.

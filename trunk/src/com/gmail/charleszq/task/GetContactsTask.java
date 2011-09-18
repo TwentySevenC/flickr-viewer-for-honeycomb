@@ -7,20 +7,21 @@
 
 package com.gmail.charleszq.task;
 
-import com.aetrion.flickr.contacts.Contact;
+import java.util.Collection;
+
+import android.app.Activity;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.DefaultContactDataProvider;
 import com.gmail.charleszq.event.IContactsFetchedListener;
-
-import android.app.Activity;
-
-import java.util.Collection;
+import com.gmail.yuyang226.flickr.contacts.Contact;
 
 /**
  * @author charles
  */
-public class GetContactsTask extends ProgressDialogAsyncTask<String, Integer, Collection<Contact>> {
+public class GetContactsTask extends
+		ProgressDialogAsyncTask<String, Integer, Collection<Contact>> {
 
     private IContactsFetchedListener mListener;
 
@@ -31,9 +32,12 @@ public class GetContactsTask extends ProgressDialogAsyncTask<String, Integer, Co
 
     @Override
     protected Collection<Contact> doInBackground(String... params) {
-        FlickrViewerApplication app = (FlickrViewerApplication) mActivity.getApplication();
+		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+				.getApplication();
         String token = app.getFlickrToken();
-        DefaultContactDataProvider dp = new DefaultContactDataProvider(token);
+		String secret = app.getFlickrTokenSecrent();
+		DefaultContactDataProvider dp = new DefaultContactDataProvider(token,
+				secret);
         return dp.getContacts(params[0]);
     }
 

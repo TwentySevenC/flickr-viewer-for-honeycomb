@@ -5,17 +5,21 @@ package com.gmail.charleszq.task;
 
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.auth.Permission;
+import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
-import com.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.auth.Permission;
+import com.gmail.yuyang226.flickr.oauth.OAuthToken;
 
 /**
  * Represents the task to start the oauth process.
@@ -25,8 +29,8 @@ import com.yuyang226.flickr.oauth.OAuthToken;
  */
 public class OAuthTask extends AsyncTask<Void, Integer, String> {
 
-	private static final String TAG = OAuthTask.class.getName();
-
+	private static final Logger logger = LoggerFactory
+			.getLogger(OAuthTask.class);
 	private static final Uri OAUTH_CALLBACK_URI = Uri.parse(Constants.ID_SCHEME
 			+ "://oauth"); //$NON-NLS-1$
 
@@ -56,15 +60,27 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 			Flickr f = FlickrHelper.getInstance().getFlickr();
 			OAuthToken oauthToken = f.getOAuthInterface().getRequestToken(
 					OAUTH_CALLBACK_URI.toString());
-			Log.d(TAG, "OAuthToken: " + oauthToken); //$NON-NLS-1$
+			saveTokenSecrent(oauthToken.getOauthTokenSecret());
 			URL oauthUrl = f.getOAuthInterface().buildAuthenticationUrl(
 					Permission.WRITE, oauthToken);
-			Log.d(TAG, "OAuth URL: " + oauthUrl); //$NON-NLS-1$
 			return oauthUrl.toString();
-		} catch (Exception ex) {
-			Log.e(TAG, "Error to oauth: " + ex.getMessage()); //$NON-NLS-1$
+		} catch (Exception e) {
+			logger.error("Error to oauth", e); //$NON-NLS-1$
 			return null;
 		}
+	}
+
+	/**
+	 * Saves the oauth token secrent.
+	 * 
+	 * @param tokenSecret
+	 */
+	private void saveTokenSecrent(String tokenSecret) {
+		Activity act = (Activity) mContext;
+		FlickrViewerApplication app = (FlickrViewerApplication) act
+				.getApplication();
+		app.saveFlickrTokenSecret(tokenSecret);
+		logger.debug("oauth token secrent saved: {}", tokenSecret); //$NON-NLS-1$
 	}
 
 	@Override

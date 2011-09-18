@@ -7,14 +7,15 @@ package com.gmail.charleszq.dataprovider;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.activity.ActivityInterface;
-import com.aetrion.flickr.activity.Item;
-import com.aetrion.flickr.activity.ItemList;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.activity.ActivityInterface;
+import com.gmail.yuyang226.flickr.activity.Item;
+import com.gmail.yuyang226.flickr.activity.ItemList;
 
 /**
  * Represents the data provider for the activities.
@@ -24,17 +25,18 @@ import com.gmail.charleszq.utils.FlickrHelper;
 public class RecentActivitiesDataProvider {
 
 	private static final int PER_PAGE = 20;
-	private static final String TAG = RecentActivitiesDataProvider.class
-			.getName();
+	private static final Logger logger = LoggerFactory
+			.getLogger(RecentActivitiesDataProvider.class);
 
 	private String mToken;
+	private String mSecret;
 	private boolean mOnlyMyPhoto = false;
 
 	/**
 	 * The check interval of activities on my photos.
 	 */
 	private int mMyPhotoInterval = Constants.SERVICE_CHECK_INTERVAL;
-	
+
 	/**
 	 * The page size.
 	 */
@@ -46,12 +48,14 @@ public class RecentActivitiesDataProvider {
 	 * @param token
 	 *            the access token
 	 */
-	public RecentActivitiesDataProvider(String token) {
+	public RecentActivitiesDataProvider(String token, String secret) {
 		this.mToken = token;
+		this.mSecret = secret;
 	}
 
-	public RecentActivitiesDataProvider(String token, boolean onlyMyPhoto) {
-		this(token);
+	public RecentActivitiesDataProvider(String token, String secret,
+			boolean onlyMyPhoto) {
+		this(token, secret);
 		this.mOnlyMyPhoto = onlyMyPhoto;
 	}
 
@@ -64,7 +68,7 @@ public class RecentActivitiesDataProvider {
 	 * @return
 	 */
 	public List<Item> getRecentActivities() {
-		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
+		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken, mSecret);
 		ActivityInterface ai = f.getActivityInterface();
 
 		List<Item> items = new ArrayList<Item>();
@@ -74,7 +78,7 @@ public class RecentActivitiesDataProvider {
 				if (userComments != null) {
 					for (int i = 0; i < userComments.size(); i++) {
 						Item item = userComments.get(i);
-						Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
+						logger.debug("Activity item type: {}", item.getType()); //$NON-NLS-1$
 						if ("photo".equals(item.getType())) { //$NON-NLS-1$
 							items.add(item);
 						}
@@ -91,7 +95,7 @@ public class RecentActivitiesDataProvider {
 			if (photoComments != null) {
 				for (int j = 0; j < photoComments.size(); j++) {
 					Item item = photoComments.get(j);
-					Log.d(TAG, "Activity item type : " + item.getType()); //$NON-NLS-1$
+					logger.debug("Activity item type: {}", item.getType()); //$NON-NLS-1$
 					if ("photo".equals(item.getType())) { //$NON-NLS-1$
 						items.add(item);
 					}
@@ -120,7 +124,5 @@ public class RecentActivitiesDataProvider {
 	public void setPageSize(int mPageSize) {
 		this.mPageSize = mPageSize;
 	}
-	
-	
-	
+
 }

@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
@@ -15,16 +18,15 @@ import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.aetrion.flickr.photos.Photo;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
 import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageUtils;
+import com.gmail.yuyang226.flickr.photos.Photo;
 
 /**
  * Represents the action to save a photo to sd card, and after that to set it as
@@ -35,9 +37,9 @@ import com.gmail.charleszq.utils.ImageUtils;
  */
 public class SaveImageWallpaperAction extends ActivityAwareAction implements
 		IImageDownloadDoneListener {
-	
-	private static final String TAG = SaveImageWallpaperAction.class.getName();
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(SaveImageWallpaperAction.class);
 	private boolean mSetAsWallpaper = false;
 	private Photo mCurrentPhoto;
 
@@ -166,7 +168,7 @@ public class SaveImageWallpaperAction extends ActivityAwareAction implements
 		}
 
 		if (bitmap != null) {
-			Log.d(TAG, "Release the downloaded bitmap."); //$NON-NLS-1$
+			logger.debug("Release the downloaded bitmap."); //$NON-NLS-1$
 			bitmap.recycle();
 			bitmap = null;
 		}

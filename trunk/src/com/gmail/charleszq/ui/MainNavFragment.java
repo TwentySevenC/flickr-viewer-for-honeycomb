@@ -66,6 +66,8 @@ public class MainNavFragment extends Fragment {
 				long id) {
 
 			if (position != 2) {
+				// position == 2 means the gallery/set/group of mine, at this
+				// time, we don't need to clear the right panel.
 				cleanFragmentBackStack();
 			}
 
@@ -75,6 +77,7 @@ public class MainNavFragment extends Fragment {
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
 			String token = app.getFlickrToken();
+			String tokenSecret = app.getFlickrTokenSecrent();
 
 			switch (position) {
 			case 0:
@@ -85,7 +88,7 @@ public class MainNavFragment extends Fragment {
 			case 1:
 				ShowPeoplePhotosAction photosAction = new ShowPeoplePhotosAction(
 						getActivity(), null, app.getUserName());
-				if (token == null) {
+				if (token == null || tokenSecret == null) {
 					ShowAuthDialogAction ia = new ShowAuthDialogAction(
 							getActivity(), photosAction);
 					ia.execute();
@@ -106,7 +109,7 @@ public class MainNavFragment extends Fragment {
 						ft2.commit();
 					}
 				};
-				if( token == null ) {
+				if (token == null || tokenSecret == null) {
 					ShowAuthDialogAction ia = new ShowAuthDialogAction(
 							getActivity(), switchAction);
 					ia.execute();
@@ -118,7 +121,7 @@ public class MainNavFragment extends Fragment {
 			case 3: // contacts
 				ShowMyContactsAction contactAction = new ShowMyContactsAction(
 						getActivity());
-				if (token == null) {
+				if (token == null || tokenSecret == null) {
 					ShowAuthDialogAction cia = new ShowAuthDialogAction(
 							getActivity(), contactAction);
 					cia.execute();
@@ -129,7 +132,7 @@ public class MainNavFragment extends Fragment {
 			case 4:
 				ShowFavoritesAction favAction = new ShowFavoritesAction(
 						getActivity(), null);
-				if (token == null) {
+				if (token == null || tokenSecret == null) {
 					ShowAuthDialogAction showAuthAction = new ShowAuthDialogAction(
 							getActivity(), favAction);
 					showAuthAction.execute();
@@ -140,7 +143,7 @@ public class MainNavFragment extends Fragment {
 			case 5:
 				GetActivitiesAction aaction = new GetActivitiesAction(
 						getActivity());
-				if (token == null) {
+				if (token == null || tokenSecret == null) {
 					ShowAuthDialogAction showAuthAction = new ShowAuthDialogAction(
 							getActivity(), aaction);
 					showAuthAction.execute();
@@ -160,6 +163,10 @@ public class MainNavFragment extends Fragment {
 		}
 	};
 
+	/**
+	 * Clears all the framgment back stack, the right panel can show only the
+	 * current selected contents.
+	 */
 	private void cleanFragmentBackStack() {
 		FragmentManager fm = getFragmentManager();
 		fm.popBackStack(Constants.PHOTO_LIST_BACK_STACK,
@@ -169,6 +176,8 @@ public class MainNavFragment extends Fragment {
 		fm.popBackStack(Constants.CONTACT_BACK_STACK,
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		fm.popBackStack(Constants.ACTIVITY_BACK_STACK,
+				FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		fm.popBackStack(Constants.HELP_BACK_STACK,
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
@@ -203,8 +212,11 @@ public class MainNavFragment extends Fragment {
 		final FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String token = app.getFlickrToken();
-		userPanel.setVisibility(token == null ? View.INVISIBLE : View.VISIBLE);
-		if (token != null) {
+		String tokenSecret = app.getFlickrTokenSecrent();
+		userPanel
+				.setVisibility(token == null || tokenSecret == null ? View.INVISIBLE
+						: View.VISIBLE);
+		if (token != null && tokenSecret != null) {
 			TextView userText = (TextView) view.findViewById(R.id.user_name);
 			userText.setText(app.getUserName());
 		}
@@ -217,9 +229,10 @@ public class MainNavFragment extends Fragment {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						getActivity());
-				builder.setMessage(getActivity().getString(R.string.logout_msg))
-						.setCancelable(false)
-						.setPositiveButton(
+				builder
+						.setMessage(
+								getActivity().getString(R.string.logout_msg))
+						.setCancelable(false).setPositiveButton(
 								getActivity().getString(R.string.btn_yes),
 								new DialogInterface.OnClickListener() {
 									@Override
@@ -227,9 +240,18 @@ public class MainNavFragment extends Fragment {
 											int id) {
 										app.logout();
 										userPanel.setVisibility(View.INVISIBLE);
+										goHome();
 									}
-								})
-						.setNegativeButton(
+
+									private void goHome() {
+										FragmentManager fm = getActivity()
+												.getFragmentManager();
+										for (int i = 0; i < fm
+												.getBackStackEntryCount(); i++) {
+											fm.popBackStack();
+										}
+									}
+								}).setNegativeButton(
 								getActivity().getString(R.string.btn_no),
 								new DialogInterface.OnClickListener() {
 									@Override
