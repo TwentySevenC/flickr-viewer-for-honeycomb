@@ -6,7 +6,6 @@ package com.gmail.charleszq.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.gmail.charleszq.utils.Constants;
 
@@ -19,8 +18,6 @@ import com.gmail.charleszq.utils.Constants;
  */
 public class TimeUpReceiver extends BroadcastReceiver {
 
-	private static final String TAG = TimeUpReceiver.class.getName();
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -29,8 +26,6 @@ public class TimeUpReceiver extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(TAG, "Intent action: " + intent.getAction()); //$NON-NLS-1$
-
 		if (Constants.INTENT_ACTION_CHECK_CONTACT_UPLOAD_RECEIVER.equals(intent
 				.getAction())) {
 			Intent serviceIntent = new Intent(context.getApplicationContext(),

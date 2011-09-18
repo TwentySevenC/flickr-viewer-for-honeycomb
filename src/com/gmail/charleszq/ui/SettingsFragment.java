@@ -4,6 +4,9 @@
 
 package com.gmail.charleszq.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +14,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.gmail.charleszq.FlickrViewerActivity;
 import com.gmail.charleszq.FlickrViewerApplication;
@@ -27,7 +29,8 @@ import com.gmail.charleszq.utils.ImageCache;
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
 
-	private static final String TAG = SettingsFragment.class.getName();
+	private static final Logger logger = LoggerFactory
+			.getLogger(SettingsFragment.class);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,6 @@ public class SettingsFragment extends PreferenceFragment implements
 		super.onStart();
 		PreferenceManager pm = getPreferenceManager();
 		SharedPreferences sp = pm.getSharedPreferences();
-		Log.d(TAG, "Preference name: " + pm.getSharedPreferencesName()); //$NON-NLS-1$
 		sp.registerOnSharedPreferenceChangeListener(this);
 
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
@@ -58,12 +60,13 @@ public class SettingsFragment extends PreferenceFragment implements
 			String size = sharedPreferences.getString(key, String
 					.valueOf(Constants.DEF_CACHE_SIZE));
 			ImageCache.CACHE_SIZE = Integer.parseInt(size);
-			Log.d(TAG, "Cache size changed: " + size); //$NON-NLS-1$
+			logger.debug("Cache size changed: {}", size); //$NON-NLS-1$
 			return;
 		}
 
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
-		FlickrViewerApplication app = (FlickrViewerApplication) act.getApplication();
+		FlickrViewerApplication app = (FlickrViewerApplication) act
+				.getApplication();
 		if (Constants.ENABLE_CONTACT_UPLOAD_NOTIF.equals(key)
 				|| Constants.NOTIF_CONTACT_UPLOAD_INTERVAL.equals(key)) {
 			app.handleContactUploadService();
@@ -75,11 +78,12 @@ public class SettingsFragment extends PreferenceFragment implements
 			app.handlePhotoActivityService();
 			return;
 		}
-		
-		if( Constants.SETTING_SHOW_APP_TITLE.equals(key)) {
+
+		if (Constants.SETTING_SHOW_APP_TITLE.equals(key)) {
 			boolean result = sharedPreferences.getBoolean(key, true);
-			int option = ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM;
-			if( result ) {
+			int option = ActionBar.DISPLAY_SHOW_HOME
+					| ActionBar.DISPLAY_SHOW_CUSTOM;
+			if (result) {
 				option |= ActionBar.DISPLAY_SHOW_TITLE;
 			}
 			getActivity().getActionBar().setDisplayOptions(option);

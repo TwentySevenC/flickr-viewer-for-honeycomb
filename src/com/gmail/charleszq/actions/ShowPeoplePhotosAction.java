@@ -4,7 +4,11 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.photos.PhotoList;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.widget.Toast;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.PeoplePublicPhotosDataProvider;
@@ -12,11 +16,7 @@ import com.gmail.charleszq.event.IPhotoListReadyListener;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
 import com.gmail.charleszq.ui.PhotoListFragment;
 import com.gmail.charleszq.utils.Constants;
-
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.widget.Toast;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * Represents the action to show all the public photos of a given user.
@@ -32,10 +32,10 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
 
         @Override
         public void onPhotoListReady(PhotoList list, boolean cancelled) {
-        	if( cancelled ) {
+			if (cancelled) {
         		return;
         	}
-        	
+
         	if (list == null) {
                 Toast.makeText(mActivity,
                 		mActivity.getString(R.string.toast_error_get_photos),
@@ -57,7 +57,8 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
     /**
      * @param resId
      */
-    public ShowPeoplePhotosAction(Activity context, String userId, String userName) {
+	public ShowPeoplePhotosAction(Activity context, String userId,
+			String userName) {
         super(context);
         this.mUserId = userId;
         this.mUserName = userName;
@@ -65,6 +66,7 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
 
     /*
      * (non-Javadoc)
+	 * 
      * @see com.gmail.charleszq.actions.IAction#execute()
      */
     @Override
@@ -81,10 +83,11 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
         if (mUserId == null) {
             mUserId = app.getUserId();
         }
-        if( mUserName == null ) {
+		if (mUserName == null) {
             mUserName = app.getUserName();
         }
-        mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token, mUserName);
+		mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token,
+				mUserName, app.getFlickrTokenSecrent());
         AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
                 mDataProvider, mPhotosReadyListener);
         task.execute();

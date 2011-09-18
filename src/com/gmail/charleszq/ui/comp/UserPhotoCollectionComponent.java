@@ -6,12 +6,14 @@ package com.gmail.charleszq.ui.comp;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +26,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.aetrion.flickr.photos.PhotoPlace;
-import com.aetrion.flickr.photosets.Photoset;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.actions.ShowPhotoPoolAction;
-import com.gmail.charleszq.model.FlickrGallery;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
@@ -36,6 +35,9 @@ import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.galleries.Gallery;
+import com.gmail.yuyang226.flickr.photos.PhotoPlace;
+import com.gmail.yuyang226.flickr.photosets.Photoset;
 
 /**
  * Represents the UI component to show the photo collection information for a
@@ -47,8 +49,8 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 public class UserPhotoCollectionComponent extends FrameLayout implements
 		IUserPhotoCollectionFetched, OnItemClickListener {
 
-	private static final String TAG = UserPhotoCollectionComponent.class
-			.getName();
+	private static final Logger logger = LoggerFactory
+			.getLogger(UserPhotoCollectionComponent.class);
 
 	/**
 	 * The list view
@@ -64,7 +66,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	 * The async task to fetch the gallery/set/group list of this user.
 	 */
 	private UserPhotoCollectionTask task;
-	
+
 	/**
 	 * The section adapter.
 	 */
@@ -72,6 +74,8 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 
 	private String mUserId;
 	private String mToken;
+
+	private String mSecret;
 
 	/**
 	 * @param context
@@ -111,15 +115,16 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		mProgressBar = (ProgressBar) findViewById(R.id.progress);
 	}
 
-	public void initialize(String userId, String token) {
+	public void initialize(String userId, String token, String secret) {
 		this.mUserId = userId;
 		this.mToken = token;
+		this.mSecret = secret;
 
 		if (task != null && !task.isCancelled()) {
 			task.cancel(true);
 		}
 		task = new UserPhotoCollectionTask(this);
-		task.execute(userId, token);
+		task.execute(userId, token, secret);
 	}
 
 	/**
@@ -130,8 +135,8 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 			return;
 		}
 		mProgressBar.setVisibility(View.VISIBLE);
-		task = new UserPhotoCollectionTask(this,true);
-		task.execute(mUserId, mToken);
+		task = new UserPhotoCollectionTask(this, true);
+		task.execute(mUserId, mToken, mSecret);
 	}
 
 	@Override
@@ -144,7 +149,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 			return;
 		}
 
-		if( mSectionAdapter == null ) {
+		if (mSectionAdapter == null) {
 			mSectionAdapter = new SimpleSectionAdapter(getContext());
 		}
 		mSectionAdapter.clearSections();
@@ -261,7 +266,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 	@Override
 	protected void onDetachedFromWindow() {
 		if (task != null && !task.isCancelled()) {
-			Log.d(TAG, "cancel the running task."); //$NON-NLS-1$
+			logger.debug("cancel the running task: {}", task); //$NON-NLS-1$
 			task.cancel(true);
 		}
 		super.onDetachedFromWindow();
@@ -274,7 +279,7 @@ public class UserPhotoCollectionComponent extends FrameLayout implements
 		public ListItemAdapterPhotoPlace(IListItemAdapter item) {
 			super(PHOTO_GALLERY, item.getId(), item.getTitle());
 			String obj = item.getObjectClassType();
-			if (FlickrGallery.class.getName().equals(obj)) {
+			if (Gallery.class.getName().equals(obj)) {
 				setKind(PHOTO_GALLERY);
 			} else if (Photoset.class.getName().equals(obj)) {
 				setKind(PhotoPlace.SET);

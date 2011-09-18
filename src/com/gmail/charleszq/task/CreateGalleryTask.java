@@ -7,15 +7,10 @@
 
 package com.gmail.charleszq.task;
 
-import java.io.IOException;
-
-import org.xml.sax.SAXException;
-
 import android.os.AsyncTask;
 
-import com.aetrion.flickr.FlickrException;
-import com.gmail.charleszq.fapi.GalleryInterface;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.galleries.GalleriesInterface;
 
 /**
  * @author charles
@@ -44,9 +39,9 @@ public class CreateGalleryTask extends AsyncTask<String, Integer, String> {
 		String description = params[1];
 		String primaryPhotoId = params[2];
 
-		GalleryInterface gi = FlickrHelper.getInstance().getGalleryInterface();
+		GalleriesInterface gi = FlickrHelper.getInstance().getFlickr().getGalleriesInterface();
 		try {
-			String galleryId = gi.createGallery(title, description,
+			String galleryId = gi.create(title, description,
 					primaryPhotoId);
 			return galleryId;
 		} catch (Exception e) {

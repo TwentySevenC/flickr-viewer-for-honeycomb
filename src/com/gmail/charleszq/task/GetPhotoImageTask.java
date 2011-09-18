@@ -10,20 +10,22 @@ package com.gmail.charleszq.task;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.util.Log;
 
-import com.aetrion.flickr.photos.GeoData;
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotosInterface;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageUtils;
+import com.gmail.yuyang226.flickr.photos.GeoData;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
 
 /**
  * Represents the task to fetch photo image from flickr.
@@ -34,9 +36,10 @@ public class GetPhotoImageTask extends
 		ProgressDialogAsyncTask<String, Integer, Bitmap> {
 
 	private static final int MSG_ID = R.string.loading_photo_detail;
-	private static final String TAG = GetPhotoImageTask.class.getName();
+	private static final Logger logger = LoggerFactory
+			.getLogger(GetPhotoImageTask.class);
 	private Photo mCurrentPhoto;
-	
+
 	private float mCacheImageScale = 0.5f;
 
 	public static enum PhotoType {
@@ -64,7 +67,7 @@ public class GetPhotoImageTask extends
 		mPhotoType = photoType;
 		this.mPhotoFetchedListener = listener;
 	}
-	
+
 	public void setCacheImageScale(float scale) {
 		this.mCacheImageScale = scale;
 	}
@@ -79,9 +82,10 @@ public class GetPhotoImageTask extends
 		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 				.getApplication();
 		String token = app.getFlickrToken();
+		String tokenSecret = app.getFlickrTokenSecrent();
 		PhotosInterface pi = null;
 		if (token != null) {
-			pi = FlickrHelper.getInstance().getFlickrAuthed(token)
+			pi = FlickrHelper.getInstance().getFlickrAuthed(token, tokenSecret)
 					.getPhotosInterface();
 		} else {
 			pi = FlickrHelper.getInstance().getPhotosInterface();
@@ -96,11 +100,12 @@ public class GetPhotoImageTask extends
 
 		try {
 			mCurrentPhoto = pi.getInfo(photoId, secret);
-			Log.d(TAG, "Photo description: " + mCurrentPhoto.getDescription()); //$NON-NLS-1$
+			logger.debug(
+					"Photo description: {}", mCurrentPhoto.getDescription()); //$NON-NLS-1$
 			GeoData geo = mCurrentPhoto.getGeoData();
 			if (geo != null) {
-				Log.d(TAG, "geo data: " + geo.getLatitude() + ", " //$NON-NLS-1$//$NON-NLS-2$
-						+ geo.getLongitude());
+				logger.debug("Geo data: latitude={}, longtitude={}", //$NON-NLS-1$
+						geo.getLatitude(), geo.getLongitude());
 			}
 			String url = mCurrentPhoto.getMediumUrl();
 			switch (mPhotoType) {
@@ -129,13 +134,14 @@ public class GetPhotoImageTask extends
 			if (imageFile.exists()) {
 				mDownloadedBitmap = BitmapFactory
 						.decodeStream(new FileInputStream(imageFile));
-				mDownloadedBitmap = ImageUtils.resize(mDownloadedBitmap, mCacheImageScale);
+				mDownloadedBitmap = ImageUtils.resize(mDownloadedBitmap,
+						mCacheImageScale);
 			} else {
 				mDownloadedBitmap = ImageUtils.downloadImage(url);
 			}
 			return mDownloadedBitmap;
 		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
+			logger.error(e.getLocalizedMessage(), e);
 		}
 		return null;
 	}

@@ -3,13 +3,13 @@
  */
 package com.gmail.charleszq.task;
 
-import com.aetrion.flickr.activity.Item;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.dataprovider.RecentActivitiesDataProvider;
+import java.util.List;
 
 import android.app.Activity;
 
-import java.util.List;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.dataprovider.RecentActivitiesDataProvider;
+import com.gmail.yuyang226.flickr.activity.Item;
 
 /**
  * Represents the task to get the rencent activites.
@@ -34,9 +34,10 @@ public class GetActivitiesTask extends
 	}
 
 	@Override
-	protected List<Item> doInBackground(String... arg0) {
-		String token = arg0[0];
-		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(token);
+	protected List<Item> doInBackground(String... params) {
+		String token = params[0];
+		String secret = params[1];
+		RecentActivitiesDataProvider dp = new RecentActivitiesDataProvider(token, secret);
 		dp.setPageSize(30);
 		dp.setCheckInterval(24);
 		return dp.getRecentActivities();

@@ -7,17 +7,17 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.photos.Photo;
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.task.GetPhotoImageTask;
-import com.gmail.charleszq.task.GetPhotoImageTask.IPhotoFetchedListener;
-import com.gmail.charleszq.ui.ViewImageDetailFragment;
-
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.widget.Toast;
+
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.task.GetPhotoImageTask;
+import com.gmail.charleszq.task.GetPhotoImageTask.IPhotoFetchedListener;
+import com.gmail.charleszq.ui.ViewImageDetailFragment;
+import com.gmail.yuyang226.flickr.photos.Photo;
 
 /**
  * @author charles

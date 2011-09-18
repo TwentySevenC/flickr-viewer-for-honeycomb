@@ -25,7 +25,6 @@ import android.text.Html;
 import android.text.util.Linkify;
 import android.text.util.Linkify.MatchFilter;
 import android.text.util.Linkify.TransformFilter;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.gmail.charleszq.model.IListItemAdapter;
@@ -37,7 +36,7 @@ import com.gmail.charleszq.model.IListItemAdapter;
  */
 public final class StringUtils {
 
-	private static final String TAG = StringUtils.class.getName();
+//	private static final Logger logger = LoggerFactory.getLogger(StringUtils.class);
 	
 	public static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -54,8 +53,6 @@ public final class StringUtils {
 	private static final String FILICK_URL_EXPRESSION = "(\\[http){1}+(s)?+(://){1}+.*\\]{1}+"; //$NON-NLS-1$
 
 	public static void formatHtmlString(String string, TextView textView) {
-
-		Log.d(TAG, string);
 
 		textView.setText(Html.fromHtml(string));
 		Linkify.addLinks(textView, Pattern.compile(FILICK_URL_EXPRESSION),

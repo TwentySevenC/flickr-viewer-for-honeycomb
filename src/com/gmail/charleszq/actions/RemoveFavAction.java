@@ -7,16 +7,16 @@
 
 package com.gmail.charleszq.actions;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.favorites.FavoritesInterface;
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.utils.FlickrHelper;
-
-import android.app.Activity;
-import android.os.AsyncTask;
-import android.widget.Toast;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.favorites.FavoritesInterface;
 
 /**
  * Represents the action to remove a photo from the favorite list.
@@ -37,6 +37,7 @@ public class RemoveFavAction extends ActivityAwareAction {
 
     /*
      * (non-Javadoc)
+	 * 
      * @see com.gmail.charleszq.actions.IAction#execute()
      */
     @Override
@@ -46,9 +47,12 @@ public class RemoveFavAction extends ActivityAwareAction {
             @Override
             protected Boolean doInBackground(String... arg0) {
                 String photoId = arg0[0];
-                FlickrViewerApplication app = (FlickrViewerApplication) mActivity.getApplication();
+				FlickrViewerApplication app = (FlickrViewerApplication) mActivity
+						.getApplication();
                 String mToken = app.getFlickrToken();
-                Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
+				String secret = app.getFlickrTokenSecrent();
+				Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken,
+						secret);
                 FavoritesInterface fi = f.getFavoritesInterface();
                 try {
                     fi.remove(photoId);
@@ -61,9 +65,11 @@ public class RemoveFavAction extends ActivityAwareAction {
             @Override
             protected void onPostExecute(Boolean result) {
                 super.onPostExecute(result);
-                String msg = mActivity.getResources().getString(R.string.remove_fav_done);
+				String msg = mActivity.getResources().getString(
+						R.string.remove_fav_done);
                 if (!result) {
-                    msg = mActivity.getResources().getString(R.string.remove_fav_error);
+					msg = mActivity.getResources().getString(
+							R.string.remove_fav_error);
                 }
                 Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
 

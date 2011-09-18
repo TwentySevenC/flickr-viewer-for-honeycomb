@@ -16,7 +16,7 @@
 	<string name="add_fav_photo">Add as Favorite</string>
 	<string name="show_owner_photos">Show Owner\'s Photos</string>
 	<string name="view_big_photo">View Big Photo</string>
-	
+
 	<string name="ok_btn">OK</string>
 	<string name="cancel_btn">Cancel</string>
 
@@ -56,14 +56,12 @@
 
 	<string name="auth_hint">
 		Click the first button to grant access to your
-		flickr account, it\'s with OAUTH, your password is not known to this
-		application.\n\r\n\rAfter you grant access, please go back here, then
-		click
-		the 2nd button to finish the auth process.\n\r\n\rClick \'back\'
-		button to dismiss this dialog.
+		flickr
+		account, it\'s with OAUTH, your password is not known to this
+		application.
 	</string>
 	<string name="auth_btn_title">Go Flickr to Authorize</string>
-	<string name="auth_done_btn_title">Permission Granted</string>
+	<string name="auth_done_btn_title">Cancel</string>
 	<string name="flickr_oauth">OAuth</string>
 	<string name="auth_progress_title">Authenticating...</string>
 
@@ -82,7 +80,6 @@
 	<string name="toast_error_save_photo">Error to save the photo.</string>
 	<string name="toast_error_get_photos">Unable to get photo list, please check your network
 		access.</string>
-	<string name="toast_click_first_btn">Click the 1st button first please.</string>
 
 	<!-- Share photo intent related. -->
 	<string name="share_photo_intent_subj">Share Photo</string>
@@ -183,19 +180,22 @@
 		hide the application title.</string>
 	<string name="gen_tag_search_mode">Tag search mode</string>
 	<string name="summary_gen_tag_search_mode">When 2 or more tags provided to search, check
-		this to use the \'AND\' search mode, otherwise, \'any\' mode, that is,
+		this
+		to use the \'AND\' search mode, otherwise, \'any\' mode, that is,
 		\'OR\' mode, will be used.
 	</string>
 
 	<string name="app_title_tags_search_result">Tags</string>
 	<string name="tag_search_hint">Search by Tags</string>
-	
+
 	<string name="error_get_photo_detail">Unable to get the detail information.</string>
 	<!-- Create gallery -->
-	<string name="crt_gallery_desc">No gallery available to add this photo, you need to create one.</string>
+	<string name="crt_gallery_desc">No gallery available to add this photo, you need to
+		create one.</string>
 	<string name="crt_gallery_title">Title*</string>
 	<string name="crt_gallery_desc_man">Description</string>
 	<string name="error_no_title">Please input title</string>
+	<string name="fail_to_oauth">Failed to access your flickr account, please try again</string>
 </resources>
 
 

@@ -8,15 +8,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,8 +33,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotoList;
 import com.gmail.charleszq.FlickrViewerActivity;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -46,6 +47,8 @@ import com.gmail.charleszq.ui.comp.IContextMenuHandler;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * @author charles
@@ -55,7 +58,8 @@ public class PhotoListFragment extends Fragment implements
 		IFlickrViewerMessageHandler {
 
 	private static final String BUNDLE_ATTR_DATA_PROVIDER = "data.provider"; //$NON-NLS-1$
-	private static final String TAG = PhotoListFragment.class.getName();
+	private static final Logger logger = LoggerFactory
+			.getLogger(PhotoListFragment.class);
 
 	private PhotoList mPhotoList;
 	private MyAdapter mGridAdapter;
@@ -169,7 +173,17 @@ public class PhotoListFragment extends Fragment implements
 		// change action bar title
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
 		if (mPhotoListDataProvider != null) {
-			act.changeActionBarTitle(mPhotoListDataProvider.getDescription(act));
+			act
+					.changeActionBarTitle(mPhotoListDataProvider
+							.getDescription(act));
+		} else {
+			logger.warn("Photo grid view, data provider is null."); //$NON-NLS-1$
+			// TODO need to test.
+			FragmentManager fm = getFragmentManager();
+			int count = fm.getBackStackEntryCount();
+			for (int i = 0; i < count; i++) {
+				fm.popBackStack();
+		}
 		}
 		return mRootContainer;
 	}
@@ -424,7 +438,7 @@ public class PhotoListFragment extends Fragment implements
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(BUNDLE_ATTR_DATA_PROVIDER,
 				mPhotoListDataProvider);
-		Log.d(TAG, "data provider is saved."); //$NON-NLS-1$
+		logger.debug("data provider [{}] is saved.", mPhotoListDataProvider); //$NON-NLS-1$
 	}
 
 	@Override

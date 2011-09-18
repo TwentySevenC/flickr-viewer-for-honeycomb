@@ -7,13 +7,13 @@
 
 package com.gmail.charleszq.actions;
 
+import android.app.Activity;
+
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.InterestingPhotosDataProvider;
 import com.gmail.charleszq.dataprovider.PaginationPhotoListDataProvider;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
-
-import android.app.Activity;
 
 /**
  * @author charles

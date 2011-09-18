@@ -6,17 +6,19 @@ package com.gmail.charleszq.task;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.people.PeopleInterface;
-import com.aetrion.flickr.people.User;
-import com.aetrion.flickr.photos.comments.Comment;
-import com.aetrion.flickr.photos.comments.CommentsInterface;
+import android.os.AsyncTask;
+
 import com.gmail.charleszq.event.IUserCommentsFetchedListener;
 import com.gmail.charleszq.model.UserComment;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.people.PeopleInterface;
+import com.gmail.yuyang226.flickr.people.User;
+import com.gmail.yuyang226.flickr.photos.comments.Comment;
+import com.gmail.yuyang226.flickr.photos.comments.CommentsInterface;
 
 /**
  * Represents the async task to get the comment for a specified photo which is
@@ -33,7 +35,7 @@ import com.gmail.charleszq.utils.FlickrHelper;
 public class GetPhotoCommentsTask extends
 		AsyncTask<String, Integer, List<UserComment>> {
 
-	private static final String TAG = GetPhotoCommentsTask.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(GetPhotoCommentsTask.class);
 	private IUserCommentsFetchedListener mListener;
 	
 	public GetPhotoCommentsTask(IUserCommentsFetchedListener listener) {
@@ -51,7 +53,7 @@ public class GetPhotoCommentsTask extends
 			CommentsInterface ci = f.getCommentsInterface();
 			PeopleInterface pi = f.getPeopleInterface();
 			try {
-				List<Comment> flickrComments = ci.getList(photoId);
+				List<Comment> flickrComments = ci.getList(photoId, null, null);
 				for (Comment c : flickrComments) {
 					UserComment userComment = new UserComment();
 					userComment.setUserName(c.getAuthorName());
@@ -63,7 +65,7 @@ public class GetPhotoCommentsTask extends
 					comments.add(userComment);
 				}
 			} catch (Exception e) {
-				Log.w(TAG, e.getMessage());
+				logger.warn(e.getLocalizedMessage(), e);
 			}
 		}
 		return comments;

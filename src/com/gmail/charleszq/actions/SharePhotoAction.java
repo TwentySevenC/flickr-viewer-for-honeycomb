@@ -4,9 +4,10 @@
 
 package com.gmail.charleszq.actions;
 
-import com.gmail.charleszq.R;
-import com.gmail.charleszq.utils.Constants;
-import com.gmail.charleszq.utils.ImageUtils;
+import java.io.File;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
 import android.content.ClipboardManager;
@@ -15,9 +16,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
-import java.io.File;
+import com.gmail.charleszq.R;
+import com.gmail.charleszq.utils.Constants;
+import com.gmail.charleszq.utils.ImageUtils;
 
 /**
  * Represents the action to share photos to other applicataions, like twitter,
@@ -27,7 +29,7 @@ import java.io.File;
  */
 public class SharePhotoAction extends ActivityAwareAction {
 
-	private static final String TAG = SharePhotoAction.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(SharePhotoAction.class);
 	private static final String SHARE_PHOTO_FILE_NAME = "share.jpg"; //$NON-NLS-1$
 
 	private Bitmap mPhoto;
@@ -52,7 +54,7 @@ public class SharePhotoAction extends ActivityAwareAction {
 		File bsRoot = new File(Environment.getExternalStorageDirectory(),
 				Constants.SD_CARD_FOLDER_NAME);
 		if (!bsRoot.exists() && !bsRoot.mkdirs()) {
-			Log.w(TAG, "Couldn't make dir " + bsRoot); //$NON-NLS-1$
+			logger.warn("Couldn't make dir {}", bsRoot); //$NON-NLS-1$
 			return;
 		}
 

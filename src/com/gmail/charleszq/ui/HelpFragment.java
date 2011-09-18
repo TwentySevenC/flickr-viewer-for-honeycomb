@@ -7,6 +7,11 @@
 
 package com.gmail.charleszq.ui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import android.app.Fragment;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -15,11 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * Represents the fragment to show the help page of this application.

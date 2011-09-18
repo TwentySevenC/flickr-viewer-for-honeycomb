@@ -5,12 +5,12 @@ package com.gmail.charleszq.actions;
 
 import android.app.Activity;
 
-import com.aetrion.flickr.photos.PhotoPlace;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.dataprovider.PaginationPhotoListDataProvider;
 import com.gmail.charleszq.dataprovider.PhotoPoolDataProvider;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
+import com.gmail.yuyang226.flickr.photos.PhotoPlace;
 
 /**
  * @author chalres

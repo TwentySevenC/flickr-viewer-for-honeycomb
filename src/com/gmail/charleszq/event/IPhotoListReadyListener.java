@@ -1,6 +1,6 @@
 package com.gmail.charleszq.event;
 
-import com.aetrion.flickr.photos.PhotoList;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * @author charles

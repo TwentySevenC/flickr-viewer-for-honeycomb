@@ -8,6 +8,9 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
@@ -17,12 +20,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.services.TimeUpReceiver;
 import com.gmail.charleszq.utils.Constants;
+import com.gmail.yuyang226.flickr.RequestContext;
+import com.gmail.yuyang226.flickr.oauth.OAuth;
+import com.gmail.yuyang226.flickr.oauth.OAuthToken;
+import com.gmail.yuyang226.flickr.people.User;
 
 /**
  * Represents the main application.
@@ -31,7 +37,8 @@ import com.gmail.charleszq.utils.Constants;
  */
 public class FlickrViewerApplication extends Application {
 
-	private static final String TAG = FlickrViewerApplication.class.getName();
+	private static final Logger logger = LoggerFactory
+			.getLogger(FlickrViewerApplication.class);
 
 	private Set<IFlickrViewerMessageHandler> mMessageHandlers = new HashSet<IFlickrViewerMessageHandler>();
 
@@ -62,14 +69,55 @@ public class FlickrViewerApplication extends Application {
 		return token;
 	}
 
-	public void saveFlickrAuthToken(String token, String userId, String userName) {
+	public OAuth loadSavedOAuth() {
+		String userId = getUserId();
+		String userName = getUserName();
+		String token = getFlickrToken();
+		String tokenSecret = getFlickrTokenSecrent();
+		if (userId == null || token == null || tokenSecret == null) {
+			return null;
+		}
+		OAuth oauth = new OAuth();
+		oauth.setToken(new OAuthToken(token, tokenSecret));
+		User user = new User();
+		user.setId(userId);
+		user.setRealName(userName);
+		oauth.setUser(user);
+		RequestContext.getRequestContext().setOAuth(oauth);
+		return oauth;
+	}
+
+	public void saveFlickrAuthToken(OAuth oauth) {
 		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
 				Context.MODE_PRIVATE);
 		Editor editor = sp.edit();
-		editor.putString(Constants.FLICKR_TOKEN, token);
+		String oauthToken = null;
+		String tokenSecret = null;
+		String userId = null;
+		String userName = null;
+		if (oauth != null) {
+			oauthToken = oauth.getToken().getOauthToken();
+			tokenSecret = oauth.getToken().getOauthTokenSecret();
+			userId = oauth.getUser().getId();
+			userName = oauth.getUser().getUsername();
+		}
+		editor.putString(Constants.FLICKR_TOKEN, oauthToken);
+		editor.putString(Constants.FLICKR_TOKEN_SECRENT, tokenSecret);
 		editor.putString(Constants.FLICKR_USER_ID, userId);
 		editor.putString(Constants.FLICKR_USER_NAME, userName);
 		editor.commit();
+	}
+
+	public void saveFlickrTokenSecret(String tokenSecrent) {
+		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
+				Context.MODE_PRIVATE);
+		Editor editor = sp.edit();
+		editor.putString(Constants.FLICKR_TOKEN_SECRENT, tokenSecrent);
+		editor.commit();
+	}
+
+	public String getFlickrTokenSecrent() {
+		return getSharedPreferenceValue(Constants.FLICKR_TOKEN_SECRENT, null);
 	}
 
 	public String getUserName() {
@@ -139,7 +187,7 @@ public class FlickrViewerApplication extends Application {
 				cacheFile.delete();
 			}
 		}
-		saveFlickrAuthToken(null, null, null);
+		saveFlickrAuthToken(null);
 	}
 
 	/**
@@ -159,7 +207,6 @@ public class FlickrViewerApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.d(TAG, "Application created."); //$NON-NLS-1$
 		registerTimeCheckReceiver();
 	}
 
@@ -185,12 +232,11 @@ public class FlickrViewerApplication extends Application {
 		PendingIntent pendingIntent = getPhotoCommentPendingIntent();
 		am.cancel(pendingIntent);
 		if (isPhotoActivityCheckEnabled()) {
-
 			int pIntervalInHours = getPhotoActivityCheckInterval();
 			am.setRepeating(AlarmManager.RTC,
 					System.currentTimeMillis() + 5 * 60 * 1000L,
 					pIntervalInHours * 60 * 60 * 1000L, pendingIntent);
-			Log.d(TAG, "Receiver registered to check comments on my photos."); //$NON-NLS-1$
+			logger.debug("Receiver registered to check comments on my photos."); //$NON-NLS-1$
 		}
 	}
 
@@ -207,7 +253,7 @@ public class FlickrViewerApplication extends Application {
 			am.setRepeating(AlarmManager.RTC,
 					System.currentTimeMillis() + 2 * 60 * 1000L,
 					cIntervalInHours * 60 * 60 * 1000L, pendingIntent);
-			Log.d(TAG, "Receiver registered to check contact upload."); //$NON-NLS-1$
+			logger.debug("Receiver registered to check contact upload."); //$NON-NLS-1$
 		}
 	}
 

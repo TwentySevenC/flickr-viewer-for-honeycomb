@@ -7,12 +7,12 @@
 
 package com.gmail.charleszq.actions;
 
-import com.gmail.charleszq.ui.AuthFragmentDialog;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+
+import com.gmail.charleszq.ui.AuthFragmentDialog;
 
 /**
  * Represents the action to show the auth dialog TODO: can add a finish action

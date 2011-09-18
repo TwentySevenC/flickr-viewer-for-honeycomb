@@ -7,7 +7,7 @@
 
 package com.gmail.charleszq.event;
 
-import com.aetrion.flickr.people.User;
+import com.gmail.yuyang226.flickr.people.User;
 
 /**
  * @author qiangz

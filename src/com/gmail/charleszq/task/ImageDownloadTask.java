@@ -6,24 +6,26 @@ package com.gmail.charleszq.task;
 
 import java.lang.ref.WeakReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.groups.Group;
-import com.aetrion.flickr.groups.GroupsInterface;
-import com.aetrion.flickr.photos.Photo;
-import com.aetrion.flickr.photos.PhotosInterface;
-import com.aetrion.flickr.photosets.Photoset;
-import com.aetrion.flickr.photosets.PhotosetsInterface;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.groups.Group;
+import com.gmail.yuyang226.flickr.groups.GroupsInterface;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
+import com.gmail.yuyang226.flickr.photosets.Photoset;
+import com.gmail.yuyang226.flickr.photosets.PhotosetsInterface;
 
 /**
  * Represents the image download task which takes an image url as the parameter,
@@ -33,7 +35,7 @@ import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
  */
 public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 
-	private static final String TAG = ImageDownloadTask.class.getName();
+	private static final Logger logger = LoggerFactory.getLogger(ImageDownloadTask.class);
 	private WeakReference<ImageView> imgRef = null;
 	private String mUrl;
 	
@@ -129,8 +131,7 @@ public class ImageDownloadTask extends AsyncTask<String, Integer, Bitmap> {
 				}
 
 			} catch (Exception e) {
-				Log.e(TAG,
-						"Unable to get the photo detail information: " + e.getMessage()); //$NON-NLS-1$
+				logger.error("Unable to get the photo detail information", e); //$NON-NLS-1$
 				return null;
 			}
 		}

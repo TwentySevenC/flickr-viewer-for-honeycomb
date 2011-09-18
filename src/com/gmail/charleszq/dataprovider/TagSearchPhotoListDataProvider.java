@@ -8,12 +8,12 @@ import java.util.Set;
 
 import android.content.Context;
 
-import com.aetrion.flickr.photos.Extras;
-import com.aetrion.flickr.photos.PhotoList;
-import com.aetrion.flickr.photos.PhotosInterface;
-import com.aetrion.flickr.photos.SearchParameters;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.photos.Extras;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
+import com.gmail.yuyang226.flickr.photos.PhotosInterface;
+import com.gmail.yuyang226.flickr.photos.SearchParameters;
 
 /**
  * Represents the data provider to search photos according to the tag provided.

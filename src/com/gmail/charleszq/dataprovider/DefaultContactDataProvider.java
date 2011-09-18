@@ -7,13 +7,13 @@
 
 package com.gmail.charleszq.dataprovider;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.contacts.Contact;
-import com.aetrion.flickr.contacts.ContactsInterface;
-import com.gmail.charleszq.utils.FlickrHelper;
-
 import java.util.ArrayList;
 import java.util.Collection;
+
+import com.gmail.charleszq.utils.FlickrHelper;
+import com.gmail.yuyang226.flickr.Flickr;
+import com.gmail.yuyang226.flickr.contacts.Contact;
+import com.gmail.yuyang226.flickr.contacts.ContactsInterface;
 
 /**
  * @author charles
@@ -21,9 +21,11 @@ import java.util.Collection;
 public class DefaultContactDataProvider implements IContactDataProvider {
 
     private String mToken;
+	private String mSecret;
 
-    public DefaultContactDataProvider(String token) {
+    public DefaultContactDataProvider(String token, String secret) {
         this.mToken = token;
+        this.mSecret = secret;
     }
 
     /*
@@ -34,7 +36,7 @@ public class DefaultContactDataProvider implements IContactDataProvider {
      */
     @Override
     public Collection<Contact> getContacts(String userId) {
-        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken);
+        Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken,mSecret);
         ContactsInterface ci = f.getContactsInterface();
         try {
             return ci.getList();
