@@ -178,8 +178,18 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		if (mProgressBar != null) {
 			mProgressBar.setVisibility(View.GONE);
 		}
+		if (bitmap == null) {
+			Toast.makeText(this, getString(R.string.error_download_big_photo),
+					Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
 		this.mPhotoBitmap = bitmap;
-		mImageView.setImageBitmap(mPhotoBitmap);
+		// The following code is not neccesary, it was already set in the task.
+		// need to test.
+		// if (mImageView != null) {
+		// mImageView.setImageBitmap(mPhotoBitmap);
+		// }
 	}
 
 	@Override
@@ -189,7 +199,6 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 			mPhotoBitmap = null;
 			logger.debug("Bitmap released."); //$NON-NLS-1$
 		}
-		mImageView = null;
 		mPhoto = null;
 		super.onDestroy();
 	}
