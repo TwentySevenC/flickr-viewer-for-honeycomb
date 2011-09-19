@@ -112,7 +112,6 @@ public class PhotoLocationActivity extends MapActivity implements
 				logger.debug("Destroy the bitmap reference."); //$NON-NLS-1$
 			}
 		}
-		mMapView = null;
 		super.onDestroy();
 	}
 
@@ -305,7 +304,8 @@ public class PhotoLocationActivity extends MapActivity implements
 	 * Draws the photo on the map.
 	 */
 	private void drawPhotoLayer() {
-		if (mPhotoBitmapRef == null || mPhotoBitmapRef.get() == null) {
+		if (mPhotoBitmapRef == null || mPhotoBitmapRef.get() == null
+				|| mMapView == null) {
 			return;
 		}
 
