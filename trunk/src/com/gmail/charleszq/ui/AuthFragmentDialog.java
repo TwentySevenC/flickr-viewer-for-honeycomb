@@ -16,8 +16,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -81,17 +81,17 @@ public class AuthFragmentDialog extends DialogFragment {
 	 * The button click listener.
 	 */
 	private OnClickListener mClickListener = new OnClickListener() {
-	@Override
+		@Override
 		public void onClick(View v) {
 
 			Integer tag = (Integer) v.getTag();
 			if (tag == R.id.button_auth_done) {
 				AuthFragmentDialog.this.dismiss();
-			return;
+				return;
 			} else {
 				OAuthTask task = new OAuthTask(getActivity());
 				task.execute();
-		}
+			}
 		}
 	};
 
@@ -163,7 +163,7 @@ public class AuthFragmentDialog extends DialogFragment {
 				return null;
 			}
 
-			}
+		}
 
 		@Override
 		protected void onPostExecute(OAuth result) {
@@ -175,6 +175,7 @@ public class AuthFragmentDialog extends DialogFragment {
 	}
 
 	void onOAuthDone(OAuth result) {
+
 		if (result == null) {
 			Toast.makeText(getActivity(),
 					getActivity().getString(R.string.fail_to_oauth),

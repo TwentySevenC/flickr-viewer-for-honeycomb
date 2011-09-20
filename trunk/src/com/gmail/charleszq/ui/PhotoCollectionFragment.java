@@ -7,11 +7,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -19,10 +18,13 @@ import com.gmail.charleszq.ui.comp.UserPhotoCollectionComponent;
 import com.gmail.charleszq.utils.Constants;
 
 /**
- * @author charles
+ * Represents the fragment to show user's galleries, photo sets and photo
+ * groups.
  * 
+ * @author charles
  */
-public class PhotoCollectionFragment extends Fragment {
+public class PhotoCollectionFragment extends Fragment implements
+		OnClickListener {
 
 	private UserPhotoCollectionComponent mCollectionComponent;
 
@@ -37,36 +39,39 @@ public class PhotoCollectionFragment extends Fragment {
 				.getApplication();
 		String userId = app.getUserId();
 		String token = app.getFlickrToken();
-		mCollectionComponent.initialize(userId, token, app.getFlickrTokenSecrent());
+		mCollectionComponent.initialize(userId, token, app
+				.getFlickrTokenSecrent());
+
+		ImageView btnBack = (ImageView) view.findViewById(R.id.btn_back);
+		btnBack.setTag(R.id.btn_back);
+		btnBack.setOnClickListener(this);
+
+		ImageView btnRefresh = (ImageView) view.findViewById(R.id.btn_refresh);
+		btnRefresh.setTag(R.id.btn_refresh);
+		btnRefresh.setOnClickListener(this);
+
 		return view;
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.setHasOptionsMenu(true);
-	}
+	public void onClick(View v) {
+		Object tag = v.getTag();
+		if (tag == null) {
+			return;
+		}
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.menu_user_collection, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_item_back_main_menu:
+		Integer nTag = (Integer) tag;
+		switch (nTag) {
+		case R.id.btn_back:
 			FragmentManager fm = getFragmentManager();
 			fm.popBackStack(Constants.USER_COLL_BACK_STACK,
 					FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			return true;
-		case R.id.menu_item_refresh_user_col:
+			break;
+		case R.id.btn_refresh:
 			if (mCollectionComponent != null) {
 				mCollectionComponent.refreshList();
 			}
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+			break;
 		}
 	}
 

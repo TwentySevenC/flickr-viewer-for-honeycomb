@@ -38,4 +38,7 @@
 		<uses-library android:name="com.google.android.maps"
 			android:required="true"></uses-library>
 	</application>
+	<supports-screens android:smallScreens="false"
+		android:normalScreens="false" android:largeScreens="false"
+		android:xlargeScreens="true" />
 </manifest>

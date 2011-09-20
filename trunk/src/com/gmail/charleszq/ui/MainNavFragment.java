@@ -8,6 +8,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -21,15 +24,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -39,6 +41,7 @@ import com.gmail.charleszq.actions.ShowAuthDialogAction;
 import com.gmail.charleszq.actions.ShowFavoritesAction;
 import com.gmail.charleszq.actions.ShowInterestingPhotosAction;
 import com.gmail.charleszq.actions.ShowMyContactsAction;
+import com.gmail.charleszq.actions.ShowMyPopularPhotosAction;
 import com.gmail.charleszq.actions.ShowPeoplePhotosAction;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
 import com.gmail.charleszq.task.GetUserInfoTask;
@@ -52,6 +55,12 @@ import com.gmail.charleszq.utils.ImageUtils;
  * @author charles
  */
 public class MainNavFragment extends Fragment {
+
+	/**
+	 * The logger.
+	 */
+	private static final Logger logger = LoggerFactory
+			.getLogger(MainNavFragment.class.getSimpleName());
 
 	/**
 	 * the handler.
@@ -76,8 +85,6 @@ public class MainNavFragment extends Fragment {
 
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
-			String token = app.getFlickrToken();
-			String tokenSecret = app.getFlickrTokenSecrent();
 
 			switch (itemId) {
 			case CommandItem.ID_INTERESTING:
@@ -88,14 +95,7 @@ public class MainNavFragment extends Fragment {
 			case CommandItem.ID_MY_PHOTOS:
 				ShowPeoplePhotosAction photosAction = new ShowPeoplePhotosAction(
 						getActivity(), null, app.getUserName());
-				if (token == null || tokenSecret == null) {
-					ShowAuthDialogAction ia = new ShowAuthDialogAction(
-							getActivity(), photosAction);
-					ia.execute();
-				} else {
-					photosAction.execute();
-				}
-
+				showAuthBeforeRun(photosAction);
 				break;
 			case CommandItem.ID_MY_SETS: // my photo sets and groups
 				IAction switchAction = new IAction() {
@@ -109,47 +109,23 @@ public class MainNavFragment extends Fragment {
 						ft2.commit();
 					}
 				};
-				if (token == null || tokenSecret == null) {
-					ShowAuthDialogAction ia = new ShowAuthDialogAction(
-							getActivity(), switchAction);
-					ia.execute();
-				} else {
-					switchAction.execute();
-				}
+				showAuthBeforeRun(switchAction);
 
 				break;
 			case CommandItem.ID_MY_CONTACTS: // contacts
 				ShowMyContactsAction contactAction = new ShowMyContactsAction(
 						getActivity());
-				if (token == null || tokenSecret == null) {
-					ShowAuthDialogAction cia = new ShowAuthDialogAction(
-							getActivity(), contactAction);
-					cia.execute();
-				} else {
-					contactAction.execute();
-				}
+				showAuthBeforeRun(contactAction);
 				break;
 			case CommandItem.ID_MY_FAV:
 				ShowFavoritesAction favAction = new ShowFavoritesAction(
 						getActivity(), null);
-				if (token == null || tokenSecret == null) {
-					ShowAuthDialogAction showAuthAction = new ShowAuthDialogAction(
-							getActivity(), favAction);
-					showAuthAction.execute();
-				} else {
-					favAction.execute();
-				}
+				showAuthBeforeRun(favAction);
 				break;
 			case CommandItem.ID_ACTIVITY:
 				GetActivitiesAction aaction = new GetActivitiesAction(
 						getActivity());
-				if (token == null || tokenSecret == null) {
-					ShowAuthDialogAction showAuthAction = new ShowAuthDialogAction(
-							getActivity(), aaction);
-					showAuthAction.execute();
-				} else {
-					aaction.execute();
-				}
+				showAuthBeforeRun(aaction);
 				break;
 			case CommandItem.ID_SETTINGS:
 				Fragment frag = new SettingsFragment();
@@ -160,9 +136,24 @@ public class MainNavFragment extends Fragment {
 				ft.commit();
 				break;
 			case CommandItem.ID_MY_POPULAR:
-				Toast.makeText(getActivity(),
-						"Not implemented yet.", Toast.LENGTH_SHORT).show(); //$NON-NLS-1$
+				ShowMyPopularPhotosAction showPopularAction = new ShowMyPopularPhotosAction(
+						getActivity());
+				showAuthBeforeRun(showPopularAction);
 				break;
+			}
+		}
+
+		private void showAuthBeforeRun(IAction action) {
+			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+					.getApplication();
+			String token = app.getFlickrToken();
+			String tokenSecret = app.getFlickrTokenSecrent();
+			if (token == null || tokenSecret == null) {
+				ShowAuthDialogAction showAuthAction = new ShowAuthDialogAction(
+						getActivity(), action);
+				showAuthAction.execute();
+			} else {
+				action.execute();
 			}
 		}
 	};
@@ -233,9 +224,10 @@ public class MainNavFragment extends Fragment {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						getActivity());
-				builder.setMessage(getActivity().getString(R.string.logout_msg))
-						.setCancelable(false)
-						.setPositiveButton(
+				builder
+						.setMessage(
+								getActivity().getString(R.string.logout_msg))
+						.setCancelable(false).setPositiveButton(
 								getActivity().getString(R.string.btn_yes),
 								new DialogInterface.OnClickListener() {
 									@Override
@@ -243,6 +235,7 @@ public class MainNavFragment extends Fragment {
 											int id) {
 										app.logout();
 										userPanel.setVisibility(View.INVISIBLE);
+										deleteBuddyIconFile();
 										goHome();
 									}
 
@@ -254,8 +247,32 @@ public class MainNavFragment extends Fragment {
 											fm.popBackStack();
 										}
 									}
-								})
-						.setNegativeButton(
+
+									private void deleteBuddyIconFile() {
+										File root = new File(Environment
+												.getExternalStorageDirectory(),
+												Constants.SD_CARD_FOLDER_NAME);
+										File buddyIconFile = new File(
+												root,
+												Constants.FLICKR_BUDDY_IMAGE_FILE_NAME);
+										if (!buddyIconFile.exists()) {
+											try {
+												if (buddyIconFile.delete()) {
+													logger
+															.debug("Buddy icon cache file deleted."); //$NON-NLS-1$
+												} else {
+													logger
+															.debug("Failed to delete the cached buddy icon."); //$NON-NLS-1$
+												}
+											} catch (Exception ex) {
+												logger
+														.warn("Error when trying deleting the cache buddy icon: " //$NON-NLS-1$
+																+ ex
+																		.getMessage());
+											}
+										}
+									}
+								}).setNegativeButton(
 								getActivity().getString(R.string.btn_no),
 								new DialogInterface.OnClickListener() {
 									@Override
