@@ -30,7 +30,7 @@ public class AsyncPhotoListTask extends
 	public AsyncPhotoListTask(Activity context,
 			IPhotoListDataProvider photoListProvider,
 			IPhotoListReadyListener listener) {
-		this(context, photoListProvider, listener, context.getResources()
+		this(context, photoListProvider, listener, context
 				.getString(R.string.loading_photos));
 	}
 

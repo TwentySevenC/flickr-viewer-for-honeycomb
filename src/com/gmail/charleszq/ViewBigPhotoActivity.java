@@ -185,11 +185,9 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 			return;
 		}
 		this.mPhotoBitmap = bitmap;
-		// The following code is not neccesary, it was already set in the task.
-		// need to test.
-		// if (mImageView != null) {
-		// mImageView.setImageBitmap(mPhotoBitmap);
-		// }
+		if (mImageView != null) {
+			mImageView.setImageBitmap(mPhotoBitmap);
+		}
 	}
 
 	@Override

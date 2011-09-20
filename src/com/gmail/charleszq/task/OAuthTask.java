@@ -9,12 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.gmail.charleszq.FlickrViewerApplication;
+import com.gmail.charleszq.R;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.Flickr;
@@ -40,6 +44,11 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 	private Context mContext;
 
 	/**
+	 * The progress dialog before going to the browser.
+	 */
+	private ProgressDialog mProgressDialog;
+
+	/**
 	 * Constructor.
 	 * 
 	 * @param context
@@ -47,6 +56,21 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 	public OAuthTask(Context context) {
 		super();
 		this.mContext = context;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		mProgressDialog = ProgressDialog.show(mContext,
+				"", mContext.getString(R.string.auth_gen_req_token)); //$NON-NLS-1$
+		mProgressDialog.setCanceledOnTouchOutside(true);
+		mProgressDialog.setCancelable(true);
+		mProgressDialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dlg) {
+				OAuthTask.this.cancel(true);
+			}
+		});
 	}
 
 	/*
@@ -85,6 +109,9 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
+		if (mProgressDialog != null) {
+			mProgressDialog.dismiss();
+		}
 		if (result != null) {
 			mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri
 					.parse(result)));

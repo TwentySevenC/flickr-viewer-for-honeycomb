@@ -17,7 +17,10 @@ import com.gmail.yuyang226.flickr.photos.Extras;
 import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
- * Represents the data provider to get public photos.
+ * Represents the data provider to get public and private photos.
+ * <p>
+ * The class name should be changed, since now it can retrieve not only public
+ * photos.
  * 
  * @author charles
  */
@@ -45,6 +48,9 @@ public class PeoplePublicPhotosDataProvider extends
 	 */
 	private String mToken;
 
+	/**
+	 * The oauth token secret.
+	 */
 	private String mSecret;
 
 	/**
@@ -76,7 +82,6 @@ public class PeoplePublicPhotosDataProvider extends
 		extras.add(Extras.TAGS);
 		extras.add(Extras.GEO);
 		extras.add(Extras.OWNER_NAME);
-		// return pi.getPublicPhotos(mUserId, extras, mPageSize, mPageNumber);
 		return pi.getPhotos(mUserId, extras, mPageSize, mPageNumber);
 	}
 
