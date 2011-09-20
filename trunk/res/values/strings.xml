@@ -126,6 +126,7 @@
 	<string name="item_interesting_photo">Interesting Photos</string>
 	<string name="item_my_photo">My Photos</string>
 	<string name="item_my_sets">My Sets/Groups</string>
+	<string name="item_my_popular">My Popular Photos</string>
 	<string name="item_my_contact">My Contacts</string>
 	<string name="item_my_fav">My Favorites</string>
 	<string name="item_recent_activities">Recent Activities</string>
