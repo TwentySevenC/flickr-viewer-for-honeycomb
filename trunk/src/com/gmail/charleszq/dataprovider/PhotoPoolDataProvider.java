@@ -56,6 +56,7 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 		extras.add(Extras.TAGS);
 		extras.add(Extras.GEO);
 		extras.add(Extras.OWNER_NAME);
+		extras.add(Extras.VIEWS);
 
 		Flickr f = FlickrHelper.getInstance().getFlickr();
 		switch (mPhotoPlaceKind) {

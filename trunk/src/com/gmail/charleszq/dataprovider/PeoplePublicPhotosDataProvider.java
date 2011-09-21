@@ -82,6 +82,7 @@ public class PeoplePublicPhotosDataProvider extends
 		extras.add(Extras.TAGS);
 		extras.add(Extras.GEO);
 		extras.add(Extras.OWNER_NAME);
+		extras.add(Extras.VIEWS);
 		return pi.getPhotos(mUserId, extras, mPageSize, mPageNumber);
 	}
 

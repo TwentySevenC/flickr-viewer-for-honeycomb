@@ -40,6 +40,7 @@ public class InterestingPhotosDataProvider extends
 		extras.add(Extras.TAGS);
 		extras.add(Extras.GEO);
 		extras.add(Extras.OWNER_NAME);
+		extras.add(Extras.VIEWS);
 		return iif.getList((String) null, extras, mPageSize, mPageNumber);
 	}
 
