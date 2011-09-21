@@ -58,7 +58,7 @@ public class ShowFavoritesAction extends ActivityAwareAction {
 		IPhotoListReadyListener photoReadyListener = new DefaultPhotoListReadyListener(
 				mActivity, dp, menuHandler);
 		AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity, dp,
-				photoReadyListener, mActivity.getResources().getString(
+				photoReadyListener, mActivity.getString(
 						R.string.task_loading_favs));
         task.execute();
     }

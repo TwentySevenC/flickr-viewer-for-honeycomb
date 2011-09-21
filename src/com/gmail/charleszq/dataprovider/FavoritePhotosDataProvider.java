@@ -66,6 +66,6 @@ public class FavoritePhotosDataProvider extends PaginationPhotoListDataProvider 
 
     @Override
     public String getDescription(Context context) {
-        return context.getResources().getString(R.string.my_favs);
+        return context.getResources().getString(R.string.dp_desc_fav);
     }
 }
