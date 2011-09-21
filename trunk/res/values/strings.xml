@@ -2,12 +2,9 @@
 <resources>
 	<string name="app_name">Flickr Viewer HD</string>
 
-	<string name="menu_item_back_main_menu">Back to Main Menu</string>
-	<string name="menu_item_refresh_user_collection">Refresh Gallery/Set/Group List</string>
 	<string name="menu_item_remove_fav">Remove from Favorites</string>
 	<string name="menu_share_title">Share</string>
 	<string name="menu_write_comment">Comment</string>
-	<string name="menu_item_setting">Settings</string>
 	<string name="menu_item_add_photo_to_group">Add to Gallery/Set/Group</string>
 	<string name="menu_previous_page">Previous Page</string>
 	<string name="menu_next_page">Next Page</string>
@@ -62,8 +59,6 @@
 	</string>
 	<string name="auth_btn_title">Go Flickr to Authorize</string>
 	<string name="auth_done_btn_title">Cancel</string>
-	<string name="flickr_oauth">OAuth</string>
-	<string name="auth_progress_title">Authenticating...</string>
 
 	<string name="share_dlg_title">Select an action to share</string>
 
@@ -144,13 +139,11 @@
 	<string name="empty_comment_error">Please input your comment.</string>
 
 	<!-- app title -->
-	<string name="my_favs">My Favorite photos</string>
 	<string name="photo_stream_of">Photostream of</string>
 
 	<!-- Photo detail -->
 	<string name="exif_info">EXIF Information:</string>
 	<string name="user_comments">Comments:</string>
-	<string name="no_exif_info">No EXIF Information.</string>
 	<string name="no_photo_desc">No description provided.</string>
 
 	<string name="saving_photo">Saving photo...</string>
@@ -162,7 +155,6 @@
 	<string name="contact_with_upload">Have Recent Upload</string>
 	<string name="contact_filter_hint">Filter Contacts</string>
 
-	<string name="error_no_network">Please make sure you have network access.</string>
 	<string name="photo_pool">Photo Pool</string>
 	<string name="dp_photo_pool_desc_set">Photo set</string>
 	<string name="dp_photo_pool_desc_pool">Photo group</string>
