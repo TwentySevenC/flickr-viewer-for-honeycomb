@@ -10,6 +10,7 @@ import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.Flickr;
 import com.gmail.yuyang226.flickr.photos.PhotoList;
 import com.gmail.yuyang226.flickr.stats.StatsInterface;
+import com.gmail.yuyang226.flickr.stats.StatsInterface.SORT;
 
 /**
  * Represents the data provider to fetch my own popular photos.
@@ -81,14 +82,14 @@ public class PopularPhotoListProvider extends PaginationPhotoListDataProvider {
 				mPageNumber);
 	}
 
-	private String getSortString() {
+	private SORT getSortString() {
 		switch (mSortType) {
 		case COMMENTS:
-			return StatsInterface.SORT_COMMENTS;
+			return SORT.COMMENTS;
 		case FAV:
-			return StatsInterface.SORT_FAVORITES;
+			return SORT.FAVORITES;
 		default:
-			return StatsInterface.SORT_VIEWS;
+			return SORT.VIEWS;
 		}
 	}
 
