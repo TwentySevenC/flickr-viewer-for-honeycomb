@@ -79,6 +79,7 @@ public class TagSearchPhotoListDataProvider extends
 		extras.add(Extras.OWNER_NAME);
 		extras.add(Extras.TAGS);
 		extras.add(Extras.GEO);
+		extras.add(Extras.VIEWS);
 		parameter.setExtras(extras);
 		
 		parameter.setTagMode(mSearchMode.toString());

@@ -183,7 +183,7 @@ public class PhotoListFragment extends Fragment implements
 			int count = fm.getBackStackEntryCount();
 			for (int i = 0; i < count; i++) {
 				fm.popBackStack();
-		}
+			}
 		}
 		return mRootContainer;
 	}
@@ -321,7 +321,15 @@ public class PhotoListFragment extends Fragment implements
 				geoMarker = holder.getMarker;
 				privateMarker = holder.privateMarker;
 			}
-			titleView.setText(photo.getTitle());
+			// photo title
+			StringBuilder sb = new StringBuilder();
+			sb.append("["); //$NON-NLS-1$
+			sb.append(photo.getViews()).append("/").append(photo.getComments()) //$NON-NLS-1$
+					.append("/").append(photo.getFavorites()); //$NON-NLS-1$
+			sb.append("] "); //$NON-NLS-1$
+			sb.append(photo.getTitle());
+
+			titleView.setText(sb.toString());
 
 			boolean showGeoMarker = photo.getGeoData() != null;
 			boolean showPrivateMarker = !photo.isPublicFlag()

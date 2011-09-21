@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.FragmentManager.OnBackStackChangedListener;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -158,6 +159,8 @@ public class FlickrViewerActivity extends Activity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		ImageCache.dispose();
+		FragmentManager fm = getFragmentManager();
+		fm.removeOnBackStackChangedListener(mBackStackChangedListener);
 	}
 
 	public void changeActionBarTitle(String title) {
@@ -172,17 +175,29 @@ public class FlickrViewerActivity extends Activity implements
 	}
 
 	private void initializeFragments() {
-		
+
 		FragmentManager fm = getFragmentManager();
+		fm.addOnBackStackChangedListener(mBackStackChangedListener);
 		FragmentTransaction ft = fm.beginTransaction();
 
 		MainNavFragment menu = new MainNavFragment();
 		ft.replace(R.id.nav_frg, menu);
 		ft.commit();
-		
+
 		showHelp();
 	}
-	
+
+	private OnBackStackChangedListener mBackStackChangedListener = new OnBackStackChangedListener() {
+
+		@Override
+		public void onBackStackChanged() {
+			if (FlickrViewerActivity.this.mSearchView != null) {
+				FlickrViewerActivity.this.mSearchView.setIconified(true);
+			}
+		}
+
+	};
+
 	/**
 	 * Shows the help fragment.
 	 */
@@ -194,15 +209,15 @@ public class FlickrViewerActivity extends Activity implements
 		ft.addToBackStack(Constants.HELP_BACK_STACK);
 		ft.commit();
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		FragmentManager fm = getFragmentManager();
 		int count = fm.getBackStackEntryCount();
-		if( count == 1 ) {
+		if (count == 1) {
 			Fragment frg = fm.findFragmentByTag(Constants.HELP_BACK_STACK);
-			if( frg == null ) {
-				//the current fragment is not help.
+			if (frg == null) {
+				// the current fragment is not help.
 				super.onBackPressed();
 				showHelp();
 			} else {
@@ -215,15 +230,15 @@ public class FlickrViewerActivity extends Activity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if( item.getItemId() == android.R.id.home ) {
+		if (item.getItemId() == android.R.id.home) {
 			FragmentManager fm = getFragmentManager();
 			int count = fm.getBackStackEntryCount();
-			for( int i = 0; i < count; i ++ ) {
+			for (int i = 0; i < count; i++) {
 				fm.popBackStack();
 			}
 			showHelp();
 			return true;
-		} 
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
