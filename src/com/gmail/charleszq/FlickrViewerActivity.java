@@ -24,6 +24,8 @@ import android.widget.SearchView.OnSuggestionListener;
 
 import com.gmail.charleszq.actions.GetActivitiesAction;
 import com.gmail.charleszq.actions.TagSearchAction;
+import com.gmail.charleszq.event.FlickrViewerMessage;
+import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.model.RecentTagsCursor;
 import com.gmail.charleszq.ui.ContactsFragment;
 import com.gmail.charleszq.ui.HelpFragment;
@@ -54,15 +56,42 @@ public class FlickrViewerActivity extends Activity implements
 	 */
 	private CursorAdapter mSuggestionAdapter;
 
+	/**
+	 * The message handler to handle the <code>FlickrViewerMessage</code>s.
+	 */
+	private IFlickrViewerMessageHandler mMessageHandler = new IFlickrViewerMessageHandler() {
+
+		@Override
+		public void handleMessage(FlickrViewerMessage message) {
+			if (FlickrViewerMessage.ICONFY_TAG_SEARCH_VIEW.equals(message
+					.getMessageId())) {
+				if (mSearchView != null) {
+					mSearchView.setIconified(true);
+				}
+			}
+		}
+
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
 		addTagSearchButton();
+		addMessageHandler();
 
 		initializeFragments();
 		handleIntent();
+
+	}
+
+	/**
+	 * Registers message handlers.
+	 */
+	private void addMessageHandler() {
+		FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
+		app.registerMessageHandler(mMessageHandler);
 	}
 
 	/**
@@ -159,8 +188,6 @@ public class FlickrViewerActivity extends Activity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		ImageCache.dispose();
-		FragmentManager fm = getFragmentManager();
-		fm.removeOnBackStackChangedListener(mBackStackChangedListener);
 	}
 
 	public void changeActionBarTitle(String title) {
@@ -176,9 +203,17 @@ public class FlickrViewerActivity extends Activity implements
 
 	private void initializeFragments() {
 
+		final FlickrViewerApplication app = (FlickrViewerApplication) getApplication();
 		FragmentManager fm = getFragmentManager();
-		fm.addOnBackStackChangedListener(mBackStackChangedListener);
 		FragmentTransaction ft = fm.beginTransaction();
+		fm.addOnBackStackChangedListener(new OnBackStackChangedListener() {
+			@Override
+			public void onBackStackChanged() {
+				FlickrViewerMessage msg = new FlickrViewerMessage(
+						FlickrViewerMessage.ICONFY_TAG_SEARCH_VIEW, null);
+				app.handleMessage(msg);
+			}
+		});
 
 		MainNavFragment menu = new MainNavFragment();
 		ft.replace(R.id.nav_frg, menu);
@@ -186,17 +221,6 @@ public class FlickrViewerActivity extends Activity implements
 
 		showHelp();
 	}
-
-	private OnBackStackChangedListener mBackStackChangedListener = new OnBackStackChangedListener() {
-
-		@Override
-		public void onBackStackChanged() {
-			if (FlickrViewerActivity.this.mSearchView != null) {
-				FlickrViewerActivity.this.mSearchView.setIconified(true);
-			}
-		}
-
-	};
 
 	/**
 	 * Shows the help fragment.

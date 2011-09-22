@@ -16,6 +16,7 @@ package com.gmail.charleszq.event;
 public final class FlickrViewerMessage {
     
     public static final String FAV_PHOTO_REMOVED = "fav.photo.removed"; //$NON-NLS-1$
+    public static final String ICONFY_TAG_SEARCH_VIEW = "iconfy.search.view"; //$NON-NLS-1$
     
     private String mMessageId;
     private Object mMessageData;

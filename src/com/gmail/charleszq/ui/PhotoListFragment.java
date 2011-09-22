@@ -209,6 +209,10 @@ public class PhotoListFragment extends Fragment implements
 				.getApplication();
 		int pageSize = app.getPageSize();
 
+		FlickrViewerMessage iconTagSearchMessage = new FlickrViewerMessage(
+				FlickrViewerMessage.ICONFY_TAG_SEARCH_VIEW, null);
+		app.handleMessage(iconTagSearchMessage);
+
 		switch (item.getItemId()) {
 		case R.id.menu_item_previous_page:
 			if (mCurrentPageNumber <= 1) {
@@ -325,11 +329,11 @@ public class PhotoListFragment extends Fragment implements
 			StringBuilder sb = new StringBuilder();
 			sb.append("["); //$NON-NLS-1$
 			sb.append(photo.getViews());
-			if (photo.getComments() > 0) {
-				sb.append("/").append(photo.getComments()); //$NON-NLS-1$
-			}
-			if (photo.getFavorites() > 0) {
-				sb.append("/").append(photo.getFavorites()); //$NON-NLS-1$
+			if (photo.getComments() != -1 || photo.getFavorites() != -1) {
+				sb
+						.append("/").append(photo.getComments() == -1 ? "na" : photo.getComments()); //$NON-NLS-1$ //$NON-NLS-2$
+				sb
+						.append("/").append(photo.getFavorites() == -1 ? "na" : photo.getFavorites()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			sb.append("] "); //$NON-NLS-1$
 			sb.append(photo.getTitle());
