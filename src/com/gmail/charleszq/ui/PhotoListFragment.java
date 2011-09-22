@@ -324,8 +324,13 @@ public class PhotoListFragment extends Fragment implements
 			// photo title
 			StringBuilder sb = new StringBuilder();
 			sb.append("["); //$NON-NLS-1$
-			sb.append(photo.getViews()).append("/").append(photo.getComments()) //$NON-NLS-1$
-					.append("/").append(photo.getFavorites()); //$NON-NLS-1$
+			sb.append(photo.getViews());
+			if (photo.getComments() > 0) {
+				sb.append("/").append(photo.getComments()); //$NON-NLS-1$
+			}
+			if (photo.getFavorites() > 0) {
+				sb.append("/").append(photo.getFavorites()); //$NON-NLS-1$
+			}
 			sb.append("] "); //$NON-NLS-1$
 			sb.append(photo.getTitle());
 
