@@ -43,6 +43,7 @@ import com.gmail.charleszq.actions.ShowInterestingPhotosAction;
 import com.gmail.charleszq.actions.ShowMyContactsAction;
 import com.gmail.charleszq.actions.ShowMyPopularPhotosAction;
 import com.gmail.charleszq.actions.ShowPeoplePhotosAction;
+import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IImageDownloadDoneListener;
 import com.gmail.charleszq.task.GetUserInfoTask;
 import com.gmail.charleszq.utils.Constants;
@@ -85,6 +86,9 @@ public class MainNavFragment extends Fragment {
 
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
+			FlickrViewerMessage iconTagSearchMessage = new FlickrViewerMessage(
+					FlickrViewerMessage.ICONFY_TAG_SEARCH_VIEW, null);
+			app.handleMessage(iconTagSearchMessage);
 
 			switch (itemId) {
 			case CommandItem.ID_INTERESTING:
