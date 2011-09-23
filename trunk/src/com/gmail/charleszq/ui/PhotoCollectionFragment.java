@@ -5,6 +5,7 @@ package com.gmail.charleszq.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.ui.CreateGalleryDialog.CollectionCreationType;
 import com.gmail.charleszq.ui.comp.UserPhotoCollectionComponent;
 import com.gmail.charleszq.utils.Constants;
 
@@ -50,6 +52,11 @@ public class PhotoCollectionFragment extends Fragment implements
 		btnRefresh.setTag(R.id.btn_refresh);
 		btnRefresh.setOnClickListener(this);
 
+		ImageView btnCreateGallery = (ImageView) view
+				.findViewById(R.id.btn_crt_gallery);
+		btnCreateGallery.setTag(R.id.btn_crt_gallery);
+		btnCreateGallery.setOnClickListener(this);
+
 		return view;
 	}
 
@@ -61,9 +68,9 @@ public class PhotoCollectionFragment extends Fragment implements
 		}
 
 		Integer nTag = (Integer) tag;
+		FragmentManager fm = getFragmentManager();
 		switch (nTag) {
 		case R.id.btn_back:
-			FragmentManager fm = getFragmentManager();
 			fm.popBackStack(Constants.USER_COLL_BACK_STACK,
 					FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			break;
@@ -72,6 +79,19 @@ public class PhotoCollectionFragment extends Fragment implements
 				mCollectionComponent.refreshList();
 			}
 			break;
+		case R.id.btn_crt_gallery:
+			FragmentTransaction ft = fm.beginTransaction();
+			Fragment prev = fm.findFragmentByTag("crt_gallery_dlg"); //$NON-NLS-1$
+			if (prev != null) {
+				ft.remove(prev);
+			}
+			ft.addToBackStack(null);
+
+			// Create and show the dialog.
+			CreateGalleryDialog dlgCreateGallery = new CreateGalleryDialog(
+					CollectionCreationType.GALLERY, null);
+			dlgCreateGallery.setCancelable(true);
+			dlgCreateGallery.show(ft, "crt_gallery_dlg"); //$NON-NLS-1$
 		}
 	}
 
