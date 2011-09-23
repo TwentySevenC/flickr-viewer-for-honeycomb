@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.gmail.charleszq.R;
 
 /**
+ * Represents the ui component to create a gallery, or a photo set.
+ * 
  * @author charles
  * 
  */
@@ -80,9 +82,9 @@ public class CreateGalleryComponent extends AbstractComponent {
 	 */
 	@Override
 	public boolean validate() {
-		
+
 		String title = null;
-		if( mTitle.getText() != null ) {
+		if (mTitle.getText() != null) {
 			title = mTitle.getText().toString();
 		}
 		if (title == null || title.trim().length() == 0) {

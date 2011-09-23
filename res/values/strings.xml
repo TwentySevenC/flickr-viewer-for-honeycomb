@@ -16,6 +16,7 @@
 
 	<string name="ok_btn">OK</string>
 	<string name="cancel_btn">Cancel</string>
+	<string name="submit_btn">Submit</string>
 
 	<string name="photo_list">Photo List</string>
 	<string name="photo_grid_column_count">Grid column count</string>
@@ -184,12 +185,15 @@
 	<string name="tag_search_hint">Search by Tags</string>
 
 	<string name="error_get_photo_detail">Unable to get the detail information.</string>
+	
 	<!-- Create gallery -->
-	<string name="crt_gallery_desc">No gallery available to add this photo, you need to
-		create one.</string>
 	<string name="crt_gallery_title">Title*</string>
 	<string name="crt_gallery_desc_man">Description</string>
 	<string name="error_no_title">Please input title</string>
+	<string name="dlg_title_crt_gallery">Create Gallery</string>
+	<string name="dlg_title_crt_photo_set">Create Photo Set</string>
+	
+	<!-- auth process -->
 	<string name="fail_to_oauth">Failed to access your flickr account, please try again</string>
 	<string name="auth_gen_req_token">Generating the authorization request...</string>
 	

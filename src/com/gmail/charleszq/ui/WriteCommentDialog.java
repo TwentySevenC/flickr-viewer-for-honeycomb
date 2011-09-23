@@ -34,7 +34,7 @@ public class WriteCommentDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         getDialog().setTitle(
-                getActivity().getResources().getString(R.string.dlg_title_write_comment));
+                getActivity().getString(R.string.dlg_title_write_comment));
 
         View view = inflater.inflate(R.layout.write_comment_dlg, null);
         mCommentField = (EditText) view.findViewById(R.id.edit_comment);
@@ -59,7 +59,10 @@ public class WriteCommentDialog extends DialogFragment {
 
     };
 
-    protected void onWriteComment() {
+    /**
+     * Writes the comment.
+     */
+    private void onWriteComment() {
         String comment = mCommentField.getText().toString();
         if (comment == null || comment.trim().length() == 0) {
             Toast.makeText(getActivity(),
