@@ -192,6 +192,7 @@
 	<string name="error_no_title">Please input title</string>
 	<string name="dlg_title_crt_gallery">Create Gallery</string>
 	<string name="dlg_title_crt_photo_set">Create Photo Set</string>
+	<string name="gallery_created">Gallery created successfully.</string>
 	
 	<!-- auth process -->
 	<string name="fail_to_oauth">Failed to access your flickr account, please try again</string>

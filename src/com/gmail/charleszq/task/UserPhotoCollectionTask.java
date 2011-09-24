@@ -132,8 +132,8 @@ public class UserPhotoCollectionTask extends
 
 		result = new LinkedHashMap<Integer, List<IListItemAdapter>>();
 		// galleries
-		GalleriesInterface gi = FlickrHelper.getInstance().getFlickr()
-				.getGalleriesInterface();
+		GalleriesInterface gi = FlickrHelper.getInstance().getFlickrAuthed(
+				mToken, mSecret).getGalleriesInterface();
 		try {
 			List<Gallery> galleries = gi.getList(userId, -1, -1);
 			if (!galleries.isEmpty()) {
