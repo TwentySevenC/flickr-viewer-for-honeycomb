@@ -8,8 +8,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.task.CreateGalleryTask;
+import com.gmail.charleszq.task.CreateGalleryTask.ICreateGalleryListener;
 import com.gmail.charleszq.ui.comp.CreateGalleryComponent;
 
 /**
@@ -18,7 +24,8 @@ import com.gmail.charleszq.ui.comp.CreateGalleryComponent;
  * @author charles
  * 
  */
-public class CreateGalleryDialog extends DialogFragment {
+public class CreateGalleryDialog extends DialogFragment implements
+		OnClickListener, ICreateGalleryListener {
 
 	/**
 	 * The enum type to represent what to be created, photo set, or gallery.
@@ -68,8 +75,53 @@ public class CreateGalleryDialog extends DialogFragment {
 		View view = inflater.inflate(R.layout.create_gallery_dlg, null);
 		mCreateGalleryComponent = (CreateGalleryComponent) view
 				.findViewById(R.id.crt_gallery);
-		mCreateGalleryComponent.init(); // TODO
+		mCreateGalleryComponent.init();
+
+		// buttons
+		Button ok = (Button) view.findViewById(R.id.btn_ok);
+		ok.setTag(R.id.btn_ok);
+		Button cancel = (Button) view.findViewById(R.id.btn_cancel);
+		cancel.setTag(R.id.btn_cancel);
+
+		ok.setOnClickListener(this);
+		cancel.setOnClickListener(this);
 		return view;
+	}
+
+	@Override
+	public void onClick(View view) {
+		Integer tag = (Integer) view.getTag();
+		if (tag == R.id.btn_ok) {
+			if (mCreateGalleryComponent.validate()) {
+				String title = mCreateGalleryComponent.getGalleryTile();
+				String description = mCreateGalleryComponent
+						.getGalleryDescription();
+				if (description == null) {
+					description = title;
+				}
+
+				FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+						.getApplication();
+				CreateGalleryTask task = new CreateGalleryTask(app
+						.getFlickrToken(), app.getFlickrTokenSecrent(), this);
+				task.execute(title, description, mPrimaryPhotoId);
+			}
+		} else if (tag == R.id.btn_cancel) {
+			this.dismiss();
+		}
+	}
+
+	@Override
+	public void onGalleryCreated(boolean ok, String result) {
+		if (ok) {
+			Toast.makeText(getActivity(),
+					getActivity().getString(R.string.gallery_created),
+					Toast.LENGTH_SHORT).show();
+			dismiss();
+			// TODO notify to refresh the gallery list.
+		} else {
+			Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+		}
 	}
 
 }

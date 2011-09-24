@@ -195,7 +195,8 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 				boolean val = mCreateGalleryComponent.validate();
 				if (val) {
 					// call method to create gallery.
-					CreateGalleryTask cgTask = new CreateGalleryTask(this);
+					CreateGalleryTask cgTask = new CreateGalleryTask(
+							this.mToken, this.mSecret, this);
 					String title = mCreateGalleryComponent.getGalleryTile();
 					String desc = mCreateGalleryComponent
 							.getGalleryDescription();

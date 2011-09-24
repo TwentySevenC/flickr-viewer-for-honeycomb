@@ -19,9 +19,13 @@ import com.gmail.yuyang226.flickr.galleries.GalleriesInterface;
 public class CreateGalleryTask extends AsyncTask<String, Integer, String> {
 
 	private ICreateGalleryListener mListener;
+	private String mToken, mTokenSecret;
 
-	public CreateGalleryTask(ICreateGalleryListener listener) {
+	public CreateGalleryTask(String token, String secret,
+			ICreateGalleryListener listener) {
 		this.mListener = listener;
+		this.mToken = token;
+		this.mTokenSecret = secret;
 	}
 
 	/*
@@ -39,10 +43,10 @@ public class CreateGalleryTask extends AsyncTask<String, Integer, String> {
 		String description = params[1];
 		String primaryPhotoId = params[2];
 
-		GalleriesInterface gi = FlickrHelper.getInstance().getFlickr().getGalleriesInterface();
+		GalleriesInterface gi = FlickrHelper.getInstance().getFlickrAuthed(
+				mToken, mTokenSecret).getGalleriesInterface();
 		try {
-			String galleryId = gi.create(title, description,
-					primaryPhotoId);
+			String galleryId = gi.create(title, description, primaryPhotoId);
 			return galleryId;
 		} catch (Exception e) {
 			return "error: " + e.getMessage(); //$NON-NLS-1$
@@ -58,7 +62,23 @@ public class CreateGalleryTask extends AsyncTask<String, Integer, String> {
 		}
 	}
 
+	/**
+	 * Represents the interface to be notified when gallery or photo set is
+	 * created.
+	 * 
+	 * @author charles
+	 * 
+	 */
 	public interface ICreateGalleryListener {
+
+		/**
+		 * 
+		 * @param ok
+		 *            the success or not status.
+		 * @param result
+		 *            the gallery id created if success, otherwise, the error
+		 *            message.
+		 */
 		void onGalleryCreated(boolean ok, String result);
 	}
 
