@@ -102,9 +102,14 @@ public class CreateGalleryDialog extends DialogFragment implements
 
 				FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 						.getApplication();
-				CreateGalleryTask task = new CreateGalleryTask(app
-						.getFlickrToken(), app.getFlickrTokenSecrent(), this);
-				task.execute(title, description, mPrimaryPhotoId);
+				if (this.mCreationType == CollectionCreationType.GALLERY) {
+					CreateGalleryTask task = new CreateGalleryTask(app
+							.getFlickrToken(), app.getFlickrTokenSecrent(),
+							this);
+					task.execute(title, description, mPrimaryPhotoId);
+				} else {
+					//create photoset.
+				}
 			}
 		} else if (tag == R.id.btn_cancel) {
 			this.dismiss();

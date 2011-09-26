@@ -5,17 +5,18 @@ package com.gmail.charleszq.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
+import android.widget.ImageButton;
+import android.widget.SearchView;
+import android.widget.ViewSwitcher;
+import android.widget.SearchView.OnCloseListener;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
-import com.gmail.charleszq.ui.CreateGalleryDialog.CollectionCreationType;
 import com.gmail.charleszq.ui.comp.UserPhotoCollectionComponent;
 import com.gmail.charleszq.utils.Constants;
 
@@ -29,6 +30,7 @@ public class PhotoCollectionFragment extends Fragment implements
 		OnClickListener {
 
 	private UserPhotoCollectionComponent mCollectionComponent;
+	private ViewSwitcher mSwitcher;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,18 +46,34 @@ public class PhotoCollectionFragment extends Fragment implements
 		mCollectionComponent.initialize(userId, token, app
 				.getFlickrTokenSecrent());
 
-		ImageView btnBack = (ImageView) view.findViewById(R.id.btn_back);
+		ImageButton btnBack = (ImageButton) view.findViewById(R.id.btn_back);
 		btnBack.setTag(R.id.btn_back);
 		btnBack.setOnClickListener(this);
 
-		ImageView btnRefresh = (ImageView) view.findViewById(R.id.btn_refresh);
+		ImageButton btnRefresh = (ImageButton) view
+				.findViewById(R.id.btn_refresh);
 		btnRefresh.setTag(R.id.btn_refresh);
 		btnRefresh.setOnClickListener(this);
 
-		ImageView btnCreateGallery = (ImageView) view
-				.findViewById(R.id.btn_crt_gallery);
-		btnCreateGallery.setTag(R.id.btn_crt_gallery);
-		btnCreateGallery.setOnClickListener(this);
+		mSwitcher = (ViewSwitcher) view.findViewById(R.id.switcher);
+		ImageButton btnSearch = (ImageButton) view
+				.findViewById(R.id.btn_search);
+		btnSearch.setTag(R.id.btn_search);
+		btnSearch.setOnClickListener(this);
+
+		SearchView searchView = (SearchView) view
+				.findViewById(R.id.search_view);
+		searchView.setSubmitButtonEnabled(true);
+		searchView.setOnCloseListener(new OnCloseListener() {
+
+			@Override
+			public boolean onClose() {
+				if( mSwitcher != null ) {
+					mSwitcher.showPrevious();
+				}
+				return true;
+			}
+		});
 
 		return view;
 	}
@@ -79,19 +97,11 @@ public class PhotoCollectionFragment extends Fragment implements
 				mCollectionComponent.refreshList();
 			}
 			break;
-		case R.id.btn_crt_gallery:
-			FragmentTransaction ft = fm.beginTransaction();
-			Fragment prev = fm.findFragmentByTag("crt_gallery_dlg"); //$NON-NLS-1$
-			if (prev != null) {
-				ft.remove(prev);
+		case R.id.btn_search:
+			if (mSwitcher != null) {
+				mSwitcher.showNext();
 			}
-			ft.addToBackStack(null);
-
-			// Create and show the dialog.
-			CreateGalleryDialog dlgCreateGallery = new CreateGalleryDialog(
-					CollectionCreationType.GALLERY, null);
-			dlgCreateGallery.setCancelable(true);
-			dlgCreateGallery.show(ft, "crt_gallery_dlg"); //$NON-NLS-1$
+			break;
 		}
 	}
 

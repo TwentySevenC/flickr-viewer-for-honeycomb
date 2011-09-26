@@ -13,22 +13,29 @@
 	<com.gmail.charleszq.ui.comp.UserPhotoCollectionComponent
 		android:id="@+id/user_collection_list" android:layout_height="0dp"
 		android:layout_weight="1" android:layout_width="fill_parent" />
-	<LinearLayout android:layout_height="wrap_content"
-		android:padding="10dp" style="@android:style/Holo.ButtonBar"
-		android:layout_marginTop="20dp" android:layout_width="fill_parent"
-		android:orientation="horizontal">
-		<ImageView android:layout_width="32dp" android:clickable="true"
-			android:id="@+id/btn_crt_gallery" android:background="@drawable/action_bar_item"
-			android:layout_height="32dp" android:src="@drawable/add_gallery"
-			android:layout_weight="1" android:scaleType="fitCenter" />
-		<ImageView android:layout_width="32dp" android:clickable="true"
-			android:id="@+id/btn_refresh" android:scaleType="fitCenter"
-			android:background="@drawable/action_bar_item" android:layout_weight="1"
-			android:layout_height="32dp" android:src="@drawable/refresh" />
-		<ImageView android:layout_width="32dp" android:clickable="true"
-			android:id="@+id/btn_back" android:scaleType="fitCenter"
-			android:background="@drawable/action_bar_item" android:layout_weight="1"
-			android:layout_height="32dp" android:src="@drawable/back2" />
-	</LinearLayout>
+	<ViewSwitcher android:layout_height="wrap_content" android:layout_marginTop="20dp" 
+		style="@android:style/Holo.ButtonBar" android:id="@+id/switcher"
+		android:layout_width="fill_parent">
+		<LinearLayout android:layout_height="wrap_content"
+			android:layout_gravity="center" android:padding="10dp"
+			android:layout_width="fill_parent"
+			android:orientation="horizontal">
+			<ImageButton android:layout_width="0dp" android:id="@+id/btn_search"
+				android:clickable="true" android:scaleType="fitCenter"
+				android:background="@drawable/action_bar_item"
+				android:layout_weight="1" android:layout_height="32dp"
+				android:src="@android:drawable/ic_menu_search" />
+			<ImageButton android:layout_width="0dp"
+				android:clickable="true" android:id="@+id/btn_refresh"
+				android:scaleType="fitCenter" android:background="@drawable/action_bar_item"
+				android:layout_weight="1" android:layout_height="32dp" android:src="@drawable/refresh" />
+			<ImageButton android:layout_width="0dp"
+				android:clickable="true" android:id="@+id/btn_back"
+				android:scaleType="fitCenter" android:background="@drawable/action_bar_item"
+				android:layout_weight="1" android:layout_height="32dp" android:src="@drawable/back2" />
+		</LinearLayout>
+		<SearchView android:iconifiedByDefault="false" android:layout_gravity="center" android:id="@+id/search_view"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"></SearchView>
+	</ViewSwitcher>
 
 </LinearLayout>
