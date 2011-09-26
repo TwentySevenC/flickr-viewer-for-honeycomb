@@ -13,41 +13,40 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.widget.ViewAnimator;
+import android.widget.ProgressBar;
 import android.widget.ViewSwitcher;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.model.IListItemAdapter;
-import com.gmail.charleszq.task.CreateGalleryTask;
-import com.gmail.charleszq.task.CreateGalleryTask.ICreateGalleryListener;
 import com.gmail.charleszq.task.GetPhotoPoolTask;
-import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
 import com.gmail.charleszq.task.ImageDownloadTask;
-import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask;
+import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
+import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
+import com.gmail.charleszq.ui.CreateGalleryDialog;
+import com.gmail.charleszq.ui.CreateGalleryDialog.CollectionCreationType;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 import com.gmail.yuyang226.flickr.photos.Photo;
@@ -61,19 +60,12 @@ import com.gmail.yuyang226.flickr.photos.PhotoPlace;
  */
 public class AddPhotoToGroupComponent extends FrameLayout implements
 		OnClickListener, IUserPhotoCollectionFetched, OnItemClickListener,
-		IPhotoPoolListener, ICreateGalleryListener {
-	private static final Logger logger = LoggerFactory
-			.getLogger(AddPhotoToGroupComponent.class);
-	private static final int IDX_PROGRESS = 0;
-	private static final int IDX_LIST = 1;
-	private static final int IDX_CRT_GALLERY = 2;
-	// private static final int IDX_CRT_SET = 3;
+		IPhotoPoolListener {
 
-	private ViewAnimator mViewContainer;
 	private ListView mListView;
-	private Button mOkButton, mCancelButton;
+	private Button mOkButton, mCancelButton, mCreateNewButton;
+	private ProgressBar mProgressBar;
 	private SectionAdapter mSectionAdapter;
-	private CreateGalleryComponent mCreateGalleryComponent;
 
 	private Photo mCurrentPhoto;
 	private String mUserId;
@@ -124,20 +116,15 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		LayoutInflater li = LayoutInflater.from(getContext());
 		li.inflate(R.layout.add_photo_to_group, this, true);
 
-		mViewContainer = (ViewAnimator) findViewById(R.id.views);
-		mViewContainer.setInAnimation(AnimationUtils.loadAnimation(
-				getContext(), R.anim.push_right_in));
-		mViewContainer.setOutAnimation(AnimationUtils.loadAnimation(
-				getContext(), R.anim.push_left_out));
-
-		mCreateGalleryComponent = (CreateGalleryComponent) findViewById(R.id.crt_gallery);
-
 		mListView = (ListView) findViewById(R.id.group_check_list);
 		mOkButton = (Button) findViewById(R.id.ok_btn);
 		mCancelButton = (Button) findViewById(R.id.cancel_btn);
+		mCreateNewButton = (Button) findViewById(R.id.create_btn);
+		mProgressBar = (ProgressBar) findViewById(R.id.progress);
 
 		mOkButton.setOnClickListener(this);
 		mCancelButton.setOnClickListener(this);
+		mCreateNewButton.setOnClickListener(this);
 		mListView.setOnItemClickListener(this);
 		mListView.setItemsCanFocus(false);
 	}
@@ -160,7 +147,6 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 
 		mCheckedItems.clear();
 		mPhotoGroupIds.clear();
-		mViewContainer.setDisplayedChild(IDX_PROGRESS);
 
 		mSectionAdapter = new SimpleSectionAdapter(getContext());
 		mListView.setAdapter(mSectionAdapter);
@@ -190,28 +176,24 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 					R.anim.push_right_out));
 			vs.showPrevious();
 		} else if (view == mOkButton) {
-			int index = mViewContainer.getDisplayedChild();
-			if (index == IDX_CRT_GALLERY) {
-				boolean val = mCreateGalleryComponent.validate();
-				if (val) {
-					// call method to create gallery.
-					CreateGalleryTask cgTask = new CreateGalleryTask(
-							this.mToken, this.mSecret, this);
-					String title = mCreateGalleryComponent.getGalleryTile();
-					String desc = mCreateGalleryComponent
-							.getGalleryDescription();
-					if (desc == null) {
-						desc = title;
-					}
-					cgTask.execute(title, desc, mCurrentPhoto.getId());
-					mViewContainer.setDisplayedChild(IDX_PROGRESS);
-				}
+			// TODO add to groups.
+		} else if (view == mCreateNewButton) {
+			FragmentManager fm = ((Activity)getContext()).getFragmentManager();
+			FragmentTransaction ft = fm.beginTransaction();
+			Fragment prev = fm.findFragmentByTag("crt_gallery_dialog"); //$NON-NLS-1$
+			if (prev != null) {
+				ft.remove(prev);
 			}
-		}
+			ft.addToBackStack(null);
 
-		InputMethodManager imeManager = (InputMethodManager) getContext()
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imeManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+			// Create and show the dialog.
+			CreateGalleryDialog dlg = new CreateGalleryDialog(
+					mIsMyOwnPhoto ? CollectionCreationType.PHOTO_SET
+							: CollectionCreationType.GALLERY, mCurrentPhoto
+							.getId());
+			dlg.setCancelable(true);
+			dlg.show(ft, "crt_gallery_dialog"); //$NON-NLS-1$
+		}
 	}
 
 	/*
@@ -225,8 +207,9 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	public void onUserPhotoCollectionFetched(
 			Map<Integer, List<IListItemAdapter>> map) {
 		mSectionAdapter.clearSections();
-
-		int count = 0; // whether we finally got at least one item in the list.
+		if (mProgressBar != null) {
+			mProgressBar.setVisibility(View.INVISIBLE);
+		}
 		for (Integer key : map.keySet()) {
 			if (mIsMyOwnPhoto) {
 				if (key == R.string.section_photo_gallery) {
@@ -242,27 +225,12 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 			for (IListItemAdapter item : values) {
 				if (!mPhotoGroupIds.contains(item.getId())) {
 					items.add(item);
-					count++;
 				}
 			}
 			mSectionAdapter.addSection(getContext().getString(key),
 					new PhotoPoolAdapter(getContext(), items, mCheckedItems));
 		}
 		mListView.setAdapter(mSectionAdapter);
-		mViewContainer.setDisplayedChild(IDX_LIST);
-
-		if (count == 0) {
-			logger
-					.debug("No photo sets/gallery/group availabe to add this photo, need to create one."); //$NON-NLS-1$
-			if (mIsMyOwnPhoto) {
-				// no photo set/group avaliable to add this photo, prompt user
-				// to create a new photo set.
-			} else {
-				// no gallery to store this photo, prompt user to create a new
-				// gallery.
-				mViewContainer.setDisplayedChild(IDX_CRT_GALLERY);
-			}
-		}
 	}
 
 	private class PhotoPoolAdapter extends BaseAdapter {
@@ -390,18 +358,4 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
 		task.execute(mUserId, mToken, mSecret);
 	}
-
-	@Override
-	public void onGalleryCreated(boolean ok, String result) {
-		if (ok) {
-			onClick(mCancelButton);
-			Toast.makeText(getContext(), "Gallery created", Toast.LENGTH_SHORT) //$NON-NLS-1$
-					.show();
-		} else {
-			mViewContainer.setDisplayedChild(IDX_CRT_GALLERY);
-			logger.warn("Gallery Creation Result: {}", result); //$NON-NLS-1$
-			Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
-		}
-	}
-
 }

@@ -204,17 +204,17 @@ public class ViewImageDetailFragment extends Fragment implements
 					getActivity(), mCurrentPhoto, true);
 			wallAction.execute();
 			return true;
-			// case R.id.menu_item_add_photo_to_group:
-			// app = (FlickrViewerApplication) getActivity().getApplication();
-			// token = app.getFlickrToken();
-			// String userId = app.getUserId();
-			// mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token);
-			// mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
-			// getActivity(), R.anim.push_right_in));
-			// mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
-			// getActivity(), R.anim.push_left_out));
-			// mAddGroupViewSwither.showNext();
-			// return true;
+		case R.id.menu_item_add_photo_to_group:
+			app = (FlickrViewerApplication) getActivity().getApplication();
+			token = app.getFlickrToken();
+			String userId = app.getUserId();
+			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token, app.getFlickrTokenSecrent());
+			mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
+					getActivity(), R.anim.push_right_in));
+			mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
+					getActivity(), R.anim.push_left_out));
+			mAddGroupViewSwither.showNext();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
