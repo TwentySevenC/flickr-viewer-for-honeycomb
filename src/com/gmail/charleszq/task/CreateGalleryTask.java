@@ -13,6 +13,8 @@ import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.galleries.GalleriesInterface;
 
 /**
+ * Represents the task to create a gallery.
+ * 
  * @author charles
  * 
  */
@@ -43,8 +45,8 @@ public class CreateGalleryTask extends AsyncTask<String, Integer, String> {
 		String description = params[1];
 		String primaryPhotoId = params[2];
 
-		GalleriesInterface gi = FlickrHelper.getInstance().getFlickrAuthed(
-				mToken, mTokenSecret).getGalleriesInterface();
+		GalleriesInterface gi = FlickrHelper.getInstance()
+				.getFlickrAuthed(mToken, mTokenSecret).getGalleriesInterface();
 		try {
 			String galleryId = gi.create(title, description, primaryPhotoId);
 			return galleryId;
