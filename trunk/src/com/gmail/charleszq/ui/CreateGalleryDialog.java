@@ -7,8 +7,8 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -16,6 +16,8 @@ import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.task.CreateGalleryTask;
 import com.gmail.charleszq.task.CreateGalleryTask.ICreateGalleryListener;
+import com.gmail.charleszq.task.CreatePhotoSetTask;
+import com.gmail.charleszq.task.CreatePhotoSetTask.IPhotoSetCreationListener;
 import com.gmail.charleszq.ui.comp.CreateGalleryComponent;
 
 /**
@@ -25,14 +27,14 @@ import com.gmail.charleszq.ui.comp.CreateGalleryComponent;
  * 
  */
 public class CreateGalleryDialog extends DialogFragment implements
-		OnClickListener, ICreateGalleryListener {
+		OnClickListener, ICreateGalleryListener, IPhotoSetCreationListener {
 
 	/**
 	 * The enum type to represent what to be created, photo set, or gallery.
 	 */
 	public enum CollectionCreationType {
 		GALLERY, PHOTO_SET;
-	};
+	}
 
 	/**
 	 * The creation type.
@@ -103,12 +105,15 @@ public class CreateGalleryDialog extends DialogFragment implements
 				FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 						.getApplication();
 				if (this.mCreationType == CollectionCreationType.GALLERY) {
-					CreateGalleryTask task = new CreateGalleryTask(app
-							.getFlickrToken(), app.getFlickrTokenSecrent(),
+					CreateGalleryTask task = new CreateGalleryTask(
+							app.getFlickrToken(), app.getFlickrTokenSecrent(),
 							this);
 					task.execute(title, description, mPrimaryPhotoId);
 				} else {
-					//create photoset.
+					CreatePhotoSetTask psTask = new CreatePhotoSetTask(
+							app.getFlickrToken(), app.getFlickrTokenSecrent(),
+							this);
+					psTask.execute(title, mPrimaryPhotoId, description);
 				}
 			}
 		} else if (tag == R.id.btn_cancel) {
@@ -126,6 +131,26 @@ public class CreateGalleryDialog extends DialogFragment implements
 			// TODO notify to refresh the gallery list.
 		} else {
 			Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.gmail.charleszq.task.CreatePhotoSetTask.IPhotoSetCreationListener
+	 * #onPhotoSetCreated(boolean, java.lang.String)
+	 */
+	@Override
+	public void onPhotoSetCreated(boolean success, String msg) {
+		if( success ) {
+			Toast.makeText(getActivity(),
+					getActivity().getString(R.string.photo_set_created),
+					Toast.LENGTH_SHORT).show();
+			dismiss();
+			// TODO notify to refresh the gallery list.
+		} else {
+			Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
 		}
 	}
 
