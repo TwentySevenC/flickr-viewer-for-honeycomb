@@ -7,16 +7,17 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.task.CreateGalleryTask;
-import com.gmail.charleszq.task.CreateGalleryTask.ICreateGalleryListener;
 import com.gmail.charleszq.task.CreatePhotoSetTask;
+import com.gmail.charleszq.task.CreateGalleryTask.ICreateGalleryListener;
 import com.gmail.charleszq.task.CreatePhotoSetTask.IPhotoSetCreationListener;
 import com.gmail.charleszq.ui.comp.CreateGalleryComponent;
 
@@ -105,13 +106,13 @@ public class CreateGalleryDialog extends DialogFragment implements
 				FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 						.getApplication();
 				if (this.mCreationType == CollectionCreationType.GALLERY) {
-					CreateGalleryTask task = new CreateGalleryTask(
-							app.getFlickrToken(), app.getFlickrTokenSecrent(),
+					CreateGalleryTask task = new CreateGalleryTask(app
+							.getFlickrToken(), app.getFlickrTokenSecrent(),
 							this);
 					task.execute(title, description, mPrimaryPhotoId);
 				} else {
-					CreatePhotoSetTask psTask = new CreatePhotoSetTask(
-							app.getFlickrToken(), app.getFlickrTokenSecrent(),
+					CreatePhotoSetTask psTask = new CreatePhotoSetTask(app
+							.getFlickrToken(), app.getFlickrTokenSecrent(),
 							this);
 					psTask.execute(title, mPrimaryPhotoId, description);
 				}
@@ -127,10 +128,24 @@ public class CreateGalleryDialog extends DialogFragment implements
 			Toast.makeText(getActivity(),
 					getActivity().getString(R.string.gallery_created),
 					Toast.LENGTH_SHORT).show();
+			notifyMessageHandlers(CollectionCreationType.GALLERY);
 			dismiss();
-			// TODO notify to refresh the gallery list.
 		} else {
 			Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private void notifyMessageHandlers(CollectionCreationType type) {
+		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+				.getApplication();
+		FlickrViewerMessage msg = new FlickrViewerMessage(
+				FlickrViewerMessage.REFRESH_LOCAL_COLLECTION, null);
+		app.handleMessage(msg);
+
+		if (CollectionCreationType.PHOTO_SET == type) {
+			FlickrViewerMessage refreshPhotoPoolMessage = new FlickrViewerMessage(
+					FlickrViewerMessage.REFRESH_PHOTO_POOLS, mPrimaryPhotoId);
+			app.handleMessage(refreshPhotoPoolMessage);
 		}
 	}
 
@@ -143,12 +158,12 @@ public class CreateGalleryDialog extends DialogFragment implements
 	 */
 	@Override
 	public void onPhotoSetCreated(boolean success, String msg) {
-		if( success ) {
+		if (success) {
 			Toast.makeText(getActivity(),
 					getActivity().getString(R.string.photo_set_created),
 					Toast.LENGTH_SHORT).show();
+			notifyMessageHandlers(CollectionCreationType.PHOTO_SET);
 			dismiss();
-			// TODO notify to refresh the gallery list.
 		} else {
 			Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
 		}

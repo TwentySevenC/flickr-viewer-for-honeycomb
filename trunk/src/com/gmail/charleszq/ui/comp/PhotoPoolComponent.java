@@ -15,20 +15,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.actions.ShowPhotoPoolAction;
+import com.gmail.charleszq.event.FlickrViewerMessage;
+import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.task.GetPhotoPoolTask;
-import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
 import com.gmail.charleszq.task.ImageDownloadTask;
+import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
@@ -42,11 +44,13 @@ import com.gmail.yuyang226.flickr.photos.PhotoPlace;
  * 
  */
 public class PhotoPoolComponent extends FrameLayout implements
-		IPhotoPoolListener, OnItemClickListener {
+		IPhotoPoolListener, OnItemClickListener, IFlickrViewerMessageHandler {
 
 	private ListView mPhotoPoolListView;
 	private ProgressBar mProgressBar;
 	private SectionAdapter mSectionAdapter = null;
+
+	private String mCurrentPhotoId = null;
 
 	/**
 	 * @param context
@@ -88,17 +92,43 @@ public class PhotoPoolComponent extends FrameLayout implements
 	 * @param photoId
 	 */
 	public void initialize(String photoId, OnTouchListener listener) {
+		this.mCurrentPhotoId = photoId;
 		mPhotoPoolListView.setOnTouchListener(listener);
-		
+		startFetchPoolTask(mCurrentPhotoId);
+	}
+
+	private void startFetchPoolTask(String photoId) {
+
+		if (mProgressBar != null) {
+			mProgressBar.setVisibility(View.VISIBLE);
+		}
+
 		String token = null;
 		String secret = null;
-		if( getContext() instanceof Activity ) {
-			FlickrViewerApplication app = (FlickrViewerApplication) ((Activity)getContext()).getApplication();
+		if (getContext() instanceof Activity) {
+			FlickrViewerApplication app = (FlickrViewerApplication) ((Activity) getContext())
+					.getApplication();
 			token = app.getFlickrToken();
 			secret = app.getFlickrTokenSecrent();
 		}
 		GetPhotoPoolTask task = new GetPhotoPoolTask(this);
-		task.execute(photoId,token,secret);
+		task.execute(photoId, token, secret);
+	}
+
+	@Override
+	protected void onAttachedToWindow() {
+		super.onAttachedToWindow();
+		FlickrViewerApplication app = (FlickrViewerApplication) ((Activity) getContext())
+				.getApplication();
+		app.registerMessageHandler(this);
+	}
+
+	@Override
+	protected void onDetachedFromWindow() {
+		FlickrViewerApplication app = (FlickrViewerApplication) ((Activity) getContext())
+				.getApplication();
+		app.unregisterMessageHandler(this);
+		super.onDetachedFromWindow();
 	}
 
 	@Override
@@ -118,19 +148,19 @@ public class PhotoPoolComponent extends FrameLayout implements
 				groups.add(place);
 			}
 		}
-		if( mSectionAdapter == null ) {
+		if (mSectionAdapter == null) {
 			mSectionAdapter = new SimpleSectionAdapter(getContext());
 		}
 		mSectionAdapter.clearSections();
 		if (!sets.isEmpty()) {
-			mSectionAdapter.addSection(
-					getContext().getString(R.string.section_photo_set),
-					new PhotoPoolAdapter(getContext(), sets));
+			mSectionAdapter.addSection(getContext().getString(
+					R.string.section_photo_set), new PhotoPoolAdapter(
+					getContext(), sets));
 		}
 		if (!groups.isEmpty()) {
-			mSectionAdapter.addSection(
-					getContext().getString(R.string.section_photo_group),
-					new PhotoPoolAdapter(this.getContext(), groups));
+			mSectionAdapter.addSection(getContext().getString(
+					R.string.section_photo_group), new PhotoPoolAdapter(this
+					.getContext(), groups));
 		}
 		mPhotoPoolListView.setAdapter(mSectionAdapter);
 		mPhotoPoolListView.setOnItemClickListener(this);
@@ -229,6 +259,16 @@ public class PhotoPoolComponent extends FrameLayout implements
 			ShowPhotoPoolAction action = new ShowPhotoPoolAction(
 					(Activity) getContext(), photoPlace, false);
 			action.execute();
+		}
+	}
+
+	@Override
+	public void handleMessage(FlickrViewerMessage message) {
+		if (FlickrViewerMessage.REFRESH_PHOTO_POOLS.equals(message
+				.getMessageId())
+				&& mCurrentPhotoId != null
+				&& mCurrentPhotoId.equals(message.getMessageData())) {
+			startFetchPoolTask(mCurrentPhotoId);
 		}
 	}
 }

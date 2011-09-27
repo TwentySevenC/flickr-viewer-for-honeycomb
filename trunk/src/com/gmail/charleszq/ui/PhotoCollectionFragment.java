@@ -3,6 +3,7 @@
  */
 package com.gmail.charleszq.ui;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.widget.SearchView.OnCloseListener;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.event.FlickrViewerMessage;
+import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.ui.comp.UserPhotoCollectionComponent;
 import com.gmail.charleszq.utils.Constants;
 
@@ -27,7 +30,7 @@ import com.gmail.charleszq.utils.Constants;
  * @author charles
  */
 public class PhotoCollectionFragment extends Fragment implements
-		OnClickListener {
+		OnClickListener, IFlickrViewerMessageHandler {
 
 	private UserPhotoCollectionComponent mCollectionComponent;
 	private ViewSwitcher mSwitcher;
@@ -68,7 +71,7 @@ public class PhotoCollectionFragment extends Fragment implements
 
 			@Override
 			public boolean onClose() {
-				if( mSwitcher != null ) {
+				if (mSwitcher != null) {
 					mSwitcher.showPrevious();
 				}
 				return true;
@@ -102,6 +105,32 @@ public class PhotoCollectionFragment extends Fragment implements
 				mSwitcher.showNext();
 			}
 			break;
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+				.getApplication();
+		app.unregisterMessageHandler(this);
+		super.onDetach();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		FlickrViewerApplication app = (FlickrViewerApplication) activity
+				.getApplication();
+		app.registerMessageHandler(this);
+	}
+
+	@Override
+	public void handleMessage(FlickrViewerMessage message) {
+		if (FlickrViewerMessage.REFRESH_LOCAL_COLLECTION.equals(message
+				.getMessageId())) {
+			if (mCollectionComponent != null) {
+				mCollectionComponent.refreshList();
+			}
 		}
 	}
 
