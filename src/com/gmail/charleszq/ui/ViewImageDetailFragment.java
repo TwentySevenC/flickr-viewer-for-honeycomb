@@ -12,6 +12,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -20,26 +21,26 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.GestureDetector;
-import android.view.GestureDetector.OnDoubleTapListener;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 import android.widget.ViewSwitcher;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -51,7 +52,9 @@ import com.gmail.charleszq.actions.SharePhotoAction;
 import com.gmail.charleszq.actions.ShowAuthDialogAction;
 import com.gmail.charleszq.actions.ShowPeoplePhotosAction;
 import com.gmail.charleszq.actions.ShowWriteCommentAction;
+import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IExifListener;
+import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.event.IUserCommentsFetchedListener;
 import com.gmail.charleszq.model.UserComment;
 import com.gmail.charleszq.task.GetPhotoCommentsTask;
@@ -61,8 +64,8 @@ import com.gmail.charleszq.ui.comp.AddPhotoToGroupComponent;
 import com.gmail.charleszq.ui.comp.PhotoDetailActionBar;
 import com.gmail.charleszq.ui.comp.PhotoPoolComponent;
 import com.gmail.charleszq.utils.ImageCache;
-import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 import com.gmail.charleszq.utils.StringUtils;
+import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
 import com.gmail.yuyang226.flickr.people.User;
 import com.gmail.yuyang226.flickr.photos.Exif;
 import com.gmail.yuyang226.flickr.photos.Photo;
@@ -75,7 +78,8 @@ import com.gmail.yuyang226.flickr.tags.Tag;
  * @author charles
  */
 public class ViewImageDetailFragment extends Fragment implements
-		IUserCommentsFetchedListener, IExifListener {
+		IUserCommentsFetchedListener, IExifListener,
+		IFlickrViewerMessageHandler {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ViewImageDetailFragment.class);
@@ -208,7 +212,8 @@ public class ViewImageDetailFragment extends Fragment implements
 			app = (FlickrViewerApplication) getActivity().getApplication();
 			token = app.getFlickrToken();
 			String userId = app.getUserId();
-			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token, app.getFlickrTokenSecrent());
+			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token, app
+					.getFlickrTokenSecrent());
 			mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
 					getActivity(), R.anim.push_right_in));
 			mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
@@ -468,6 +473,22 @@ public class ViewImageDetailFragment extends Fragment implements
 	}
 
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		FlickrViewerApplication app = (FlickrViewerApplication) activity
+				.getApplication();
+		app.registerMessageHandler(this);
+	}
+
+	@Override
+	public void onDetach() {
+		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+				.getApplication();
+		app.unregisterMessageHandler(this);
+		super.onDetach();
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString(PHOTO_ID_ATTR, mCurrentPhoto.getId());
@@ -685,4 +706,18 @@ public class ViewImageDetailFragment extends Fragment implements
 		}
 	}
 
+	@Override
+	public void handleMessage(FlickrViewerMessage message) {
+		if (FlickrViewerMessage.REFRESH_PHOTO_COMMENT.equals(message
+				.getMessageId())
+				&& mCurrentPhoto != null
+				&& mCurrentPhoto.getId() != null
+				&& mCurrentPhoto.getId().equals(message.getMessageData())) {
+			mPhotoCommentTask = new GetPhotoCommentsTask(this);
+			mPhotoCommentTask.execute(mCurrentPhoto.getId());
+			if (mCommentProgressBar != null) {
+				mCommentProgressBar.setVisibility(View.VISIBLE);
+			}
+		}
+	}
 }
