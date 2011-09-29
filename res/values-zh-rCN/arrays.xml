@@ -24,10 +24,10 @@
 	</string-array>
 	
 	<string-array name="contact_upload_interval_title">
-		<item>2 Hours</item>
-		<item>6 Hours</item>
-		<item>12 Hours</item>
-		<item>24 Hours</item>
+		<item>2小时</item>
+		<item>6小时</item>
+		<item>12小时</item>
+		<item>24小时</item>
 	</string-array>
 	
 	<string-array name="contact_upload_interval_value">
