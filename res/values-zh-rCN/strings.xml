@@ -117,7 +117,7 @@
 	<string name="item_my_contact">我的好友</string>
 	<string name="item_my_fav">我的最爱</string>
 	<string name="item_recent_activities">最新动态</string>
-	<string name="item_settings">配置</string>
+	<string name="item_settings">系统设置</string>
 
 	<!-- pagination -->
 	<string name="toast_first_page">这是第一张页面.</string>
