@@ -11,7 +11,7 @@
 	<string name="menu_item_save">保存</string>
 	<string name="menu_item_set_wall_paper">设置为墙纸</string>
 	<string name="add_fav_photo">添加到我的最爱</string>
-	<string name="show_owner_photos">显示主人照片</string>
+	<string name="show_owner_photos">显示作者照片</string>
 	<string name="view_big_photo">显示大图</string>
 
 	<string name="ok_btn">确认</string>
@@ -23,7 +23,7 @@
 	<string name="summary_photo_grid_column_count">照片网格的列的数量</string>
 	<string name="photo_grid_column_count_dlg_title">照片网格列数</string>
 
-	<string name="photo_grid_page_size">页面大小</string>
+	<string name="photo_grid_page_size">每页照片数量</string>
 	<string name="summary_photo_grid_page_size">照片网格的页面大小</string>
 	<string name="photo_grid_page_size_dlg_title">照片网格页面大小</string>
 
@@ -52,7 +52,7 @@
 	<string name="auth_btn_title">到Flickr去授权</string>
 	<string name="auth_done_btn_title">取消</string>
 
-	<string name="share_dlg_title">选择一个目标来分享</string>
+	<string name="share_dlg_title">选择一个应用来分享</string>
 
 	<!-- Notification title and hints -->
 	<string name="notif_message_recent_upload">您的好友有新照片了.</string>
@@ -139,10 +139,10 @@
 	<string name="saving_photo">正在保存照片...</string>
 
 	<!-- contact filter string -->
-	<string name="family_only">仅家人可见</string>
-	<string name="family_and_friend">家人和好友可见</string>
+	<string name="family_only">仅家人</string>
+	<string name="family_and_friend">家人和好友</string>
 	<string name="all_contacts">任何人</string>
-	<string name="contact_with_upload">有更新</string>
+	<string name="contact_with_upload">有更新的联系人</string>
 	<string name="contact_filter_hint">过滤联系人</string>
 
 	<string name="photo_pool">相册</string>
