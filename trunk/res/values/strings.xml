@@ -140,7 +140,7 @@
 	<string name="empty_comment_error">Please input your comment.</string>
 
 	<!-- app title -->
-	<string name="photo_stream_of">Photostream of</string>
+	<string name="photo_stream_of">Photostream of %s</string>
 
 	<!-- Photo detail -->
 	<string name="exif_info">EXIF Information:</string>

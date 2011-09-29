@@ -88,10 +88,8 @@ public class PeoplePublicPhotosDataProvider extends
 
 	@Override
 	public String getDescription(Context context) {
-		StringBuilder builder = new StringBuilder(context.getResources()
-				.getString(R.string.photo_stream_of));
-		builder.append(" ").append(mUserName); //$NON-NLS-1$
-		return builder.toString();
+		return String.format(context.getResources()
+				.getString(R.string.photo_stream_of), mUserName);
 	}
 
 }
