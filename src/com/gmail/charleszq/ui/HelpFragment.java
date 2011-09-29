@@ -21,6 +21,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 
+import com.gmail.charleszq.R;
+
 /**
  * Represents the fragment to show the help page of this application.
  * 
@@ -38,7 +40,7 @@ public class HelpFragment extends Fragment {
         mWebView = new WebView(getActivity());
         mWebView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
                 LayoutParams.FILL_PARENT));
-
+        mWebView.getSettings().setJavaScriptEnabled(true);
         return mWebView;
     }
 
@@ -48,7 +50,8 @@ public class HelpFragment extends Fragment {
         AssetManager am = getActivity().getAssets();
         InputStream is = null;
         try {
-            is = am.open("help.html"); //$NON-NLS-1$
+        	String htmlFile = getActivity().getString(R.string.help_file_name);
+            is = am.open(htmlFile);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             StringBuilder sb = new StringBuilder();
             int ch = reader.read();
@@ -56,7 +59,8 @@ public class HelpFragment extends Fragment {
                 sb.append((char) ch);
                 ch = reader.read();
             }
-            mWebView.loadData(sb.toString(), "text/html", "utf-8"); //$NON-NLS-1$//$NON-NLS-2$
+            mWebView.loadDataWithBaseURL(htmlFile, sb.toString(), "text/html", "utf-8", null); //$NON-NLS-1$//$NON-NLS-2$
+            //mWebView.loadData(sb.toString(), "text/html", "utf-8"); //$NON-NLS-1$//$NON-NLS-2$
         } catch (IOException e) {
         } finally {
             if( is != null ) {
