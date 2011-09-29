@@ -112,7 +112,7 @@
 	<!-- main menu items -->
 	<string name="item_interesting_photo">热门照片</string>
 	<string name="item_my_photo">我的足迹</string>
-	<string name="item_my_sets">我的照片集/活动组</string>
+	<string name="item_my_sets">我的照片集/群组</string>
 	<string name="item_my_popular">我的热门</string>
 	<string name="item_my_contact">我的好友</string>
 	<string name="item_my_fav">我的最爱</string>
@@ -147,14 +147,14 @@
 
 	<string name="photo_pool">相册</string>
 	<string name="dp_photo_pool_desc_set">照片集</string>
-	<string name="dp_photo_pool_desc_pool">活动组</string>
+	<string name="dp_photo_pool_desc_pool">群组</string>
 	<string name="task_loading_photo_pool">正在从相册中读取照片...</string>
 
 	<string name="radio_exif_label">EXIF</string>
 	<string name="radio_comment_label">留言</string>
 	<string name="radio_pool_label">相册</string>
 	<string name="section_photo_set">照片集</string>
-	<string name="section_photo_group">活动组</string>
+	<string name="section_photo_group">群组</string>
 	<string name="section_photo_gallery">博览馆</string>
 
 	<!-- General settings -->
