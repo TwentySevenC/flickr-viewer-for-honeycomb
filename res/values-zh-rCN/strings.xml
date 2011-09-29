@@ -24,8 +24,8 @@
 	<string name="photo_grid_column_count_dlg_title">照片网格列数</string>
 
 	<string name="photo_grid_page_size">每页照片数量</string>
-	<string name="summary_photo_grid_page_size">照片网格的页面大小</string>
-	<string name="photo_grid_page_size_dlg_title">照片网格页面大小</string>
+	<string name="summary_photo_grid_page_size">照片网格的每页照片数量</string>
+	<string name="photo_grid_page_size_dlg_title">每页照片数量</string>
 
 	<string name="app_caches">缓存</string>
 	<string name="photo_list_cache_size">照片缓存大小</string>
