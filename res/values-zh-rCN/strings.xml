@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Flickr浏览器 HD</string>
+	<string name="help_file_name">help-zh.html</string>
 
 	<string name="menu_item_remove_fav">从我的最爱中删除</string>
 	<string name="menu_share_title">分享</string>
@@ -14,6 +15,7 @@
 	<string name="show_owner_photos">显示作者照片</string>
 	<string name="view_big_photo">显示大图</string>
 
+	<string name="new_btn">新建</string>
 	<string name="ok_btn">确认</string>
 	<string name="cancel_btn">取消</string>
 	<string name="submit_btn">提交</string>

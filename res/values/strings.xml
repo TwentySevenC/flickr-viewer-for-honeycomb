@@ -15,6 +15,7 @@
 	<string name="show_owner_photos">Show Owner\'s Photos</string>
 	<string name="view_big_photo">View Big Photo</string>
 
+	<string name="new_btn">New</string>
 	<string name="ok_btn">OK</string>
 	<string name="cancel_btn">Cancel</string>
 	<string name="submit_btn">Submit</string>
