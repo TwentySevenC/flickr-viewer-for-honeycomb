@@ -8,6 +8,7 @@
 package com.gmail.charleszq.ui.comp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -70,6 +72,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	private Photo mCurrentPhoto;
 	private String mUserId;
 	private String mToken;
+	private String mSecret;
 
 	private boolean mIsMyOwnPhoto;
 
@@ -82,7 +85,12 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	 * The set to store the group/set ids which the given photo is already in.
 	 */
 	private Set<String> mPhotoGroupIds = new HashSet<String>();
-	private String mSecret;
+
+	/**
+	 * The map to store the photo gallery, photo set, or photo groups which are
+	 * available to add a photo in.
+	 */
+	private Map<String, IListItemAdapter> mAvailableCollections;
 
 	/**
 	 * @param context
@@ -176,9 +184,12 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 					R.anim.push_right_out));
 			vs.showPrevious();
 		} else if (view == mOkButton) {
-			// TODO add to groups.
+			if(mCheckedItems.isEmpty()) {
+				Toast.makeText(getContext(), R.string.no_photo_coll_selected, Toast.LENGTH_SHORT).show();
+				return;
+			}
 		} else if (view == mCreateNewButton) {
-			FragmentManager fm = ((Activity)getContext()).getFragmentManager();
+			FragmentManager fm = ((Activity) getContext()).getFragmentManager();
 			FragmentTransaction ft = fm.beginTransaction();
 			Fragment prev = fm.findFragmentByTag("crt_gallery_dialog"); //$NON-NLS-1$
 			if (prev != null) {
@@ -221,10 +232,12 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 				}
 			}
 			List<IListItemAdapter> items = new ArrayList<IListItemAdapter>();
+			mAvailableCollections = new HashMap<String, IListItemAdapter>();
 			List<IListItemAdapter> values = map.get(key);
 			for (IListItemAdapter item : values) {
 				if (!mPhotoGroupIds.contains(item.getId())) {
 					items.add(item);
+					mAvailableCollections.put(item.getId(), item);
 				}
 			}
 			mSectionAdapter.addSection(getContext().getString(key),

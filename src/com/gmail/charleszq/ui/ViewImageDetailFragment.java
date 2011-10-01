@@ -212,6 +212,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			app = (FlickrViewerApplication) getActivity().getApplication();
 			token = app.getFlickrToken();
 			String userId = app.getUserId();
+			
 			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token, app
 					.getFlickrTokenSecrent());
 			mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(

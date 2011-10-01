@@ -202,6 +202,7 @@
 	<string name="auth_gen_req_token">Generating the authorization request...</string>
 	
 	<string name="error_download_big_photo">Unable to get the big photo, please try again.</string>
+	<string name="no_photo_coll_selected">Please select a gallery/set/group first.</string>
 </resources>
 
 

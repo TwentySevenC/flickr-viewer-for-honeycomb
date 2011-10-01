@@ -75,7 +75,13 @@ public class PeoplePublicPhotosDataProvider extends
 	 */
 	@Override
 	public PhotoList getPhotoList() throws Exception {
-		Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken, mSecret);
+
+		Flickr f = null;
+		if (mToken == null) {
+			f = FlickrHelper.getInstance().getFlickr();
+		} else {
+			f = FlickrHelper.getInstance().getFlickrAuthed(mToken, mSecret);
+		}
 
 		PeopleInterface pi = f.getPeopleInterface();
 		Set<String> extras = new HashSet<String>();
@@ -88,8 +94,8 @@ public class PeoplePublicPhotosDataProvider extends
 
 	@Override
 	public String getDescription(Context context) {
-		return String.format(context.getResources()
-				.getString(R.string.photo_stream_of), mUserName);
+		return String.format(context.getResources().getString(
+				R.string.photo_stream_of), mUserName);
 	}
 
 }
