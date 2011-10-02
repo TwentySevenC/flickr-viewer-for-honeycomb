@@ -50,7 +50,7 @@ public class RemoveFavAction extends ActivityAwareAction {
 				FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 						.getApplication();
                 String mToken = app.getFlickrToken();
-				String secret = app.getFlickrTokenSecrent();
+				String secret = app.getFlickrTokenSecret();
 				Flickr f = FlickrHelper.getInstance().getFlickrAuthed(mToken,
 						secret);
                 FavoritesInterface fi = f.getFavoritesInterface();

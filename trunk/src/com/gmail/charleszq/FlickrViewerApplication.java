@@ -73,7 +73,7 @@ public class FlickrViewerApplication extends Application {
 		String userId = getUserId();
 		String userName = getUserName();
 		String token = getFlickrToken();
-		String tokenSecret = getFlickrTokenSecrent();
+		String tokenSecret = getFlickrTokenSecret();
 		if (userId == null || token == null || tokenSecret == null) {
 			return null;
 		}
@@ -116,7 +116,7 @@ public class FlickrViewerApplication extends Application {
 		editor.commit();
 	}
 
-	public String getFlickrTokenSecrent() {
+	public String getFlickrTokenSecret() {
 		return getSharedPreferenceValue(Constants.FLICKR_TOKEN_SECRENT, null);
 	}
 

@@ -58,7 +58,7 @@ public class ContactUploadService extends IntentService {
 		if (context instanceof FlickrViewerApplication) {
 			FlickrViewerApplication app = (FlickrViewerApplication) context;
 			token = app.getFlickrToken();
-			secret = app.getFlickrTokenSecrent();
+			secret = app.getFlickrTokenSecret();
 			intervalInHours = app.getContactUploadCheckInterval();
 
 			if (token == null || secret == null

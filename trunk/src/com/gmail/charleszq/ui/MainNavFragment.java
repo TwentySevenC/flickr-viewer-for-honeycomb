@@ -151,7 +151,7 @@ public class MainNavFragment extends Fragment {
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
 			String token = app.getFlickrToken();
-			String tokenSecret = app.getFlickrTokenSecrent();
+			String tokenSecret = app.getFlickrTokenSecret();
 			if (token == null || tokenSecret == null) {
 				ShowAuthDialogAction showAuthAction = new ShowAuthDialogAction(
 						getActivity(), action);
@@ -211,7 +211,7 @@ public class MainNavFragment extends Fragment {
 		final FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String token = app.getFlickrToken();
-		String tokenSecret = app.getFlickrTokenSecrent();
+		String tokenSecret = app.getFlickrTokenSecret();
 		userPanel
 				.setVisibility(token == null || tokenSecret == null ? View.INVISIBLE
 						: View.VISIBLE);

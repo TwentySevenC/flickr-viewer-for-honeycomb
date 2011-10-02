@@ -16,6 +16,7 @@
 	<string name="view_big_photo">显示大图</string>
 
 	<string name="new_btn">新建</string>
+	<string name="begin_btn">开始</string>
 	<string name="ok_btn">确认</string>
 	<string name="cancel_btn">取消</string>
 	<string name="submit_btn">提交</string>
@@ -185,6 +186,8 @@
 	
 	<string name="error_download_big_photo">无法获取大图，请稍后重试.</string>
 	<string name="no_photo_coll_selected">请先选择一个博览馆，或照片集，或照片组.</string>
+	<string name="add_photo_to_pool_hint">某些照片组设置有一些限制，请添加您的照片到组的时候遵守这些规则.</string>
+	<string name="add_photo_to_pool_dlg_title">添加到照片集</string>
 </resources>
 
 

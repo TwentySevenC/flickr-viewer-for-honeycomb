@@ -59,10 +59,7 @@ public class AuthFragmentDialog extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getDialog()
-				.setTitle(
-						getActivity().getResources().getString(
-								R.string.auth_dlg_title));
+		getDialog().setTitle(getActivity().getString(R.string.auth_dlg_title));
 		View view = inflater.inflate(R.layout.auth_dlg, null);
 
 		Button authButton = (Button) view.findViewById(R.id.button_auth);
@@ -126,7 +123,7 @@ public class AuthFragmentDialog extends DialogFragment {
 	private String getTokenSecret() {
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
-		return app.getFlickrTokenSecrent();
+		return app.getFlickrTokenSecret();
 	}
 
 	/**

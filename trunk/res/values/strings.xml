@@ -2,7 +2,7 @@
 <resources>
 	<string name="app_name">Flickr Viewer HD</string>
 	<string name="help_file_name">help.html</string>
-	
+
 	<string name="menu_item_remove_fav">Remove from Favorites</string>
 	<string name="menu_share_title">Share</string>
 	<string name="menu_write_comment">Comment</string>
@@ -16,6 +16,7 @@
 	<string name="view_big_photo">View Big Photo</string>
 
 	<string name="new_btn">New</string>
+	<string name="begin_btn">Begin</string>
 	<string name="ok_btn">OK</string>
 	<string name="cancel_btn">Cancel</string>
 	<string name="submit_btn">Submit</string>
@@ -187,7 +188,7 @@
 	<string name="tag_search_hint">Search by Tags</string>
 
 	<string name="error_get_photo_detail">Unable to get the detail information.</string>
-	
+
 	<!-- Create gallery -->
 	<string name="crt_gallery_title">Title*</string>
 	<string name="crt_gallery_desc_man">Description</string>
@@ -196,13 +197,19 @@
 	<string name="dlg_title_crt_photo_set">Create Photo Set</string>
 	<string name="gallery_created">Gallery created successfully.</string>
 	<string name="photo_set_created">Photo set created successfully.</string>
-	
+
 	<!-- auth process -->
-	<string name="fail_to_oauth">Failed to access your flickr account, please try again</string>
+	<string name="fail_to_oauth">Failed to access your flickr account, please try
+		again</string>
 	<string name="auth_gen_req_token">Generating the authorization request...</string>
-	
-	<string name="error_download_big_photo">Unable to get the big photo, please try again.</string>
+
+	<string name="error_download_big_photo">Unable to get the big photo, please try again.
+	</string>
 	<string name="no_photo_coll_selected">Please select a gallery/set/group first.</string>
+	<string name="add_photo_to_pool_hint">When adding your photos to groups, please be aware
+		that some groups may have constraints, make sure you follow the rules
+		of the groups.</string>
+	<string name="add_photo_to_pool_dlg_title">Add to Pools</string>
 </resources>
 
 

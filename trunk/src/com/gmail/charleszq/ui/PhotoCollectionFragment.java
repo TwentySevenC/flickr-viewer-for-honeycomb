@@ -47,7 +47,7 @@ public class PhotoCollectionFragment extends Fragment implements
 		String userId = app.getUserId();
 		String token = app.getFlickrToken();
 		mCollectionComponent.initialize(userId, token, app
-				.getFlickrTokenSecrent());
+				.getFlickrTokenSecret());
 
 		ImageButton btnBack = (ImageButton) view.findViewById(R.id.btn_back);
 		btnBack.setTag(R.id.btn_back);

@@ -73,7 +73,7 @@ public class WriteCommentDialog extends DialogFragment {
 
         FlickrViewerApplication app = (FlickrViewerApplication) getActivity().getApplication();
         String token = app.getFlickrToken();
-        String secret = app.getFlickrTokenSecrent();
+        String secret = app.getFlickrTokenSecret();
 
         WriteCommentTask task = new WriteCommentTask(this);
         task.execute(mPhotoId, comment, token, secret);

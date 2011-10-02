@@ -107,12 +107,12 @@ public class CreateGalleryDialog extends DialogFragment implements
 						.getApplication();
 				if (this.mCreationType == CollectionCreationType.GALLERY) {
 					CreateGalleryTask task = new CreateGalleryTask(app
-							.getFlickrToken(), app.getFlickrTokenSecrent(),
+							.getFlickrToken(), app.getFlickrTokenSecret(),
 							this);
 					task.execute(title, description, mPrimaryPhotoId);
 				} else {
 					CreatePhotoSetTask psTask = new CreatePhotoSetTask(app
-							.getFlickrToken(), app.getFlickrTokenSecrent(),
+							.getFlickrToken(), app.getFlickrTokenSecret(),
 							this);
 					psTask.execute(title, mPrimaryPhotoId, description);
 				}
