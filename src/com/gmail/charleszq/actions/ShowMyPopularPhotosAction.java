@@ -38,7 +38,7 @@ public class ShowMyPopularPhotosAction extends ActivityAwareAction {
 		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 				.getApplication();
 		PopularPhotoListProvider mDataProvider = new PopularPhotoListProvider(
-				app.getFlickrToken(), app.getFlickrTokenSecrent());
+				app.getFlickrToken(), app.getFlickrTokenSecret());
 		AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
 				mDataProvider, null, mActivity.getString(R.string.task_loading_populars));
 		task.execute();

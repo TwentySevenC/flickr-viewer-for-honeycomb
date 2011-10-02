@@ -52,7 +52,7 @@ public class ShowFavoritesAction extends ActivityAwareAction {
             mUserId = app.getUserId();
         }
         PaginationPhotoListDataProvider dp = new FavoritePhotosDataProvider(
-				mUserId, token, app.getFlickrTokenSecrent());
+				mUserId, token, app.getFlickrTokenSecret());
 		IContextMenuHandler menuHandler = new FavContextMenuHandler(mActivity,
 				dp);
 		IPhotoListReadyListener photoReadyListener = new DefaultPhotoListReadyListener(

@@ -47,6 +47,7 @@ import com.gmail.charleszq.task.UserPhotoCollectionTask;
 import com.gmail.charleszq.task.GetPhotoPoolTask.IPhotoPoolListener;
 import com.gmail.charleszq.task.ImageDownloadTask.ParamType;
 import com.gmail.charleszq.task.UserPhotoCollectionTask.IUserPhotoCollectionFetched;
+import com.gmail.charleszq.ui.AddToPoolDialog;
 import com.gmail.charleszq.ui.CreateGalleryDialog;
 import com.gmail.charleszq.ui.CreateGalleryDialog.CollectionCreationType;
 import com.gmail.charleszq.utils.ImageCache;
@@ -188,6 +189,16 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 				Toast.makeText(getContext(), R.string.no_photo_coll_selected, Toast.LENGTH_SHORT).show();
 				return;
 			}
+			FragmentManager fm = ((Activity) getContext()).getFragmentManager();
+			FragmentTransaction ft = fm.beginTransaction();
+			Fragment prev = fm.findFragmentByTag("add_to_pool_dlg"); //$NON-NLS-1$
+			if (prev != null) {
+				ft.remove(prev);
+			}
+			ft.addToBackStack(null);
+			AddToPoolDialog poolDialog = new AddToPoolDialog();
+			poolDialog.setCancelable(true);
+			poolDialog.show(ft, "add_to_pool_dlg"); //$NON-NLS-1$
 		} else if (view == mCreateNewButton) {
 			FragmentManager fm = ((Activity) getContext()).getFragmentManager();
 			FragmentTransaction ft = fm.beginTransaction();

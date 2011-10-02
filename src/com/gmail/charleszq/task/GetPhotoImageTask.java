@@ -82,7 +82,7 @@ public class GetPhotoImageTask extends
 		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 				.getApplication();
 		String token = app.getFlickrToken();
-		String tokenSecret = app.getFlickrTokenSecrent();
+		String tokenSecret = app.getFlickrTokenSecret();
 		PhotosInterface pi = null;
 		if (token != null) {
 			pi = FlickrHelper.getInstance().getFlickrAuthed(token, tokenSecret)

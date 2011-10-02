@@ -89,7 +89,12 @@ public class PeoplePublicPhotosDataProvider extends
 		extras.add(Extras.GEO);
 		extras.add(Extras.OWNER_NAME);
 		extras.add(Extras.VIEWS);
-		return pi.getPhotos(mUserId, extras, mPageSize, mPageNumber);
+
+		if (mToken == null) {
+			return pi.getPublicPhotos(mUserId, extras, mPageSize, mPageNumber);
+		} else {
+			return pi.getPhotos(mUserId, extras, mPageSize, mPageNumber);
+		}
 	}
 
 	@Override

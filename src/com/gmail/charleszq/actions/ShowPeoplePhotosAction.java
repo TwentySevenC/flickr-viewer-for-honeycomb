@@ -87,7 +87,7 @@ public class ShowPeoplePhotosAction extends ActivityAwareAction {
             mUserName = app.getUserName();
         }
 		mDataProvider = new PeoplePublicPhotosDataProvider(mUserId, token,
-				mUserName, app.getFlickrTokenSecrent());
+				mUserName, app.getFlickrTokenSecret());
         AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
                 mDataProvider, mPhotosReadyListener);
         task.execute();

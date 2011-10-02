@@ -164,7 +164,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 					.getApplication();
 			String token = app.getFlickrToken();
-			String tokenSecret = app.getFlickrTokenSecrent();
+			String tokenSecret = app.getFlickrTokenSecret();
 			ShowWriteCommentAction commentAction = new ShowWriteCommentAction(
 					getActivity(), mCurrentPhoto.getId());
 			if (token == null || tokenSecret == null) {
@@ -178,7 +178,7 @@ public class ViewImageDetailFragment extends Fragment implements
 		case R.id.menu_item_add_as_fav:
 			app = (FlickrViewerApplication) getActivity().getApplication();
 			token = app.getFlickrToken();
-			tokenSecret = app.getFlickrTokenSecrent();
+			tokenSecret = app.getFlickrTokenSecret();
 			AddFavAction addfavAction = new AddFavAction(getActivity(),
 					mCurrentPhoto.getId());
 			if (token == null || tokenSecret == null) {
@@ -211,19 +211,63 @@ public class ViewImageDetailFragment extends Fragment implements
 		case R.id.menu_item_add_photo_to_group:
 			app = (FlickrViewerApplication) getActivity().getApplication();
 			token = app.getFlickrToken();
-			String userId = app.getUserId();
-			
-			mAddPhotoToGroupComponent.init(mCurrentPhoto, userId, token, app
-					.getFlickrTokenSecrent());
-			mAddGroupViewSwither.setInAnimation(AnimationUtils.loadAnimation(
-					getActivity(), R.anim.push_right_in));
-			mAddGroupViewSwither.setOutAnimation(AnimationUtils.loadAnimation(
-					getActivity(), R.anim.push_left_out));
-			mAddGroupViewSwither.showNext();
+			tokenSecret = app.getFlickrTokenSecret();
+
+			IAction addToPoolAction = new AddPhotoToPoolAction(getActivity(),
+					mAddGroupViewSwither, mAddPhotoToGroupComponent,
+					mCurrentPhoto);
+			if (token == null || tokenSecret == null) {
+				ShowAuthDialogAction dlgact = new ShowAuthDialogAction(
+						getActivity(), addToPoolAction);
+				dlgact.execute();
+			} else {
+				addToPoolAction.execute();
+			}
+
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	/**
+	 * Represents the action to show the UI that adds a photo to galleries, sets
+	 * or groups
+	 * 
+	 * @author charles
+	 * 
+	 */
+	private static class AddPhotoToPoolAction implements IAction {
+
+		private Activity mContext;
+		private AddPhotoToGroupComponent mComponent;
+		private Photo mCurrentPhoto;
+		private ViewSwitcher mContainer;
+
+		AddPhotoToPoolAction(Activity context, ViewSwitcher container,
+				AddPhotoToGroupComponent component, Photo photo) {
+			this.mContext = context;
+			this.mContainer = container;
+			this.mComponent = component;
+			this.mCurrentPhoto = photo;
+		}
+
+		@Override
+		public void execute() {
+			FlickrViewerApplication app = (FlickrViewerApplication) mContext
+					.getApplication();
+			String userId = app.getUserId();
+			String token = app.getFlickrToken();
+			String secret = app.getFlickrTokenSecret();
+
+			mComponent.init(mCurrentPhoto, userId, token, secret);
+			mContainer.setInAnimation(AnimationUtils.loadAnimation(mContext,
+					R.anim.push_right_in));
+			mContainer.setOutAnimation(AnimationUtils.loadAnimation(mContext,
+					R.anim.push_left_out));
+			mContainer.showNext();
+		}
+
 	}
 
 	private void showBigImage() {

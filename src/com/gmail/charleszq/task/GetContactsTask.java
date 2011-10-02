@@ -35,7 +35,7 @@ public class GetContactsTask extends
 		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
 				.getApplication();
         String token = app.getFlickrToken();
-		String secret = app.getFlickrTokenSecrent();
+		String secret = app.getFlickrTokenSecret();
 		DefaultContactDataProvider dp = new DefaultContactDataProvider(token,
 				secret);
         return dp.getContacts(params[0]);

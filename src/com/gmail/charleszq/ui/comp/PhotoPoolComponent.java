@@ -109,7 +109,7 @@ public class PhotoPoolComponent extends FrameLayout implements
 			FlickrViewerApplication app = (FlickrViewerApplication) ((Activity) getContext())
 					.getApplication();
 			token = app.getFlickrToken();
-			secret = app.getFlickrTokenSecrent();
+			secret = app.getFlickrTokenSecret();
 		}
 		GetPhotoPoolTask task = new GetPhotoPoolTask(this);
 		task.execute(photoId, token, secret);

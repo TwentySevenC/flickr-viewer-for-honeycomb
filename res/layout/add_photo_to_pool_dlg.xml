@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:padding="5dp" android:orientation="vertical"
+	android:layout_width="match_parent" android:layout_height="match_parent">
+	<TextView android:layout_width="fill_parent" android:padding="20dp"
+		android:layout_height="wrap_content" android:singleLine="false"
+		android:text="@string/add_photo_to_pool_hint" />
+	<ProgressBar android:layout_width="fill_parent"
+		android:layout_marginLeft="20dp" android:layout_marginRight="20dp"
+		style="?android:attr/progressBarStyleHorizontal" android:id="@+id/progressBar1"
+		android:layout_height="wrap_content"></ProgressBar>
+	<TextView android:id="@+id/process_msg" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" />
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<Button android:id="@+id/begin_btn" android:layout_width="0dp"
+			android:text="@string/begin_btn" android:layout_height="wrap_content"
+			android:layout_weight="1" />
+		<Button android:id="@+id/cancel_btn" android:layout_width="0dp"
+			android:text="@string/cancel_btn" android:layout_height="wrap_content"
+			android:layout_weight="1" />
+	</LinearLayout>
+</LinearLayout>

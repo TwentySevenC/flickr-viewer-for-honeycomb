@@ -65,7 +65,7 @@ public class GetActivitiesAction extends ActivityAwareAction {
 		String token = app.getFlickrToken();
 		GetActivitiesTask task = new GetActivitiesTask(mActivity,
 				mTaskDoneListener);
-		task.execute(token, app.getFlickrTokenSecrent());
+		task.execute(token, app.getFlickrTokenSecret());
 	}
 
 }
