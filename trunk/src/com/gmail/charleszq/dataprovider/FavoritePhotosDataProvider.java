@@ -60,7 +60,7 @@ public class FavoritePhotosDataProvider extends PaginationPhotoListDataProvider 
         extras.add(Extras.GEO);
         extras.add(Extras.OWNER_NAME);
         extras.add(Extras.VIEWS);
-		mPhotoList = fi.getList(mUserId, this.mPageSize, this.mPageNumber,
+		mPhotoList = fi.getList(mUserId, null, null, this.mPageSize, this.mPageNumber,
 				extras);
         return mPhotoList;
     }
