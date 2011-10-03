@@ -188,6 +188,7 @@
 	<string name="no_photo_coll_selected">请先选择一个博览馆，或照片集，或照片组.</string>
 	<string name="add_photo_to_pool_hint">某些照片组设置有一些限制，请添加您的照片到组的时候遵守这些规则.</string>
 	<string name="add_photo_to_pool_dlg_title">添加到照片集</string>
+	<string name="click_begin_to_start">请点击\'开始\'</string>
 </resources>
 
 
