@@ -210,6 +210,7 @@
 		that some groups may have constraints, make sure you follow the rules
 		of the groups.</string>
 	<string name="add_photo_to_pool_dlg_title">Add to Pools</string>
+	<string name="click_begin_to_start">Click \'Begin\' to start</string>
 </resources>
 
 

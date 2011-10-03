@@ -91,7 +91,7 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 	 * The map to store the photo gallery, photo set, or photo groups which are
 	 * available to add a photo in.
 	 */
-	private Map<String, IListItemAdapter> mAvailableCollections;
+	private Map<String, IListItemAdapter> mAvailableCollections = new HashMap<String, IListItemAdapter>();
 
 	/**
 	 * @param context
@@ -136,6 +136,8 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mCreateNewButton.setOnClickListener(this);
 		mListView.setOnItemClickListener(this);
 		mListView.setItemsCanFocus(false);
+		
+		mAvailableCollections.clear();
 	}
 
 	/**
@@ -185,8 +187,9 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 					R.anim.push_right_out));
 			vs.showPrevious();
 		} else if (view == mOkButton) {
-			if(mCheckedItems.isEmpty()) {
-				Toast.makeText(getContext(), R.string.no_photo_coll_selected, Toast.LENGTH_SHORT).show();
+			if (mCheckedItems.isEmpty()) {
+				Toast.makeText(getContext(), R.string.no_photo_coll_selected,
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 			FragmentManager fm = ((Activity) getContext()).getFragmentManager();
@@ -196,7 +199,8 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 				ft.remove(prev);
 			}
 			ft.addToBackStack(null);
-			AddToPoolDialog poolDialog = new AddToPoolDialog();
+			AddToPoolDialog poolDialog = new AddToPoolDialog(mCurrentPhoto,
+					mAvailableCollections, mCheckedItems);
 			poolDialog.setCancelable(true);
 			poolDialog.show(ft, "add_to_pool_dlg"); //$NON-NLS-1$
 		} else if (view == mCreateNewButton) {
@@ -243,7 +247,6 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 				}
 			}
 			List<IListItemAdapter> items = new ArrayList<IListItemAdapter>();
-			mAvailableCollections = new HashMap<String, IListItemAdapter>();
 			List<IListItemAdapter> values = map.get(key);
 			for (IListItemAdapter item : values) {
 				if (!mPhotoGroupIds.contains(item.getId())) {
