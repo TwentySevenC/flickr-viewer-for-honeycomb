@@ -15,7 +15,7 @@
 	<string name="show_owner_photos">Show Owner\'s Photos</string>
 	<string name="view_big_photo">View Big Photo</string>
 
-	<string name="new_btn">New</string>
+	<string name="new_btn">Create</string>
 	<string name="begin_btn">Begin</string>
 	<string name="ok_btn">OK</string>
 	<string name="cancel_btn">Cancel</string>
@@ -208,9 +208,13 @@
 	<string name="no_photo_coll_selected">Please select a gallery/set/group first.</string>
 	<string name="add_photo_to_pool_hint">When adding your photos to groups, please be aware
 		that some groups may have constraints, make sure you follow the rules
-		of the groups.</string>
+		of the groups.\n\nBe careful when trying to add your private photos to a
+		group, it will be visible to other.</string>
 	<string name="add_photo_to_pool_dlg_title">Add to Pools</string>
 	<string name="click_begin_to_start">Click \'Begin\' to start</string>
+	<string name="photo_added_to">Photo added to</string>
+	<string name="photo_failed_to_add_to">Failed to add photo to</string>
+	<string name="photo_add_to_pool_fail_reason">Reason:</string>
 </resources>
 
 

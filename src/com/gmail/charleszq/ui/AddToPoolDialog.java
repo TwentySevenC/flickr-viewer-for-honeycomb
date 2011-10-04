@@ -22,10 +22,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.Flickr;
@@ -181,17 +181,22 @@ public class AddToPoolDialog extends DialogFragment implements OnClickListener {
 				if (item != null) {
 					try {
 						addItemToPool(item, photoId, token, tokenSecret);
-						builder.append("\n").append("Pool ").append(
-								item.getTitle()).append(" done");
-						mDialog.updateProgressMessage("Photo added to "
-								+ item.getTitle());
+						builder.append("\n").append("Pool ").append( //$NON-NLS-1$//$NON-NLS-2$
+								item.getTitle()).append(" done"); //$NON-NLS-1$
+						mDialog.updateProgressMessage(mDialog
+								.getString(R.string.photo_added_to)
+								+ " " + item.getTitle()); //$NON-NLS-1$
 					} catch (Exception e) {
-						builder.append("\n").append("Pool ").append(
-								item.getTitle()).append(" fail: ").append(
+						builder.append("\n").append("Pool ").append( //$NON-NLS-1$//$NON-NLS-2$
+								item.getTitle()).append(" fail: ").append( //$NON-NLS-1$
 								e.getMessage());
-						mDialog.updateProgressMessage("Fail to add photo to "
-								+ item.getTitle() + ", reason: "
-								+ e.getMessage());
+						mDialog
+								.updateProgressMessage(mDialog
+										.getString(R.string.photo_failed_to_add_to)
+										+ " " //$NON-NLS-1$
+										+ item.getTitle()
+										+ ", " + mDialog.getString(R.string.photo_add_to_pool_fail_reason) //$NON-NLS-1$
+										+ e.getMessage());
 					}
 				} else {
 					logger.error("Unable to find the pool by id: " + id); //$NON-NLS-1$
@@ -223,15 +228,27 @@ public class AddToPoolDialog extends DialogFragment implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(String result) {
-			Toast.makeText(mDialog.getActivity(), result, Toast.LENGTH_LONG)
-					.show();
+			// Toast.makeText(mDialog.getActivity(), result, Toast.LENGTH_LONG)
+			// .show();
+			FlickrViewerMessage msg = new FlickrViewerMessage(
+					FlickrViewerMessage.REFRESH_PHOTO_POOLS,
+					mDialog.mCurrentPhoto.getId());
+			FlickrViewerApplication app = (FlickrViewerApplication) mDialog
+					.getActivity().getApplication();
+			app.handleMessage(msg);
+
+			FlickrViewerMessage msg2 = new FlickrViewerMessage(
+					FlickrViewerMessage.REFRESH_USER_POOL,
+					mDialog.mCurrentPhoto.getId());
+			app.handleMessage(msg2);
+
 			mDialog.dismiss();
 		}
 
 		@Override
 		protected void onProgressUpdate(Integer... values) {
-			super.onProgressUpdate(values);
 			mDialog.mProgressBar.setProgress(values[0]);
+			super.onProgressUpdate(values);
 		}
 
 	}
