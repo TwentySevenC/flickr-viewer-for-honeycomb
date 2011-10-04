@@ -730,13 +730,12 @@ public class ViewImageDetailFragment extends Fragment implements
 		MenuItem ownerPhotoItem = menu
 				.findItem(R.id.menu_item_show_owner_photos);
 		MenuItem favItem = menu.findItem(R.id.menu_item_add_as_fav);
-		// MenuItem addToGroupItem = menu
-		// .findItem(R.id.menu_item_add_photo_to_group);
+		MenuItem addToGroupItem = menu
+				.findItem(R.id.menu_item_add_photo_to_group);
 
 		FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
 				.getApplication();
 		String userId = app.getUserId();
-		// addToGroupItem.setVisible(userId != null);
 		if (userId == null || mCurrentPhoto == null
 				|| mCurrentPhoto.getOwner() == null) {
 			return;
@@ -748,6 +747,15 @@ public class ViewImageDetailFragment extends Fragment implements
 		}
 		if (favItem != null) {
 			favItem.setVisible(!same);
+		}
+
+		if (mAddGroupViewSwither != null
+				&& mAddGroupViewSwither.getCurrentView() instanceof AddPhotoToGroupComponent) {
+			if (addToGroupItem != null)
+				addToGroupItem.setVisible(false);
+		} else {
+			if (addToGroupItem != null)
+				addToGroupItem.setVisible(true);
 		}
 	}
 

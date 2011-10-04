@@ -41,6 +41,12 @@ public final class FlickrViewerMessage {
 	 * this message says that the pool information of a photo is changed.
 	 */
 	public static final String REFRESH_PHOTO_POOLS = "refresh.photo.pool"; //$NON-NLS-1$
+	
+	/**
+	 * this message says that a photo was added to pools, then refresh the available pool list, it only 
+	 * works on my own photos.
+	 */
+	public static final String REFRESH_USER_POOL = "refresh.user.pools"; //$NON-NLS-1$
 
 	private String mMessageId;
 	private Object mMessageData;

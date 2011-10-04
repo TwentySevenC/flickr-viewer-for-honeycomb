@@ -39,7 +39,10 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.event.FlickrViewerMessage;
+import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.model.IListItemAdapter;
 import com.gmail.charleszq.task.GetPhotoPoolTask;
 import com.gmail.charleszq.task.ImageDownloadTask;
@@ -63,7 +66,7 @@ import com.gmail.yuyang226.flickr.photos.PhotoPlace;
  */
 public class AddPhotoToGroupComponent extends FrameLayout implements
 		OnClickListener, IUserPhotoCollectionFetched, OnItemClickListener,
-		IPhotoPoolListener {
+		IPhotoPoolListener, IFlickrViewerMessageHandler {
 
 	private ListView mListView;
 	private Button mOkButton, mCancelButton, mCreateNewButton;
@@ -136,8 +139,24 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		mCreateNewButton.setOnClickListener(this);
 		mListView.setOnItemClickListener(this);
 		mListView.setItemsCanFocus(false);
-		
+
 		mAvailableCollections.clear();
+	}
+
+	@Override
+	protected void onAttachedToWindow() {
+		super.onAttachedToWindow();
+		FlickrViewerApplication app = (FlickrViewerApplication) ((Activity) getContext())
+				.getApplication();
+		app.registerMessageHandler(this);
+	}
+
+	@Override
+	protected void onDetachedFromWindow() {
+		FlickrViewerApplication app = (FlickrViewerApplication) ((Activity) getContext())
+				.getApplication();
+		app.unregisterMessageHandler(this);
+		super.onDetachedFromWindow();
 	}
 
 	/**
@@ -156,19 +175,30 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		this.mToken = token;
 		this.mSecret = tokenSecret;
 
-		mCheckedItems.clear();
-		mPhotoGroupIds.clear();
-
 		mSectionAdapter = new SimpleSectionAdapter(getContext());
 		mListView.setAdapter(mSectionAdapter);
 
 		mIsMyOwnPhoto = authUserId.equals(mCurrentPhoto.getOwner().getId());
+		refresh(mUserId, mCurrentPhoto, mToken, mSecret);
+	}
+
+	/**
+	 * Refreshes the photo group list, and show only available photo pools which
+	 * the current photo can be put into.
+	 */
+	private void refresh(String userId, Photo photo, String token,
+			String tokenSecret) {
+		mCheckedItems.clear();
+		mPhotoGroupIds.clear();
 		if (mIsMyOwnPhoto) {
+			// if the photo is mine, we need to know which photo set/group this
+			// photo already was put into
 			GetPhotoPoolTask getPhotoPoolTask = new GetPhotoPoolTask(this);
 			getPhotoPoolTask.execute(photo.getId(), token, tokenSecret);
 		} else {
+			// if the photo is not mine, we only need to know the gallery list.
 			UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
-			task.execute(authUserId, token, tokenSecret);
+			task.execute(userId, token, tokenSecret);
 		}
 	}
 
@@ -384,5 +414,16 @@ public class AddPhotoToGroupComponent extends FrameLayout implements
 		// get user's set/group list
 		UserPhotoCollectionTask task = new UserPhotoCollectionTask(this);
 		task.execute(mUserId, mToken, mSecret);
+	}
+
+	@Override
+	public void handleMessage(FlickrViewerMessage message) {
+		if (FlickrViewerMessage.REFRESH_USER_POOL
+				.equals(message.getMessageId())) {
+			String photoId = message.getMessageData().toString();
+			if (mCurrentPhoto.getId().equals(photoId)) {
+				refresh(mUserId, mCurrentPhoto, mToken, mSecret);
+			}
+		}
 	}
 }
