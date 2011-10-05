@@ -23,7 +23,7 @@
 				android:clickable="true" android:scaleType="fitCenter"
 				android:background="@drawable/action_bar_item"
 				android:layout_weight="1" android:layout_height="32dp"
-				android:src="@drawable/blue_search" />
+				android:visibility="gone" android:src="@drawable/blue_search" />
 			<ImageButton android:layout_width="0dp"
 				android:clickable="true" android:id="@+id/btn_refresh"
 				android:scaleType="fitCenter" android:background="@drawable/action_bar_item"
