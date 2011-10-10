@@ -37,7 +37,7 @@ public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends
 
 	@Override
 	protected void onPostExecute(Result result) {
-		if( mDialog != null && mDialog.isShowing() ) {
+		if(mActivity != null && mDialog != null && mDialog.isShowing() ) {
 			mDialog.dismiss();
 		}
 	}

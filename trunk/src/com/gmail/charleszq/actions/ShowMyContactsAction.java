@@ -55,7 +55,7 @@ public class ShowMyContactsAction extends ActivityAwareAction {
             ContactsFragment fragment = new ContactsFragment(ret);
             ft.replace(R.id.main_area, fragment);
             ft.addToBackStack(Constants.CONTACT_BACK_STACK);
-            ft.commitAllowingStateLoss();
+            ft.commit();
         }
     };
 }
