@@ -12,6 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,13 +23,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.model.IListItemAdapter;
+import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.FlickrHelper;
 import com.gmail.yuyang226.flickr.Flickr;
 import com.gmail.yuyang226.flickr.FlickrException;
@@ -43,7 +50,8 @@ import com.gmail.yuyang226.flickr.photosets.PhotosetsInterface;
  * @author charles
  * 
  */
-public class AddToPoolDialog extends DialogFragment implements OnClickListener {
+public class AddToPoolDialog extends DialogFragment implements OnClickListener,
+		OnCheckedChangeListener {
 
 	static final int PROGRESS_MAX = 100;
 
@@ -61,6 +69,11 @@ public class AddToPoolDialog extends DialogFragment implements OnClickListener {
 	 * The photo to be added to pools.
 	 */
 	private Photo mCurrentPhoto;
+
+	/**
+	 * The checkbox to say whether starts the task next time.
+	 */
+	private CheckBox mAutoStart;
 
 	/**
 	 * The progress text
@@ -111,9 +124,33 @@ public class AddToPoolDialog extends DialogFragment implements OnClickListener {
 		mProgressBar.setMax(PROGRESS_MAX);
 		mProgressBar.setProgress(0);
 
+		mAutoStart = (CheckBox) view.findViewById(R.id.cb_donot_show);
+		mAutoStart.setChecked(isAutoStart());
+		mBeginButton.setEnabled(!mAutoStart.isChecked());
+		mAutoStart.setOnCheckedChangeListener(this);
+
 		mProgressMessage = (TextView) view.findViewById(R.id.process_msg);
 
 		return view;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (isAutoStart()) {
+			onClick(mBeginButton);
+		}
+	}
+
+	/**
+	 * Returns the preference setting.
+	 * 
+	 * @return
+	 */
+	private boolean isAutoStart() {
+		SharedPreferences sp = getActivity().getSharedPreferences(
+				Constants.DEF_PREF_NAME, Context.MODE_APPEND);
+		return sp.getBoolean(Constants.SETTING_ADD_TO_POOL_AUTO_BEGIN, false);
 	}
 
 	@Override
@@ -251,6 +288,15 @@ public class AddToPoolDialog extends DialogFragment implements OnClickListener {
 			super.onProgressUpdate(values);
 		}
 
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton button, boolean checked) {
+		SharedPreferences sp = getActivity().getSharedPreferences(
+				Constants.DEF_PREF_NAME, Context.MODE_APPEND);
+		Editor editor = sp.edit();
+		editor.putBoolean(Constants.SETTING_ADD_TO_POOL_AUTO_BEGIN, checked);
+		editor.commit();
 	}
 
 }
