@@ -25,6 +25,9 @@
 		<CheckBoxPreference android:key="tag.search.mode"
 			android:defaultValue="false" android:title="@string/gen_tag_search_mode"
 			android:summary="@string/summary_gen_tag_search_mode" />
+		<CheckBoxPreference android:key="add.to.pool.auto.begin"
+			android:defaultValue="false" android:title="@string/pref_add_to_pool_auto_begin"
+			android:summary="@string/summary_add_to_pool_auto_begin" />
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/photo_list">
