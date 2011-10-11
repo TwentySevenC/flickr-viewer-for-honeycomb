@@ -208,13 +208,19 @@
 	<string name="no_photo_coll_selected">Please select a gallery/set/group first.</string>
 	<string name="add_photo_to_pool_hint">When adding your photos to groups, please be aware
 		that some groups may have constraints, make sure you follow the rules
-		of the groups.\n\nBe careful when trying to add your private photos to a
+		of the groups.\n\nBe careful when trying to add your private photos to
+		a
 		group, it will be visible to other.</string>
 	<string name="add_photo_to_pool_dlg_title">Add to Pools</string>
 	<string name="click_begin_to_start">Click \'Begin\' to start</string>
 	<string name="photo_added_to">Photo added to</string>
 	<string name="photo_failed_to_add_to">Failed to add photo to</string>
 	<string name="photo_add_to_pool_fail_reason">Reason:</string>
+	<string name="add_to_pool_auto_begin">Begin automatically next time</string>
+	
+	<string name="pref_add_to_pool_auto_begin">Add photo to pools</string>
+	<string name="summary_add_to_pool_auto_begin">Check this so that I do not need to click the
+		\'Begin\' button every time when adding a photo to pools</string>
 </resources>
 
 

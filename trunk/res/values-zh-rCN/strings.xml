@@ -192,6 +192,10 @@
 	<string name="photo_added_to">照片成功添加到了</string>
 	<string name="photo_failed_to_add_to">照片添加到照片组失败</string>
 	<string name="photo_add_to_pool_fail_reason">原因:</string>
+	<string name="add_to_pool_auto_begin">下次自动开始</string>
+	
+	<string name="pref_add_to_pool_auto_begin">添加照片到照片集</string>
+	<string name="summary_add_to_pool_auto_begin">添加照片到照片集的时候是否自动开始</string>
 </resources>
 
 
