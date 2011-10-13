@@ -108,15 +108,13 @@ public class MainNavFragment extends Fragment {
 						FragmentManager fm = getActivity().getFragmentManager();
 						FragmentTransaction ft2 = fm.beginTransaction();
 						Fragment setFragment = new PhotoCollectionFragment();
-						/**
-						* TODO: replace the imple here.
-						* Fragment mainNavFragment = fm.findFragmentByTag(Constants.FRG_TAG_MAIN_NAV);
-						* if( mainNavFragment != null ) {
-						* 		ft2.remove(mainNavFragment);
-						* }
-						* ft2.add(R.id.nav_frag, setFragment);
-						*/
-						ft2.replace(R.id.nav_frg, setFragment);
+						Fragment mainNavFragment = fm
+								.findFragmentByTag(Constants.FRG_TAG_MAIN_NAV);
+						if (mainNavFragment != null) {
+							ft2.remove(mainNavFragment);
+						}
+						ft2.add(R.id.nav_frg, setFragment);
+						// ft2.replace(R.id.nav_frg, setFragment);
 						ft2.addToBackStack(Constants.USER_COLL_BACK_STACK);
 						ft2.commit();
 					}
