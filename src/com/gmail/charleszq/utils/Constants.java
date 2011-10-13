@@ -57,6 +57,9 @@ public final class Constants {
 	public static final String MAIN_MENU_BACK_STACK = "main.menu"; //$NON-NLS-1$
 	public static final String LOCATION_BACK_STACK = "photo.location"; //$NON-NLS-1$
 	public static final String HELP_BACK_STACK = "help"; //$NON-NLS-1$
+	
+	//fragment tags
+	public static final String FRG_TAG_MAIN_NAV = "main.nav"; //$NON-NLS-1$
 
 
 	// notifications

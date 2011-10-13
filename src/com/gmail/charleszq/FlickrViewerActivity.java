@@ -216,7 +216,7 @@ public class FlickrViewerActivity extends Activity implements
 		});
 
 		MainNavFragment menu = new MainNavFragment();
-		ft.replace(R.id.nav_frg, menu);
+		ft.replace(R.id.nav_frg, menu, Constants.FRG_TAG_MAIN_NAV);
 		ft.commit();
 
 		showHelp();
