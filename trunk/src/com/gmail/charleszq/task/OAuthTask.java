@@ -90,7 +90,7 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 			return oauthUrl.toString();
 		} catch (Exception e) {
 			logger.error("Error to oauth", e); //$NON-NLS-1$
-			return null;
+			return "error:" + e.getMessage(); //$NON-NLS-1$
 		}
 	}
 
@@ -112,9 +112,11 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 		if (mProgressDialog != null) {
 			mProgressDialog.dismiss();
 		}
-		if (result != null) {
+		if (result != null && !result.startsWith("error") ) {
 			mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri
 					.parse(result)));
+		} else {
+			Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
 		}
 	}
 
