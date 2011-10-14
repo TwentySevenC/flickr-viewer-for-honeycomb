@@ -100,6 +100,8 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 	 * @param tokenSecret
 	 */
 	private void saveTokenSecrent(String tokenSecret) {
+	
+		logger.debug("request token: " + tokenSecret); //$NON-NLS-1$
 		Activity act = (Activity) mContext;
 		FlickrViewerApplication app = (FlickrViewerApplication) act
 				.getApplication();
