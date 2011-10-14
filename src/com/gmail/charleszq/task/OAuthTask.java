@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -114,7 +115,7 @@ public class OAuthTask extends AsyncTask<Void, Integer, String> {
 		if (mProgressDialog != null) {
 			mProgressDialog.dismiss();
 		}
-		if (result != null && !result.startsWith("error") ) {
+		if (result != null && !result.startsWith("error") ) { //$NON-NLS-1$
 			mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri
 					.parse(result)));
 		} else {
