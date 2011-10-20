@@ -36,11 +36,32 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 	private String mPhotoPlaceId;
 	private int mPhotoPlaceKind;
 	private String mPhotoPlaceTitle;
+	
+	/**
+	 * The token and secret to make authed calls
+	 */
+	private String mToken, mTokenSecret;
 
+	/**
+	 * Constructor.
+	 * @param photoPlace
+	 */
 	public PhotoPoolDataProvider(PhotoPlace photoPlace) {
 		this.mPhotoPlaceId = photoPlace.getId();
 		this.mPhotoPlaceKind = photoPlace.getKind();
 		this.mPhotoPlaceTitle = photoPlace.getTitle();
+	}
+	
+	/**
+	 * Constructor.
+	 * @param photoPlace
+	 * @param token
+	 * @param tokenSecret
+	 */
+	public PhotoPoolDataProvider(PhotoPlace photoPlace, String token, String tokenSecret) {
+	    this(photoPlace);
+	    this.mToken = token;
+	    this.mTokenSecret = tokenSecret;
 	}
 
 	/*
@@ -58,7 +79,12 @@ public class PhotoPoolDataProvider extends PaginationPhotoListDataProvider {
 		extras.add(Extras.OWNER_NAME);
 		extras.add(Extras.VIEWS);
 
-		Flickr f = FlickrHelper.getInstance().getFlickr();
+		Flickr f = null;
+		if( mToken == null || mTokenSecret == null ) {
+		    f = FlickrHelper.getInstance().getFlickr();
+		} else {
+		    f = FlickrHelper.getInstance().getFlickrAuthed(mToken,mTokenSecret);
+		}
 		switch (mPhotoPlaceKind) {
 		case PhotoPlace.SET:
 			PhotosetsInterface psi = f.getPhotosetsInterface();

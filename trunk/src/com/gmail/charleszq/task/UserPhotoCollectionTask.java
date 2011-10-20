@@ -150,7 +150,7 @@ public class UserPhotoCollectionTask extends
 		}
 
 		// photo sets
-		PhotosetsInterface psi = FlickrHelper.getInstance().getFlickr()
+		PhotosetsInterface psi = FlickrHelper.getInstance().getFlickrAuthed(mToken,mSecret)
 				.getPhotosetsInterface();
 		try {
 			Photosets photosets = psi.getList(userId);
