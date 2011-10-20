@@ -16,39 +16,42 @@ import com.gmail.yuyang226.flickr.photos.PhotoPlace;
  * @author chalres
  * 
  */
-public class ShowPhotoPoolAction extends ActivityAwareAction {
+public class ShowPhotoPoolAction extends ActivityAwareAction
+{
 
-	private PhotoPlace mPhotoPlace;
-	private boolean mClearStack = false;
+    private PhotoPlace mPhotoPlace;
+    private boolean    mClearStack = false;
 
-	/**
-	 * @param activity
-	 */
-	public ShowPhotoPoolAction(Activity activity, PhotoPlace photoPlace) {
-		this(activity,photoPlace,false);
-	}
-	
-	public ShowPhotoPoolAction(Activity activity, PhotoPlace photoPlace, boolean clearStack) {
-		super(activity);
-		this.mPhotoPlace = photoPlace;
-		this.mClearStack = clearStack;
-	}
+    /**
+     * @param activity
+     */
+    public ShowPhotoPoolAction(Activity activity, PhotoPlace photoPlace)
+    {
+        this(activity, photoPlace, false);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.gmail.charleszq.actions.IAction#execute()
-	 */
-	@Override
-	public void execute() {
-		FlickrViewerApplication app = (FlickrViewerApplication) mActivity
-				.getApplication();
-		final PaginationPhotoListDataProvider photoListDataProvider = new PhotoPoolDataProvider(mPhotoPlace);
-		photoListDataProvider.setPageSize(app.getPageSize());
-		final AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
-				photoListDataProvider, null, mActivity.getResources()
-						.getString(R.string.task_loading_photo_pool), mClearStack);
-		task.execute();
-	}
+    public ShowPhotoPoolAction(Activity activity, PhotoPlace photoPlace, boolean clearStack)
+    {
+        super(activity);
+        this.mPhotoPlace = photoPlace;
+        this.mClearStack = clearStack;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.gmail.charleszq.actions.IAction#execute()
+     */
+    @Override
+    public void execute()
+    {
+        FlickrViewerApplication app = (FlickrViewerApplication) mActivity.getApplication();
+        final PaginationPhotoListDataProvider photoListDataProvider = new PhotoPoolDataProvider(mPhotoPlace,
+                app.getFlickrToken(), app.getFlickrTokenSecret());
+        photoListDataProvider.setPageSize(app.getPageSize());
+        final AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity, photoListDataProvider, null, mActivity
+                .getResources().getString(R.string.task_loading_photo_pool), mClearStack);
+        task.execute();
+    }
 
 }
