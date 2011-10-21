@@ -14,7 +14,7 @@
 	<string name="add_fav_photo">添加到我的最爱</string>
 	<string name="show_owner_photos">显示作者照片</string>
 	<string name="view_big_photo">显示大图</string>
-	<string name="menu_item_go_user_webpage">Visit Owner\'s Flickr Web Page</string>
+	<string name="menu_item_go_user_webpage">访问作者的flickr网页</string>
 
 	<string name="new_btn">新建</string>
 	<string name="begin_btn">开始</string>
