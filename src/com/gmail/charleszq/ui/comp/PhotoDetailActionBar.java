@@ -4,20 +4,25 @@
 
 package com.gmail.charleszq.ui.comp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gmail.charleszq.PhotoLocationActivity;
 import com.gmail.charleszq.R;
+import com.gmail.charleszq.actions.ShowPeoplePhotosAction;
 import com.gmail.charleszq.event.IUserInfoFetchedListener;
 import com.gmail.charleszq.task.GetUserInfoTask;
 import com.gmail.yuyang226.flickr.people.User;
@@ -32,7 +37,7 @@ import com.gmail.yuyang226.flickr.photos.Photo;
  * @author charles
  */
 public class PhotoDetailActionBar extends FrameLayout implements
-		IUserInfoFetchedListener, OnClickListener {
+		IUserInfoFetchedListener, OnClickListener, OnMenuItemClickListener {
 
 	private ImageView mBuddyIcon;
 	private TextView mUserName;
@@ -97,9 +102,11 @@ public class PhotoDetailActionBar extends FrameLayout implements
 	@Override
 	public void onClick(View v) {
 		if (v == mBuddyIcon) {
-			String url = "http://www.flickr.com/photos/" + mCurrentPhoto.getOwner().getId(); //$NON-NLS-1$
-			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-			this.getContext().startActivity(intent);
+			PopupMenu popup = new PopupMenu(getContext(), mBuddyIcon);
+			popup.getMenuInflater().inflate(R.menu.user_avator_menus,
+					popup.getMenu());
+			popup.setOnMenuItemClickListener(this);
+			popup.show();
 		} else if (v == mLocationButton) {
 			int lat = (int) (mCurrentPhoto.getGeoData().getLatitude() * 1E6);
 			int lng = (int) (mCurrentPhoto.getGeoData().getLongitude() * 1E6);
@@ -107,8 +114,10 @@ public class PhotoDetailActionBar extends FrameLayout implements
 					PhotoLocationActivity.class);
 			intent.putExtra(PhotoLocationActivity.LAT_VAL, lat);
 			intent.putExtra(PhotoLocationActivity.LONG_VAL, lng);
-			intent.putExtra(PhotoLocationActivity.PHOTO_ID, mCurrentPhoto.getId());
-			intent.putExtra(PhotoLocationActivity.PHOTO_SECRET, mCurrentPhoto.getSecret());
+			intent.putExtra(PhotoLocationActivity.PHOTO_ID,
+					mCurrentPhoto.getId());
+			intent.putExtra(PhotoLocationActivity.PHOTO_SECRET,
+					mCurrentPhoto.getSecret());
 			getContext().startActivity(intent);
 		}
 	}
@@ -119,7 +128,25 @@ public class PhotoDetailActionBar extends FrameLayout implements
 		mLocationButton = null;
 		super.onDetachedFromWindow();
 	}
-	
-	
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		int itemid = item.getItemId();
+		switch (itemid) {
+		case R.id.menu_item_user_web_site:
+			String url = "http://www.flickr.com/photos/" + mCurrentPhoto.getOwner().getId(); //$NON-NLS-1$
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			this.getContext().startActivity(intent);
+			return true;
+		case R.id.menu_item_user_photo_stream:
+			ShowPeoplePhotosAction showOwnerPhotosAction = new ShowPeoplePhotosAction(
+					(Activity)getContext(), mCurrentPhoto.getOwner().getId(),
+					mCurrentPhoto.getOwner().getUsername());
+			showOwnerPhotosAction.execute();
+			return true;
+		default:
+			return false;
+		}
+	}
 
 }
