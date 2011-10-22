@@ -158,6 +158,7 @@ public class ContactsFragment extends Fragment implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		item.setChecked(true);
 		String filterString = null;
 		switch (item.getItemId()) {
 		case R.id.family_only:
