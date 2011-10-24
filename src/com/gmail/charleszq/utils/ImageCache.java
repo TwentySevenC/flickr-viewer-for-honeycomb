@@ -3,6 +3,8 @@ package com.gmail.charleszq.utils;
 import java.lang.ref.SoftReference;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.graphics.Bitmap;
 
@@ -22,29 +24,52 @@ public final class ImageCache {
 		}
 		
 	};
+	
+	private static final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+	private static final Lock read  = readWriteLock.readLock();
+	private static final Lock write = readWriteLock.writeLock();
+	
+	/**
+	 * 
+	 */
+	private ImageCache() {
+		super();
+	}
 
 	public static void dispose() {
-		for (SoftReference<Bitmap> bm : cache.values()) {
-			if (bm != null && bm.get() != null) {
-				bm.get().recycle();
+		write.lock();
+		try {
+			for (SoftReference<Bitmap> bm : cache.values()) {
+				if (bm != null && bm.get() != null) {
+					bm.get().recycle();
+				}
 			}
+			cache.clear();
+		} finally {
+			write.unlock();
 		}
-		cache.clear();
 	}
 
 	public static void saveToCache(String url, Bitmap bitmap) {
-		cache.put(url, new SoftReference<Bitmap>(bitmap));
+		if (url == null || bitmap == null) {
+			return;
+		}
+		write.lock();
+		try {
+			cache.put(url, new SoftReference<Bitmap>(bitmap));
+		} finally {
+			write.unlock();
+		}
 	}
 
 	public static Bitmap getFromCache(String url) {
-		if(!cache.containsKey(url))
-            return null;
-		Bitmap bitmap = cache.get(url).get();
-		if (bitmap == null || bitmap.isRecycled()) {
-			cache.remove(url);
-			bitmap = null;
+		read.lock();
+		try {
+			if(!cache.containsKey(url))
+				return null;
+			return cache.get(url).get();
+		} finally {
+			read.lock();
 		}
-
-		return bitmap;
 	}
 }
