@@ -21,6 +21,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Environment;
 import android.os.Handler;
 
+import com.gmail.charleszq.dataprovider.PopularPhotoListProvider;
 import com.gmail.charleszq.event.FlickrViewerMessage;
 import com.gmail.charleszq.event.IFlickrViewerMessageHandler;
 import com.gmail.charleszq.services.TimeUpReceiver;
@@ -208,6 +209,9 @@ public class FlickrViewerApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		registerTimeCheckReceiver();
+		
+		DataProviderDelegate delegate = DataProviderDelegate.getInstance();
+		delegate.registerOptionMenuResource(PopularPhotoListProvider.class, R.menu.menu_popular_photos);
 	}
 
 	/**

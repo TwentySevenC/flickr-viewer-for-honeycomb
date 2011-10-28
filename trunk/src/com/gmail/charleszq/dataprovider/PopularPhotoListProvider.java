@@ -82,6 +82,10 @@ public class PopularPhotoListProvider extends PaginationPhotoListDataProvider {
 				mPageNumber);
 	}
 
+	public void setSortType(PopularSortType type) {
+		this.mSortType = type;
+	}
+
 	private SORT getSortString() {
 		switch (mSortType) {
 		case COMMENTS:

@@ -3,7 +3,7 @@
 	<item android:showAsAction="ifRoom" android:id="@+id/menu_item_search"
 		android:icon="@android:drawable/ic_menu_search"
 		android:actionViewClass="android.widget.SearchView"></item>
-	<item android:icon="@drawable/contact_filter" android:title="Filter"
+	<item android:icon="@drawable/contact_filter" android:title="@string/menu_item_filter"
 		android:showAsAction="ifRoom|withText">
 		<menu>
 			<group android:checkableBehavior="single">
