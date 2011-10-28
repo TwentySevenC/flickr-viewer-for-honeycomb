@@ -15,6 +15,12 @@
 	<string name="show_owner_photos">Show Owner\'s Photos</string>
 	<string name="view_big_photo">View Big Photo</string>
 	<string name="menu_item_go_user_webpage">Visit Owner\'s Flickr Web Page</string>
+	
+	<string name="menu_item_filter">Filter</string>
+	<string name="menu_item_sort">Sort</string>
+	<string name="menu_item_sort_by_views">Sort by Views</string>
+	<string name="menu_item_sort_by_comments">Sort by Comments</string>
+	<string name="menu_item_sort_by_favs">Sort by Favorites</string>
 
 	<string name="new_btn">Create</string>
 	<string name="begin_btn">Begin</string>

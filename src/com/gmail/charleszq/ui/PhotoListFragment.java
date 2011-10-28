@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gmail.charleszq.DataProviderDelegate;
 import com.gmail.charleszq.FlickrViewerActivity;
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
@@ -44,6 +45,7 @@ import com.gmail.charleszq.event.IPhotoListReadyListener;
 import com.gmail.charleszq.task.AsyncPhotoListTask;
 import com.gmail.charleszq.task.ImageDownloadTask;
 import com.gmail.charleszq.ui.comp.IContextMenuHandler;
+import com.gmail.charleszq.ui.menu.IOptionMenuHandler;
 import com.gmail.charleszq.utils.Constants;
 import com.gmail.charleszq.utils.ImageCache;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
@@ -173,9 +175,7 @@ public class PhotoListFragment extends Fragment implements
 		// change action bar title
 		FlickrViewerActivity act = (FlickrViewerActivity) getActivity();
 		if (mPhotoListDataProvider != null) {
-			act
-					.changeActionBarTitle(mPhotoListDataProvider
-							.getDescription(act));
+			act.changeActionBarTitle(mPhotoListDataProvider.getDescription(act));
 		} else {
 			logger.warn("Photo grid view, data provider is null."); //$NON-NLS-1$
 			// TODO need to test.
@@ -191,6 +191,12 @@ public class PhotoListFragment extends Fragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_photo_list, menu);
+		DataProviderDelegate delegate = DataProviderDelegate.getInstance();
+		Integer res = delegate.getOptionMneuRes(mPhotoListDataProvider
+				.getClass());
+		if (res != null) {
+			inflater.inflate(res, menu);
+		}
 	}
 
 	/**
@@ -245,7 +251,14 @@ public class PhotoListFragment extends Fragment implements
 			}
 			return true;
 		default:
-			return super.onOptionsItemSelected(item);
+			DataProviderDelegate delegate = DataProviderDelegate.getInstance();
+			IOptionMenuHandler handler = delegate.getOptionMenuHandler(
+					getActivity(), mPhotoListDataProvider, this);
+			if (handler != null) {
+				return handler.onOptionMenuClicked(item);
+			} else {
+				return super.onOptionsItemSelected(item);
+			}
 		}
 	}
 
@@ -330,10 +343,8 @@ public class PhotoListFragment extends Fragment implements
 			sb.append("["); //$NON-NLS-1$
 			sb.append(photo.getViews());
 			if (photo.getComments() != -1 || photo.getFavorites() != -1) {
-				sb
-						.append("/").append(photo.getComments() == -1 ? "na" : photo.getComments()); //$NON-NLS-1$ //$NON-NLS-2$
-				sb
-						.append("/").append(photo.getFavorites() == -1 ? "na" : photo.getFavorites()); //$NON-NLS-1$ //$NON-NLS-2$
+				sb.append("/").append(photo.getComments() == -1 ? "na" : photo.getComments()); //$NON-NLS-1$ //$NON-NLS-2$
+				sb.append("/").append(photo.getFavorites() == -1 ? "na" : photo.getFavorites()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			sb.append("] "); //$NON-NLS-1$
 			sb.append(photo.getTitle());

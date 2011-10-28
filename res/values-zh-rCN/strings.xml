@@ -15,6 +15,12 @@
 	<string name="show_owner_photos">显示作者照片</string>
 	<string name="view_big_photo">显示大图</string>
 	<string name="menu_item_go_user_webpage">访问作者的flickr网页</string>
+	
+	<string name="menu_item_filter">过滤</string>
+	<string name="menu_item_sort">排序</string>
+	<string name="menu_item_sort_by_views">按照查看次数</string>
+	<string name="menu_item_sort_by_comments">按照评论数量</string>
+	<string name="menu_item_sort_by_favs">按照最爱照片</string>
 
 	<string name="new_btn">新建</string>
 	<string name="begin_btn">开始</string>
