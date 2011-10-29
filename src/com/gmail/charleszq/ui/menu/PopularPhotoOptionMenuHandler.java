@@ -66,6 +66,7 @@ public class PopularPhotoOptionMenuHandler implements IOptionMenuHandler {
 		
 		mPopularPhotoDataProvider.setSortType(type);
 		mPopularPhotoDataProvider.invalidatePhotoList();
+		mPopularPhotoDataProvider.setPageNumber(1);
 		AsyncPhotoListTask task = new AsyncPhotoListTask(mActivity,
 				mPopularPhotoDataProvider, mPhotoListReadyListener);
 		task.execute();
