@@ -11,6 +11,39 @@
 			android:layout_below="@id/image" android:layout_marginTop="10dp"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center" />
+		<!-- Beginning of views/comments/favs -->
+		<ImageView android:id="@+id/detailsViewsIcon" android:layout_height="wrap_content" 
+		    android:layout_above="@+id/photo_tags" android:layout_marginLeft="30dp"
+		    android:src="@drawable/views" android:layout_marginBottom="2dp"
+			android:layout_width="wrap_content"  />
+		<TextView android:id="@+id/views_text" android:layout_width="wrap_content"
+			android:layout_marginLeft="2dp" android:singleLine="true"
+			android:gravity="center" android:layout_height="wrap_content" 
+			android:textSize="10sp" android:layout_above="@+id/photo_tags"
+			android:layout_toRightOf="@+id/detailsViewsIcon" />
+		<ImageView android:id="@+id/detailsCommentsIcon" android:layout_marginLeft="50dp"
+			android:layout_height="wrap_content" android:layout_marginRight="2dp"
+			android:src="@drawable/comments" android:layout_toRightOf="@+id/views_text"
+			android:layout_width="wrap_content"
+			android:layout_above="@+id/photo_tags" android:layout_marginBottom="2dp"/>
+		<TextView android:id="@+id/comments_text" android:layout_width="wrap_content"
+			android:gravity="center" android:singleLine="true"
+			android:layout_gravity="center_vertical" android:layout_weight="1"
+			android:layout_height="wrap_content" android:textSize="10sp" 
+			android:layout_toRightOf="@+id/detailsCommentsIcon"
+			android:layout_above="@+id/photo_tags"/>
+		<!-- <ImageView android:id="@+id/detailsFavsIcon" android:layout_marginLeft="50dp"
+			android:layout_height="wrap_content" android:layout_marginRight="2dp"
+			android:src="@drawable/favourites" android:layout_toRightOf="@+id/comments_text"
+			android:layout_width="wrap_content" android:scaleType="fitXY" 
+			android:layout_above="@+id/photo_tags"/>
+		<TextView android:id="@+id/favourites_text" android:layout_width="wrap_content"
+			android:gravity="center" android:singleLine="true"
+			android:layout_gravity="center_vertical" android:layout_weight="1"
+			android:layout_height="wrap_content" android:textSize="10sp" 
+			android:layout_toRightOf="@+id/detailsFavsIcon"
+			android:layout_above="@+id/photo_tags"/> -->
+		<!-- End of views/comments/favs -->
 		<com.gmail.charleszq.ui.comp.PhotoDetailActionBar
 			style="@android:style/Holo.ButtonBar"
 			android:layout_centerHorizontal="true" android:id="@+id/user_action_bar"
