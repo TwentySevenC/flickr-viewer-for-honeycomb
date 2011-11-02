@@ -339,7 +339,7 @@ public class PhotoListFragment extends Fragment implements
 				privateMarker = holder.privateMarker;
 			}
 			// photo title
-			StringBuilder sb = new StringBuilder();
+			/*StringBuilder sb = new StringBuilder();
 			sb.append("["); //$NON-NLS-1$
 			sb.append(photo.getViews());
 			if (photo.getComments() != -1 || photo.getFavorites() != -1) {
@@ -347,9 +347,9 @@ public class PhotoListFragment extends Fragment implements
 				sb.append("/").append(photo.getFavorites() == -1 ? "na" : photo.getFavorites()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			sb.append("] "); //$NON-NLS-1$
-			sb.append(photo.getTitle());
+			sb.append(photo.getTitle());*/
 
-			titleView.setText(sb.toString());
+			titleView.setText(photo.getTitle());
 
 			boolean showGeoMarker = photo.getGeoData() != null;
 			boolean showPrivateMarker = !photo.isPublicFlag()
@@ -366,6 +366,30 @@ public class PhotoListFragment extends Fragment implements
 			} else {
 				geoMarker.setVisibility(View.VISIBLE);
 				privateMarker.setVisibility(View.VISIBLE);
+			}
+			
+			ImageView commentsIcon = (ImageView) view.findViewById(R.id.comments_icon);
+			commentsIcon.setVisibility(View.INVISIBLE);
+			if (photo.getComments() >= 0) {
+				commentsIcon.setVisibility(View.VISIBLE);
+				TextView commentsText = (TextView) view.findViewById(R.id.comments_text);
+				commentsText.setText(String.valueOf(photo.getComments()));
+			}
+			
+			ImageView viewsIcon = (ImageView) view.findViewById(R.id.views_icon);
+			viewsIcon.setVisibility(View.INVISIBLE);
+			if (photo.getViews() >= 0) {
+				viewsIcon.setVisibility(View.VISIBLE);
+				TextView viewsText = (TextView) view.findViewById(R.id.views_text);
+				viewsText.setText(String.valueOf(photo.getViews()));
+			}
+			
+			ImageView favsIcon = (ImageView) view.findViewById(R.id.favourites_icon);
+			favsIcon.setVisibility(View.INVISIBLE);
+			if (photo.getFavorites() >= 0) {
+				favsIcon.setVisibility(View.VISIBLE);
+				TextView favsText = (TextView) view.findViewById(R.id.favourites_text);
+				favsText.setText(String.valueOf(photo.getFavorites()));
 			}
 
 			Drawable drawable = photoImage.getDrawable();

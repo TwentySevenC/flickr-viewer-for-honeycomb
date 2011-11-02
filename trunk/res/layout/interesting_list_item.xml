@@ -23,4 +23,32 @@
 			android:layout_gravity="center_vertical" android:layout_weight="1"
 			android:layout_height="wrap_content" />
 	</LinearLayout>
+	<LinearLayout android:layout_width="fill_parent"
+		android:paddingLeft="50dp" android:layout_marginTop="5dp"
+		android:layout_gravity="center_horizontal" android:layout_height="12dp">
+		<ImageView android:id="@+id/views_icon" android:layout_height="wrap_content"
+			android:layout_marginRight="2dp" android:src="@drawable/views"
+			android:visibility="invisible" android:layout_width="wrap_content"
+			android:scaleType="fitEnd" />
+		<TextView android:id="@+id/views_text" android:layout_width="fill_parent"
+			android:gravity="left|center" android:singleLine="true"
+			android:layout_gravity="center_vertical" android:layout_weight="1"
+			android:layout_height="wrap_content" android:textSize="10sp"/>
+		<ImageView android:id="@+id/comments_icon"
+			android:layout_height="wrap_content" android:layout_marginRight="2dp"
+			android:src="@drawable/comments" android:visibility="invisible"
+			android:layout_width="wrap_content" android:scaleType="fitXY" />
+		<TextView android:id="@+id/comments_text" android:layout_width="fill_parent"
+			android:gravity="left|center" android:singleLine="true"
+			android:layout_gravity="center_vertical" android:layout_weight="1"
+			android:layout_height="wrap_content" android:textSize="10sp" />
+		<ImageView android:id="@+id/favourites_icon"
+			android:layout_height="wrap_content" android:layout_marginRight="2dp"
+			android:src="@drawable/favourites" android:visibility="invisible"
+			android:layout_width="wrap_content" android:scaleType="fitXY" />
+		<TextView android:id="@+id/favourites_text" android:layout_width="fill_parent"
+			android:gravity="left|center" android:singleLine="true"
+			android:layout_gravity="center_vertical" android:layout_weight="1"
+			android:layout_height="wrap_content" android:textSize="10sp" />
+	</LinearLayout>
 </LinearLayout>

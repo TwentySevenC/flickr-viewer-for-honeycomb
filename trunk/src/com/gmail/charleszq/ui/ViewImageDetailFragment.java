@@ -340,6 +340,21 @@ public class ViewImageDetailFragment extends Fragment implements
 			tagsText.setText(sb.toString());
 			tagsText.setSelected(true);
 		}
+		
+		if (mCurrentPhoto.getViews() >= 0) {
+			TextView viewsText = (TextView) view.findViewById(R.id.views_text);
+			viewsText.setText(String.valueOf(mCurrentPhoto.getViews()));
+		}
+		
+		if (mCurrentPhoto.getComments() >= 0) {
+			TextView commentsText = (TextView) view.findViewById(R.id.comments_text);
+			commentsText.setText(String.valueOf(mCurrentPhoto.getComments()));
+		}
+		
+		if (mCurrentPhoto.getFavorites() >= 0) {
+			TextView favsText = (TextView) view.findViewById(R.id.favourites_text);
+			favsText.setText(String.valueOf(mCurrentPhoto.getFavorites()));
+		}
 
 		// exif list.
 		ListView list = (ListView) view.findViewById(R.id.exifList);
