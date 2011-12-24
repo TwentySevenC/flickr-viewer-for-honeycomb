@@ -20,11 +20,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -101,6 +104,11 @@ public class PhotoListFragment extends Fragment implements
 	 * The marker to say whether to show the private marker or not.
 	 */
 	private boolean mShowPrivatePhotoMarker = true;
+	
+	/**
+	 * the gesture detector for changing pages
+	 */
+	private GestureDetector mGestureDetector;
 
 	/**
 	 * Default constructor.
@@ -167,6 +175,8 @@ public class PhotoListFragment extends Fragment implements
 				mShowPrivatePhotoMarker);
 		mGridView.setAdapter(mGridAdapter);
 		mGridView.setOnItemClickListener(this);
+		mGestureDetector = new GestureDetector(new PhotoListGestureListener());
+		mGridView.setOnTouchListener(mOnTouchListener);
 
 		if (mContextMenuHandler != null) {
 			mGridView.setOnCreateContextMenuListener(mContextMenuHandler);
@@ -221,7 +231,7 @@ public class PhotoListFragment extends Fragment implements
 
 		switch (item.getItemId()) {
 		case R.id.menu_item_previous_page:
-			if (mCurrentPageNumber <= 1) {
+			/*if (mCurrentPageNumber <= 1) {
 				Toast.makeText(
 						getActivity(),
 						getActivity().getResources().getString(
@@ -233,10 +243,11 @@ public class PhotoListFragment extends Fragment implements
 				mPhotoListDataProvider.setPageNumber(mCurrentPageNumber);
 				mPhotoListDataProvider.setPageSize(pageSize);
 				runPhotoListTask();
-			}
+			}*/
+			changeToPreviousPage(pageSize);
 			return true;
 		case R.id.menu_item_next_page:
-			if (mPhotoList.size() < pageSize) {
+			/*if (mPhotoList.size() < pageSize) {
 				Toast.makeText(
 						getActivity(),
 						getActivity().getResources().getString(
@@ -248,7 +259,8 @@ public class PhotoListFragment extends Fragment implements
 				mPhotoListDataProvider.setPageNumber(mCurrentPageNumber);
 				mPhotoListDataProvider.setPageSize(pageSize);
 				runPhotoListTask();
-			}
+			}*/
+			changeToNextPage(pageSize);
 			return true;
 		default:
 			DataProviderDelegate delegate = DataProviderDelegate.getInstance();
@@ -259,6 +271,38 @@ public class PhotoListFragment extends Fragment implements
 			} else {
 				return super.onOptionsItemSelected(item);
 			}
+		}
+	}
+	
+	private void changeToPreviousPage(int pageSize) {
+		if (mCurrentPageNumber <= 1) {
+			Toast.makeText(
+					getActivity(),
+					getActivity().getResources().getString(
+							R.string.toast_first_page), Toast.LENGTH_SHORT)
+					.show();
+		} else {
+			mOldPageNumber = mCurrentPageNumber;
+			mCurrentPageNumber--;
+			mPhotoListDataProvider.setPageNumber(mCurrentPageNumber);
+			mPhotoListDataProvider.setPageSize(pageSize);
+			runPhotoListTask();
+		}
+	}
+	
+	private void changeToNextPage(int pageSize) {
+		if (mPhotoList.size() < pageSize) {
+			Toast.makeText(
+					getActivity(),
+					getActivity().getResources().getString(
+							R.string.toast_last_page), Toast.LENGTH_SHORT)
+					.show();
+		} else {
+			mOldPageNumber = mCurrentPageNumber;
+			mCurrentPageNumber++;
+			mPhotoListDataProvider.setPageNumber(mCurrentPageNumber);
+			mPhotoListDataProvider.setPageSize(pageSize);
+			runPhotoListTask();
 		}
 	}
 
@@ -304,7 +348,6 @@ public class PhotoListFragment extends Fragment implements
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-
 			View view = convertView;
 			if (view == null) {
 				LayoutInflater li = LayoutInflater.from(mContext);
@@ -465,7 +508,7 @@ public class PhotoListFragment extends Fragment implements
 			long id) {
 		mSelectedPhoto = (Photo) mGridAdapter.getItem(position);
 		GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(),
-				mSelectedPhoto);
+				mSelectedPhoto, mPhotoList);
 		action.execute();
 
 	}
@@ -517,6 +560,44 @@ public class PhotoListFragment extends Fragment implements
 				.getApplication();
 		app.unregisterMessageHandler(this);
 		super.onDetach();
+	}
+	
+	private OnTouchListener mOnTouchListener = new OnTouchListener() {
+
+		@Override
+		public boolean onTouch(View arg0, MotionEvent event) {
+			return mGestureDetector.onTouchEvent(event);
+		}
+
+	};
+	
+	class PhotoListGestureListener extends GestureDetector.SimpleOnGestureListener{
+		  @Override
+		  public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			  if (e1 == null || e2 == null) {
+				  return false;
+			  }
+
+			  int dx = (int) (e2.getX() - e1.getX());
+			  int dy = (int) (e2.getY() - e1.getY());
+			  if (Math.abs(dx) <= Math.abs(dy)) {
+				  return false;
+			  }
+			  FlickrViewerApplication app = (FlickrViewerApplication) getActivity()
+					  .getApplication();
+			  int pageSize = app.getPageSize();
+			  if (dx > 50) {
+				  logger.debug("Fling from left to right: changing to the previous page"); //$NON-NLS-1$
+				  changeToPreviousPage(pageSize);
+				  return true;
+			  } else if (dx < -50) {
+				  logger.debug("Fling from right to left: changing to the next page"); //$NON-NLS-1$
+				  changeToNextPage(pageSize);
+				  return true;
+			  } else {
+				  return false;
+			  }
+		  }
 	}
 
 }

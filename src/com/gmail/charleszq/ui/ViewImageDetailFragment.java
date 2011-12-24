@@ -21,31 +21,32 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.GestureDetector.OnDoubleTapListener;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 import android.widget.ViewSwitcher;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.ViewBigPhotoActivity;
 import com.gmail.charleszq.actions.AddFavAction;
+import com.gmail.charleszq.actions.GetPhotoDetailAction;
 import com.gmail.charleszq.actions.IAction;
 import com.gmail.charleszq.actions.SaveImageWallpaperAction;
 import com.gmail.charleszq.actions.SharePhotoAction;
@@ -64,11 +65,12 @@ import com.gmail.charleszq.ui.comp.AddPhotoToGroupComponent;
 import com.gmail.charleszq.ui.comp.PhotoDetailActionBar;
 import com.gmail.charleszq.ui.comp.PhotoPoolComponent;
 import com.gmail.charleszq.utils.ImageCache;
-import com.gmail.charleszq.utils.StringUtils;
 import com.gmail.charleszq.utils.ImageUtils.DownloadedDrawable;
+import com.gmail.charleszq.utils.StringUtils;
 import com.gmail.yuyang226.flickr.people.User;
 import com.gmail.yuyang226.flickr.photos.Exif;
 import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 import com.gmail.yuyang226.flickr.tags.Tag;
 
 /**
@@ -99,6 +101,7 @@ public class ViewImageDetailFragment extends Fragment implements
 	 */
 	private List<UserComment> mComments = new ArrayList<UserComment>();
 	private List<Exif> mExifs = new ArrayList<Exif>();
+	private PhotoList mPhotoList;
 
 	private ViewAnimator mViewSwitcher;
 	private View mCommentProgressBar;
@@ -135,7 +138,8 @@ public class ViewImageDetailFragment extends Fragment implements
 	 * @param bitmap
 	 * @param exifs
 	 */
-	public ViewImageDetailFragment(Photo photo, Bitmap bitmap) {
+	public ViewImageDetailFragment(Photo photo, Bitmap bitmap, PhotoList mPhotoList) {
+		this.mPhotoList = mPhotoList;
 		this.mCurrentPhoto = photo;
 		mBitmapRef = new WeakReference<Bitmap>(bitmap);
 	}
@@ -290,6 +294,10 @@ public class ViewImageDetailFragment extends Fragment implements
 		image.setFocusable(true);
 		image.setClickable(true);
 		hookDoubleTapOnImage(image);
+		if (this.mPhotoList != null) {
+			mImageGestureDector = new GestureDetector(mImageGestureListener);
+			image.setOnTouchListener(mOnImageTouchListener);
+		}
 
 		if (savedInstanceState != null) {
 			logger
@@ -510,6 +518,60 @@ public class ViewImageDetailFragment extends Fragment implements
 		@Override
 		public boolean onTouch(View arg0, MotionEvent event) {
 			return mGestureDector.onTouchEvent(event);
+		}
+
+	};
+	
+	private GestureDetector mImageGestureDector;
+	private OnGestureListener mImageGestureListener = new SimpleOnGestureListener() {
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			if (e1 == null || e2 == null) {
+				return false;
+			}
+
+			int dx = (int) (e2.getX() - e1.getX());
+			int dy = (int) (e2.getY() - e1.getY());
+			if (Math.abs(dx) <= Math.abs(dy)) {
+				return false;
+			}
+			
+			if (dx >= -50 && dx <= 50) {
+				return false;
+			}
+			
+			int index = mPhotoList.indexOf(mCurrentPhoto);
+			if (index < 0) {
+				return false;
+			}
+
+			Photo newPhoto = null;
+			if (dx > 50 && index > 0) {
+				//previous
+				newPhoto = mPhotoList.get(index - 1);
+			} else if (dx < -50 && index < (mPhotoList.size() - 1)) {
+				//next
+				newPhoto = mPhotoList.get(index + 1);
+			}
+			
+			if (newPhoto != null) {
+				GetPhotoDetailAction action = new GetPhotoDetailAction(getActivity(),
+						newPhoto, mPhotoList);
+				action.execute();
+				return true;
+			}
+			return false;
+		}
+
+	};
+
+	private OnTouchListener mOnImageTouchListener = new OnTouchListener() {
+
+		@Override
+		public boolean onTouch(View arg0, MotionEvent event) {
+			return mImageGestureDector.onTouchEvent(event);
 		}
 
 	};
