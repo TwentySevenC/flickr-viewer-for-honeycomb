@@ -18,6 +18,7 @@ import com.gmail.charleszq.task.GetPhotoImageTask;
 import com.gmail.charleszq.task.GetPhotoImageTask.IPhotoFetchedListener;
 import com.gmail.charleszq.ui.ViewImageDetailFragment;
 import com.gmail.yuyang226.flickr.photos.Photo;
+import com.gmail.yuyang226.flickr.photos.PhotoList;
 
 /**
  * @author charles
@@ -29,6 +30,7 @@ public class GetPhotoDetailAction extends ActivityAwareAction implements
 	private String mPhotoSecret;
 
 	private Photo mCurrentPhoto = null;
+	private PhotoList mPhotoList = null;
 
 	public GetPhotoDetailAction(Activity activity, String photoId,
 			String photoSecret) {
@@ -42,6 +44,20 @@ public class GetPhotoDetailAction extends ActivityAwareAction implements
 		this.mPhotoId = photo.getId();
 		this.mPhotoSecret = photo.getSecret();
 		this.mCurrentPhoto = photo;
+	}
+
+	/**
+	 * @param activity
+	 * @param mCurrentPhoto
+	 * @param mPhotoList
+	 */
+	public GetPhotoDetailAction(Activity activity, Photo photo,
+			PhotoList mPhotoList) {
+		super(activity);
+		this.mPhotoId = photo.getId();
+		this.mPhotoSecret = photo.getSecret();
+		this.mCurrentPhoto = photo;
+		this.mPhotoList = mPhotoList;
 	}
 
 	/*
@@ -69,7 +85,7 @@ public class GetPhotoDetailAction extends ActivityAwareAction implements
 			photo.setGeoData(mCurrentPhoto.getGeoData());
 		}
 		ViewImageDetailFragment fragment = new ViewImageDetailFragment(photo,
-				bitmap);
+				bitmap, mPhotoList);
 		FragmentManager fm = mActivity.getFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.replace(R.id.main_area, fragment);

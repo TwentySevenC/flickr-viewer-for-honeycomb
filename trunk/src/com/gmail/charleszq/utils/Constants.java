@@ -45,7 +45,7 @@ public final class Constants {
 	/**
 	 * The default setting values.
 	 */
-	public static final int DEF_CACHE_SIZE = 20;
+	public static final int DEF_CACHE_SIZE = 50;
 	public static final int DEF_GRID_COL_COUNT = 3;
 	public static final int DEF_GRID_PAGE_SIZE = 18;
 
