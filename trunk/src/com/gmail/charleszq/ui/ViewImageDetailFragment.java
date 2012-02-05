@@ -46,7 +46,6 @@ import com.gmail.charleszq.FlickrViewerApplication;
 import com.gmail.charleszq.R;
 import com.gmail.charleszq.ViewBigPhotoActivity;
 import com.gmail.charleszq.actions.AddFavAction;
-import com.gmail.charleszq.actions.GetPhotoDetailAction;
 import com.gmail.charleszq.actions.IAction;
 import com.gmail.charleszq.actions.SaveImageWallpaperAction;
 import com.gmail.charleszq.actions.SharePhotoAction;
@@ -294,10 +293,10 @@ public class ViewImageDetailFragment extends Fragment implements
 		image.setFocusable(true);
 		image.setClickable(true);
 		hookDoubleTapOnImage(image);
-		if (this.mPhotoList != null) {
+		/*if (this.mPhotoList != null) {
 			mImageGestureDector = new GestureDetector(mImageGestureListener);
 			image.setOnTouchListener(mOnImageTouchListener);
-		}
+		}*/
 
 		if (savedInstanceState != null) {
 			logger
@@ -522,7 +521,7 @@ public class ViewImageDetailFragment extends Fragment implements
 
 	};
 	
-	private GestureDetector mImageGestureDector;
+	/*private GestureDetector mImageGestureDector;
 	private OnGestureListener mImageGestureListener = new SimpleOnGestureListener() {
 
 		@Override
@@ -574,7 +573,7 @@ public class ViewImageDetailFragment extends Fragment implements
 			return mImageGestureDector.onTouchEvent(event);
 		}
 
-	};
+	};*/
 
 	private GetPhotoCommentsTask mPhotoCommentTask;
 	private GetPhotoExifTask mExifTask;
