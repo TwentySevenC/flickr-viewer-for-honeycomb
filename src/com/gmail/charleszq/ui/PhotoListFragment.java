@@ -200,8 +200,15 @@ public class PhotoListFragment extends Fragment implements
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		if (menu == null || inflater == null) {
+			return;
+		}
 		inflater.inflate(R.menu.menu_photo_list, menu);
 		DataProviderDelegate delegate = DataProviderDelegate.getInstance();
+		if (delegate == null || mPhotoListDataProvider == null) {
+			return;
+		}
+		
 		Integer res = delegate.getOptionMneuRes(mPhotoListDataProvider
 				.getClass());
 		if (res != null) {

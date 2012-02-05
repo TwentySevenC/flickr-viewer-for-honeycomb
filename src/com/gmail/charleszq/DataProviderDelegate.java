@@ -26,7 +26,7 @@ public final class DataProviderDelegate {
 	/**
 	 * The singleton instance.
 	 */
-	private static DataProviderDelegate mInstance = null;
+	private static DataProviderDelegate mInstance = new DataProviderDelegate();
 
 	/**
 	 * The option menu resource map. The <code>Application</code> will
@@ -38,6 +38,7 @@ public final class DataProviderDelegate {
 	 * Private constructor.
 	 */
 	private DataProviderDelegate() {
+		super();
 	}
 
 	/**
@@ -46,9 +47,6 @@ public final class DataProviderDelegate {
 	 * @return
 	 */
 	public static DataProviderDelegate getInstance() {
-		if (mInstance == null) {
-			mInstance = new DataProviderDelegate();
-		}
 		return mInstance;
 	}
 
