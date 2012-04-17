@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.FloatMath;
@@ -187,6 +188,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		this.mPhotoBitmap = bitmap;
 		if (mImageView != null) {
 			mImageView.setImageBitmap(mPhotoBitmap);
+			center(true, true);
 		}
 	}
 
@@ -261,9 +263,10 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		}
 
 		view.setImageMatrix(matrix);
+		center(true, true);
 		return true; // indicate event was handled
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -317,5 +320,49 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		float y = event.getY(0) + event.getY(1);
 		point.set(x / 2, y / 2);
 	}
+
+	// Center Photo to ImageView
+	// 2012/04/17 Luca Vettoretto 
+	private void center(boolean horizontal, boolean vertical) {
+	    if (mPhotoBitmap == null) {
+	        return;
+	    }
+
+	    RectF rect = new RectF(0, 0,
+	    		mPhotoBitmap.getWidth(),
+	    		mPhotoBitmap.getHeight());
+
+	    matrix.mapRect(rect);
+
+	    float height = rect.height();
+	    float width  = rect.width();
+
+	    float deltaX = 0, deltaY = 0;
+
+	    if (vertical) {
+	        int viewHeight = mImageView.getHeight();
+	        if (height < viewHeight) {
+	            deltaY = (viewHeight - height) / 2 - rect.top;
+	        } else if (rect.top > 0) {
+	            deltaY = -rect.top;
+	        } else if (rect.bottom < viewHeight) {
+	            deltaY = mImageView.getHeight() - rect.bottom;
+	        }
+	    }
+
+	    if (horizontal) {
+	        int viewWidth = mImageView.getWidth();
+	        if (width < viewWidth) {
+	            deltaX = (viewWidth - width) / 2 - rect.left;
+	        } else if (rect.left > 0) {
+	            deltaX = -rect.left;
+	        } else if (rect.right < viewWidth) {
+	            deltaX = viewWidth - rect.right;
+	        }
+	    }
+
+	    matrix.postTranslate(deltaX, deltaY);
+	    mImageView.setImageMatrix(matrix);
+	}	
 
 }
