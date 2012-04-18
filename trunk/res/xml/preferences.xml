@@ -28,7 +28,10 @@
 		<CheckBoxPreference android:key="add.to.pool.auto.begin"
 			android:defaultValue="false" android:title="@string/pref_add_to_pool_auto_begin"
 			android:summary="@string/summary_add_to_pool_auto_begin" />
-	</PreferenceCategory>
+		<CheckBoxPreference android:key="hide.preview.titlebar"
+			android:defaultValue="false" android:title="@string/gen_hide_preview_titlebar"
+			android:summary="@string/summary_gen_hide_preview_titlebar" />
+			</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/photo_list">
 		<ListPreference android:key="photo.grid.col.count"

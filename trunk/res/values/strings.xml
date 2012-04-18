@@ -188,8 +188,10 @@
 	<string name="summary_gen_tag_search_mode">When 2 or more tags provided to search, check
 		this
 		to use the \'AND\' search mode, otherwise, \'any\' mode, that is,
-		\'OR\' mode, will be used.
-	</string>
+		\'OR\' mode, will be used.</string>
+	<string name="gen_hide_preview_titlebar">Hide preview title bar</string>
+	<string name="summary_gen_hide_preview_titlebar">Hide the title bar of the photo preview 
+	    for a better view.</string>
 
 	<string name="app_title_tags_search_result">Tags</string>
 	<string name="tag_search_hint">Search by Tags</string>

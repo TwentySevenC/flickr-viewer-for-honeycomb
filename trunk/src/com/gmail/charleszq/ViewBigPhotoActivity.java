@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -31,6 +33,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -75,6 +79,9 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	private PointF mid = new PointF();
 	private float oldDist = 1f;
 
+	// Hide titlebar.
+	private boolean hideTitleBar = false;
+
 	/**
 	 * The current photo.
 	 */
@@ -113,6 +120,19 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		SharedPreferences sp = getSharedPreferences(Constants.DEF_PREF_NAME,
+				Context.MODE_APPEND);
+		hideTitleBar = sp.getBoolean(Constants.SETTING_HIDE_PREVIEW_TITLEBAR, false);		
+		
+		if (hideTitleBar)
+		{
+			// Remove Title Bar
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+					WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		}
+        
 		setContentView(R.layout.view_big_img);
 
 		if (savedInstanceState != null) {
@@ -131,7 +151,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		mImageView = (ImageView) findViewById(R.id.big_image);
 		mImageView.setOnTouchListener(this);
 
-		// mImageView.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
+		//mImageView.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
 	}
 
 	/*
@@ -142,8 +162,13 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	@Override
 	protected void onStart() {
 		super.onStart();
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		if (!hideTitleBar)
+		{
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+		
 		if (mPhotoId != null) {
 			File root = new File(Environment.getExternalStorageDirectory(),
 					Constants.SD_CARD_FOLDER_NAME);
