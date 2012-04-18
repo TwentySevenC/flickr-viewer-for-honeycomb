@@ -171,7 +171,11 @@
 	<string name="gen_tag_search_mode">Modalità di ricerca TAGs</string>
 	<string name="summary_gen_tag_search_mode">Quando vengono ricercati due o più TAG, selezionando questa opzione verrà effettuata una ricerca con modalità \'AND\' diversamente verrà utilizzata la modalità \'OR\'.
 	</string>
-
+	<string name="gen_hide_preview_titlebar">Nascondi barra del titolo nella preview</string>
+	<string name="summary_gen_hide_preview_titlebar">Selezionando questa opzione viene nascosta
+	    la barra del titolo nella preview della foto per una visione ottimale.
+	</string>
+	
 	<string name="app_title_tags_search_result">Tags</string>
 	<string name="tag_search_hint">Cerca per Tags</string>
 
