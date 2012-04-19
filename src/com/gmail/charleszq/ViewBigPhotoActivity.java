@@ -213,6 +213,7 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		this.mPhotoBitmap = bitmap;
 		if (mImageView != null) {
 			mImageView.setImageBitmap(mPhotoBitmap);
+			fitToScreen();
 			center(true, true);
 		}
 	}
@@ -390,4 +391,25 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	    mImageView.setImageMatrix(matrix);
 	}	
 
+	// Fit Photo to ImageView
+	// 2012/04/19 Luca Vettoretto 
+	private void fitToScreen(){
+		if (mPhotoBitmap == null) {
+	        return;
+	    }
+		
+	    float bmpHeight = mPhotoBitmap.getHeight();
+	    float bmpWidth  = mPhotoBitmap.getWidth();
+        int viewHeight = mImageView.getHeight();
+        int viewWidth = mImageView.getWidth();
+
+        float scaleX = viewWidth / (float)bmpWidth;
+        float scaleY = viewHeight / (float)bmpHeight;
+        
+        float minScale = Math.min(scaleX, scaleY);
+        
+		matrix.postScale(minScale, minScale, mid.x, mid.y);
+	    mImageView.setImageMatrix(matrix);
+	}
+	
 }
