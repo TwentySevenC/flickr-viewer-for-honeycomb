@@ -27,10 +27,12 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.FloatMath;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.Window;
@@ -82,6 +84,12 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	// Hide titlebar.
 	private boolean hideTitleBar = false;
 
+	// Gesture Handler
+	protected GestureListener mGestureListener;
+	protected ScaleListener mScaleListener;
+	protected ScaleGestureDetector mScaleDetector;
+	protected GestureDetector mGestureDetector;
+	
 	/**
 	 * The current photo.
 	 */
@@ -151,6 +159,14 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 		mImageView = (ImageView) findViewById(R.id.big_image);
 		mImageView.setOnTouchListener(this);
 
+		// Initialize listeners
+		mGestureListener = new GestureListener();
+		mScaleListener = new ScaleListener();
+		
+		// Initialize detectors
+		mScaleDetector = new ScaleGestureDetector(mImageView.getContext(), mScaleListener);
+		mGestureDetector = new GestureDetector(mImageView.getContext(), mGestureListener, null, true);
+		
 		//mImageView.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
 	}
 
@@ -245,6 +261,9 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
+		mScaleDetector.onTouchEvent(event);
+		if (!mScaleDetector.isInProgress()) mGestureDetector.onTouchEvent(event);
+		
 		ImageView view = (ImageView) v;
 
 		// Handle touch events here...
@@ -398,8 +417,13 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
 	        return;
 	    }
 		
-	    float bmpHeight = mPhotoBitmap.getHeight();
-	    float bmpWidth  = mPhotoBitmap.getWidth();
+		RectF rect = new RectF(0, 0,
+	    		mPhotoBitmap.getWidth(),
+	    		mPhotoBitmap.getHeight());
+		matrix.mapRect(rect);
+	    float bmpHeight = rect.height();
+	    float bmpWidth  = rect.width();
+	    
         int viewHeight = mImageView.getHeight();
         int viewWidth = mImageView.getWidth();
 
@@ -410,6 +434,49 @@ public class ViewBigPhotoActivity extends Activity implements OnTouchListener,
         
 		matrix.postScale(minScale, minScale, mid.x, mid.y);
 	    mImageView.setImageMatrix(matrix);
+	}
+	
+	// Gesture Listener Class
+	// 2012/04/20 Luca Vettoretto 
+	class GestureListener extends GestureDetector.SimpleOnGestureListener 
+	{
+
+		@Override
+		public boolean onDoubleTap(MotionEvent e)
+		{
+			logger.debug("onDoubleTap");
+			fitToScreen();
+			center(true, true);
+			return true;
+		}
+		
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+		{
+			logger.debug("onScroll");
+			return true;
+		}
+		
+		@Override
+		public boolean onFling( MotionEvent e1, MotionEvent e2, float velocityX, float velocityY )
+		{
+			logger.debug("onFling");
+			return true;
+		}	
+	}
+	
+	// Scale Listener Class
+	// 2012/04/20 Luca Vettoretto 
+	class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
+	{
+		
+		@Override
+		public boolean onScale(ScaleGestureDetector detector)
+		{
+			logger.debug("onScale");
+			return true;
+		}
+		
 	}
 	
 }
