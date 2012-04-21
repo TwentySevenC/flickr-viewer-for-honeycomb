@@ -70,7 +70,7 @@
 	<string name="toast_no_activities">无活动更新.</string>
 	<string name="toast_photo_already_saved">照片已保存.</string>
 	<string name="toast_wallpaper_changed">墙纸已修改.</string>
-	<string name="toast_error_set_wallpaper">设置照片为墙纸失败.</string>
+	<string name="toast_errx_set_wallpaper">设置照片为墙纸失败.</string>
 	<string name="toast_photo_saved">照片保存成功.</string>
 	<string name="toast_error_save_photo">保存照片失败.</string>
 	<string name="toast_error_get_photos">无法获取照片列表，请检查您的网络连接.</string>
@@ -170,8 +170,9 @@
 	<string name="gen_show_app_title">显示程序标题</string>
 	<string name="summary_gen_show_app_title">一些页面可能会有较长标题，从而造成标签搜索框过小，您可以通过选择不显示程序标题来解决此问题.</string>
 	<string name="gen_tag_search_mode">标签搜索模式</string>
-	<string name="summary_gen_tag_search_mode">当两个以上标签用于搜索时，选中此选项将使用\'与\'搜索模式, 否则为\'或\'模式.
-	</string>
+	<string name="summary_gen_tag_search_mode">当两个以上标签用于搜索时，选中此选项将使用\'与\'搜索模式, 否则为\'或\'模式.</string>
+	<string name="gen_hide_preview_titlebar">全屏时隐藏标题栏</string>
+	<string name="summary_gen_hide_preview_titlebar">在全屏浏览图片时隐藏标题栏.</string>
 
 	<string name="app_title_tags_search_result">标签</string>
 	<string name="tag_search_hint">通过标签搜索</string>
